@@ -1,0 +1,210 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:form id="infoIndividuEditForm" dir="#{localeBean.dir}">
+
+		<p:panel id="infosStructurePanel">
+
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_identite}"
+							for="identifiant" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="identifiant"
+							styleClass="value"
+							value="#{structureMgrBean.refStructureDto.identifiant}">
+						</h:outputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel
+							value="#{structuremsgs.structure_type_structure_fr}"
+							for="typeStructure" />
+					</p:column>
+					<p:column width="35%">
+						<p:selectOneMenu id="typeStructure"
+							style="text-align: left;width:100%"
+							value="#{structureMgrBean.refStructureDto.typeId}"
+							label="#{structuremsgs.structure_type_structure_fr}"
+							required="true" filter="true" filterMatchMode="startsWith"
+							valueChangeListener="#{structureMgrBean.codeChanged}"
+							requiredMessage="#{structuremsgs.structure_type_structure_required}">
+							<f:selectItem itemLabel="#{structuremsgs.structure_select_Type}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeStructure}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_statut_fr}"
+							for="statut" />
+					</p:column>
+					<p:column width="35%">
+						<p:selectOneMenu id="statut" style="text-align: left;width:100%"
+							filter="true" filterMatchMode="startsWith"
+							value="#{structureMgrBean.refStructureDto.statusId}"
+							label="#{structuremsgs.structure_statut_fr}">
+							<f:selectItem
+								itemLabel="#{structuremsgs.structure_select_statut}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listStatut}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_libelle}"
+							for="llstructLatin" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="llstructLatin" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.llStructureLatin}"
+							label="#{structuremsgs.structure_libelle}" required="true"
+							requiredMessage="#{structuremsgs.structure_libelle_required}">
+						</p:inputText>
+					</p:column>
+
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_libelle_arabe}"
+							for="llArabe" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="llArabe" style="text-align: right; width:97%"
+							value="#{structureMgrBean.refStructureDto.llStructureArabe}"
+							label="#{structuremsgs.structure_libelle_arabe}" required="true"
+							requiredMessage="#{structuremsgs.structure_libelle_arabe_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_libelle_court}"
+							for="lcLatin" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="lcLatin" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.lcStructureLatin}"
+							label="#{structuremsgs.structure_libelle_court}" required="true"
+							requiredMessage="#{structuremsgs.structure_libelle_court_required}">
+						</p:inputText>
+					</p:column>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_libelle_court_ar}"
+							for="lcAr" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="lcAr" style="text-align: right;width:97%"
+							value="#{structureMgrBean.refStructureDto.lcStructureArabe}"
+							label="#{structuremsgs.structure_libelle_court_ar}"
+							required="true"
+							requiredMessage="#{structuremsgs.structure_libelle_court_ar_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_date_creation}"
+							for="dateCreation" />
+					</p:column>
+					<p:column width="35%">
+						<p:calendar navigator="true"
+							value="#{structureMgrBean.refStructureDto.dateCreation}"
+							required="true" id="dateCreation" showButtonPanel="true"
+							label="#{structuremsgs.structure_date_creation}"
+							pattern="dd/MM/yyyy"
+							requiredMessage="#{structuremsgs.structure_date_creation_required}" />
+					</p:column>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_decret}"
+							for="decret" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="decret" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.decret}"
+							label="#{structuremsgs.structure_decret}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel
+							value="#{structuremsgs.structure_forme_juridique_fr}" for="fj" />
+					</p:column>
+					<p:column width="35%">
+						<p:selectOneMenu id="fj" style="text-align: left;width:100%"
+							value="#{structureMgrBean.refStructureDto.formeJuridiqueId}"
+							label="#{structuremsgs.structure_forme_juridique_fr}"
+							filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{structuremsgs.structure_select_fj}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listFormeJuridique}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_nss}" for="nss" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="nss" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.nss}"
+							label="#{structuremsgs.structure_nss}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_nis}" for="nis" />
+					</p:column>
+
+
+
+					<p:column width="35%">
+						<p:inputText id="nis" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.nis}"
+							label="#{structuremsgs.structure_nis}">
+						</p:inputText>
+					</p:column>
+					<p:column width="15%">
+						<p:outputLabel value="#{structuremsgs.structure_nif}" for="nif" />
+					</p:column>
+					<p:column width="35%">
+						<p:inputText id="nif" style="text-align: left;width:97%"
+							value="#{structureMgrBean.refStructureDto.nif}"
+							label="#{structuremsgs.structure_nif}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<br />
+			<br />
+			<p:toolbar id="actionPanel">
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.button_save}"
+					onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+						update="infoIndividuEditForm" icon="ui-icon-disk"
+						action="#{structureMgrBean.saveStructure}" />
+
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</p:panel>
+	</h:form>
+</ui:composition>

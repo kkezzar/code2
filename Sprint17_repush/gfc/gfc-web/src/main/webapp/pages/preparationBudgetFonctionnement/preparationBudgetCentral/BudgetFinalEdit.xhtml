@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{preparationBudgetFonctionnementMsgs.page_title_enregistrer_budget_final}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+
+					<p:toolbarGroup align="right">
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{budgetFinalBean.model}" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{budgetFinalBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.identite}">
+						<h:outputText value="#{current.identite}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.description}">
+						<h:outputText value="#{current.description}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.exercice_budgetaire}">
+						<h:outputText
+							value="#{current.exerciceBudgetaire.annee} - #{current.exerciceBudgetaire.intituleFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.typeBudget.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.date_debut}">
+						<h:outputText value="#{current.dateDebut}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.date_fin}">
+						<h:outputText value="#{current.dateFin}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{budgetFinalBean.crud}">
+
+					<p:tab
+						title="#{preparationBudgetFonctionnementMsgs.detail_projet_budget}">
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.identite}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.identite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{gfcMsgs.description}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.exercice_budgetaire}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.exerciceBudgetaire.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.projet_budget_parent}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.projetBudget.identite} - #{budgetFinalBean.projetBudgetDto.projetBudget.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.type}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.typeBudget.libelleLongFr}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.unite_monetaire}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.uniteMonetaire.libelleLongFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.date_reception}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											title="#{preparationBudgetFonctionnementMsgs.date_reception_note_orientation}"
+											value="#{budgetFinalBean.projetBudgetDto.dateReceptionNoteOrientation}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.date_debut}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.dateDebut}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.date_fin}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetFinalBean.projetBudgetDto.dateFin}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:column colspan="3">
+											<h:outputText styleClass="value"
+												value="#{budgetFinalBean.projetBudgetDto.observation}" />
+										</p:column>
+									</p:column>
+								</p:row>
+
+							<!-- 	<p:row>
+									<p:column colspan="4">
+
+										<p:selectOneMenu styleClass="input-xlarge-px pull-right"
+											style="margin-bottom:-10px"
+											value="#{budgetFinalBean.etablissementSearchDto.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_etablissement}"
+												itemValue="" />
+											<f:selectItems value="#{budgetFinalBean.listEtablissements}" />
+											<p:ajax event="valueChange" update="@this"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()" />
+										</p:selectOneMenu>
+										<p:spacer height="20px"></p:spacer>
+									</p:column>
+								</p:row> -->
+
+								<p:row>
+									<p:column colspan="4">
+
+										<p:tabView>
+
+											<p:tab
+												title="#{preparationBudgetFonctionnementMsgs.budget_final_recette}">
+												<h:form>
+
+													<p:dataTable var="currentAff" id="tableRecette"
+														value="#{budgetFinalBean.listDetailsBudgetRecettes}"
+														editable="true" rowIndexVar="rowIndexAff"
+														emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+														<f:facet name="header">
+
+														</f:facet>
+														<p:column
+															headerText="#{referentielMsgs.gfc_referentiel_numero}">
+															<h:outputText value="#{rowIndexAff+1}" />
+														</p:column>
+
+													<!--  	<p:column
+															headerText="#{parametrageBudgetMsg.etablissement}">
+															<h:outputText
+																value="#{currentAff.etablissement.llEtablissementLatin}" />
+														</p:column> 
+														-->
+														<p:column headerText="#{parametrageBudgetMsg.section}">
+															<h:outputText
+																value="#{currentAff.chapitre.idSection.intituleFr}" />
+														</p:column>
+														<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+															<h:outputText value="#{currentAff.chapitre.intituleFr}" />
+														</p:column>
+													
+													<!-- 	<p:column headerText="#{parametrageBudgetMsg.article}">
+															<h:outputText value="#{currentAff.article.intituleFr}" />
+														</p:column> 
+														 -->
+														<p:column
+															headerText="#{preparationBudgetFonctionnementMsgs.montantProposes}">
+															<h:outputText value="#{currentAff.montantBesoins}"
+																styleClass="pull-right">
+																<f:convertNumber type="currency" currencySymbol="" />
+															</h:outputText>
+														</p:column>
+														<p:column
+															headerText="#{preparationBudgetFonctionnementMsgs.montantFinal}">
+															<h:inputText value="#{currentAff.montantFinal}"
+																styleClass="pull-right" />
+														</p:column>
+
+														<p:columnGroup type="footer">
+															<p:row>
+																<p:column colspan="4" style="text-align:right"
+																	footerText="Total" />
+																<p:column style="text-align:right">
+																	<f:facet name="footer">
+																		<h:outputText
+																			value="#{preparationBudgetEtabBean.getTotalMontant()}"
+																			styleClass="value">
+																			<f:convertNumber type="currency" currencySymbol="" />
+																		</h:outputText>
+																	</f:facet>
+																</p:column>
+																<p:column style="text-align:right">
+																	<f:facet name="footer">
+																		<h:outputText
+																			value="#{preparationBudgetEtabBean.getTotalMontant()}"
+																			styleClass="value">
+																			<f:convertNumber type="currency" currencySymbol="" />
+																		</h:outputText>
+																	</f:facet>
+																</p:column>
+															</p:row>
+														</p:columnGroup>
+
+														<!-- 								<p:columnGroup type="footer">
+									<p:row>
+										<p:column></p:column>
+
+										<p:column colspan="3" style="text-align:right"
+											footerText="#{preparationBudgetFonctionnementMsgs.montant_total}:" />
+										<p:column
+											footerText="#{budgetFinalBean.projetBudgetDto.uniteMonetaire.code}#{currentAff.TotalMontantBesoins}" />
+
+										<p:column
+											footerText="#{budgetFinalBean.projetBudgetDto.uniteMonetaire.code}#{currentAff.TotalMontantFinal}" />
+									</p:row>
+								</p:columnGroup> -->
+
+													</p:dataTable>
+
+
+
+												</h:form>
+											</p:tab>
+
+											<p:tab
+												title="#{preparationBudgetFonctionnementMsgs.budget_final_depenses}">
+												<h:form>
+
+													<p:dataTable var="currentAff" id="tableDepenses"
+														value="#{budgetFinalBean.listDetailsBudgetDepenses}"
+														editable="true" rowIndexVar="rowIndexAff"
+														emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+														<f:facet name="header">
+
+														</f:facet>
+														<p:column
+															headerText="#{referentielMsgs.gfc_referentiel_numero}">
+															<h:outputText value="#{rowIndexAff+1}" />
+														</p:column>
+														<p:column headerText="#{parametrageBudgetMsg.section}">
+															<h:outputText
+																value="#{currentAff.chapitre.idSection.intituleFr}" />
+														</p:column>
+														<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+															<h:outputText value="#{currentAff.chapitre.intituleFr}" />
+														</p:column>
+													<!-- 	<p:column headerText="#{parametrageBudgetMsg.article}">
+															<h:outputText value="#{currentAff.article.intituleFr}" />
+														</p:column>
+														 -->
+														<p:column
+															headerText="#{preparationBudgetFonctionnementMsgs.montantProposes}">
+															<h:outputText value="#{currentAff.montantBesoins}"
+																styleClass="pull-right">
+																<f:convertNumber type="currency" currencySymbol="" />
+															</h:outputText>
+														</p:column>
+														<p:column
+															headerText="#{preparationBudgetFonctionnementMsgs.montantFinal}">
+															<h:inputText value="#{currentAff.montantFinal}"
+																styleClass="pull-right" />
+														</p:column>
+
+														<p:columnGroup type="footer">
+															<p:row>
+																<p:column colspan="4" style="text-align:right"
+																	footerText="Total" />
+																<p:column style="text-align:right">
+																	<f:facet name="footer">
+																		<h:outputText
+																			value="#{preparationBudgetEtabBean.getTotalMontant()}"
+																			styleClass="value">
+																			<f:convertNumber type="currency" currencySymbol="" />
+																		</h:outputText>
+																	</f:facet>
+																</p:column>
+																<p:column style="text-align:right">
+																	<f:facet name="footer">
+																		<h:outputText
+																			value="#{preparationBudgetEtabBean.getTotalMontant()}"
+																			styleClass="value">
+																			<f:convertNumber type="currency" currencySymbol="" />
+																		</h:outputText>
+																	</f:facet>
+																</p:column>
+															</p:row>
+														</p:columnGroup>
+
+													</p:dataTable>
+
+												</h:form>
+											</p:tab>
+
+										</p:tabView>
+
+									</p:column>
+								</p:row>
+
+								<f:facet name="footer">
+									<p:row>
+
+
+										<p:column colspan="4">
+											<p:commandButton
+												value="#{preparationBudgetFonctionnementMsgs.transferer}"
+												id="transfBtn" update=":form_crud"
+												styleClass="ui-button-validate-o"
+												actionListener="#{budgetFinalBean.transferAction()}"
+												onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=" :form_crud" icon="ui-icon-disk"
+												styleClass="ui-button-save"
+												actionListener="#{budgetFinalBean.saveAction()}"
+												onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												id="validateBtn" update=":form_search :form_crud"
+												styleClass="ui-button-validate"
+												actionListener="#{budgetFinalBean.validateAction()}"
+												onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud" process="@this"
+												immediate="true"
+												actionListener="#{budgetFinalBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="ProjetBudget" scope="request" />
+							<c:set var="identifiant"
+								value="#{budgetFinalBean.projetBudgetDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="ProjetBudget" />
+							<ui:param name="identifiant"
+								value="#{budgetFinalBean.projetBudgetDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+
+					<!-- historique  -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique"
+						title="#{commonmsgs.tab_historique_situations}"
+						titletip="#{commonmsgs.tab_historique_situations_tooltip}"
+						disabled="">
+						<f:facet name="title">
+							<i class="fa fa-history"></i>
+						</f:facet>
+							<eh:EntityHistoryComponent
+							list="#{budgetFinalBean.projetBudgetHistory}" idParamName="id"
+							idParamValue="#{budgetFinalBean.projetBudgetDto.id}"></eh:EntityHistoryComponent>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

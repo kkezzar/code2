@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{evalControleContinuMsgs.eval_controle_continu_panel_consult_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:panel id="panelGlobal">
+
+			<h:form id="evalForm">
+				<pe:blockUI target="evalForm" widgetVar="globalWidget">
+					<i class="fa fa-spinner fa-spin" />
+				</pe:blockUI>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+					showSummary="false" closable="true" life="5000" />
+					<p:outputPanel id="globalPanel">
+				<ui:include
+					src="/pages/cursus/controlecontinu/ControleContinuSearchResult.xhtml" />
+				<br />
+				<p:panel id="detailPanel"
+					rendered="#{controleContinuBean.showDetail}">
+					<p:tabView>
+						<p:tab
+							title="#{evalControleContinuMsgs.eval_controle_continu_tab_evaluation_title}">
+							<ui:include
+								src="/pages/cursus/controlecontinu/ControleContinuInfoDetail.xhtml" />
+						</p:tab>
+						<p:tab
+							title="#{evalControleContinuMsgs.eval_controle_continu_tab_note_title}">
+							<ui:include
+								src="/pages/cursus/controlecontinu/ControleContinuNoteDetail.xhtml" />
+						</p:tab>
+
+					</p:tabView>
+				</p:panel>
+				</p:outputPanel>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

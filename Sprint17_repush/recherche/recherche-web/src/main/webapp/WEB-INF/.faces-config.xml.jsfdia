@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeDetail.xhtml"
+  PATH="/pages/offreformation/ue/UeDetail.xhtml" SHAPE="328,48,50,25"
+  model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeSearch.xhtml"
+  PATH="/pages/offreformation/ue/UeSearch.xhtml" SHAPE="544,104,50,25"
+  model-entity="JSFProcessGroup" persistent="true">
+  <PROCESS-ITEM ID="rules:#pages#offreformation#ue#UeSearch.xhtml:0"
+   NAME="item" PATH="/pages/offreformation/ue/UeSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="ofSearch::#pages#offreformation#of#OfSearch.xhtml" NAME="output"
+    PATH="/pages/offreformation/of/OfSearch.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfSearch.xhtml"
+    TITLE="ofSearch" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ofEdit::#pages#offreformation#of#OfEdit.xhtml" NAME="output1"
+    PATH="/pages/offreformation/of/OfEdit.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfEdit.xhtml" TITLE="ofEdit" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ap#ApDetail.xhtml"
+  PATH="/pages/offreformation/ap/ApDetail.xhtml" SHAPE="318,250,0,0"
+  model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="32,9937,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#pages#index.xhtml" NAME="output"
+    PATH="/pages/index.xhtml" TARGET="rules:#pages#index.xhtml"
+    TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#index.xhtml" PATH="/pages/index.xhtml"
+  SHAPE="240,10625,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

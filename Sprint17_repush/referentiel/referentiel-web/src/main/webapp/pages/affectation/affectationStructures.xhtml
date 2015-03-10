@@ -1,0 +1,192 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{affectationMgrBean.structureCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="affectationStructuresFormId" >
+		<pe:blockUI target="affectationStructuresData"
+			widgetVar="affStrWidget">
+			<h:graphicImage value="/images/ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:dataTable id="affectationStructuresData" styleClass="styleAffStr"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectationMgrBean.listRefAffectationStructureDto}"
+			var="current">
+
+			<f:facet name="header">
+				<h:outputText
+					value="#{affectationmsgs.affectation_structures_affectes}      " />
+				<p:commandButton id="addStructureButton"
+					actionListener="#{affectationMgrBean.beforeAdd}"
+					onstart="PF('affStrWidget').block()"
+					onsuccess="PF('affStrWidget').unblock()" icon="ui-icon-plusthick"
+					oncomplete="PF('dlgAffecterStructure').show()"
+					rendered="#{affecStructureCrudBean.createAllow}">
+				</p:commandButton>
+			</f:facet>
+
+
+			
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.styleAffStr)"
+				process="@(.styleAffStr)" />
+
+
+			<p:column sortBy="#{current.llStructureLatin}" width="30%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_structure}" />
+				</f:facet>
+				<h:outputText value="#{current.llStructureLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.roleLibelleLongFr}" width="30%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_role}" />
+				</f:facet>
+				<h:outputText value="#{current.roleLibelleLongFr}" />
+			</p:column>
+			<p:column sortBy="#{current.dateDebut}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_debut}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{current.dateFin}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+				</f:facet>
+				<h:outputText value="#{current.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column style="width:10%"
+				rendered="#{affecStructureCrudBean.deleteAllow}">
+				<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					onstart="PF('affStrWidget').block()"
+					onsuccess="PF('affStrWidget').unblock()"
+					actionListener="#{affectationMgrBean.deleteStructure(current)}"
+					process="@(.styleAffStr)" update="@(.styleAffStr)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+
+					
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+	<p:dialog header="#{affectationmsgs.affectation_structure_title}" closeOnEscape="true"
+		appendTo="@(body)" modal="true" widgetVar="dlgAffecterStructure"
+		resizable="false" width="650" height="130">
+		<h:form id="dlgAffecterStructureForm" >
+			<p:panelGrid id="StrDescription" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_structure} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:selectOneMenu id="selectStructure"
+							style="text-align: left;width:100%"
+							value="#{affectationMgrBean.refAffectationDto.idStructure}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_selection_structure}"
+							required="true"
+							requiredMessage="#{affectationmsgs.affectation_structure_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_structure}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_role} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:selectOneMenu id="selectionStrRole"
+							style="text-align: left;width:100%"
+							value="#{affectationMgrBean.refAffectationDto.roleId}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_role}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_role_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_debut} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" binding="#{strFirstDate}"
+							value="#{affectationMgrBean.refAffectationDto.dateDebut}"
+							id="debutStr" showButtonPanel="true" required="true"
+							validator="dateValidator"
+							label="#{affectationmsgs.affectation_date_debut}"
+							requiredMessage="#{affectationmsgs.affectation_debut_required}"
+							pattern="dd/MM/yyyy" />
+
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true"
+							value="#{affectationMgrBean.refAffectationDto.dateFin}"
+							id="finStr" showButtonPanel="true" validator="dateValidator"
+							label="#{affectationmsgs.affectation_date_fin}" required="false"
+							requiredMessage="#{affectationmsgs.affectation_fin_required}"
+							pattern="dd/MM/yyyy">
+							<f:attribute name="firstDate" value="#{strFirstDate}" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{affectationMgrBean.addStructure('dlgAffecterStructure')}"
+						update="@(.styleAffStr)">
+						
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						oncomplete="dlgAffecterStructure.hide()" />
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

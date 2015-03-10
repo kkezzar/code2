@@ -1,0 +1,218 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+              <p:panelGrid id="demande_conge_detailPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{congeEmployeMgs.demande_conge_title}" styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{congeEmployeMgs.employe} "
+											 />
+									</p:column>
+									<p:column style="width:25%">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											rendered="#{congeEmployeDtoParam.dossierEmployeDto!=null}"
+											immediate="true">
+											<h:outputText
+												value="#{congeEmployeDtoParam.dossierEmployeDto.refIndividuDto.nomLatin} #{congeEmployeDtoParam.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										   
+                               
+									</p:column>
+								</p:row>
+<p:row>
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.annee} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{congeEmployeDtoParam.anneeGrh}"
+						styleClass="value" />
+			</p:column>
+	
+	
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.solde_conge_periode} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{congeEmployeDtoParam.soldeConge} jour(s)"
+						styleClass="value" />
+			</p:column>
+		</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_demande} "
+											 />
+									</p:column>
+									<p:column>
+										<h:outputText id="dateDemande"
+						value="#{congeEmployeDtoParam.dateDemande}"
+						styleClass="value" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+									</p:column>
+								
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.objet} " />
+									</p:column>
+
+									<p:column>
+										<h:outputText id="objet" styleClass="value"
+											value="#{congeEmployeDtoParam.objet}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+								
+                             <p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.type_conge} "
+											 />
+									</p:column>
+									<p:column>
+										<h:outputText  id="typeConge" 
+											styleClass="value"
+											value="#{congeEmployeDtoParam.nomenclatureByTypeCongeDto.libelleLongFr}"
+											>
+											</h:outputText>
+									</p:column>
+								</p:row>  
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_debut} "
+											 />
+									</p:column>
+									<p:column>
+											<h:outputText id="dateDebut"
+						value="#{congeEmployeDtoParam.dateDebut}"
+						styleClass="value" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.nb_jours} "
+											 />
+									</p:column>
+									<p:column>
+									
+								<h:outputText id="nbreJourDemande"
+						value="#{congeEmployeDtoParam.nbreJourDemande}"
+						styleClass="value" >
+					
+						</h:outputText>
+								</p:column>
+								</p:row>
+							     <p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_reprise} "
+											 />
+									</p:column>
+									<p:column>
+											
+							<h:outputText id="dateReprise"
+						value="#{congeEmployeDtoParam.dateReprise}"
+						styleClass="value" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+									</p:column> 
+									</p:row>  
+									
+									<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{congeEmployeMgs.resultat_conge_title}" styleClass="value" />
+									</p:column>
+								</p:row>
+						
+								<p:row>
+								<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.resultat}"
+											 />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{congeEmployeDtoParam.resultat==true?'accéptée':'refusée'}"  styleClass="value" >
+											</h:outputText>
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+										<h:outputLabel value="#{congeEmployeMgs.date_debut_accepte} "
+											 />
+									</p:column>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+											<h:outputText  value="#{congeEmployeDtoParam.dateDebutAccepte}" styleClass="value" >
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+											</h:outputText>
+									</p:column>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+										<h:outputLabel value="#{congeEmployeMgs.nb_jours_accepte} "
+											 />
+									</p:column>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+									<h:outputText  value="#{congeEmployeDtoParam.nbreJourAccepte}"  styleClass="value" >
+											</h:outputText>
+								</p:column>
+								</p:row>
+							     <p:row>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+										<h:outputLabel value="#{congeEmployeMgs.date_reprise_accepte} "
+											/>
+									</p:column>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==true}">
+											
+							<h:outputText id="dateRepriseAccepte"
+						value="#{congeEmployeDtoParam.dateRepriseAccepte}"
+						styleClass="value" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+									</p:column> 
+									</p:row>    
+								
+								<p:row>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==false}">
+										<h:outputLabel value="#{congeEmployeMgs.motif_refus} "
+											 />
+									</p:column>
+									<p:column rendered="#{congeEmployeDtoParam.resultat==false}">
+										<h:outputText id="motifRefus" value="#{congeEmployeDtoParam.motifRefus}" styleClass="value" >
+											</h:outputText>
+									</p:column>
+								</p:row>
+									  
+							</p:panelGrid>
+
+	<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{congeEmployeDtoParam.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

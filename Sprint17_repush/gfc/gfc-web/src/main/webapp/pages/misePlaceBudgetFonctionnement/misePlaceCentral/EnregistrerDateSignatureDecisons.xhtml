@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{misePlaceBudgetFonctionnementMsgs.page_title_enregistrer_date_signature_decision_notification_budget}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<!--  fields/buttons -->
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{decisionsNotificationsBean.model}" paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{decisionsNotificationsBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="Etablissement">
+						<h:outputText
+							value="#{current.etablissement.llEtablissementLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Référence">
+						<h:outputText value="#{current.reference}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Intitule">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date décision">
+						<h:outputText value="#{current.dateDecision}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant">
+						<h:outputText value="#{current.montant}" styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{decisionsNotificationsBean.crud}">
+
+					<p:tab title="Détail décision de notification">
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+
+									<p:column style="width:25%">
+										<h:outputText value="Exercice budgétaire" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.projetBudget.exerciceBudgetaire.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Projet de budget" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.projetBudget.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Etablissement" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.etablissement.llEtablissementLatin}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Réference" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.reference}"></h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputText value="Date décision" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.dateDecision}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.intituleFr}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_ar}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.intituleAr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Montant" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.montant}">
+											<f:convertNumber type="currency" currencySymbol="" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4">
+										<hr />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="Date signature" styleClass="required" />
+									</p:column>
+									<p:column colspan="3">
+										<p:calendar required="true"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.dateSiganture}"
+											pattern="#{applicationBean.datePattern()}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea styleClass="input-large"
+											value="#{decisionsNotificationsBean.decisionBudgetDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud :form_search"
+												styleClass="ui-button-save"
+												actionListener="#{decisionsNotificationsBean.saveDateValidationAction()}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_valider}"
+												id="valBtn" update=":form_crud :form_search"
+												styleClass="ui-button-validate-o"
+												actionListener="#{decisionsNotificationsBean.validateDateValidationAction()}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud" process="@this"
+												immediate="true"
+												actionListener="#{decisionsNotificationsBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<p:tab title="Notification des recettes">
+
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							value="#{decisionsNotificationsBean.listDetailsNotifications.get('true')}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Section">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Chapitre">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="3" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{decisionsNotificationsBean.getTotalMontant(true)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Notification des dépenses">
+
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							value="#{decisionsNotificationsBean.listDetailsNotifications.get('false')}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Section">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Chapitre">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="3" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{decisionsNotificationsBean.getTotalMontant(false)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="DecisionBudget" scope="request" />
+							<c:set var="identifiant"
+								value="#{decisionsNotificationsBean.decisionBudgetDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DecisionBudget" />
+							<ui:param name="identifiant"
+								value="#{decisionsNotificationsBean.decisionBudgetDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

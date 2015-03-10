@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<p:fieldset legend="Domaine LMD informations">
+	<p:panel style="height:600px" id="infosdomainelmdPanel"  header="" >
+		<h:form id="infosFromId">
+	
+			<p:panelGrid id="descriptionDomaineLMD" styleClass="noBorder1">
+				<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_identite}" />
+				</p:column>
+				<p:column>
+				<h:outputText id="identifiantdomaine" value="#{domainelmdMgrBean.refDomaineLMDDto.identifiant}" style="font-weight: bold;" />
+					
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcr" value="#{domainelmdMgrBean.refDomaineLMDDto.lcDomaine}" style="font-weight: bold;" />
+					
+				</p:column>
+           
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_arabe_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcrArabe"  value="#{domainelmdMgrBean.refDomaineLMDDto.lcDomaineArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="lbelle" value="#{domainelmdMgrBean.refDomaineLMDDto.llDomaine}" style="font-weight: bold;" />
+					
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_arabe}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libelleArabe" value="#{domainelmdMgrBean.refDomaineLMDDto.llDomaineArabe}" style="font-weight: bold;" />
+				
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_description}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="description" 	value="#{domainelmdMgrBean.refDomaineLMDDto.description}" style="font-weight: bold;" />
+					
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="descriptionArabe"	value="#{domainelmdMgrBean.refDomaineLMDDto.descriptionArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_niveau_recrutement}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="niveaurecrutement" 	value="#{domainelmdMgrBean.refDomaineLMDDto.niveauRecrutementCode}" style="font-weight: bold;" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_premiere_inscription} " />
+				</p:column>
+				<p:column>
+				    <h:outputText value="#{domainelmdMgrBean.refDomaineLMDDto.isPremiereInscription? 'Oui':'Non'}" style="font-weight: bold;"  />
+				</p:column>
+			</p:row>
+			
+		
+				
+
+			</p:panelGrid>
+			
+	
+		
+			
+		</h:form>
+			<br></br>
+				<br></br>
+		<h:form id="domainelmdDetailsForm" prependId="false">
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-disk" process="@this"
+					action="#{domainelmdBckBean.back}">
+
+					<f:param name="searchValue"
+						value="#{domainelmdBckBean.searchValue}" />
+				</p:commandButton>
+
+			</h:form>
+		
+	</p:panel>
+</p:fieldset>
+</ui:composition>

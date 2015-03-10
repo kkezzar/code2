@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<p:dialog header="Liste des affectations" widgetVar="affectationDialog"
+		modal="true" resizable="false" width="700" closeOnEscape="true">
+		<h:form id="critereDetail" style="text-align:left;font-size:11px">
+			<p:dataTable id="affectationTable"
+				value="#{menuBean.listAffectation}" 
+				selectionMode="single" selection="#{menuBean.selectedAffectation}"
+				var="current"
+				rowKey="#{current.id}">
+				<p:ajax event="rowSelect"
+					onstart="PF('page').block();PF('affectationDialog').hide()"
+					oncomplete="PF('page').unblock();"
+					listener="#{menuBean.onRowSelect}"  />
+				<p:column headerText="Etablissement" style="width:30%">
+
+					<h:outputText value="#{current.llFrRefEtablissement}" />
+				</p:column>
+
+				<p:column headerText="Entité"
+					style="width:10%">
+					<h:outputText rendered="#{current.idGroupe!=null}" value="Groupe" />
+					<h:outputText rendered="#{current.idStructure!=null}"
+						value="Structure" />
+				</p:column>
+
+				<p:column headerText="Libellé" style="width:30%">
+					<h:outputText rendered="#{current.idGroupe!=null}"
+						value="#{current.llGroupe}" />
+					<h:outputText rendered="#{current.idStructure!=null}"
+						value="#{current.llStructureLatin}" />
+				</p:column>
+				<p:column headerText="Rôle" style="width:30%">
+					<h:outputText value="#{current.roleLibelleLongFr}" />
+				</p:column>
+			
+			</p:dataTable>
+			<br/><br/>
+		</h:form>
+	</p:dialog>
+</ui:composition>

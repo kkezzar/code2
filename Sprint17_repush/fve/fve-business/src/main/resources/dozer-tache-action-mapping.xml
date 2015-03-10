@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+     <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.TacheActionDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.TacheAction</class-b>
+      <field>
+      <a>tacheId</a>
+	  <b>tache.id</b>
+      </field>  
+        <field>
+      <a>actionId</a>
+	  <b>action.id</b>
+      </field>    
+   </mapping>
+  
+   <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.ActionI18nDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.ActionI18n</class-b>
+      <field>
+      <a>actionId</a>
+	  <b>action.id</b>
+      </field>  
+        <field>
+      <a>actionCode</a>
+	  <b>action.code</b>
+      </field>    
+   </mapping>
+   
+   <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.TacheDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Tache</class-b>
+      <field>
+      <a>etapeRoleId</a>
+	  <b>etapeRole.id</b>
+      </field>
+      <!--    
+        <field>
+      <a>etapeId</a>
+	  <b>etapeRole.etape.id</b>
+      </field> 
+      
+     <field>
+      <a>etapeCode</a>
+	  <b>etapeRole.etape.code</b>
+      </field> 
+      <field>
+      <a>roleId</a>
+	  <b>etapeRole.role.id</b>
+      </field> 
+      <field>
+      <a>roleCode</a>
+	  <b>etapeRole.role.code</b>
+      </field> 
+      -->
+      <field>
+	 <a>idSituation</a>
+	  <b>situationEntite.id</b>
+      </field>  
+   </mapping>
+    
+</mappings>

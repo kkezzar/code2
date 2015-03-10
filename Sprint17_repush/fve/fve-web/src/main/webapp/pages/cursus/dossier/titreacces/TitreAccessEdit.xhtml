@@ -1,0 +1,413 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:outputPanel styleClass="infoEtudiantStyle">
+		<h:form id="titreAccesinfosForm">
+			<p:fieldset legend="#{titreAccesMsgs.titre_acces_infos}">
+
+				<p:panelGrid styleClass="ui-panelgrid-full-width">
+
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{titreAccesMsgs.titre_acces_numero}"
+								for="numeroTitre" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText style="text-align: left;width:100%"
+								value="#{titreAccesBean.titreAccesDto.numeroTitreAcces}"
+								label="#{titreAccesMsgs.titre_acces_numero}" required="true"
+								id="numeroTitre"
+								requiredMessage="#{titreAccesMsgs.titre_acces_numero_required}">
+							</p:inputText>
+						</p:column>
+
+						<p:column style="width:15%">
+							<p:outputLabel value="#{titreAccesMsgs.titre_acces_type}"
+								for="typetitre" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="typetitre"
+								style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.refCodeTypeTitre}"
+								label="#{titreAccesMsgs.titre_acces_type}" required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_type_required}">
+
+								<f:selectItem
+									itemLabel="#{titreAccesMsgs.titre_acces_select_type}"
+									itemValue="" />
+								<f:selectItems value="#{titreAccesBean.listeTypeTitreAcces}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{titreAccesMsgs.titre_acces_moyenne}"
+								for="moyenne" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.moyenne}"
+								label="#{titreAccesMsgs.titre_acces_moyenne}*" required="true"
+								id="moyenne"
+								requiredMessage="#{titreAccesMsgs.titre_acces_moyenne_required}*">
+								<f:validateDoubleRange minimum="0.00" maximum="100.00" />
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{titreAccesMsgs.titre_acces_mention}"
+								for="mentionTitre" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="mentionTitre"
+								style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.refCodeMention}"
+								label="#{titreAccesMsgs.titre_acces_mention}*" required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_mention_required}">
+
+								<f:selectItem
+									itemLabel="#{titreAccesMsgs.titre_acces_select_mention}"
+									itemValue="" />
+								<f:selectItems value="#{titreAccesBean.listeMention}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<p:outputLabel
+								value="#{titreAccesMsgs.titre_acces_premiere_langue_etrangere}"
+								for="langtitre1" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="langtitre1"
+								style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.refCodeLangueEtrangere1}"
+								label="#{titreAccesMsgs.titre_acces_premiere_langue_etrangere}*"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_langue_required}">
+
+								<f:selectItem
+									itemLabel="#{titreAccesMsgs.titre_acces_select_langue}"
+									itemValue="" />
+								<f:selectItems value="#{titreAccesBean.listeLangueEtrangere1}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column style="width:15%">
+							<p:outputLabel
+								value="#{titreAccesMsgs.titre_acces_deuxieme_langue_etrangere}"
+								for="langtitre2" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="langtitre2"
+								style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.refCodeLangueEtrangere2}"
+								label="#{titreAccesMsgs.titre_acces_deuxieme_langue_etrangere}"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_langue_required}">
+
+								<f:selectItem
+									itemLabel="#{titreAccesMsgs.titre_acces_select_langue}"
+									itemValue="" />
+								<f:selectItems value="#{titreAccesBean.listeLangueEtrangere2}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_etablissement_obtention}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.etablissementObtentionFr}"
+								label="#{titreAccesMsgs.titre_acces_etablissement_obtention}">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{titreAccesMsgs.titre_acces_specialite}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.refCodeSpecialite}"
+								label="#{titreAccesMsgs.titre_acces_specialite}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel
+								value="#{titreAccesMsgs.titre_acces_annee_obtention}"
+								for="anneeObtention" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.anneeObtention}"
+								label="#{titreAccesMsgs.titre_acces_annee_obtention}"
+								required="true" id="anneeObtention"
+								requiredMessage="#{titreAccesMsgs.titre_acces_annee_obtention_required}">
+								<!-- 								<f:validateLongRange minimum="1900" maximum="#{titreAccesBean.presentYear}" /> -->
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{titreAccesMsgs.titre_acces_equivalence}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputTextarea style="text-align: left; width:100%"
+								value="#{titreAccesBean.titreAccesDto.equivalence}"
+								label="#{titreAccesMsgs.titre_acces_equivalence}">
+							</p:inputTextarea>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+							id="saveTitre" icon="ui-icon-disk"
+							actionListener="#{titreAccesBean.saveTitre}"
+							update="titreAccesinfosForm,@([id$=lignesreleveTitreData])">
+
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton value="#{commonmsgs.bouton_retour}"
+							icon="ui-icon-arrowthick-1-w"
+							action="#{dossierEtudiantBean.cancel}" immediate="true">
+
+						</p:commandButton>
+
+
+					</p:toolbarGroup>
+				</p:toolbar>
+			</p:fieldset>
+
+
+		</h:form>
+
+		<br />
+
+		<p:fieldset legend="#{titreAccesMsgs.titre_acces_titre_releve}"
+			id="tablenotes">
+
+			<h:form id="resultlignesTitreForm">
+
+				<p:dataTable resizableColumns="true" id="lignesreleveTitreData"
+					value="#{titreAccesBean.listeLignesReleveNotes}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="7"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+					<f:param name="ligneId" value="#{current.id}" />
+					<f:param name="releveId" value="#{titreAccesBean.releveId}" />
+					<f:param name="dossierEtudiantId"
+						value="#{titreAccesBean.dossierEtudiantId}" />
+
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@this" process="@this" />
+
+
+					<f:facet name="header">
+						<h:outputText value="#{titreAccesMsgs.titre_acces_list_notes}    " />
+
+						<p:commandButton id="addLigneButton" immediate="true"
+							rendered="#{titreAccesBean.titreAccesDto.id!=0}"
+							icon="ui-icon-plusthick" onclick="PF('dlgAddLigneTitre').show()">
+
+
+							<f:param name="dossierEtudiantId"
+								value="#{titreAccesBean.dossierEtudiantId}" />
+							<f:param name="releveId" value="#{titreAccesBean.releveId}" />
+
+							<p:ajax resetValues="true"
+								update="@([id$=titreAddLigneTitreForm])" immediate="true" />
+
+						</p:commandButton>
+
+					</f:facet>
+
+					<p:column sortBy="#{current.libelleMatiereFr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_matiere_fr}" />
+						</f:facet>
+						<h:outputText value="#{current.libelleMatiereFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.libelleMatiereAr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_matiere_ar}" />
+						</f:facet>
+						<h:outputText value="#{current.libelleMatiereAr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.note}">
+						<f:facet name="header">
+							<h:outputText value="#{titreAccesMsgs.titre_acces_releve_note}" />
+						</f:facet>
+						<h:outputText value="#{current.note}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.noteBase}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_note_base}" />
+						</f:facet>
+						<h:outputText value="#{current.noteBase}">
+						</h:outputText>
+					</p:column>
+
+
+					<p:column style="width:5%">
+						<f:facet name="header">
+							<h:outputText value="#{commonmsgs.data_table_action_title}" />
+						</f:facet>
+						<p:commandButton id="removeLigneTitreButton" icon="ui-icon-trash"
+							title="#{commonmsgs.data_table_action_delete}"
+							update="@([id$=resultlignesTitreForm])"
+							actionListener="#{titreAccesBean.removeLigne(current)}">
+
+							<p:confirm header="Confirmation"
+								message="#{titreAccesMsgs.titre_acces_confirm_delete_ligne_releve}"
+								icon="ui-icon-alert" />
+
+							<f:param name="dossierEtudiantId"
+								value="#{titreAccesBean.dossierEtudiantId}" />
+							<f:param name="releveId" value="#{titreAccesBean.releveId}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="updateLigneTitreButton" icon="ui-icon-pencil"
+							title="#{commonmsgs.data_table_action_update}" immediate="true"
+							ajax="true" update="@([id$=titreAddLigneTitreForm])"
+							onsuccess="PF('dlgAddLigneTitre').show()"
+							actionListener="#{titreAccesBean.open(current)}">
+
+							<f:param name="ligneId" value="#{current.id}" />
+							<f:param name="dossierEtudiantId"
+								value="#{titreAccesBean.dossierEtudiantId}" />
+							<f:param name="releveId" value="#{titreAccesBean.releveId}" />
+
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</p:fieldset>
+
+
+		<p:dialog id="dlgAddLigneTitre" widgetVar="dlgAddLigneTitre"
+			resizable="false" modal="true" appendTo="@(body)" closable="true"
+			showHeader="true"
+			header="#{titreAccesMsgs.titre_acces_ajout_ligne_releve}">
+
+			<!-- 		<p:messages id="messagesdlgtitre" showSummary="true" autoUpdate="true" 	closable="true" /> -->
+
+			<h:form id="titreAddLigneTitreForm">
+
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_matiere_fr}" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:150px"
+								value="#{titreAccesBean.ligneReleveDto.libelleMatiereFr}"
+								label="#{titreAccesMsgs.titre_acces_releve_matiere_fr}"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_releve_matiere_fr_required}">
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_matiere_ar}" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: right; width:150px" dir="rtl"
+								value="#{titreAccesBean.ligneReleveDto.libelleMatiereAr}"
+								label="#{titreAccesMsgs.titre_acces_releve_matiere_ar}"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_releve_matiere_ar_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{titreAccesMsgs.titre_acces_releve_note} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:50px"
+								value="#{titreAccesBean.ligneReleveDto.note}"
+								label="#{titreAccesMsgs.titre_acces_releve_note}"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_releve_note_required}">
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{titreAccesMsgs.titre_acces_releve_note_base} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:50px"
+								value="#{titreAccesBean.ligneReleveDto.noteBase}"
+								label="#{titreAccesMsgs.titre_acces_releve_note_base}"
+								required="true"
+								requiredMessage="#{titreAccesMsgs.titre_acces_releve_note_base_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+
+				<br />
+
+				<p:panelGrid id="panelButtonligneadd">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								icon="ui-icon-disk" update="@([id$=lignesreleveTitreData])"
+								process="titreAddLigneTitreForm"
+								actionListener="#{titreAccesBean.saveLigne}"
+								oncomplete="if(!args.validationFailed) dlgAddLigneTitre.hide()">
+
+								<f:param name="ligneId" value="#{titreAccesBean.ligneId}" />
+								<f:param name="releveId" value="#{titreAccesBean.releveId}" />
+								<f:param name="dossierEtudiantId"
+									value="#{titreAccesBean.dossierEtudiantId}" />
+							</p:commandButton>
+
+						</p:column>
+
+						<!-- 							<p:column> -->
+						<!-- 								<p:commandButton value="#{commonmsgs.bouton_fermer}" -->
+						<!-- 									icon="ui-icon-disk" process="@this" ajax="true" -->
+						<!-- 									immediate="true" onclick="PF('dlgAddLigneTitre').hide();" -->
+						<!-- 									update="@([id$=lignesreleveTitreData])" -->
+						<!-- 									actionListener="#{titreAccesBean.close}"> -->
+
+						<!-- 								  <f:param name="dossierEtudiantId" value="#{titreAccesBean.dossierEtudiantId}"/> -->
+						<!-- 								  <f:param name="releveId" value="#{titreAccesBean.releveId}"/>  -->
+
+						<!-- 								</p:commandButton> -->
+
+						<!-- 							</p:column> -->
+					</p:row>
+				</p:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+	</p:outputPanel>
+
+</ui:composition>

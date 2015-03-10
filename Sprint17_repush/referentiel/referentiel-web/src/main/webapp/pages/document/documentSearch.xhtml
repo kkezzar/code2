@@ -1,0 +1,342 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_documents}" style="border:0;">
+
+			<h:form id="searchForm" enctype="multipart/form-data" 
+			        onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							rendered="#{documentDroitBean.createAllow}"
+							icon="ui-icon-document"
+							action="#{documentSearchBean.toNewDocument}">
+							<f:param name="searchValue" value="#{documentSearchBean.searchValue}" />
+							
+							<f:param name="searchAdv" value="#{documentSearchBean.searchAdv}"/>
+							<f:param name="searchListNomenclat" value="#{documentSearchBean.searchListNomenclat}"/>
+							
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton title="#{documentmsgs.document_vider_temporay}"
+							icon="ui-icon-trash" value="#{documentmsgs.document_vider_temporay}"
+							action="#{documentSearchBean.deleteTempFiles()}">
+
+							<p:confirm header="Confirmation"
+								message="#{documentmsgs.document_msg_delete_files_confirmation}"
+								icon="ui-icon-alert" />
+
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText binding="#{searchValue}" id="searchInput"
+							value="#{documentSearchBean.searchValue}"
+							rendered="#{documentDroitBean.readAllow}" style="width:250px" />						
+						
+						<p:watermark for="searchInput"
+							value="#{documentmsgs.watermark_find_generic}" /> 
+							
+						<p:commandButton update=":searchForm" ajax="true" id="searchButton"
+							icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{documentSearchBean.findGeneric}"
+							rendered="#{documentDroitBean.readAllow}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+						</p:commandButton>
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()" immediate="true">
+							<h:outputText value="#{commonmsgs.button_advanced_search}"
+								rendered="#{documentDroitBean.readAllow}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="documentData"
+					value="#{documentSearchBean.listRefDocumentDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="15"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+					<f:param name="searchValue" value="#{searchValue.value}" />
+					<f:param name="searchAdv" value="#{documentSearchBean.searchAdv}"/>
+					<f:param name="searchListNomenclat" value="#{documentSearchBean.searchListNomenclat}"/>
+					
+					<f:param name="idfDoc" value="#{current.id}" />
+										
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update=":searchForm:documentData"
+						process=":searchForm:documentData" />
+
+					<f:facet name="header">
+						<h:outputText value="#{documentmsgs.document_list_title}" />
+					</f:facet>
+
+					<p:column sortBy="#{current.titreDocument}">
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_titre}" />
+						</f:facet>
+						<h:outputText value="#{current.titreDocument}" />
+					</p:column>
+
+
+					<p:column sortBy="#{current.objetDocument}">
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_objet_document}" />
+						</f:facet>
+						<h:outputText value="#{current.objetDocument}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.referenceDocument}">
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_reference}" />
+						</f:facet>
+						<h:outputText value="#{current.referenceDocument}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.natureDocumentLibelleLongFr}">
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_nature_document}" />
+						</f:facet>
+						<h:outputText value="#{current.natureDocumentLibelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.dateDocument}">
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_date_document}" />
+						</f:facet>
+						<h:outputText value="#{current.dateDocument}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{documentmsgs.document_url_document}" />
+						</f:facet>
+
+						<p:commandLink id="downfile"
+							value="#{documentmsgs.document_voir_document}" ajax="false"
+							style="font-weight: bold;">
+
+							<p:fileDownload value="#{documentEditBean.file}" />
+
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="searchAdv" value="#{documentSearchBean.searchAdv}"/>
+							<f:param name="searchListNomenclat" value="#{documentSearchBean.searchListNomenclat}"/>
+
+							<f:param name="idfDoc" value="#{current.id}" />
+						</p:commandLink>
+
+					</p:column>
+
+					<p:column style="width:70px" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{documentSearchBean.toDetailsDocument}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{documentDroitBean.readAllow}" icon="ui-icon-document"
+							title="#{commonmsgs.button_consulter}"
+							immediate="true">
+							<f:param name="idfDoc" value="#{current.id}" />
+							
+							<f:param name="idfEntity" value="#{current.id}" />
+							<c:set var="idfEntity" value="#{current.id}" />
+							
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="searchAdv" value="#{documentSearchBean.searchAdv}"/>
+							<f:param name="searchListNomenclat" value="#{documentSearchBean.searchListNomenclat}"/>
+
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{documentSearchBean.toEditDocument}"
+							rendered="#{documentDroitBean.editAllow}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_update}"
+							>
+
+							<f:param name="idfDoc" value="#{current.id}" />
+							<c:set var="idfEntity" value="#{current.id}" />
+							
+							<f:param name="idfEntity" value="#{current.id}" />
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="searchAdv" value="#{documentSearchBean.searchAdv}"/>
+							<f:param name="searchListNomenclat" value="#{documentSearchBean.searchListNomenclat}"/>
+
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			appendTo="@(body)">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+					    <p:column>
+							<h:outputText value="#{documentmsgs.document_entity_name}"/>
+
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectNomEntiteDocument"
+								value="#{documentSearchBean.searchDto.nomEntite}" filter="false"
+								label="#{documentmsgs.document_entity_name}">
+								<f:selectItem itemValue=""
+									itemLabel="#{documentmsgs.document_select_entity_name}" />
+								<f:selectItem itemValue="RefContrat" itemLabel="Avenant" />
+								<f:selectItem itemValue="RefContrat" itemLabel="Contrat" />
+								<f:selectItem itemValue="RefEquipement" itemLabel="Equipement" />
+								<f:selectItem itemValue="RefEtablissement" itemLabel="Etablissement" />
+								<f:selectItem itemValue="RefEvenement" itemLabel="Evénement" />
+								<f:selectItem itemValue="RefGroupe" itemLabel="Groupe" />
+								<f:selectItem itemValue="RefIndividu" itemLabel="Individu" />
+								<f:selectItem itemValue="RefLieu" itemLabel="Lieu" />
+								<f:selectItem itemValue="RefStructure" itemLabel="Structure" />
+								
+								<f:selectItem itemValue="RefDomaineLMD" itemLabel="Domaine formation" />
+								<f:selectItem itemValue="RefFiliereLmd" itemLabel="Filière" />
+								<f:selectItem itemValue="RefSpecialiteLmd" itemLabel="Spécialité" />
+								
+								<f:selectItem itemValue="OffreFormation" itemLabel="Offre de Formation" />
+								<f:selectItem itemValue="DossierEtudiant" itemLabel="Dossier Etudiant" />
+								<f:selectItem itemValue="DossierInscriptionAdministrative" itemLabel="Dossier Inscription Administrative" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:separator></p:separator>
+					</p:row>
+
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_type_document}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectTypeDocument"
+								value="#{documentSearchBean.searchDto.typeDocumentId}"
+								filter="false" label="#{documentmsgs.document_type_document}">
+								<f:selectItem
+									itemLabel="#{documentmsgs.document_select_type_document}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listTypeDocument}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_nature_document}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectNatureDocument"
+								value="#{documentSearchBean.searchDto.natureDocumentId}"
+								filter="false" label="#{documentmsgs.document_nature_document}">
+								<f:selectItem
+									itemLabel="#{documentmsgs.document_select_nature_document}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listNatureDocument}" />
+
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_titre}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="titreDocSearch"
+								style="text-align: left; width:200px;"
+								value="#{documentSearchBean.searchDto.titreDocument}"
+								label="#{documentmsgs.document_titre}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_reference}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="refdocSearch"
+								style="text-align: left; width:200px;"
+								value="#{documentSearchBean.searchDto.referenceDocument}"
+								label="#{documentmsgs.document_reference}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_classement}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectClassementDocument"
+								value="#{documentSearchBean.searchDto.classementId}"
+								filter="false" label="#{documentmsgs.document_classement}">
+								<f:selectItem
+									itemLabel="#{documentmsgs.document_select_classement_document}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listClassement}" />
+
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{documentmsgs.document_mots_cles}:" />
+						</p:column>
+
+						<p:column>
+							<p:autoComplete value="#{documentSearchBean.nomenclatureDtoList}"
+								id="selectmotscles" forceSelection="true" multiple="true"
+								completeMethod="#{motCleConverter.completeMotCle}"
+								var="motCleDto" itemLabel="#{motCleDto.libelleLongFr}"
+								itemValue="#{motCleDto.id}" converter="#{motCleConverter}"
+								label="#{documentmsgs.document_mots_cles}" style="width: 10em;">
+
+							</p:autoComplete>
+
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}"
+					update=":searchForm,selectmotscles"
+					actionListener="#{documentSearchBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();">				
+				
+					
+				</p:commandButton>
+
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

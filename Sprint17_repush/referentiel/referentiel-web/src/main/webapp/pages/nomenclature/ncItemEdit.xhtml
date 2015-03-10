@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	
+		<ui:include src="/pages/nomenclature/ncInfo.xhtml" />
+		<p:panel style="height:600px" id="infosEtabPanel" styleClass="ncPanelStyle">
+		<h:form id="infosNcFromId">
+
+			<br></br>
+			<h:outputText value="#{nomenclaturemsgs.nc_item_description}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="editNcDescription" styleClass="noBorder1">
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_code} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="itemCode" style="text-align: left;width:180px" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.code}"
+							label="#{nomenclaturemsgs.nc_item_ll_fr_libelle}" required="true"
+							valueChangeListener="#{ncBckBean.codeChanged}"
+							
+							requiredMessage="#{nomenclaturemsgs.nc_item_code_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_ll_fr_libelle} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="libelleLongFr" style="text-align: left;width:180px" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.libelleLongFr}"
+							label="#{nomenclaturemsgs.nc_item_ll_fr_libelle}" required="true"
+							valueChangeListener="#{ncBckBean.llLatinChanged}"
+							requiredMessage="#{nomenclaturemsgs.nc_item_ll_fr_required}">
+						</p:inputText>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_lc_fr_libelle}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="libelleCourtFr" style="text-align: left;width:180px"
+							value="#{ncBckBean.nomenclatureDto.libelleCourtFr}"
+							label="#{nomenclaturemsgs.nc_item_lc_fr_libelle}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_ll_ar_libelle} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="libelleLongAr" style="text-align: right;width:180px" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.libelleLongAr}"
+							label="#{nomenclaturemsgs.nc_item_ll_ar_libelle}" required="true"
+							valueChangeListener="#{ncBckBean.llArabeChanged}"
+							requiredMessage="#{nomenclaturemsgs.nc_item_ll_ar_required}">
+						</p:inputText>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_lc_ar_libelle}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="libelleCourtAr" style="text-align: right;width:180px" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.libelleCourtAr}"
+							label="#{nomenclaturemsgs.nc_item_lc_ar_libelle}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox id="actif" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.status}"
+							itemLabel="#{nomenclaturemsgs.nc_item_actif_label}"
+							label="Checkbox" />
+					</p:column>
+				    <p:column/>
+					<p:column>
+						<p:selectBooleanCheckbox id="default" styleClass="inputStyle"
+							value="#{ncBckBean.nomenclatureDto.defaultValue}"
+							itemLabel="#{nomenclaturemsgs.nc_item_default_label}"
+							label="Checkbox" />
+					</p:column>
+				</p:row>
+
+				<p:row rendered="#{ncBckBean.hasReference}">
+					<p:column>
+						<h:outputText
+							value="#{ncBckBean.nomenclatureDto.ncNameReference} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="idReference"
+							value="#{ncBckBean.nomenclatureDto.idReference}" filter="true"
+							filterMatchMode="startsWith" required="true" styleClass="inputStyle"
+							requiredMessage="#{nomenclaturemsgs.nc_item_ref_required}"
+							label="#{ncBckBean.nomenclatureDto.ncNameReference}">
+							<f:selectItem itemLabel="#{nomenclaturemsgs.nc_item_select_ref}"
+								itemValue="" />
+							<f:selectItems value="#{ncBckBean.listNcReference}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+			<br></br>
+			<br></br>
+			<p:panelGrid id="oprButton" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" actionListener="#{ncBckBean.saveItem}"
+							update="@(.ncPanelStyle)" process="@(.ncPanelStyle)">
+							<f:param name="idItem" value="#{ncBckBean.nomenclatureDto.id}" />
+							<f:param name="idNc" value="#{ncBckBean.idNc}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column>
+						<p:commandButton  icon="ui-icon-plusthick"
+							actionListener="#{ncBckBean.toNewItem}" update="@(.ncPanelStyle)" 
+							process="@(.ncPanelStyle)"
+							disabled="#{ncBckBean.nomenclatureDto.id==null}">
+							<f:param name="idItem" value="#{ncBckBean.idItem}" />
+							<f:param name="idNc" value="#{ncBckBean.idNc}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_return}"
+							icon="ui-icon-arrowreturnthick-1-w" process="@this"
+							action="#{ncBckBean.back}">
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_cancel_modification_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="idNc" value="#{ncBckBean.idNc}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+
+
+			<ui:include src="/pages/nomenclature/ncHistoryDetails.xhtml">
+				<ui:param name="idNomecnlature"
+					value="#{ncBckBean.nomenclatureDto.id}" />
+			</ui:include>
+		</h:form>
+		</p:panel>
+	
+</ui:composition>

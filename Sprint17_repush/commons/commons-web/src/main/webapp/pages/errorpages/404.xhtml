@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html" locale="fr">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+			<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<title>404 Page introuvale - Progres</title>
+		</f:facet>
+
+		<f:facet name="middle">
+			<h:outputStylesheet name="css/bootstrap.min.css" />
+			<h:outputStylesheet name="css/font-awesome.min.css" />
+			<h:outputStylesheet name="css/progres-production.css" />
+			<h:outputStylesheet name="css/jquery.ui.css" />
+		</f:facet>
+
+		<f:facet name="last">
+		</f:facet>
+	</h:head>
+
+	<h:body styleClass="progres-style-2">
+		
+		<style>
+		.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+		</style>
+		<header id="header">
+		<div id="logo-group">
+
+			<!-- PLACE YOUR LOGO HERE -->
+
+			<span id="logo"> <a href="#"><img
+					src="#{facesContext.externalContext.request.contextPath}/images/logo2.png"
+					alt="Progres" /> </a>
+			</span>
+		</div>
+		</header>
+
+		<div class="middle-box text-center animated fadeInDown">
+			<h1>404</h1>
+			<h2>Page introuvable</h2>
+
+ 			<div class="error-details">La page que vous recherchez a peut-être changé d'emplacement ou n'est plus disponible.</div>
+                
+			<div class="error-actions">
+				<a href="#{request.contextPath}/pages/index.xhtml" class="btn btn-primary"><i class="fa fa-home"></i> Accueil</a>
+			</div>
+		</div>
+
+	</h:body>
+</f:view>
+</html>

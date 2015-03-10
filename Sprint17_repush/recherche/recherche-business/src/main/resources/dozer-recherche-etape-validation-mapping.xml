@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.EtapeValidationDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.EtapeValidation</class-b>
+      		
+      		
+      		<field>  
+      					<a>demandeBudgetDto</a>
+	  					<b>demandeBudget</b>
+      		</field>
+      		<field>
+      					<a>etapeCircuitDto</a>
+	  					<b>etapeCircuit</b>
+      		</field>
+      		<field>
+      					<a>projetDto</a>
+	  					<b>projet</b>
+      		</field>  
+      		<field>  
+      					<a>reponceDto</a>
+	  					<b>reponce</b>
+      		</field>     		
+      		 
+   	</mapping>
+</mappings>

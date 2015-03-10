@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="etudiants" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12968d3c-35ee-4ced-86b3-e8ce19d20342">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 2" uuid="84a4968c-92a4-46b5-8d5d-ae98b248a739">
+		<field name="matricule" class="java.lang.String"/>
+		<field name="nom" class="java.lang.String"/>
+		<field name="prenom" class="java.lang.String"/>
+		<field name="dateNaissance" class="java.lang.String"/>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="matricule" class="java.lang.String"/>
+	<field name="nom" class="java.lang.String"/>
+	<field name="prenom" class="java.lang.String"/>
+	<field name="dateNaissance" class="java.lang.String"/>
+	<field name="urlPhoto" class="java.lang.String"/>
+	<field name="nomPrenom" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="87c74709-0d7e-45e5-b2a5-8a945847a02e" x="5" y="0" width="120" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Matricule]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e67f164e-db7d-4959-b88c-e83ee3eeb52b" x="127" y="0" width="150" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6cc1eb31-fa88-4744-aeab-ea556f5f05ab" x="285" y="0" width="150" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Prénom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2dbdb3df-81ae-4850-93bd-8c5966a518bb" x="435" y="0" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date de naissance]]></text>
+			</staticText>
+			<frame>
+				<reportElement uuid="ed0c992a-406c-41ba-9a25-488c297c1817" x="0" y="0" width="535" height="15"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.5" lineStyle="Solid"/>
+					<leftPen lineWidth="1.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.5" lineStyle="Solid"/>
+					<rightPen lineWidth="1.5" lineStyle="Solid"/>
+				</box>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement uuid="ed0c992a-406c-41ba-9a25-488c297c1817" x="0" y="0" width="535" height="15"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.5" lineStyle="Solid"/>
+					<leftPen lineWidth="1.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.5" lineStyle="Solid"/>
+					<rightPen lineWidth="1.5" lineStyle="Solid"/>
+				</box>
+			</frame>
+			<textField>
+				<reportElement uuid="acf82444-5665-47bb-a742-dbe6236feac8" x="5" y="0" width="120" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bdd821cb-daee-4ac6-9abf-acf8909b061c" x="127" y="0" width="150" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement uuid="6eef753d-0dc9-498a-9b70-9ae9d68480f8" x="435" y="0" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateNaissance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6fe4c314-5234-4024-b3b1-d1ed56a53f76" x="277" y="0" width="150" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prenom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="82" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

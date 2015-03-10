@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		Gérer les dossiers étudiants
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<pe:blockUI target="form_search" widgetVar="blockUI">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<h:form id="form_search"
+			onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_search:btnSearch').click(); return false;}">
+
+			<p:toolbar styleClass="toolBarMesrs">
+				<p:toolbarGroup align="right">
+					<p:commandButton id="toNewDossierButtonIDTest" ajax="true"
+						icon="ui-icon-plusthick" onstart="PF('blockUI').block()"
+						oncomplete="PF('blockUI').unblock()"
+						value="#{commonmsgs.bouton_nouveau}"
+						action="/pages/cursus/dossier/DossierEtudiantEdit.xhtml">
+						<f:param name="codeTypeDossier" value="D001" />
+					</p:commandButton>
+
+					<!-- 						<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+									action="/pages/cursus/dossier/DossierEtudiantAddNewBac.xhtml"
+									icon="ui-icon-plusthick" /> -->
+				</p:toolbarGroup>
+				<p:toolbarGroup align="left">
+
+					<p:inputText id="sNom" placeholder="Nom"
+						value="#{dossierEtudiantSearchBean.searchByNom}"></p:inputText>
+					<p:spacer width="5px"></p:spacer>
+
+					<p:inputText id="prenometudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_prenom_etudiant}"
+						value="#{dossierEtudiantSearchBean.searchByPrenom}"></p:inputText>
+					<p:separator />
+
+					<p:inputText id="matriculetudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+						value="#{dossierEtudiantSearchBean.searchByMatricule}"></p:inputText>
+					<p:separator />
+
+					<p:inputText id="ninetudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_nin}"
+						value="#{dossierEtudiantSearchBean.searchByNIN}"></p:inputText>
+					<p:spacer width="5px"></p:spacer>
+
+					<p:commandButton icon="ui-icon-search" id="btnSearch"
+						update="form_search :form_crud" styleClass="ui-button-bleu"
+						process="form_search" onstart="PF('blockUI').block()"
+						onsuccess="PF('blockUI').unblock()" title="Rechercher"
+						actionListener="#{dossierEtudiantSearchBean.searchAction()}"></p:commandButton>
+
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+
+
+			<p:spacer height="20px" />
+
+			<p:dataTable id="ResultSearchDataTable" var="current"
+				resizableColumns="false" lazy="true"
+				value="#{dossierEtudiantSearchBean.dossiersEtudiantsModel}"
+				rowKey="#{current.id}" selectionMode="single" paginator="true"
+				rows="5" rowsPerPageTemplate="5,10,50,100"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+				paginatorPosition="bottom"
+				emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datable_list_dossier_etudiant_no_result}">
+
+				<p:ajax event="rowSelect" immediate="true"
+					listener="#{dossierEtudiantSearchBean.onRowSelect}" process="@this"
+					onstart="PF('blockUI').block()" onsuccess="PF('blockUI').unblock()"
+					update=":form_crud">
+				</p:ajax>
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+					width="10%">
+					<h:outputText value="#{current.numeroMatricule}">
+					</h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_nom_etudiant}"
+					width="22%">
+					<h:outputText value="#{current.individu.nomLatin}" width="15%">
+					</h:outputText>
+				</p:column>
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_prenom_etudiant}"
+					width="20%">
+					<h:outputText value="#{current.individu.prenomLatin}">
+					</h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_date_naissance}"
+					width="15%">
+					<h:outputText value="#{current.individu.dateNaissance}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="NIN" width="15%">
+					<h:outputText value="">
+						<f:convertDateTime pattern="#{current.nin}" />
+					</h:outputText>
+				</p:column>
+
+
+			</p:dataTable>
+		</h:form>
+
+		<br/>
+		<p:outputPanel id="form_crud">
+
+			<p:outputPanel rendered="#{dossierEtudiantSearchBean.crud}">
+
+				<ui:include src="/pages/cursus/dossier/DossierEtudiantHeader.xhtml" />
+
+				<br />
+
+				<p:tabView orientation="top" id="tabView" dynamic="true"
+					widgetVar="tabviewWidget">
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_etudiant_title}">
+						<ui:include src="/pages/cursus/individu/IndividuEdit.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_dossier_title}">
+						<ui:include
+							src="/pages/cursus/dossier/DossierEtudiantInfoEdit.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_titreacces_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+						<ui:include
+							src="/pages/cursus/dossier/titreacces/TitreAccessEdit.xhtml" />
+					</p:tab>
+
+					<!-- 					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_diplome_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+						<ui:include src="/pages/cursus/dossier/diplome/DiplomeEdit.xhtml" />
+					</p:tab> -->
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_formation_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+						<ui:include
+							src="/pages/cursus/dossier/formation/FormationEdit.xhtml" />
+					</p:tab>
+
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_besoin_special_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+						<ui:include
+							src="/pages/cursus/dossier/handicap/HandicapEdit.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_situation_sportive_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+						<ui:include src="/pages/cursus/dossier/sportif/SportifEdit.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_document_title}"
+						disabled="#{dossierEtudiantSearchBean.dossierEtudiant.id eq null}">
+
+						<!-- <p:panel> -->
+						<ui:include src="/pages/document/DossierEtudiantDocument.xhtml">
+							<c:set var="entity" value="DossierEtudiant" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierEtudiantBean.dossierEtudiantId} "
+								scope="request" />
+							<ui:param name="entity" value="DossierEtudiant" />
+							<ui:param name="identifiant"
+								value="#{dossierEtudiantBean.dossierEtudiantId}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+						<!--  </p:panel> -->
+
+					</p:tab>
+				</p:tabView>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

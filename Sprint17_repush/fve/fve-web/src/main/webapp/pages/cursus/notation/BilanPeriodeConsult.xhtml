@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{bilanMsgs.bilan_panel_consulter_bilan_periode_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<h:form id="bilanForm" enctype="multipart/form-data">
+			<pe:blockUI target="bilanForm" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+			<p:fieldset legend="#{bilanMsgs.bilan_field_search_title}"
+				toggleable="true" styleClass="ui-fieldset-full-width">
+				<sp:SearchPeriodeComponent beanName="#{bilanConsulBean}"
+					periodeListenerName="periodeChanged" editMode="false"
+					updateForm=":bilanForm" />
+			</p:fieldset>
+			<br />
+			<ui:include src="/pages/cursus/notation/BilanConsult.xhtml" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

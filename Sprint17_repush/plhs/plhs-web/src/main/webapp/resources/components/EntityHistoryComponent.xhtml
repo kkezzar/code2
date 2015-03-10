@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+<!-- INTERFACE COMPOSANT  [ HISTORIQUE DES SITUATIONS  ENTITE ] -->
+<composite:interface componentType="dynamicList">
+	<composite:attribute name="list" type="java.util.List" required="true"
+		shortDescription=" Historique des situations Entite" />
+	<composite:attribute name="idParamName" type="java.lang.String"
+		required="false" shortDescription="Nom du param Id Entite" />
+	<composite:attribute name="idParamValue" type="java.lang.String"
+		required="false" shortDescription="Valeur du param Id Entite" />
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT [ HISTORIQUE DES SITUATIONS  ENTITE ] -->
+<composite:implementation>
+	<h:form id="myForm">
+		<p:tabView id="tvOffreFormation" style="padding:0px" dynamic="true"
+			orientation="left">
+			
+			<p:tab title="Table" >
+				<f:facet name="title">
+					<i class="fa fa-table"></i>
+					<h:outputText value=" Table" />
+				</f:facet>
+				
+				<p:dataTable id="entityHistoryTable" value="#{cc.model}" var="row"
+					rowKey="#{row.id}" rowIndexVar="rowIndex"
+					emptyMessage="#{ofEditMsgs.EDIT_OF_DATA_TABLE_SITUATIONS_LISTE_NO_RESULT}"
+					paginatorPosition="bottom" rowsPerPageTemplate="10,15"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					paginator="true" rows="10">
+
+					<f:param name="#{txtEntityIdParamName.value}"
+						value="#{txtEntityIdParamValue.value}" />
+					<p:ajax event="page" update="@all" process="@form"
+						onstart="PF('ajaxProgressEHC').block()"
+						oncomplete="PF('ajaxProgressEHC').unblock()" />
+
+<!-- 					<f:facet name="header"> -->
+<!--             									#{ofEditMsgs.EDIT_OF_DATA_TABLE_SITUATIONS_LISTE_RESULT} -->
+<!--        						 	</f:facet> -->
+					<p:column headerText="N°" style="text-align:center;">
+						<h:outputText value="#{cc.modelSize - rowIndex}" />
+					</p:column>
+
+					<p:column headerText=" Situation">
+						<h:outputText value="#{row.libelleSituation}" style="#{row.styleCssSituation}"/>
+					</p:column>
+
+					<p:column headerText="Date" styleClass="center">
+						<h:outputText value="#{row.dateSituation}">
+							<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Chronologie">
+				<f:facet name="title">
+					<i class="fa fa-sliders"></i>
+					<h:outputText value=" Chronologie" />
+				</f:facet>
+				
+				<pe:timeline value="#{cc.modelTimeline}"
+					height="300px" selectable="true" zoomable="true" moveable="true">
+				</pe:timeline>
+
+			</p:tab>
+		</p:tabView>
+		<h:inputHidden id="entityIdParamNameID"
+			binding="#{txtEntityIdParamName}" value="#{cc.attrs.idParamName}" />
+		<h:inputHidden id="entityIdParamValueID"
+			binding="#{txtEntityIdParamValue}" value="#{cc.attrs.idParamValue}" />
+
+	</h:form>
+
+	<pe:blockUI target="@([id$=entityHistoryTable])" widgetVar="ajaxProgressEHC">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</composite:implementation>
+
+</html>

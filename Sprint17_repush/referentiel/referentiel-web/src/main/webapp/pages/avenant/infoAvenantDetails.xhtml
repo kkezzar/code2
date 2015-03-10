@@ -1,0 +1,209 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+   <p:panel style="height:600px" id="infosAvenantPanel">  
+    
+         <h:form id="avenantDetailsFormId">      
+               <h:outputText value="#{avenantmsgs.avenant_description}" style="font-weight: bold;" /> 
+                <hr></hr>
+               <p:panelGrid id="description" styleClass="noBorder1"> 
+                 <p:row >
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_identite}:  " />
+							</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantBean.refContratDto.identifiant}" style="font-weight: bold;"/>
+						</p:column> 
+						
+                 </p:row>
+                 <p:row >
+                 <p:column>
+							<h:outputText value="#{avenantmsgs.avenant_objet_lt}:  " />
+							</p:column> 
+						<p:column>
+						
+							<h:outputText value="#{avenantBean.refContratDto.objetContratFr}" style="font-weight: bold;"/>
+						</p:column> 
+						 <p:column>
+							<h:outputText value="#{avenantmsgs.avenant_objet_ar}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.objetContratAr}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						  <p:row >
+						  <p:column>
+							<h:outputText value="#{avenantmsgs.avenant_identite_contrat}:  " />
+							</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantBean.refContratDto.idContrat}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_objet_contrat}:  " />
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantBean.refContratDto.objetContratAvenantFr}" style="font-weight: bold;"/>
+						</p:column>
+                
+						</p:row>
+						<p:row >
+                        <p:column>
+						<h:outputText value="#{avenantmsgs.avenant_type_avenant}:  " />
+						</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.typeAvenantLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column> 
+						
+						<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_reference_documentaire}:  "/>
+						</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.referenceDocumentaire}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+                 </p:panelGrid>
+                 
+                 <br></br>
+                 <h:outputText value="#{avenantmsgs.avenant_dates}" style="font-weight: bold;" /> 
+                <hr></hr>
+               <p:panelGrid id="dates" styleClass="noBorder1"> 
+                
+                 <p:row >
+
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_debut_contrat}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.dateDebutContrat}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_fin_contrat}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.dateFinContrat}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_duree_contrat}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.dureeContrat}"/>
+						</p:column>
+						 
+						
+                 </p:row>
+                 <p:row >
+
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_debut_avenant}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.dateDebutValidite}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_fin_avenant}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.dateFinValidite}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_duree_avenant}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.duree}"/>
+						</p:column>
+						 
+						
+                 </p:row>
+                 </p:panelGrid>
+                 <br></br>
+                 <h:outputText value="#{avenantmsgs.avenant_donnee_financiere_contrat}" style="font-weight: bold;" /> 
+                <hr></hr>
+                 <p:panelGrid id="donneFinanc" styleClass="noBorder1"> 
+                
+                   <p:row >
+                        
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_ht_contrat}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.montantHtContrat} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>			
+						
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_tva_contrat}:  " />
+							</p:column> 
+						<p:column>
+						<h:outputText value="#{avenantBean.refContratDto.montantTvaContrat} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>
+						
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_ttc_contrat}:  " />
+							</p:column> 
+						 <p:column>
+						<h:outputText value="#{avenantBean.refContratDto.montantTtcContrat} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>					
+						</p:column> 
+						</p:row>	
+						 
+						</p:panelGrid>
+						
+						 <br></br>
+                 <h:outputText value="#{avenantmsgs.avenant_donnee_financiere_avenant}" style="font-weight: bold;" /> 
+                   <hr></hr>
+                 <p:panelGrid id="donneFinancavenant" styleClass="noBorder1"> 
+                
+                   <p:row >
+                
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_ht_avenant}:  " />
+						<h:outputText value="#{avenantBean.refContratDto.montantHt} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column> 
+							<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_tva_avenant}:  " />
+						<h:outputText value="#{avenantBean.refContratDto.montantTva} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_montant_ttc_avenant}:  " />
+							</p:column> 
+						 <p:column>
+						<h:outputText value="#{avenantBean.refContratDto.montantTtc} #{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>					
+						</p:column> 
+						</p:row>
+						
+						</p:panelGrid>
+						
+						<br></br>
+                  <h:outputText value="#{avenantmsgs.avenant_autre_informations}" style="font-weight: bold;"/> 
+                <hr></hr>
+                 <p:panelGrid id="autreInfo" styleClass="noBorder1"> 
+                 <p:row >
+                        <p:column>
+							<h:outputText value="#{avenantmsgs.avenant_descipline}:  " />
+							</p:column> 
+						 <p:column>
+						<h:outputText value="#{avenantBean.refContratDto.disciplineLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column>
+						</p:row> 
+						<p:row>
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_observation}:  " />
+						</p:column> 
+						 <p:column>
+						<h:outputText value="#{avenantBean.refContratDto.observation}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						</p:panelGrid>
+						<br></br>
+						  
+            
+            		</h:form>
+           
+            </p:panel>  
+              
+</ui:composition>

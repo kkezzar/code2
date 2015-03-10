@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_consulter_agents_comptables}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{agentsComptablesBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{agentsComptablesBean.model}" paginator="true"
+					paginatorPosition="bottom" rows="5" rowKey="#{current.id}" 
+					rowIndexVar="rowIndex" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{agentsComptablesBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}" style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.code}">
+						<h:outputText value="#{current.code}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_nom}">
+						<h:outputText value="#{current.refIndividu.nomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_preom}">
+						<h:outputText value="#{current.refIndividu.prenomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.date_nomination}">
+						<h:outputText value="#{current.dateNomination}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+
+				<p:tabView rendered="#{agentsComptablesBean.crud}">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_agent_comptable}">
+
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column style="width:20%">
+										<h:outputText value="#{parametrageBudgetMsg.agent_comptable}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{agentsComptablesBean.agentComptableDto.refIndividu.nomLatin} #{agentsComptablesBean.agentComptableDto.refIndividu.prenomLatin}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.code}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{agentsComptablesBean.agentComptableDto.code}"
+											required="true" styleClass="value" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.date_nomination}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{agentsComptablesBean.agentComptableDto.dateNomination}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.decision_nomination}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{agentsComptablesBean.agentComptableDto.decisionNomination}"
+											required="true" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.date_fin_nomination}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{agentsComptablesBean.agentComptableDto.dateFinNomination}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.etablissements_structures_affectes}" />
+									</p:column>
+									<p:column colspan="3">
+
+										<p:dataTable var="currentAff" id="affectationTable"
+											value="#{agentsComptablesBean.agentComptableDto.affectationEtabStrAgentComptables}"
+											editable="true"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+
+											<p:column headerText="#{parametrageBudgetMsg.etablissement}">
+												<h:outputText
+													value="#{currentAff.refEtablissement.llEtablissementLatin}" />
+											</p:column>
+											<p:column headerText="#{parametrageBudgetMsg.structure}">
+												<h:outputText
+													value="#{currentAff.refStructure.llStructureLatin}" />
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.date_affectation}">
+												<h:outputText value="#{currentAff.dateAffectation}">
+													<f:convertDateTime type="date"
+														pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.decision_affectation}">
+												<h:outputText value="#{currentAff.decisionAffectation}" />
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.date_fin_affectation}">
+												<h:outputText value="#{currentAff.dateFinAffectation}">
+													<f:convertDateTime type="date"
+														pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.observation}">
+												<h:outputText value="#{currentAff.observation}">
+
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_view :form_search"
+												process="@this"
+												actionListener="#{agentsComptablesBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

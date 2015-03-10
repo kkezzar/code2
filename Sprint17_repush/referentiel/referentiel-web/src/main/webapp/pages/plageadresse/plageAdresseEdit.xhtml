@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_plageAdresse}"
+			id="infosplageadressePanel" style="border:0;">
+			<h:form id="palgeadresseEditForm">
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+
+				<p:fieldset legend="#{commonmsgs.common_plageadresse}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{plageadressemsgs.plageadresse_identifiant} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="identifiant" style="text-align: left;font-weight: bold"
+									value="#{plageadresseMgrBean.refPlageAdresseDto.identifiant}"
+									label="#{plageadressemsgs.plageadresse_identifiant}"
+									readonly="true" 
+									valueChangeListener="#{plageadresseMgrBean.idfChanged}"
+									requiredMessage="#{plageadressemsgs.plageadresse_identite_required}">
+								</p:inputText>
+								<p:tooltip for="identifiant"
+									value="Veuillez saisir l'identifiant" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{plageadressemsgs.plageadresse_nom} " />
+							</p:column>
+							<p:column>
+								<p:inputText id="nom" style="text-align: left"
+									value="#{plageadresseMgrBean.refPlageAdresseDto.nom}"
+									valueChangeListener="#{plageadresseMgrBean.nameChanged}"
+									label="#{plageadressemsgs.plageadresse_nom}">
+								</p:inputText>
+								<p:tooltip for="identifiant"
+									value="Veuillez saisir le nom d'adresse" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{plageadressemsgs.plageadresse_adresse_debut} *" />
+							</p:column>
+							<p:column>
+								<p:inputMask id="adressedebut" mask="999.999.999.999"
+									label="#{plageadressemsgs.plageadresse_adresse_debut}"
+									value="#{plageadresseMgrBean.refPlageAdresseDto.adresseDebut}"
+									required="true" valueChangeListener="#{plageadresseMgrBean.adrChanged}"
+									requiredMessage="#{plageadressemsgs.plageadresse_adresse_debut_required}" />
+								<p:tooltip for="adressedebut"
+									value="Veuillez saisir l'adresse de début" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{plageadressemsgs.plageadresse_adresse_fin} *" />
+							</p:column>
+							<p:column>
+								<p:inputMask id="adressefin" mask="999.999.999.999"
+									label="#{plageadressemsgs.plageadresse_adresse_fin}"
+									value="#{plageadresseMgrBean.refPlageAdresseDto.adresseFin}"
+									required="true" valueChangeListener="#{plageadresseMgrBean.adrChanged}"
+									requiredMessage="#{plageadressemsgs.plageadresse_adresse_fin_required}" />
+								<p:tooltip for="adressefin"
+									value="Veuillez saisir l'adresse de fin" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+
+
+
+
+					</p:panelGrid>
+				</p:fieldset>
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_save}"
+								icon="ui-icon-disk" update="palgeadresseEditForm"
+								process="palgeadresseEditForm"
+								actionListener="#{plageadresseMgrBean.toSave}" >
+								<f:param name="idadr" value="#{plageadresseMgrBean.idadr}" />
+								<f:param name="searchValue"
+									value="#{plageadresseMgrBean.searchValue}" />
+								</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton id="addButton" icon="ui-icon-plusthick"
+								value="#{commonmsgs.button_add}"
+								rendered="#{plageAdresseDroitBean.createAllow}"
+								disabled="#{plageadresseMgrBean.refPlageAdresseDto.id==null}"
+								process="@this"
+								actionListener="#{plageadresseMgrBean.addAdresse()}"
+								update="palgeadresseEditForm">
+								<f:param name="searchValue"
+									value="#{plageadresseMgrBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{plageadresseMgrBean.back}">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_cancel_modification_confirmation}"
+									icon="ui-icon-alert" />
+								<f:param name="searchValue"
+									value="#{plageadresseMgrBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

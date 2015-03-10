@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{congeEmployeMgs.pnl_enregistrer_prevision_conge_annuel} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			 <ui:include
+				src="/pages/administrative/dossierEmploye/DossierEmployeSearch.xhtml" >
+				<ui:param name="nameMBean"  value="#{previsionCongeMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty previsionCongeMBean.dossierEmployeDto}">
+					<h:form id="form_prevision_conge_edit">
+					<p:panelGrid
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+		<p:row>
+			<p:column colspan="4" styleClass="title">
+				<h:outputText value="#{congeEmployeMgs.previsions_de_conge_title}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.employe} " />
+			</p:column>
+			<p:column >
+				<p:commandLink onclick="PF('employeDetailDialog').show()"
+					rendered="#{previsionCongeMBean.dossierEmployeDto!=null}"
+					immediate="true">
+					<h:outputText
+						value="#{previsionCongeMBean.dossierEmployeDto.refIndividuDto.nomLatin} #{previsionCongeMBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+						styleClass="value" />
+				</p:commandLink>
+			</p:column>
+		</p:row>
+			<p:row>
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.annee} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{previsionCongeMBean.anneeGrh.libelle}"
+						styleClass="value" />
+			</p:column>
+	
+	
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.droit_conge_periode} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{previsionCongeMBean.droitConge} jour(s)"
+						styleClass="value" />
+			</p:column>
+		</p:row>
+		</p:panelGrid>
+		
+					<p:dataTable var="prevision" value="#{previsionCongeMBean.listPrevisionCongeDtos}" id="previsionsTable"
+						widgetVar="previsionsTable" rowKey="#{prevision.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{congeEmployeMgs.datable_list_prevision_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddprevision" styleClass="ui-button-bleu" title="ajouter prevision" icon="ui-icon-plusthick"  
+										
+										process="@this previsionsTable" 
+										ajax="true"
+										immediate="true" 
+										update="previsionsTable @this"
+										action="#{previsionCongeMBean.addPrevision()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{congeEmployeMgs.numero}"
+							style="width:10%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{congeEmployeMgs.date_debut}" style="width:25%">
+							<p:calendar navigator="true" value="#{prevision.dateDebut}" style="width:100%"
+								label="#{congeEmployeMgs.date_debut}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{congeEmployeMgs.date_debut_required}">
+							</p:calendar>
+
+						</p:column>
+						<p:column headerText="#{congeEmployeMgs.nb_jours}" style="width:25%">
+							<p:inputText value="#{prevision.nbreJours}" required="true" 
+								requiredMessage="#{congeEmployeMgs.nb_jours_required}">
+							
+								</p:inputText>
+						</p:column>
+						<p:column headerText="#{congeEmployeMgs.observation}" style="width:30%">
+							<p:inputText value="#{prevision.observation}"  style="width:100%"
+								>
+							
+								</p:inputText>
+						</p:column>
+						
+						<p:column style="width:10%">
+                       <p:commandButton id="btnRemoveEtudiant"  
+									action="#{previsionCongeMBean.removePrevision()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="previsionsTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{previsionCongeMBean.selectedPrevisionIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+					<p:toolbar id="previsionCongeToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save"
+						id="saveEnfantsBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{previsionCongeMBean.onSave}">
+
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{previsionCongeMBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			</h:form>
+					
+					<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{previsionCongeMBean.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+					
+					</p:outputPanel>
+					</p:outputPanel>
+			
+		</p:outputPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

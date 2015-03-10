@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<pe:blockUI target="responsableField" widgetVar="responsableBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	<p:outputPanel styleClass="examenTabStyle">
+	<p:panel header="Affecter les responsables aux examens"
+		id="responsableField"
+		rendered="#{planningSessionSaveBean.planningSessionDto.id!=0}">
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<p:row>
+
+				<p:column style="width:5%">
+					<p:outputLabel value="#{examenMsgs.examen_salle}" for="_salle"></p:outputLabel>
+				</p:column>
+				<p:column style="width:38%">
+					<p:selectOneMenu id="_salle" filter="true" required="true"
+						style="width:50%"
+						requiredMessage="#{examenMsgs.examen_salle_required}"
+						filterMatchMode="startsWith" styleClass="value"
+						value="#{responsableExamenBean.salleExamenDto.id}"
+						label="#{examenMsgs.examen_examen}">
+						<p:ajax update="responsableField" process="@this"
+							onstart="PF('responsableBlock').block()"
+							onsuccess="PF('responsableBlock').unblock()"
+							listener="#{responsableExamenBean.salleChanged()}" />
+						<f:selectItem itemLabel="#{examenMsgs.examen_salle_select}"
+							itemValue="" />
+						<f:selectItems value="#{responsableExamenBean.salleExamenList}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<br></br>
+		<p:pickList id="ResponsablePickList"
+			value="#{responsableExamenBean.responsableDualList}"
+			var="responsable"
+			addLabel="#{examenMsgs.examen_pickList_ajouter_label}"
+			addAllLabel="#{examenMsgs.examen_pickList_ajouter_tout_label}"
+			removeLabel="#{examenMsgs.examen_pickList_supprimer_label}"
+			removeAllLabel="#{examenMsgs.examen_pickList_supprimer_tout_label}"
+			itemValue="#{responsable}"
+			itemLabel="#{responsable.individuNomLatin}" showCheckbox="true"
+			style="text-align:left" showSourceFilter="true"
+			showTargetFilter="true" filterMatchMode="contains"
+			converter="entityConverter">
+			<p:ajax event="transfer" onstart="PF('responsableBlock').block()"
+				onsuccess="PF('responsableBlock').unblock()"
+				listener="#{responsableExamenBean.onTransfer}"
+				update="responsableField" />
+			<f:facet name="sourceCaption">#{examenMsgs.examen_liste_responsable_source}</f:facet>
+			<f:facet name="targetCaption">#{examenMsgs.examen_liste_responsable_target}</f:facet>
+			<p:column style="width:2%">
+				<h:outputText value="" />
+			</p:column>
+			<p:column style="width:98%">
+				<h:outputText
+					value="#{responsable.individuPrenomLatin} #{responsable.individuNomLatin}" />
+			</p:column>
+		</p:pickList>
+		<br></br>
+		<p:toolbar id="responsableToolBar" styleClass="toolBarMesrs"
+			style="width:100%;margin:0;">
+			<p:toolbarGroup>
+
+				<p:commandButton id="btnSaveResps"
+					value="#{commonmsgs.bouton_enregistrer}"
+					actionListener="#{responsableExamenBean.save()}"
+					icon="ui-icon-disk" onstart="PF('responsableBlock').block()"
+					update="responsableField" process="responsableField"
+					disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+					onsuccess="PF('responsableBlock').unblock()">
+				</p:commandButton>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</p:panel>
+	</p:outputPanel>
+</ui:composition>
+

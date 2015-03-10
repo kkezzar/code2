@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/dialogPageLayout.xhtml">
+
+	<ui:define name="title">
+		<h:outputText
+			value="#{ofmsgs.offre_formation_ue_select_popup_page_title}" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="form_ueSearch">
+			<p:fieldset id="fldst_search"
+				style="margin-bottom:5px; text-align:right">
+
+				<h:outputText
+					value="#{ofmsgs.offre_formation_ue_select_popup_full_text_search_keyword}" />
+				<p:inputText id="it_fullTextSearchKeyword"
+					binding="#{fullTextSearchKeyword}" size="50" />
+
+				<p:spacer width="10"></p:spacer>
+ 
+				<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+					icon="ui-icon-search" update="fldst_ListUe"
+					action="#{ueSelectPopupBB.ssearchFullText(fullTextSearchKeyword.value)}">
+					<f:param name="parcoursId" value="#{ueSelectPopupBB.parcoursId}" />
+					<f:param name="refCodeSemestre"
+						value="#{ueSelectPopupBB.refCodeSemestre}" />
+				</p:commandButton>
+
+				<p:spacer width="10"></p:spacer>
+
+				<p:commandLink id="rechercheAvc" disabled="true">
+					<h:outputText value="Recherche avancée" />
+				</p:commandLink>
+
+			</p:fieldset>
+
+			<p:fieldset id="fldst_ListUe">
+
+				<p:dataTable resizableColumns="true"
+					value="#{ueSelectPopupBB.ueList}" var="currentUe" paginator="true"
+					paginatorPosition="bottom" style="margin-top:5px"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="fullTextSearchKeyword"
+						value="#{fullTextSearchKeyword.value}" />
+					<p:ajax event="page" update="@this"></p:ajax>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{ofmsgs.offre_formation_ue_select_popup_code_ue}" />
+						</f:facet>
+						<h:outputText value="#{currentUe.code}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{ofmsgs.offre_formation_ue_select_popup_libelle_fr}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.libelleFr}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{ofmsgs.offre_formation_ue_select_popup_libelle_ar}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.libelleAr}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{ofmsgs.offre_formation_ue_select_popup_type_ue}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.refCodeTypeUe}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{commonmsgs.data_table_action_title}" />
+						</f:facet>
+						<p:commandLink action="#{ueSelectPopupBB.SelectUe(currentUe.id)}"
+							value="#{commonmsgs.data_table_action_select}">
+							<f:param name="fullTextSearchKeyword"
+								value="#{fullTextSearchKeyword.value}" />
+							<f:param name="parcoursId" value="#{ueSelectPopupBB.parcoursId}" />
+							<f:param name="refCodeSemestre"
+								value="#{ueSelectPopupBB.refCodeSemestre}" />
+						</p:commandLink>
+						
+						<p:commandLink action="#{ueSelectPopupBB.selecttUe}"
+							value="#{commonmsgs.data_table_action_select}">
+							<f:setPropertyActionListener target="#{ueSelectPopupBB.SelectUe}" value="#{currentUe.id}" />
+							<f:param name="ueId" value="#{ueSelectPopupBB.SelectUe}" />
+							<f:param name="fullTextSearchKeyword" value="#{fullTextSearchKeyword.value}" />
+						</p:commandLink>
+						
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

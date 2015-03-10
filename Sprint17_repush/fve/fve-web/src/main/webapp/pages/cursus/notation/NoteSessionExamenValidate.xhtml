@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:note="http://java.sun.com/jsf/composite/components/notation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{noteExamenMsgs.note_examen_panel_valider_note_session_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="panelGlobal">
+
+			<h:form id="noteForm">
+				<pe:blockUI target="noteForm" widgetVar="globalWidget">
+					<i class="fa fa-spinner fa-spin" />
+				</pe:blockUI>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+					showSummary="false" closable="true" life="5000" />
+				<p:fieldset
+					legend="#{noteExamenMsgs.note_examen_field_search_title}"
+					toggleable="true" styleClass="ui-fieldset-full-width">
+					<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+						<p:row>
+							<p:column style="width:15%">
+								<p:outputLabel style="width:100%;text-align:left"
+									value="#{noteExamenMsgs.note_examen_annee_academique}"
+									for="annee"></p:outputLabel>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="annee" filter="true" required="true"
+									filterMatchMode="contains" style="width:100%;text-align:left"
+									requiredMessage="#{noteExamenMsgs.note_examen_annee_academique_required}"
+									rendered="#{!examenNoteSessionBean.editMode}"
+									value="#{examenNoteSessionBean.anneeAcademiqueId}"
+									label="#{noteExamenMsgs.note_examen_annee_academique}">
+									<p:ajax update="noteForm" onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()"
+										listener="#{examenNoteSessionBean.anneeChanged}" />
+									<f:selectItem
+										itemLabel="#{noteExamenMsgs.note_examen_annee_academique_select}"
+										itemValue="" />
+									<f:selectItems
+										value="#{examenNoteSessionBean.anneeAcademiqueList}" />
+								</p:selectOneMenu>
+								<h:outputText value="#{sessionBeanFve.codeAnneeAcademique}"
+									styleClass="value" rendered="#{examenNoteSessionBean.editMode}" />
+							</p:column>
+
+							<p:column style="width:15%">
+								<p:outputLabel style="width:100%;text-align:left"
+									value="#{noteExamenMsgs.note_examen_offre_formation}" for="oof"></p:outputLabel>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="oof" required="true"
+									style="width:100%;text-align:left"
+									value="#{examenNoteSessionBean.oofId}"
+									requiredMessage="#{noteExamenMsgs.note_examen_offre_formation_required}"
+									filter="true" filterMatchMode="contains"
+									label="#{noteExamenMsgs.note_examen_offre_formation}">
+									<p:ajax update="noteForm" onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()"
+										listener="#{examenNoteSessionBean.ofChanged}" />
+									<f:selectItem
+										itemLabel="#{noteExamenMsgs.note_examen_offre_formation_select}"
+										itemValue="" />
+									<f:selectItems value="#{examenNoteSessionBean.ofList}" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:15%">
+								<p:outputLabel value="#{noteExamenMsgs.note_examen_periode}"
+									for="periode"></p:outputLabel>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="periode" required="true"
+									value="#{examenNoteSessionBean.periodeId}" filter="true"
+									filterMatchMode="contains" style="width:100%;text-align:left"
+									label="#{noteExamenMsgs.note_examen_periode}">
+									<p:ajax update="noteForm" onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()"
+										listener="#{examenNoteSessionBean.periodeChanged}" />
+									<f:selectItem
+										itemLabel="#{noteExamenMsgs.note_examen_periode_select}"
+										itemValue="" />
+									<f:selectItems value="#{examenNoteSessionBean.periodeList}" />
+
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column style="width:15%">
+								<p:outputLabel for="planning"
+									value="#{noteExamenMsgs.note_examen_planning_session}" />
+							</p:column>
+							<p:column style="width:35%" colspan="3">
+								<p:selectOneMenu id="planning"
+									style="width:100%;text-align:left" filter="true"
+									filterMatchMode="contains" styleClass="listStyle"
+									value="#{examenNoteSessionBean.planningSessionId}"
+									required="true"
+									requiredMessage="#{noteExamenMsgs.note_examen_planning_session_required}"
+									label="#{noteExamenMsgs.note_examen_session}">
+									<p:ajax update="noteForm" onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()"
+										listener="#{examenNoteSessionBean.sessionChanged}" />
+									<f:selectItem
+										itemLabel="#{noteExamenMsgs.note_examen_planning_session_select}"
+										itemValue="" />
+									<f:selectItems
+										value="#{examenNoteSessionBean.planingExamenList}" />
+								</p:selectOneMenu>
+							</p:column>
+
+
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+				<br />
+				<p:panel rendered="#{examenNoteSessionBean.showDetail}" id="detail">
+					<p:fieldset legend="#{noteExamenMsgs.note_examen_field_info_title}"
+						toggleable="true" collapsed="true">
+						<p:panelGrid styleClass="ui-panelgrid-full-width">
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_numero_session}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.numeroSession}" />
+								</p:column>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_type_session}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.ncTypeSessionLibelleFr}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_avec_controle_continu}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.avecControleContinu?'Oui':'Non'}" />
+								</p:column>
+								<p:column style="width:20%">
+									<h:outputText value="#{noteExamenMsgs.note_examen_niveau}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.niveauLibelleLongLt}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText value="#{noteExamenMsgs.note_examen_date_debut}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.dateDebut}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column style="width:20%">
+									<h:outputText value="#{noteExamenMsgs.note_examen_date_fin}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.dateFin}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_date_publication}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.datePublication}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_date_cloture}" />
+								</p:column>
+								<p:column style="width:30%">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.dateCloture}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:20%">
+									<h:outputText
+										value="#{noteExamenMsgs.note_examen_validation_notes}" />
+								</p:column>
+
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{examenNoteSessionBean.planningSessionDto.notesValide?'Oui':'Non'}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+
+						</p:panelGrid>
+					</p:fieldset>
+					<p:fieldset id="fsSearchResult"
+						legend="#{noteExamenMsgs.note_examen_data_grid_result_recherche}">
+						<p:dataGrid var="row" style="width:200px;overflow-x:hidden"
+							value="#{examenNoteSessionBean.bilanSessionDtos}" columns="2"
+							layout="grid" rows="6" paginator="true" id="datagrid"
+							emptyMessage="#{noteExamenMsgs.note_examen_data_grid_empty_result}"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+							rowsPerPageTemplate="6,12,16">
+							<p:ajax event="page" onstart="PF('globalWidget').block()"
+								oncomplete="PF('globalWidget').unblock()">
+							</p:ajax>
+							<p:panel
+								header="#{row.nomLatinEtudiant} #{row.prenomLatinEtudiant} "
+								style="text-align:center;font-size:9pt">
+								<p:panelGrid  cellspacing="0" >
+								<p:row>
+									<p:column style="width:25%">
+										<p:graphicImage value="#{photoEtudiantBB.photo}"
+											rendered="#{row.urlPhoto!=null}" width="150"
+											alt="#{documentmsgs.document_photo_vide}" >
+											<f:param name="url" value="#{row.urlPhoto}" />
+										</p:graphicImage>
+										<p:graphicImage value="/resources/images/boy.png"
+											rendered="#{row.urlPhoto==null}"
+											alt="#{documentmsgs.document_photo_vide}">
+										</p:graphicImage>
+									</p:column>
+									<p:column style="width:75%">
+										<note:NoteExamenComponent listData="#{row}" />
+									</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:panel>
+
+						</p:dataGrid>
+					</p:fieldset>
+					<br />
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{commonmsgs.bouton_validate}"
+								update="noteForm"
+								disabled="#{examenNoteSessionBean.planningSessionDto.notesValide}"
+								id="saveBtn" icon="ui-icon-disk"
+								onstart="PF('globalWidget').block()"
+								oncomplete="PF('globalWidget').unblock()"
+								actionListener="#{examenNoteSessionBean.validateNote()}">
+								<p:confirm header="Confirmation"
+									message="#{noteExamenMsgs.note_examen_note_session_validation_confirmation_message}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:commandButton value="#{commonmsgs.bouton_invalidate}"
+								disabled="#{!examenNoteSessionBean.planningSessionDto.notesValide}"
+								id="anlBtn" icon="ui-icon-arrowreturnthick-1-w"
+								update="noteForm" onstart="PF('globalWidget').block()"
+								oncomplete="PF('globalWidget').unblock()"
+								actionListener="#{examenNoteSessionBean.invalidateNote()}">
+								<p:confirm header="Confirmation"
+									message="#{noteExamenMsgs.note_examen_note_session_annuler_validation_confirmation_message}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:toolbarGroup>
+					</p:toolbar>
+
+				</p:panel>
+			</h:form>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

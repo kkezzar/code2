@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.CycleFormation
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.CycleFormationDto
+		</class-b>
+
+
+		<field>
+			<a>situationEntite</a>
+			<b>situationEntiteDto</b>
+		</field>
+		<field>
+			<a>sessionFormations</a>
+			<b>sessionFormationDtos</b>
+		</field>
+		<field>
+			<a>programmeFormationGrh</a>
+			<b>programmeFormationGrhDto</b>
+		</field>
+
+		<field>
+			<a>gradeCycleFormations</a>
+			<b>gradeCycleFormationDtos</b>
+		</field>
+
+
+
+	</mapping>
+
+
+
+
+
+</mappings>

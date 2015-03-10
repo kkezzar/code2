@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_identite}:" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="identifiant" 
+							value="#{structureMgrBean.refStructureDto.identifiant}" styleClass="value"/>
+						
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_type_structure_fr}:" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="typeStructure"  styleClass="value"
+							value="#{structureMgrBean.refStructureDto.typeLibelleLongFr} "/>
+					
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="llstructLatin" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.llStructureLatin}"
+							/>
+					</p:column>
+
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle_arabe}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="llArabe" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.llStructureArabe}"
+						/>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle_court}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="lcLatin" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.lcStructureLatin}"
+						/>
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{structuremsgs.structure_libelle_court_ar}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="lcAr" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.lcStructureArabe}:"
+						/>
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_date_creation}:" />
+					</p:column>
+					<p:column style="width:30%">
+					
+						<h:outputText id="dateCreation" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.dateCreation}"
+							 ><f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_decret}: " />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="decret" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.decret}"
+						/>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{structuremsgs.structure_forme_juridique_fr}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="fj" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.formeJuridiqueLibelleLongFr}"/>
+					</p:column>
+
+					<p:column style="width:30%">
+						<h:outputText value="#{structuremsgs.structure_statut_fr}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="statut" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.statusLibelleLongFr}"
+							/>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nis}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="nis" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.nis}"
+							/>
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nif}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="nif" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.nif}"
+							/>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nss}:" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="nss" styleClass="value"
+							value="#{structureMgrBean.refStructureDto.nss}"
+							/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			
+
+</ui:composition>

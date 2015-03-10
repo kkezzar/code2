@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.AffectationLieuStructureDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.AffectationLieuStructure
+		</class-b>
+
+
+		<field>
+			<a>periodiciteId</a>
+			<b>nomenclatureByIdNcPeriodicite.id</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongFr</a>
+			<b>nomenclatureByIdNcPeriodicite.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongAr</a>
+			<b>nomenclatureByIdNcPeriodicite.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodiciteCode</a>
+			<b>nomenclatureByIdNcPeriodicite.code</b>
+		</field>
+
+
+		<field>
+			<a>periodeId</a>
+			<b>nomenclatureByIdNcPeriode.id</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongFr</a>
+			<b>nomenclatureByIdNcPeriode.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongAr</a>
+			<b>nomenclatureByIdNcPeriode.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodeCode</a>
+			<b>nomenclatureByIdNcPeriode.code</b>
+		</field>
+
+
+		<field>
+			<a>refStructureId</a>
+			<b>refStructure.id</b>
+		</field>
+		<field>
+			<a>refStructureTypeId</a>
+			<b>refStructure.nomenclatureByTypeStructure.id</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>refStructure.llStructureArabe</b>
+		</field>
+
+		<field>
+			<a>llStructureLatin</a>
+			<b>refStructure.llStructureLatin</b>
+		</field>
+		<field>
+			<a>refStructureTypeLibelle</a>
+			<b>refStructure.nomenclatureByTypeStructure.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>refStructure.refEtablissement.identifiant</b>
+		</field>
+
+
+
+
+		<field>
+			<a>refLieuId</a>
+			<b>refLieu.id</b>
+		</field>
+
+		<field>
+			<a>refLieuDesignation</a>
+			<b>refLieu.designation</b>
+		</field>
+		<field>
+			<a>refLieudesignationArabe</a>
+			<b>refLieu.designationArabe</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>refLieu.nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelleLongFr</a>
+			<b>refLieu.nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelleLongAr</a>
+			<b>refLieu.nomenclatureByTypeLieu.libelleLongAr</b>
+		</field>
+		<field>
+			<a>refLieuTypelieuCode</a>
+			<b>refLieu.nomenclatureByTypeLieu.code</b>
+		</field>
+
+
+		<field>
+			<a>celluleHoraireId</a>
+			<b>celluleHoraire.id</b>
+		</field>
+		<field>
+			<a>plageHoraireId</a>
+			<b>celluleHoraire.plageHoraire.id</b>
+		</field>
+
+		<field>
+			<a>plageHoraireCode</a>
+			<b>celluleHoraire.plageHoraire.code</b>
+		</field>
+		<field>
+			<a>plageHoraireNumero</a>
+			<b>celluleHoraire.plageHoraire.numero</b>
+		</field>
+
+		<field>
+			<a>plageHoraireLibelleFr</a>
+			<b>celluleHoraire.plageHoraire.libelleFr</b>
+		</field>
+		<field>
+			<a>plageHoraireLibelleAr</a>
+			<b>celluleHoraire.plageHoraire.libelleAr</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureDebut</a>
+			<b>celluleHoraire.plageHoraire.heureDebut</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureFin</a>
+			<b>celluleHoraire.plageHoraire.heureFin</b>
+		</field>
+
+		<field>
+			<a>jourId</a>
+			<b>celluleHoraire.jour.id</b>
+		</field>
+		<field>
+			<a>jourCode</a>
+			<b>celluleHoraire.jour.code</b>
+		</field>
+		<field>
+			<a>jourLibelleFr</a>
+			<b>celluleHoraire.jour.libelleFr</b>
+		</field>
+		<field>
+			<a>jourLibelleAr</a>
+			<b>celluleHoraire.jour.libelleAr</b>
+		</field>
+
+		<!-- AnneeAcademique anneeAcademique -->
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>anneeAcademique.code</b>
+		</field>
+
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>ouvertureOffreFormation.offreFormation.code</b>
+		</field>
+		<field>
+			<a>offreFormationLibelleFr</a>
+			<b>ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+
+
+		<field>
+			<a>offreFormationLibelleAr</a>
+			<b>ouvertureOffreFormation.offreFormation.libelleLongAr</b>
+		</field>
+
+		
+
+	</mapping>
+
+
+
+
+
+
+
+</mappings>

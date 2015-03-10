@@ -1,0 +1,148 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panelGrid id="panelEdit">
+		<p:row>
+			<p:column style="width:250px">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_mc}"
+					for="mc"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:selectOneMenu id="mc" required="false"
+					value="#{evalControleContinuBean.evalControleContinuDto.rattachementMcId}"
+					filter="true" filterMatchMode="contains"
+					style="width:100%;text-align:left"
+					label="#{evalControleContinuMsgs.eval_controle_continu_mc}">
+					<p:ajax update="panelEdit" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{evalControleContinuBean.mcChanged}" />
+					<f:selectItem
+						itemLabel="#{evalControleContinuMsgs.eval_controle_continu_mc_select}"
+						itemValue="" />
+					<f:selectItems value="#{evalControleContinuBean.matieres}" />
+
+				</p:selectOneMenu>
+			</p:column>
+			<p:column style="width:250px">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_groupe}"
+					for="groupe"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:selectOneMenu id="groupe" required="true"
+					style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.associationGroupePedagogiqueId}"
+					filter="true" filterMatchMode="contains"
+					label="#{evalControleContinuMsgs.eval_controle_continu_groupe}">
+					<p:ajax update="panelEdit" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{evalControleContinuBean.groupeChanged}" />
+					<f:selectItem
+						itemLabel="#{evalControleContinuMsgs.eval_controle_continu_groupe_select}"
+						itemValue="" />
+					<f:selectItems value="#{evalControleContinuBean.groupes}" />
+
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_date_evaluation}"
+					for="dateEval"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:calendar navigator="true" style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.dateEvaluation}"
+					id="dateEval" label="#{individumsgs.individu_datenaissance}"
+					pattern="dd/MM/yyyy" required="true"
+					mindate="#{evalControleContinuBean.periodeDateDebut}"
+					maxdate="#{evalControleContinuBean.periodeDateFin}"
+					requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_date_evaluation_required}"
+					yearRange="c-90:c">
+				</p:calendar>
+			</p:column>
+
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_coefficient}"
+					for="coefficient"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<pe:inputNumber id="coefficient" required="true"
+					requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_coefficient_required}"
+					minValue="1.00" maxValue="10.0" decimalSeparator="."
+					value="#{evalControleContinuBean.evalControleContinuDto.coefficient}">
+				</pe:inputNumber>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_type_evaluation}"
+					for="type"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:selectOneMenu id="type" required="true"
+					style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.ncTypeEvalId}"
+					filter="true" filterMatchMode="contains"
+					requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_type_evaluation_required}"
+					label="#{evalControleContinuMsgs.eval_controle_continu_type_evaluation}">
+					<f:selectItem
+						itemLabel="#{evalControleContinuMsgs.eval_controle_continu_type_evaluation_select}"
+						itemValue="" />
+					<f:selectItems value="#{evalControleContinuBean.ncTypeEvalList}" />
+
+				</p:selectOneMenu>
+			</p:column>
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_comptablise}"
+					for="comptablise"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:selectBooleanCheckbox id="comptablise"
+					style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.comptablise}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_objectif}"
+					for="objectif"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:inputText id="objectif" style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.objectif}" />
+			</p:column>
+			<p:column style="width:250px">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{evalControleContinuMsgs.eval_controle_continu_competence}"
+					for="competence"></p:outputLabel>
+			</p:column>
+			<p:column style="width:250px">
+				<p:inputText id="competence" style="width:100%;text-align:left"
+					value="#{evalControleContinuBean.evalControleContinuDto.competence}" />
+			</p:column>
+		</p:row>
+		<p:row rendered="#{evalControleContinuBean.evalControleContinuDto.situationLibelle!=null}">
+		<p:column>
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_situation}" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText styleClass="value"
+					value="#{evalControleContinuBean.evalControleContinuDto.situationLibelle}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+</ui:composition>
+

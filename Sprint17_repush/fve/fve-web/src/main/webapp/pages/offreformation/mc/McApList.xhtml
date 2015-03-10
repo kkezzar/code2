@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="apPanel">
+		<p:dataTable resizableColumns="true" id="dtTble_ap"
+			value="#{mcBB.apList}" var="currentAp" selectionMode="single"
+			rowKey="#{currentAp.id}"
+			emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+			<p:ajax event="rowSelect" listener="#{apBB.onRowSelect}"
+				update=":form_mcSearch:tbvw_mcDetail:apDetail" process="dtTble_ap"
+				onstart="PF('tabUIWidget').block()"
+				onsuccess="PF('tabUIWidget').unblock()" />
+			<f:facet name="header">
+				<h:outputText
+					value="#{matiereConstitutiveMsgs.matiere_constitutive_liste_ap}" />
+			</f:facet>
+			<p:column style="width:10%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_code_ap}" />
+				</f:facet>
+				<h:outputText value="#{currentAp.code}" />
+			</p:column>
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_type_ap}" />
+				</f:facet>
+
+				<h:outputText value="#{currentAp.ncTypeApCode}" />
+			</p:column>
+
+
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_mode_enseignement_ap}" />
+				</f:facet>
+
+				<h:outputText value="#{currentAp.ncModeEnseignementApLibelleLongFr}" />
+			</p:column>
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_seuil_ap}" />
+				</f:facet>
+
+				<h:outputText value="#{currentAp.seuil}" />
+			</p:column>
+
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_ap}" />
+				</f:facet>
+
+				<h:outputText value="#{currentAp.volumeHoraire}" />
+			</p:column>
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_groupe_prevu_ap}" />
+				</f:facet>
+
+				<h:outputText value="#{currentAp.groupesPrevus}" />
+			</p:column>
+		</p:dataTable>
+		<br />
+		<p:outputPanel id="apDetail">
+			<ui:include src="/pages/offreformation/ap/ApEdit.xhtml" />
+			<br />
+			<p:toolbar styleClass="toolBarMesrs">
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+						icon="ui-icon-disk" actionListener="#{mcBB.saveAp}"
+						onstart="PF('tabUIWidget').block()"
+						onsuccess="PF('tabUIWidget').unblock()" update="apPanel"
+						process="apDetail">
+					</p:commandButton>
+					<p:separator />
+					<p:commandButton id="btn_deleteAp"
+						value="#{commonmsgs.bouton_supprimer}" process="@this"
+						update="apPanel" disabled="#{apBB.ap.id == 0}"
+						onstart="PF('tabUIWidget').block()"
+						onsuccess="PF('tabUIWidget').unblock()"
+						actionListener="#{mcBB.deleteAp()}" icon="ui-icon-trash">
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:separator />
+					<p:commandButton id="btn_newAp" disabled="#{apBB.ap.id == 0}"
+						update="apPanel"
+						value="#{commonmsgs.bouton_nouveau}" process="@this"
+						onstart="PF('tabUIWidget').block()"
+						onsuccess="PF('tabUIWidget').unblock()"
+						actionListener="#{mcBB.createNewAp}" icon="ui-icon-plusthick">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:outputPanel>
+	</p:outputPanel>
+
+</ui:composition>
+

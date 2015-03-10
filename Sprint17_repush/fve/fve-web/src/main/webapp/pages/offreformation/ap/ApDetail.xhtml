@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/dialogPageLayout.xhtml">
+
+	<ui:define name="title">
+		<h:outputText
+			value="#{ofmsgs.offre_formation_ap_detail_page_title} #{apBB.ap.code}" />
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="form_apEdit">
+
+			<p:fieldset id="fs_actions" style="margin-bottom: 5px;">
+				<p:commandButton type="button" value="#{commonmsgs.bouton_imprime}"
+					title="#{commonmsgs.bouton_imprime}" icon="ui-icon-print" />
+
+				<p:spacer width="10"></p:spacer>
+
+				<p:commandButton value="#{commonmsgs.bouton_fermer}"
+					action="#{apBB.goback}">
+				</p:commandButton>
+			</p:fieldset>
+
+			<p:panelGrid style="width: 100%;">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{ofmsgs.offre_formation_ap_detail_code}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText styleClass="outputLabel" value="#{apBB.ap.code}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{ofmsgs.offre_formation_ap_detail_type_ap}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText value="#{apBB.ap.ncTypeApCode}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{ofmsgs.offre_formation_ap_detail_mode_enseignement}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText value="#{apBB.ap.ncModeEnseignementApLibelleLongFr}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{ofmsgs.offre_formation_ap_detail_seuil}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{apBB.ap.seuil}" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{ofmsgs.offre_formation_ap_detail_volume_horaire}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{apBB.ap.volumeHoraire}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{ofmsgs.offre_formation_ap_detail_groupes_prevus}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{apBB.ap.groupesPrevus}" />
+					</p:column>
+						<p:column>
+						<h:outputText
+							value="#{ofmsgs.offre_formation_ap_edit_pourcentage_evaluation}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{apBB.ap.pourcentage}"  />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

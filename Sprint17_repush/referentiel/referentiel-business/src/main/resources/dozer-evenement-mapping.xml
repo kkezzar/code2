@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefEvenementDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefEvenement
+		</class-b>
+		<field>
+			<a>typeId</a>
+			<b>nomenclatureByType.id</b>
+		</field>
+		<field>
+			<a>typeLibelleLongFr</a>
+			<b>nomenclatureByType.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeLibelleLongAr</a>
+			<b>nomenclatureByType.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeLibelleCourtFr</a>
+			<b>nomenclatureByType.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeLibelleCourtAr</a>
+			<b>nomenclatureByType.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeCode</a>
+			<b>nomenclatureByType.code</b>
+		</field>
+
+		<field>
+			<a>frequenceRepetitionId</a>
+			<b>nomenclatureByFrequenceRepetition.id</b>
+		</field>
+		<field>
+			<a>frequenceRepetitionLibelleLongFr</a>
+			<b>nomenclatureByFrequenceRepetition.libelleLongFr</b>
+		</field>
+		<field>
+			<a>frequenceRepetitionLibelleLongAr</a>
+			<b>nomenclatureByFrequenceRepetition.libelleLongAr</b>
+		</field>
+		<field>
+			<a>frequenceRepetitionLibelleCourtFr</a>
+			<b>nomenclatureByFrequenceRepetition.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>frequenceRepetitionLibelleCourtAr</a>
+			<b>nomenclatureByFrequenceRepetition.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>frequenceRepetitionCode</a>
+			<b>nomenclatureByFrequenceRepetition.code</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefEvenementDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+</mappings>

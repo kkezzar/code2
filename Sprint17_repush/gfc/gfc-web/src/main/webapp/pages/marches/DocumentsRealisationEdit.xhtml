@@ -1,0 +1,658 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{marchesMsgs.page_title_enregister_documents_realisation}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton value="Nouveau document de réalisation"
+							action="#{documentsRealisationMarcheBean.addAction()}"
+							update=":form_crud" process="@this"></p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{documentsRealisationMarcheBean.model}"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="20"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{documentsRealisationMarcheBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.date}">
+						<h:outputText value="#{current.dateDocument}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.typeDocument.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{marchesMsgs.marche}">
+						<h:outputText value="#{current.marche.intituleFr}">
+
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Montant HT">
+						<h:outputText value="#{current.montantHt}" styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant TVA">
+						<h:outputText value="#{current.montantTva}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column headerText="Montant TTC">
+						<h:outputText value="#{current.montantTtc}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{documentsRealisationMarcheBean.crud}"
+					id="tabview">
+
+					<p:tab title="#{marchesMsgs.detail_document_realisation}">
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="Date document" />
+									</p:column>
+									<p:column>
+										<p:calendar required="true"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.dateDocument}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText  styleClass="required" value="Type document" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu styleClass="input-xlarge-px"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.typeDocument.id}"
+											required="true">
+											<f:selectItem itemLabel="#{marchesMsgs.select_type_document}"
+												itemValue="" />
+											<f:selectItems
+												value="#{documentsRealisationMarcheBean.listTypesDocumentsRealisation}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{marchesMsgs.marche}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu styleClass="input-xxlarge-px"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.id}"
+											required="true">
+											<f:selectItem itemLabel="#{marchesMsgs.select_marche}"
+												itemValue="" />
+											<f:selectItems
+												value="#{documentsRealisationMarcheBean.listMarches}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column colspan="2"></p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="Montant HT" />
+									</p:column>
+									<p:column>
+										<pe:inputNumber
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantHt}"
+											title="Le montant en DA" /> DA
+									</p:column>
+
+
+									<p:column>
+										<h:outputText value="Montant TVA" />
+									</p:column>
+									<p:column>
+										<pe:inputNumber required="true"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantTva}"
+											title="Le montant en DA" /> DA
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="Montant TTC" />
+									</p:column>
+									<p:column colspan="3">
+										<pe:inputNumber required="true"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantTtc}"
+											title="Le montant en DA" /> DA
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea styleClass="input-large"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="saveBtn" update=":form_crud :form_search"
+												styleClass="ui-button-save" onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{documentsRealisationMarcheBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="validateBtn" update=":form_crud :form_search"
+												styleClass="ui-button-validate-o"
+												onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{documentsRealisationMarcheBean.validateAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="removeBtn" update=":form_crud :form_search"
+												disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.situation.codeSituation ne gfcConstantBean.situationCreeeCode}"
+												styleClass="ui-button-delete-o" onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{documentsRealisationMarcheBean.deleteAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												styleClass="pull-right" id="cancelBtn" update=":form_crud"
+												immediate="true" process="@this"
+												actionListener="#{documentsRealisationMarcheBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<p:tab title="Les préstations réalisées"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.prestation ne true}">
+						<p:dataTable id="datatable_prestations" var="current"  
+							selectionMode="single"
+							resizableColumns="false" rowIndexVar="rowIndex"
+							value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.detailRealisationPrestations}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}" 
+							rows="#{uiConfig['primefaces.dataTable.rows']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:ajax event="rowSelect" immediate="true"
+								listener="#{documentsRealisationMarcheBean.onRowSelectPrestation}"
+								process="@this" onsuccess="PF('gererPrestationWidget').show()"
+								update=":form_crud_prestation" />
+
+							<f:facet name="header">
+								<p:toolbar>
+									<p:toolbarGroup align="right">
+										<p:commandButton styleClass="ui-button-bleu-o pull-right"
+											title="Ajouter une préstation" icon="ui-icon-plusthick"
+											disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null}"
+											ajax="true" update=":form_crud_prestation" value=" Ajouter"
+											action="#{documentsRealisationMarcheBean.addDetailRealisationPrestationAction()}"
+											onsuccess="PF('gererPrestationWidget').show()"></p:commandButton>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</f:facet>
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Préstation">
+								<h:outputText value="#{current.prestationMarche.description}" />
+							</p:column>
+
+							<p:column headerText="Type préstation">
+								<h:outputText
+									value="#{current.prestationMarche.type.libelleLongFr}" />
+							</p:column>
+
+
+							<p:column headerText="Quantité">
+								<h:outputText value="#{current.prestationMarche.quantite}" />
+							</p:column>
+
+							<p:column headerText="#{gfcMsgs.montant} TTC">
+								<h:outputText value="#{current.prestationMarche.montantTtc}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Qté réalisée">
+								<h:outputText value="#{current.quantite}" />
+							</p:column>
+
+							<p:column headerText="Mont. Réalisé">
+								<h:outputText value="#{current.montantRealise}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="6" style="text-align:right"
+										footerText="Total" />
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText value="" styleClass="pull-right">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Les équipements livrés"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.equipement ne true}">
+						<p:dataTable id="datatable_equipements" var="current"
+							resizableColumns="false" rowIndexVar="rowIndex"
+							value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.detailRealisationEquipements}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}" selectionMode="single"
+							rows="#{uiConfig['primefaces.dataTable.rows']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:ajax event="rowSelect" immediate="true"
+								listener="#{documentsRealisationMarcheBean.onRowSelectEquipement}"
+								process="@this" onsuccess="PF('gererEquipementWidget').show()"
+								update=":form_crud_equipement" />
+
+							<f:facet name="header">
+								<p:toolbar>
+									<p:toolbarGroup align="right">
+										<p:commandButton styleClass="ui-button-bleu-o pull-right"
+											title="Ajouter un équipement" icon="ui-icon-plusthick"
+											disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null}"
+											ajax="true" update=":form_crud_equipement" value=" Ajouter"
+											action="#{documentsRealisationMarcheBean.addDetailRealisationEquipementAction()}"
+											onsuccess="PF('gererEquipementWidget').show()"></p:commandButton>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</f:facet>
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Equipement">
+								<h:outputText
+									value="#{current.equipementMarche.equipement.code} / #{current.equipementMarche.equipement.designation}" />
+							</p:column>
+
+							<p:column headerText="Quantité">
+								<h:outputText value="#{current.equipementMarche.quantite}" />
+							</p:column>
+
+
+							<p:column headerText="#{gfcMsgs.montant} TTC">
+								<h:outputText value="#{current.equipementMarche.montantTtc}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Qté Réalisée">
+								<h:outputText value="#{current.quantite}" />
+							</p:column>
+
+
+							<p:column headerText="#{gfcMsgs.montant} Réalisé">
+								<h:outputText value="#{current.montantRealise}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+							
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="5" style="text-align:right"
+										footerText="Total" />
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText value="" styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Les produits livrés"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.produit ne true}"></p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="DocumentRealisation" scope="request" />
+							<c:set var="identifiant"
+								value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.getId().toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DocumentRealisation" />
+							<ui:param name="identifiant"
+								value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.getId().toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+			</p:outputPanel>
+
+			<pe:blockUI widgetVar="gererPrestation" target="gererPrestation">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+			<p:dialog header="Enregistrer une préstation" id="gererPrestation"
+				position="center" widgetVar="gererPrestationWidget" modal="true"
+				resizable="false">
+				<p:outputPanel id="form_crud_prestation">
+					<h:form id="form">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Préstation" styleClass="required" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="listPrestations"
+										styleClass="input-xxlarge-px"
+										value="#{documentsRealisationMarcheBean.detailRealisationPrestationDto.prestationMarche.id}"
+										filter="true" filterMatchMode="contains" required="true">
+										<f:selectItem
+											itemLabel="#{marchesMsgs.select_type_prestation}"
+											itemValue="" />
+										<f:selectItems value="#{documentsRealisationMarcheBean.listPrestations}" />
+<!-- 										<p:ajax process="@this"
+											listener="#{documentsRealisationMarcheBean.}"
+											event="change"></p:ajax> -->
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Quantité" styleClass="required" />
+								</p:column>
+								<p:column>
+									<p:spinner required="true" min="0"
+										value="#{documentsRealisationMarcheBean.detailRealisationPrestationDto.quantite}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Montant réalisé" styleClass="required" />
+								</p:column>
+								<p:column>
+									<pe:inputNumber required="true"
+										value="#{documentsRealisationMarcheBean.detailRealisationPrestationDto.montantRealise}"
+										title="Le montant en DA" /> DA
+								</p:column>
+							</p:row>
+
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.observation}" />
+								</p:column>
+								<p:column>
+									<p:inputTextarea styleClass="input-large"
+										value="#{documentsRealisationMarcheBean.detailRealisationPrestationDto.observation}" />
+								</p:column>
+							</p:row>
+							
+							<!-- Actions -->
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="2">
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											id="saveBtn"
+											update=":form_crud_prestation :tabview:datatable_prestations"
+											styleClass="ui-button-save"
+											actionListener="#{documentsRealisationMarcheBean.savePrestationAction()}"
+											onstart="PF('gererPrestation').block()"
+											onsuccess="PF('gererPrestation').unblock()">
+										</p:commandButton>
+
+										<p:spacer width="5px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+											id="delBtn"
+											update=":form_crud_prestation :tabview:datatable_prestations"
+											styleClass="ui-button-delete-o"
+											actionListener="#{documentsRealisationMarcheBean.deletePrestationAction()}"
+											onstart="PF('gererPrestation').block()"
+											onsuccess="PF('gererPrestationWidget').hide(); PF('gererPrestation').unblock()">
+											<p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{commonmsgs.msg_delete_confirmation}"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+										<p:spacer width="10px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_fermer}"
+											id="cancel0Btn" immediate="true" process="@this"
+											onstart="PF('gererPrestationWidget').hide();">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
+
+			<pe:blockUI widgetVar="gererEquipement" target="gererEquipement">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+			<p:dialog header="Gérer une réalisation d'equipement"
+				id="gererEquipement" position="center"
+				widgetVar="gererEquipementWidget" modal="true" resizable="false">
+				<p:outputPanel id="form_crud_equipement">
+
+					<h:form id="form2">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Equipement" styleClass="required" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="listEquipements"
+										styleClass="input-xxlarge-px"
+										value="#{documentsRealisationMarcheBean.detailRealisationEquipementDto.equipementMarche.id}"
+										filter="true" filterMatchMode="contains" required="true">
+										<f:selectItem itemLabel="#{marchesMsgs.select_equipement}"
+											itemValue="" />
+										<f:selectItems
+											value="#{documentsRealisationMarcheBean.listEquipements}" />
+<!-- 										<p:ajax process="@this"
+											listener="#{marchesBean.handleEquipementOneMenuChange}"
+											event="change"></p:ajax> -->
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Quantité" styleClass="required" />
+								</p:column>
+								<p:column>
+									
+									<p:spinner required="true" min="0"
+										value="#{documentsRealisationMarcheBean.detailRealisationEquipementDto.quantite}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="Montant réalisé" styleClass="required" />
+								</p:column>
+								<p:column>
+									<pe:inputNumber required="true"
+										value="#{documentsRealisationMarcheBean.detailRealisationEquipementDto.montantRealise}"
+										title="Le montant en DA" /> DA
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.observation}" />
+								</p:column>
+								<p:column>
+									<p:inputTextarea styleClass="input-large"
+										value="#{documentsRealisationMarcheBean.detailRealisationEquipementDto.observation}" />
+								</p:column>
+							</p:row>
+							
+							<!-- Actions -->
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="2">
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											id="saveBtn"
+											update=":form_crud_equipement :tabview:datatable_equipements"
+											styleClass="ui-button-save"
+											actionListener="#{documentsRealisationMarcheBean.saveEquipementAction()}"
+											onstart="PF('gererEquipement').block()"
+											onsuccess="PF('gererEquipement').unblock()">
+										</p:commandButton>
+
+										<p:spacer width="5px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+											id="delBtn"
+											update=":form_crud_equipement :tabview:datatable_equipements"
+											rendered="#{marchesBean.equipementMarcheDto.id ne null}"
+											styleClass="ui-button-delete-o"
+											actionListener="#{documentsRealisationMarcheBean.deleteEquipementAction()}"
+											onstart="PF('gererRepBudget').block()"
+											onsuccess="PF('gererEquipementeWidget').hide(); PF('gererEquipement').unblock()">
+											<p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{commonmsgs.msg_delete_confirmation}"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+										<p:spacer width="10px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_fermer}"
+											id="cancel1Btn" immediate="true" process="@this"
+											onstart="PF('gererEquipementWidget').hide();">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</h:form>
+				</p:outputPanel>
+
+			</p:dialog>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,267 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+	<h:form prependId="false">
+		<p:panelGrid id="idendite" styleClass="noBorder1">
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_identite} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="identifiant" style="text-align: left; width:300px"
+
+						value="#{lieuMgrBean.refLieuDto.identifiant}"
+						label="#{lieumsgs.lieu_identite}"
+						required="true"
+						requiredMessage="#{lieumsgs.lieu_identite_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_libelle} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="designation" style="text-align: left; width:300px"
+						value="#{lieuMgrBean.refLieuDto.designation}"
+						label="#{lieumsgs.lieu_libelle}" required="true"
+						requiredMessage="#{lieumsgs.lieu_libelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_libelle_arabe} " />
+				</p:column>
+				<p:column>
+					<p:inputText id="designationArabe"
+						style="text-align: right; width:300px"
+						value="#{lieuMgrBean.refLieuDto.designationArabe}"
+						label="#{lieumsgs.lieu_libelle_arabe}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_type_lieu} *" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="typelieu"
+						value="#{lieuMgrBean.refLieuDto.typelieuId}"
+						label="#{lieumsgs.lieu_type_lieu}" required="true"
+						requiredMessage="#{lieumsgs.lieu_type_lieu_required}">
+						<f:selectItem itemLabel="#{lieumsgs.selection_type_lieu}"
+							itemValue="" />
+						<f:selectItems value="#{comboBckBean.listeTypeLieu}" />
+						<p:ajax update="sallePanel" />
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_description} *" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="description"
+						style="text-align: left; width:300px"
+						value="#{lieuMgrBean.refLieuDto.description}"
+						label="#{lieumsgs.lieu_description}" required="true"
+						requiredMessage="#{lieumsgs.lieu_description_required}">
+					</p:inputTextarea>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_description_ar} " />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="descriptionArabe"
+						style="text-align: right; width:300px"
+						value="#{lieuMgrBean.refLieuDto.descriptionArabe}"
+						label="#{lieumsgs.lieu_description_ar}">
+					</p:inputTextarea>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_type_implantation} *" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="typeimplatation"
+						value="#{lieuMgrBean.refLieuDto.typeImplantId}"
+						label="#{lieumsgs.lieu_type_implantation}" required="true"
+						requiredMessage="#{lieumsgs.lieu_type_implantation_required}">
+						<f:selectItem itemLabel="#{lieumsgs.selection_type_implantation}"
+							itemValue="" />
+						<f:selectItems value="#{comboBckBean.listeTypeImplan}" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_pere} " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="selectLieuPere"
+						value="#{lieuMgrBean.refLieuDto.idPereLieu}" filter="true"
+						filterMatchMode="startsWith" label="#{lieumsgs.lieu_pere}">
+						<f:selectItem itemLabel="#{lieumsgs.lieu_select_lieu_pere}"
+							itemValue="" />
+						<f:selectItems value="#{comboBckBean.listRefLieuDto}" />
+					</p:selectOneMenu>
+
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_superficie}" />
+				</p:column>
+				<p:column>
+
+					<p:inputMask id="superfici" style="text-align: right; width:50px"
+						value="#{lieuMgrBean.refLieuDto.superficie}"
+						label="#{lieumsgs.lieu_superficie}" mask="9999" />
+					<p:inputText id="superfici2" style="text-align: left; width:20px"
+						disabled="true" value=" M²" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_type_acces}" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="typeacces"
+						value="#{lieuMgrBean.refLieuDto.typeAccesId}"
+						label="#{lieumsgs.lieu_type_acces}">
+						<f:selectItem itemLabel="#{lieumsgs.selection_type_acces}"
+							itemValue="" />
+						<f:selectItems value="#{comboBckBean.listeTypeAcces}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_capacite} " />
+				</p:column>
+				<p:column>
+					<p:inputMask id="capacite" style="text-align: right; width:50px"
+						mask="9999" value="#{lieuMgrBean.refLieuDto.capacite}"
+						label="#{lieumsgs.lieu_capacite}" />
+				</p:column>
+				<p:column>
+				</p:column>
+				<p:column>
+					<p:selectBooleanCheckbox
+						value="#{lieuMgrBean.refLieuDto.reservable}">
+					</p:selectBooleanCheckbox>
+					<h:outputText value=" #{lieumsgs.lieu_reservable}"
+						style="text-align: top" />
+				</p:column>
+			</p:row>
+
+			<br></br>
+			<h:outputText value="#{lieumsgs.lieu_gestion}"
+				style="font-weight: bold;" />
+		</p:panelGrid>
+		<hr></hr>
+		<p:panelGrid id="gestion" styleClass="noBorder1">
+			<p:row>
+				<p:column>
+					<h:outputText value="#{lieumsgs.lieu_structure}" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="gesStructure"
+						value="#{lieuMgrBean.refLieuDto.idStructure}" filter="true"
+						filterMatchMode="startsWith" label="#{lieumsgs.lieu_structure}">
+
+						<f:selectItem itemLabel="#{lieumsgs.lieu_select_structure}"
+							itemValue="" />
+						<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+
+
+
+		<p:outputPanel id="sallePanel"  >
+			<br></br>
+			<h:outputText value="#{lieumsgs.lieu_salle}"
+				style="font-weight: bold;"  rendered="#{lieuMgrBean.refLieuDto.typelieuId eq lieumsgs.lieu_typeid}"/>
+			<hr></hr>
+			<p:panelGrid id="typeLieuSalle" styleClass="noBorder1" rendered="#{lieuMgrBean.refLieuDto.typelieuId eq lieumsgs.lieu_typeid}"
+				>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_type_salle}" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="typesalle"
+							value="#{lieuMgrBean.refLieuDto.typeSalleId}"
+							label="#{lieumsgs.lieu_type_salle}">
+							<f:selectItem itemLabel="#{lieumsgs.selection_type_salle}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeTypeSalle}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_etage}" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="etage"
+							value="#{lieuMgrBean.refLieuDto.etage}"
+							label="#{lieumsgs.lieu_etage}">
+							<f:selectItem itemLabel="" itemValue="" />
+							<f:selectItem itemLabel="RDC" itemValue="0" />
+							<f:selectItem itemLabel="SS" itemValue="-1" />
+							<f:selectItem itemLabel="1" itemValue="1" />
+							<f:selectItem itemLabel="2" itemValue="2" />
+							<f:selectItem itemLabel="3" itemValue="3" />
+							<f:selectItem itemLabel="4" itemValue="4" />
+							<f:selectItem itemLabel="5" itemValue="5" />
+							<f:selectItem itemLabel="6" itemValue="6" />
+							<f:selectItem itemLabel="7" itemValue="7" />
+							<f:selectItem itemLabel="8" itemValue="8" />
+							<f:selectItem itemLabel="9" itemValue="9" />
+							<f:selectItem itemLabel="10" itemValue="10" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_code_porte} " />
+					</p:column>
+					<p:column>
+						<p:inputText id="codeporte" style="text-align: left; width:50px"
+							value="#{lieuMgrBean.refLieuDto.codePorte}"
+							label="#{lieumsgs.lieu_code_porte}">
+						</p:inputText>
+
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+		</p:outputPanel>
+		<br></br>
+
+		<p:panelGrid id="cordonnées2" styleClass="noBorder1">
+			<p:row>
+				<p:column>
+					<br></br>
+					<p:commandButton value="#{commonmsgs.button_save}"
+						icon="ui-icon-disk" action="#{lieuMgrBean.saveLieu}"
+						 />
+				</p:column>
+
+			</p:row>
+		</p:panelGrid>
+
+	</h:form>
+
+
+</ui:composition>

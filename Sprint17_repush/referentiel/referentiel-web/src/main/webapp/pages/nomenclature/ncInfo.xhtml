@@ -1,0 +1,28 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel >  
+     <p:panelGrid id="infoNcPanelId" styleClass="noBorder1">
+      <p:row >
+      <p:column>
+			<h:outputText  value="#{nomenclaturemsgs.nc_item_nomenclature_libelle}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText id="ncNameId" value="#{ncBckBean.infoNcName.nomNomenclature}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+			<h:outputText value="#{nomenclaturemsgs.nc_item_valeur}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText id="ncNameDesc" value="#{ncBckBean.infoNcName.description}" style="font-weight: bold;"/>
+		</p:column> 
+		
+		
+		</p:row>
+      </p:panelGrid>          
+    </p:panel>
+    
+</ui:composition>

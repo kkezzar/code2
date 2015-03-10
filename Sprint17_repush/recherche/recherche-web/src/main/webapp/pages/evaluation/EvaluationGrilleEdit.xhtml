@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components"
+	xmlns:rch="http://java.sun.com/jsf/composite/components/rch">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchEvalChrMsgs.rechercher_evaluation_grille_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+<p:outputPanel id="mainOutPutPanel">
+<h:form id="mainForm">
+
+<!-- RECHERCHE GRILLES EVALUATION -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchGridsID" 
+						  searchKeyWords="#{evlGrilleBB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{evlGrilleBB.searchGrids()}"
+						  searchAdvancedMethodName="#{evlGrilleBB.searchGrids()}"
+						  toUpdateOnSearch=":mainForm:gridsDataTable :mainForm:gridOutPutPanelDetails :mainForm:msgGrid"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  withAdvancedSearch="false"
+						  textWatermark="#{rchEvalChrMsgs.rechercher_evaluation_grille_search_text_key_words}">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddGrid" 
+									value="#{rchEvalChrMsgs.rechercher_evaluation_button_add_grid_label}" 
+									action="#{evlGrilleBB.prepareAddNewGrid()}"
+									process="@this"
+									update=":mainForm:gridOutPutPanelDetails :mainForm:msgGrid"
+									icon="ui-icon-plusthick"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+		 </p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<br />
+	<p:dataTable id="gridsDataTable" var="row"
+							value="#{evlGrilleBB.listGrids}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{evlGrilleBB.selectedGrid}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{evlGrilleBB.onGridRowSelect}" update=":mainForm:gridOutPutPanelDetails :mainForm:msgGrid"	
+								onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_column_code}" style="text-align:center;">
+						<h:outputText value="#{row.code}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_column_title}" style="text-align:center;">
+						<h:outputText value="#{row.intituleFr}" styleClass="value"/>
+				</p:column>
+	</p:dataTable>
+				
+<!-- DETAILS DE LA GRILLE EVALUATION SELECTIONNEE -->
+<p:outputPanel id="gridOutPutPanelDetails">
+<p:panel header="#{evlGrilleBB.titleGridDetails}" rendered="#{evlGrilleBB.canShowGridDetails}" style="margin-bottom:8px;">
+				
+		<p:panelGrid  id="panelGridEdit" style="width:100%;margin-bottom:8px;">
+		<p:row>
+			<p:column style="text-align:right;width:20%;">
+				<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_column_code}" for="txtCodeGrid"/>
+			</p:column>
+			<p:column><p:inputText value="#{evlGrilleBB.currentGrid.code}" required="true" id="txtCodeGrid"
+								requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_msg_add_grille_code_required}"/>	
+			</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grids_column_title}" for="txtLibelleFrGrid"/>
+			</p:column>
+			<p:column >
+			<p:inputText id="txtLibelleFrGrid" value="#{evlGrilleBB.currentGrid.intituleFr}"
+			 			required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_msg_add_grille_intitule_required}" style="width:100%;"/>	
+			 </p:column>
+	</p:row>
+	</p:panelGrid>	
+			
+	<p:outputPanel id="gridDetailsOuputpanel">
+	<p:toolbar rendered="#{evlGrilleBB.canEditDetailGrid}">
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddOneDetail" 
+									action="#{evlGrilleBB.prepareAddOneDetail()}"
+									process="@this"
+									update=":dlgAddGridDetailId"
+									oncomplete="PF('dlgAddGridDetail').show();"
+									icon="ui-icon-plusthick">
+						</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<p:dataTable id="gridDetailsDataTable" var="row"
+							value="#{evlGrilleBB.selectedGridListDetails}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{evlGrilleBB.selectedGridDetail}"
+							style="margin-bottom:8px;"
+							rendered="#{evlGrilleBB.canEditDetailGrid}">
+				<f:facet name="header">#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_default}</f:facet>
+<!-- 				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column> -->
+				<p:column headerText="" style="text-align:left;">
+					<h:outputText value="#{row.numeroChapitre}"  style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="" style="text-align:center;">
+					<h:outputText value="#{row.numeroCritere}"  style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_chapter_label}">
+					<h:outputText value="#{row.ncChapitreIntituleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_criteria_label}">
+					<h:outputText value="#{row.ncCritereIntituleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_appreciation_label}" style="text-align:center;">
+					<h:outputText value="#{row.ncAppreciationIntituleFr}" style="color:#336699;"/>
+				</p:column>
+				
+				<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemoveOneDetail"  
+															action="#{evlGrilleBB.removeOneGridDetail()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:gridDetailsDataTable :mainForm:msgGrid"   
+															process="@this">
+								<p:confirm		header="#{rchEvalChrMsgs.rechercher_evaluation_grid_detail_confirm_title}"	
+														message="#{rchEvalChrMsgs.rechercher_evaluation_grid_detail_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{evlGrilleBB.selectedGridDetailId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editOneDetailButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{evlGrilleBB.prepareEditOneGridDetail()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddGridDetail').show();"
+									update=":dlgAddGridDetailId"	>
+									<f:setPropertyActionListener target="#{evlGrilleBB.selectedGridDetailId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+	</p:dataTable>
+	</p:outputPanel>
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup align="left">
+	<p:commandButton id="saveGridButtonID" 
+							action="#{evlGrilleBB.saveGrid()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchEvalChrMsgs.rechercher_evaluation_button_dialog_add_grid_save_libelle}"
+							process="@this :mainForm:panelGridEdit" 
+							ajax="true" 
+							update=":mainForm:gridsDataTable :mainForm:gridDetailsOuputpanel :mainForm:msgGrid"
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+		</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	</p:panel>
+</p:outputPanel>
+<p:messages id="msgGrid" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+</h:form>
+</p:outputPanel>
+
+<p:dialog  widgetVar="dlgAddGridDetail"  
+					appendTo="@(body)" modal="true" 
+					header="#{evlGrilleBB.titleDialogGridDetail}"
+ 					id="dlgAddGridDetailId" 
+ 					resizable="false"
+ 					style="font-size:#{sessionBean.fontSize}px">
+	<h:form id="dlgFormGridDetail">
+	<p:messages id="msgGridDetailDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+	 <p:panelGrid  id="panelGridGridDetail" style="width:550px;margin-bottom:8px;">
+				<p:row>
+				<p:column style="text-align:right;width:30%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_grille_dilalog_grid_chapter_column_label}" for="listChaptersID"/>
+				</p:column>
+				<p:column >
+						<p:selectOneMenu id="listChaptersID" 	value="#{evlGrilleBB.selectedGridDetail.ncChapitreId}" style="width:100%;" 
+															required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_detail_dialog_msg_chapter_required}">
+								<f:selectItems value="#{evlGrilleBB.listChapters}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+								<p:ajax listener="#{evlGrilleBB.handleChaptersChange}" 	event="valueChange" process="@this" update="dlgFormGridDetail:listCriteriaID"/>
+						</p:selectOneMenu>
+				</p:column>
+				</p:row>
+				
+				<p:row>
+				<p:column style="text-align:right;">
+						<h:outputText value="#{rchEvalChrMsgs.rechercher_evaluation_grille_dilalog_grid_criteria_column_label}" />
+				</p:column>
+				<p:column >
+						<p:selectOneMenu id="listCriteriaID" 	value="#{evlGrilleBB.selectedGridDetail.ncCritereId}" style="width:100%;">
+								<f:selectItems value="#{evlGrilleBB.listCriterias}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+				</p:column>
+				</p:row>
+				
+				<p:row>
+						<p:column style="text-align:right;">
+							<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_grille_dilalog_grid_number_column_label}" for="txtGridDetailNumber"/></p:column>
+						<p:column >
+							<p:inputText id="txtGridDetailNumber" value="#{evlGrilleBB.selectedGridDetail.numero}" required="true" 
+												requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_grille_detail_dialog_msg_number_required}" />	
+						</p:column>
+				</p:row>
+				
+				<p:row>
+				<p:column style="text-align:right;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_grille_dilalog_grid_appreciation_type_column_label}" for="listTypeAppreciationID"/>
+				</p:column>
+				<p:column >
+						<p:selectOneMenu id="listTypeAppreciationID" 	value="#{evlGrilleBB.selectedGridDetail.ncAppreciationId}" style="width:100%;">
+								<f:selectItems value="#{evlGrilleBB.listTypeAppreciations}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+				</p:column>
+				</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddGridDetailDialogID"
+							 value="#{rchEvalChrMsgs.rechercher_evaluation_button_dialog_add_grid_close_label}" 	
+							 type="button" onclick="PF('dlgAddGridDetail').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneGridDetail" 
+							action="#{evlGrilleBB.saveOneGridDetail()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchProgrammeMsgs.programmes_recherche_button_dialog_ajouter_axe_enregistrer_libelle}"
+							process="@this :dlgFormGridDetail:panelGridGridDetail" 
+							ajax="true" 
+							update=":mainForm:gridDetailsDataTable :mainForm:msgGrid :dlgFormGridDetail" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateGridDetailRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateGridDetailRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddGridDetail').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddGridDetail').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<pe:blockUI target="mainOutPutPanel" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

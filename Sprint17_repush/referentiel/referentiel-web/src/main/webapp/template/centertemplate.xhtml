@@ -1,0 +1,47 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/basicLayout.xhtml">
+	<ui:define name="centerContent">
+		<pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		<h:form>
+			<p:confirmDialog global="true">
+				<p:commandButton value="#{commonmsgs.button_ok}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="#{commonmsgs.button_cancel}" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-closethick" />
+			</p:confirmDialog>
+		</h:form>
+		<p:layout>
+			<p:layoutUnit id="left" position="#{localeBean.positionMenu}" size="250" header="#{commonmsgs.menu}"
+				resizable="true" rendered="#{menuBean.listSubMenu!=null}"
+				collapsible="true" style="border-color: #006DCC !important;">
+				<ui:insert name="left_optpan">
+					<ui:include src="left_optpan.xhtml" />
+				</ui:insert>
+			</p:layoutUnit>
+			<p:layoutUnit id="center" position="center"
+				style="border-color: #006DCC !important;">
+				<ui:insert name="main">
+					<ui:include src="main.xhtml" />
+				</ui:insert>
+			</p:layoutUnit>
+		</p:layout>
+	</ui:define>
+
+</ui:composition>
+</html>
+

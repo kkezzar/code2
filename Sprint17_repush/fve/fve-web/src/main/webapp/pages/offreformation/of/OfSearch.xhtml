@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<ui:define name="title">#{ofSearchMsgs.SEARCH_OF_PANEL_SEACRH_OF_TITLE}</ui:define>
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{ofSearchMsgs.SEARCH_OF_PANEL_SEACRH_OF_TITLE}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+
+	<h:form id="searchForm" style="font-size:#{ofSearch.fontSize}px">
+		<p:outputPanel id="outputPanelSearchOf" rendered="#{ofSearch.showPanelSearchOf}">
+	
+		<p:toolbar style="margin-buttom:8px">
+		<p:toolbarGroup    align="left" >
+						<ccmp:SearchComponent id="cmpSearchOfID" 
+														  searchKeyWords="#{ofSearch.keyWords}" 
+														  searchAdvancedMethodName="#{ofSearch.searchOfAdvanced()}" 
+														  searchGenericMethodName="#{ofSearch.search()}" 
+														  toUpdateOnSearch=":searchForm"
+														  txtKeyWordWidth="400"
+														  ajaxProgessId="blockUIWidget"
+														  textWatermark="Recherche OF ..."
+														  withAdvancedSearch="true">
+			<p:outputPanel id="advancedSearchOfID" >
+			<p:panelGrid style="width:380px;">
+				<p:row>
+				<p:column style="width:40%;"><h:outputLabel value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_SEARCH_DOMAIN_FR}"/></p:column>
+				<p:column><p:selectOneMenu  id="listDomainesFrID" value="#{ofSearch.dtoSearch.idDomaine}"  style="width:250px;">
+												<f:selectItems value="#{ofSearch.listDomaines}" var="d" itemLabel="#{d.label}" itemValue="#{d.value}" />
+												<p:ajax listener="#{ofSearch.handleDomainesListChange}" 	event="valueChange" update="listFilieresFrID  listSpecialitesFrID"  process="@this"
+												onstart="PF('blockUIWidget3').block()" onsuccess="PF('blockUIWidget3').unblock()"/>
+								</p:selectOneMenu></p:column>
+				</p:row>
+				<p:row>
+				<p:column><h:outputLabel 	value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_SEARCH_DEGREE_FR}" /></p:column>
+				<p:column><p:selectOneMenu  id="listFilieresFrID" 	value="#{ofSearch.dtoSearch.idFiliere}" style="width:250px;">
+												<f:selectItems value="#{ofSearch.listFilieres}" var="f" 	itemLabel="#{f.label}" itemValue="#{f.value}" />
+												<p:ajax listener="#{ofSearch.handleFilieresListChange}" 	event="valueChange" update="listSpecialitesFrID"  process="@this" 
+												onstart="PF('blockUIWidget3').block()" onsuccess="PF('blockUIWidget3').unblock()"/>
+								</p:selectOneMenu></p:column>
+				</p:row>
+				<p:row>
+				<p:column><h:outputLabel 	value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_SEARCH_SPECIALITY_FR}" /></p:column>
+		     	<p:column><p:selectOneMenu   id="listSpecialitesFrID" value="#{ofSearch.dtoSearch.idSpecialite}"  style="width:250px;">
+												<f:selectItems value="#{ofSearch.listSpecialites}" var="s" 	itemLabel="#{s.label}" itemValue="#{s.value}" />
+								</p:selectOneMenu></p:column>
+				</p:row>				
+<!-- 				<p:row>				 -->
+<!-- 				<p:column  style="width:40%;" ><h:outputLabel 	value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_BEGIN_HAB_DATE_FR}" /></p:column> -->
+<!-- 				<p:column><p:calendar id="calendarDebutHabID"  value="#{ofSearch.dtoSearch.dateDebutHabilitation}"  pattern="MM/dd/yyyy" 	style="width:50%;"  /> -->
+<!-- 				<p:watermark for="calendarDebutHabID" value="#{ofSearchMsgs.SEARCH_OF_WATERMARK_TEXT_BEGIN_HABILITATION}" />  </p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row>			 -->
+<!-- 				<p:column><h:outputLabel 	value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_END_HAB_DATE_FR}" /></p:column> -->
+<!-- 				<p:column><p:calendar   id="calendarFinHabID"  value="#{ofSearch.dtoSearch.dateFinHabilitation}"  pattern="MM/dd/yyyy" 	style="width:50%;"  /> -->
+<!-- 				<p:watermark for="calendarFinHabID" value="#{ofSearchMsgs.SEARCH_OF_WATERMARK_TEXT_END_HABILITATION}" />  </p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row>			 -->
+<!-- 				<p:column><h:outputLabel 	value="#{ofSearchMsgs.SEARCH_OF_LABEL_ADVANCED_ORDER_NUMBER_FR}" /> </p:column> -->
+<!-- 				<p:column><p:inputText id="txtNumeroArreteID"  value="#{ofSearch.dtoSearch.numeroArrete}"   style="width:100%;" />  -->
+<!-- 				<p:watermark for="txtNumeroArreteID" value="#{ofSearchMsgs.SEARCH_OF_WATERMARK_TEXT_ORDER_NUMBER}" />   </p:column> -->
+<!-- 				</p:row> -->
+			</p:panelGrid>
+			</p:outputPanel>  
+	</ccmp:SearchComponent>
+		</p:toolbarGroup>
+		<p:toolbarGroup align="right">
+						<p:commandButton id="btnToNewOf" 
+									value="#{ofSearchMsgs.SEARCH_OF_BTN_NEW_OF}" 
+									action="#{ofSearch.newOf}"
+									title="#{ofSearchMsgs.SEARCH_OF_TOOLTIP_BTN_NEW_OF}"	
+									style="vertical-align:middle;" 
+									process="@this"
+									update=":searchForm"
+									icon="ui-icon-plusthick"
+									onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()">
+									<f:param name="outcomePage" value="ofSearch" />
+									<f:param name="editionMode" value="new" />
+									<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						</p:commandButton>
+			</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+			<p:outputPanel id="outputPanelResult">
+			<p:dataTable id="lazySearchDataTable" var="row"
+								value="#{ofSearch.lazyResult}"
+								selection="#{ofSearch.selectedOf}"
+								rowKey="#{row.id}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="10" 
+								lazy="true" 
+								paginatorPosition="bottom"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_NO_RESULT}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin-buttom:8px;"
+								rendered="#{ofSearch.showResultSearch}">
+								<p:ajax event="rowSelect" listener="#{ofSearch.onOfRowSelect}" update=":searchForm"
+											onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"/>  
+								
+								<f:facet name="header">  
+            								#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_TITLE}
+       						 	</f:facet>  
+											<p:column	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_INDEX}" style="text-align:center;width:20px">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+				
+											<p:column   	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_CODE}"  style="text-align:center;width:60px">
+														<h:outputText value="#{row.code}" style="color:#336699;"/>
+											</p:column>
+											
+											<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_LABEL_FR}">
+														<h:outputText value="#{row.libelleLongFr}"  style="color:#336699;"/>
+											</p:column>
+												<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_DOMAIN_FR}">
+														<h:outputText value="#{row.libelleDomaine}" style="color:#336699;"/>
+											</p:column>
+											
+											<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_DEGREE_FR}">
+														<h:outputText value="#{row.libelleFiliere}" style="color:#336699;"/>
+											</p:column>
+											
+											<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_SPECIALITY_FR}">
+														<h:outputText value="#{row.libelleSpecialite}" style="color:#336699;"/>
+											</p:column>
+												
+											<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_CYCLE_FR}">
+														<h:outputText value="#{row.libelleCycle}" style="color:#336699;"/>
+											</p:column>
+											<p:column 	headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_Situation_FR}">
+														<h:outputText value="#{row.libelleSituationFr}" style="color:#336699;"/>
+											</p:column>
+						</p:dataTable>
+						</p:outputPanel>
+ 		<br />
+ 		<p:outputPanel  id="exportDataPanel" >
+ 		<p:panelGrid  columns="4" rendered="#{ofSearch.showExportDataButtons}">  
+ 		
+        		<h:commandLink title="#{ofSearchMsgs.SEARCH_OF_TOOLTIP_BTN_EXPORT_XLS}">  
+            			<p:graphicImage name="/images/excel.png"/>  
+            			<p:dataExporter type="xls" target="lazySearchDataTable" fileName="ListeOFs"  postProcessor="#{ofSearch.postProcessXLS}"/>
+            							
+            			<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						<f:param name="searchMode" value="#{txtSearchMode.value}" />
+        		</h:commandLink>  
+  
+        		<h:commandLink title="#{ofSearchMsgs.SEARCH_OF_TOOLTIP_BTN_EXPORT_PDF}">  
+            			<p:graphicImage name="/images/pdf.png"  />  
+            			<p:dataExporter type="pdf" target="lazySearchDataTable" fileName="ListeOFs"/>  
+            			<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						<f:param name="searchMode" value="#{txtSearchMode.value}" />
+        		</h:commandLink>  
+          
+        		<h:commandLink title="#{ofSearchMsgs.SEARCH_OF_TOOLTIP_BTN_EXPORT_CSV}">  
+            			<p:graphicImage name="/images/csv.png" />  
+            			<p:dataExporter type="csv" target="lazySearchDataTable" fileName="ListeOFs" />  
+            			<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						<f:param name="searchMode" value="#{txtSearchMode.value}" />
+       			</h:commandLink>  
+          
+        		<h:commandLink title="#{ofSearchMsgs.SEARCH_OF_TOOLTIP_BTN_EXPORT_XML}">  
+            			<p:graphicImage name="/images/xml.png" />  
+            			<p:dataExporter type="xml" target="lazySearchDataTable" fileName="ListeOFs" />  
+            			<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						<f:param name="searchMode" value="#{txtSearchMode.value}" />
+        		</h:commandLink>  
+        		
+ 	</p:panelGrid>
+ 	<h:inputHidden id="txtMode" binding="#{txtSearchMode}" value="#{ofSearch.searchMode}"  style="font-size:12px"/>
+ 	</p:outputPanel>
+ 	</p:outputPanel>
+ 	
+ 	<p:outputPanel id="outputPanelDetailOf" style="width:100%;">
+ 	<h:panelGrid  rendered="#{ofSearch.showPanelDetailOf}" style="width:100%;">
+ 	<p:row>
+ 	<p:column>
+ 			<of:OfComponent toEdit="true" managedBean="#{ofSearch.ofBB}"></of:OfComponent>
+ 	</p:column>
+ 	</p:row>
+ 	<p:row>
+ 	<p:column>
+ 	<p:toolbar style="width:100%;">
+			<p:toolbarGroup align="right">
+				<p:commandButton value="#{ofEditMsgs.EDIT_OF_BTN_GO_BACK}" 	
+										action="#{ofSearch.goBack()}"
+										update=":searchForm"
+										process="@this">
+				</p:commandButton>
+			</p:toolbarGroup>
+	</p:toolbar>
+	</p:column>
+ 	</p:row>
+ 	</h:panelGrid>
+ 	</p:outputPanel>
+	</h:form>
+	
+ 	
+	<pe:blockUI  id="blockUISearch" target="searchForm"  widgetVar="blockUIWidget">
+    				<i class="fa fa-spinner fa-spin"></i>
+    </pe:blockUI>
+	
+	<pe:blockUI target=":searchForm:cmpSearchOfID:advancedSearchOfID" widgetVar="blockUIWidget3">
+        			<i class="fa fa-spinner fa-spin"></i>
+    </pe:blockUI>
+
+		
+</ui:define>
+</ui:composition>
+</html>

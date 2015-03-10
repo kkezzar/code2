@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel style="height:600px" id="infosNcPanel"
+			styleClass="itemPanelStyle">
+			<p:fieldset id="editNcFieldSet"
+				legend="#{commonmsgs.menu_nomenclature}">
+				<h:form id="ncNamesEditForm">
+					<p:messages id="messages" showSummary="true" autoUpdate="true"
+						closable="true" />
+					<h:outputText value="#{nomenclaturemsgs.nc_description}"
+						style="font-weight: bold;" />
+					<hr></hr>
+					<p:panelGrid id="editDescription" styleClass="noBorder1">
+
+						<p:row>
+							<p:column>
+								<h:outputText value="#{nomenclaturemsgs.nc_list_nom_libelle} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="nomNomenclature"
+									style="text-align: left;width:180px"
+									value="#{ncNamesBckBean.ncNamesDto.nomNomenclature}"
+									label="#{nomenclaturemsgs.nc_list_nom_libelle}" required="true"
+									disabled="#{ncNamesBckBean.ncNamesDto.id!=null}"
+									requiredMessage="#{nomenclaturemsgs.nc_nom_required}">
+
+								</p:inputText>
+							</p:column>
+						</p:row>
+						<br></br>
+						<p:row>
+
+							<p:column>
+								<h:outputText value="#{nomenclaturemsgs.nc_description}" />
+							</p:column>
+							<p:column>
+								<p:inputTextarea id="identifiant"
+									style="text-align: left;width:180px"
+									value="#{ncNamesBckBean.ncNamesDto.description}"
+									label="#{nomenclaturemsgs.nc_description}">
+
+								</p:inputTextarea>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{nomenclaturemsgs.nc_list_default_value}" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="idDefault" style="width:190px"
+									filter="true" filterMatchMode="startsWith"
+									value="#{ncNamesBckBean.ncNamesDto.idDefaultValue}"
+									label="#{nomenclaturemsgs.nc_list_select_default}">
+									<f:selectItem
+										itemLabel="#{nomenclaturemsgs.nc_list_select_default}" />
+									<f:selectItems value="#{ncNamesBckBean.listItems}" />
+								</p:selectOneMenu>
+							</p:column>
+
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputText value="#{nomenclaturemsgs.nc_list_ref_etrangere}" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="idReference" style="width:190px"
+									filter="true" filterMatchMode="startsWith"
+									value="#{ncNamesBckBean.ncNamesDto.idReference}"
+									label="#{nomenclaturemsgs.nc_list_select_ref}">
+									<f:selectItem
+										itemLabel="#{nomenclaturemsgs.nc_list_select_ref}" />
+									<f:selectItems value="#{comboBckBean.listNc}" />
+								</p:selectOneMenu>
+							</p:column>
+
+						</p:row>
+
+					</p:panelGrid>
+					<br></br>
+					<br></br>
+					<p:panelGrid id="oprButton" styleClass="noBorder1">
+						<p:row>
+
+							<p:column>
+								<p:commandButton value="#{commonmsgs.button_save}"
+									icon="ui-icon-disk" actionListener="#{ncNamesBckBean.save}"
+									update="@(.itemPanelStyle)" process="@(.itemPanelStyle)">
+									<f:param name="searchValue"
+										value="#{ncNamesBckBean.searchValue}" />
+									<f:param name="idNc" value="#{ncNamesBckBean.idNc}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton value="#{commonmsgs.button_return}"
+									icon="ui-icon-disk" immediate="true" 
+									process="@this" action="#{ncNamesBckBean.back}">
+									<p:confirm header="Confirmation"
+										message="#{commonmsgs.msg_cancel_modification_confirmation}"
+										icon="ui-icon-alert" />
+									<f:param name="searchValue"
+										value="#{ncNamesBckBean.searchValue}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton value="#{nomenclaturemsgs.nc_button_add_item}"
+									icon="ui-icon-disk" update="@(.itemPanelStyle)"
+									process="@this"
+									disabled="#{ncNamesBckBean.ncNamesDto.id==null}"
+									actionListener="#{ncNamesBckBean.addNcName}">
+
+									<f:param name="searchValue"
+										value="#{ncNamesBckBean.searchValue}" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</h:form>
+			</p:fieldset>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

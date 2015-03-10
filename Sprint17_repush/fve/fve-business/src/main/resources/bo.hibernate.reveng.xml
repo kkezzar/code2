@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+
+
+<hibernate-reverse-engineering>
+
+<!-- Tables du schema NC -->
+
+<table schema="nc" name="nc_lmd_caractere_ue"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.CaractereUE"  />
+<table schema="nc" name="nc_lmd_competence"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Competence"  />
+<table schema="nc" name="nc_lmd_cycle"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Cycle"  />
+<table schema="nc" name="nc_lmd_domaine_competence"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.DomaineCompetence"  />
+<table schema="nc" name="nc_lmd_domaine_formation"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.DomaineFormation"  />
+<table schema="nc" name="nc_lmd_etablissement"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Etablissement"  />
+<table schema="nc" name="nc_lmd_etablissement_type"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.EtablissementType"  />
+<table schema="nc" name="nc_lmd_filiere"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Filiere"  />
+<table schema="nc" name="nc_lmd_grade"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Grade"  />
+<table schema="nc" name="nc_lmd_mode_enseignement"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.ModeEnseignement"  />
+<table schema="nc" name="nc_lmd_mode_evaluation"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.ModeEvaluation"  />
+<table schema="nc" name="nc_lmd_nature_of"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.NatureOF"  />
+<table schema="nc" name="nc_lmd_nature_ue"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.NatureUE"  />
+<table schema="nc" name="nc_lmd_palier"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Palier"  />
+<table schema="nc" name="nc_lmd_semestre"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Semestre"  />
+<table schema="nc" name="nc_lmd_specialite"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Specialite"  />
+<table schema="nc" name="nc_lmd_statut_of"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.StatutOF"  />
+<table schema="nc" name="nc_lmd_statut_ue"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.StatutUE"  />
+<table schema="nc" name="nc_lmd_type_ap"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeAP"  />
+<table schema="nc" name="nc_lmd_type_competence"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeCompetence"  />
+<table schema="nc" name="nc_lmd_type_formation"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeFormation"  />
+<table schema="nc" name="nc_lmd_type_mc"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeMC"  />
+<table schema="nc" name="nc_lmd_type_tarif"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeTarif"  />
+<table schema="nc" name="nc_lmd_type_ue"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeUE"  />
+<table schema="nc" name="nc_lmd_vocation"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Vocation"  />
+<table schema="nc" name="nc_lmd_type_enseignement"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.TypeEnseignement"  />
+
+<table schema="nc" name="nc_wilaya"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Wilaya"  />
+<table schema="nc" name="nc_daira"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Daira"  />
+<table schema="nc" name="nc_commune"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Commune"  />
+<table schema="nc" name="nc_region"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Region"  />
+<table schema="nc" name="nc_langue"  class="dz.gov.mesrs.sii.referentiel.business.model.bo.nc.Langue"  />
+
+<!-- Tables du schema LMD -->
+
+<table schema="lmd" name="lmd_ap"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.AtomePedagogique"  />
+<table schema="lmd" name="lmd_mc"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.MatiereConstitutive"  />
+<table schema="lmd" name="lmd_offre_formation"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.OffreFormation"  />
+<table schema="lmd" name="lmd_offre_formation_domaine_competence"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.OffreFormationDomaineCompetence"  />
+<table schema="lmd" name="lmd_parcours_type"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.ParcoursType"  />
+<table schema="lmd" name="lmd_parcours_type_semestre_ue"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.ParcoursTypeSemestreUE"  />
+<table schema="lmd" name="lmd_programme_formation"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.ProgrammeFormation"  />
+<table schema="lmd" name="lmd_ue"  class="dz.gov.mesrs.sii.fve.business.model.bo.offreformation.UniteEnseignement"  />
+
+</hibernate-reverse-engineering>

@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<h:outputText value="#{habilitationmsgs.module_description}"
+		style="font-weight: bold;" />
+	<hr></hr>
+
+	<p:panelGrid id="editmoduleDescription" styleClass="ui-panelgrid-full-width"
+		rendered="#{moduleBckBean.refModuleDto.id!=null}">
+		<p:row>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.module_identifiant_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="idfModule" styleClass="value"
+					value="#{moduleBckBean.refModuleDto.identifiant}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.module_name_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="nomModule" styleClass="value"
+					value="#{moduleBckBean.refModuleDto.nom}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.module_name_arabe_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="nomArabeModule" styleClass="value"
+					value="#{moduleBckBean.refModuleDto.nomArabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.module_rang_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="rangModule" styleClass="value"
+					value="#{moduleBckBean.refModuleDto.rang}" />
+			</p:column>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{habilitationmsgs.module_page_aide_label} " />
+				</p:column>
+				<p:column >
+					<h:outputText value="#{moduleBckBean.refModuleDto.helpPage}" styleClass="value"/>
+				</p:column>
+			</p:row>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

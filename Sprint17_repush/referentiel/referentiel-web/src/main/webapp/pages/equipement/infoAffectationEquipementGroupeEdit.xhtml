@@ -1,0 +1,116 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:outputStylesheet library="./css" name="style.css" />
+    <ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+   <p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+    <p:panel style="height:600px" id="modificationAffectation" header="#{commonmsgs.menu_equipement}"   > 
+    <ui:include src="/pages/equipement/equipementHeader.xhtml"/>
+    <br></br>
+    <p:fieldset legend="Modification">
+
+      <p:panel >  
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+		<h:outputText value="#{OccupationEquipementMgrBean.entitiname} : "  style="font-weight: bold;" />
+		<h:outputText value="#{OccupationEquipementMgrBean.idr}" style="font-weight: bold;"/>
+		</p:column>		 
+	  </p:row>
+      </p:panelGrid>          
+      </p:panel>
+     
+   
+      <br></br>
+		<h:form id="listForm" prependId="false">
+         <p:panelGrid id="descriptionLieu" styleClass="noBorder1">
+         <p:row>
+         <p:column>
+        <h:outputText value="#{equipementmsgs.equipement_affectationequipement_selection_groupe}*" />
+         </p:column> 
+         <p:column> 
+        <p:selectOneMenu id="groupeData"
+                                value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idGroupe}" 
+                                filter="true" filterMatchMode="startsWith" 
+								label="#{equipementmsgs.equipement_affectationequipement_groupe}"
+								required="true" 
+                                requiredMessage="#{equipementmsgs.equipement_groupe_required}"
+								>
+				<f:selectItem
+					itemLabel="#{equipementmsgs.equipement_affectationequipement_selection_groupe}"
+					itemValue="" />
+				<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+								
+		</p:selectOneMenu>
+		</p:column>
+		</p:row>
+		 <p:row>
+         <p:column>
+         <h:outputText value="#{equipementmsgs.equipement_Type_affectation}*" />
+         </p:column> 
+         <p:column>
+         <p:selectOneMenu id="lieuSelect"
+                                value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idTypeOccupation}"
+                                filter="true" filterMatchMode="startsWith" 
+                                label="#{equipementmsgs.equipement_Type_affectation}"
+								required="true" 
+                                requiredMessage="#{equipementmsgs.equipement_Typeaffectation_required}"
+								>
+				<f:selectItem
+						itemLabel="#{equipementmsgs.equipement_selection_Type_affectation}"
+						itemValue="" />
+				<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+								
+		</p:selectOneMenu>
+		</p:column> 
+         </p:row>
+         
+         <p:row>
+         <p:column>
+         <h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+         </p:column> 
+        <p:column>	
+		<p:calendar navigator="true"  value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateDebut}" id="datedebutlieu" showButtonPanel="true" label="#{equipementmsgs.equipement_date_debut}" required="true" 
+         requiredMessage="#{equipementmsgs.equipement_date_debut_recired}" > 
+		<f:ajax render="datedebutlieu" event="change"/>
+		</p:calendar>	
+		</p:column> 
+		</p:row>
+		
+		<p:row>
+         <p:column>
+         <h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+         </p:column> 
+        <p:column>	
+		<p:calendar navigator="true"  value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateFin}" id="datefinlieu" showButtonPanel="true" label="#{equipementmsgs.equipement_date_fin}"  > 
+		<f:ajax render="datefinlieu" event="change"/>
+		</p:calendar>	
+		</p:column> 
+		</p:row>						
+         
+
+				<p:row>
+					<br></br>
+					<p:column>
+					<p:commandButton value="#{commonmsgs.button_save}" icon="ui-icon-check" actionListener="#{OccupationEquipementMgrBean.save}" update="@form" >
+					<f:param name="idf" value="#{occupationLieuMgrBean.idf}"/>
+					<f:param name="idr" value="#{occupationLieuMgrBean.idr}"/>
+					</p:commandButton>		
+					</p:column>
+					<p:column>
+					<p:commandButton value="#{commonmsgs.button_close}" onclick="" icon="ui-icon-close" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	  </p:fieldset>  
+      </p:panel>  
+     </ui:define>
+      </ui:composition>            
+</ui:composition>

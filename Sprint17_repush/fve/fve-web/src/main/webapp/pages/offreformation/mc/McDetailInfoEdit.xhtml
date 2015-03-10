@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel styleClass="mcDetailInfo" id="mcDetailInfo">
+		<p:panelGrid cellpadding="5" styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column>
+					<p:tree value="#{mcBB.mcDetailTreeView}" var="node" dynamic="true"
+						cache="true" selectionMode="single">
+						<p:treeNode>
+							<p:commandLink value="#{node}" update="@([id$=pngrd_detailMc])"
+								actionListener="#{mcBB.selectNode(node)}" process="@this">
+
+							</p:commandLink>
+						</p:treeNode>
+					</p:tree>
+				</p:column>
+				<p:column>
+					<p:panelGrid id="pngrd_detailMc">
+						<f:facet name="header">
+							<p:row>
+								<p:column>
+									<h:outputText binding="#{slectedNode}" value="#{mcBB.node}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<p:editor value="#{mcBB.nodeValue}" width="700" height="400" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+		<br />
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.wizard_action_save}" process="mcDetailInfo"
+					title="#{commonmsgs.bouton_enregistrer}" action="#{mcBB.saveMc}"
+					icon="ui-icon-disk">
+
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</p:outputPanel>
+
+</ui:composition>
+

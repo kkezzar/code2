@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions" >
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<ui:define name="centerContent">
+	
+	<p:panel id="titlePage" header="Chargement de la photo de l'étudiant" >
+	
+	<p:messages id="messagesdlgPhoto" showSummary="true" autoUpdate="true" 	closable="true" /> 
+	
+  	<h:form id="photoForm" enctype="multipart/form-data">
+		
+		<p:panelGrid id="tabuploadfichier">
+						
+				<p:row>
+
+					<p:column> 
+						<h:outputText value="#{documentmsgs.document_photo_etudiant}" />
+					</p:column>
+
+					<p:column>
+
+						<p:fileUpload id="iduploadDoc"
+							fileUploadListener="#{photoBean.handleFileUpload}"
+							style="text-align: left" update="urlphoto,urlphoto2,nomphoto"
+							mode="advanced" multiple="false" auto="true"
+							label="#{documentmsgs.document_photo_upload}"
+							required="true" process="@this"
+							requiredMessage="#{documentmsgs.document_document_upload_required}"
+							uploadLabel="#{documentmsgs.document_photo_upload}"
+							sizeLimit="#{photoBean.limit_size_photo}"
+							invalidSizeMessage="#{documentmsgs.document_limite_size_fichier_upload} #{photoBean.limit_size_photo} Octets"
+							allowTypes="#{photoBean.allow_types_photo}">
+							
+<!-- 							<f:param name="url" value="#{photoBean.url}"/>	 -->
+<!-- 							<f:param name="dossierEtudiantId" value="185"/>	 -->
+
+						</p:fileUpload>
+
+					</p:column>
+
+					
+					<p:column>
+						<h:outputText 	id ="urlphoto2" value="#{photoBean.url}" />
+					</p:column>
+					<p:column>
+					<p:graphicImage id ="nomphoto" value="#{photoBean.photo}"  ajax="true" 
+									height="#{photoBean.height_photo}" 	width="#{photoBean.width_photo}"
+									alt="#{documentmsgs.document_photo_vide}">
+									
+						<f:param name="url" value="#{photoBean.url}"/>	
+						<f:param name="dossierEtudiantId" value="185"/>			
+					</p:graphicImage>
+						
+					</p:column>
+					
+					<p:column>
+						<h:inputHidden id="urlphoto"  value="#{photoBean.url}" />
+					</p:column>
+					
+					
+				</p:row>
+				</p:panelGrid>
+					
+					<p:panelGrid id="panelButtonaddphoto">
+						<p:row>
+							<p:column>
+								<p:commandButton value="#{documentmsgs.document_button_tryagain}"
+									icon="ui-icon-arrowrefresh-1-e"
+									update="@this"
+									actionListener="#{photoBean.tryaAainPhoto}">
+								</p:commandButton>
+								
+								<p:commandButton value="#{documentmsgs.document_button_save}"
+									icon="ui-icon-disk"
+									update="@this"
+									actionListener="#{photoBean.savePhoto}">
+									
+                                    <f:param name="url" value="#{photoBean.url}"/>	
+									<f:param name="dossierEtudiantId" value="185"/>											
+								</p:commandButton>
+
+							</p:column>
+							
+						</p:row>
+							
+				</p:panelGrid>
+
+	</h:form>
+	</p:panel>
+	
+</ui:define>
+</ui:composition>
+</html>

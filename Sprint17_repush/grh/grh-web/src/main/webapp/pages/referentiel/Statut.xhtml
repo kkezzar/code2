@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{grhmsgs.grh_message_statuts}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+			<h:panelGrid style="width: 100%;">
+				<p:row>
+					<p:column>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton 
+							value="#{commonmsgs.bouton_nouveau}"
+							onstart="PF('page').block()" 
+							oncomplete="PF('page').unblock()"
+							action="#{statutMBean.addNewStatut}"
+							styleClass="ui-buttop-bleu"
+							update=":form_view_statut"/>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<h:outputLabel for="keyWordsID" value="#{commonmsgs.search_label_mots_cles}" style="font-size:11px" /> 	
+						<p:separator />
+							<p:inputText id="keyWordsID" value="#{statutMBean.searchKeyWord}"   
+										 label="#{commonmsgs.search_label_mots_cles}" />
+						<p:watermark for="keyWordsID" value="Saisissez un mot clé" />  
+						<p:separator />
+						<p:commandButton  	
+							id="btnSearch" 
+							update="@([id$=resultSearchDataTable])"
+							ajax="true"
+							styleClass="ui-button-bleu"
+							icon="ui-icon-search"
+							process="@this keyWordsID"
+							action="#{statutMBean.onSearch()}" 
+							onstart="PF('page').block()"
+							oncomplete="PF('page').unblock()"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+				</h:form>
+				</p:column>
+				</p:row>
+				<p:spacer height="20px"></p:spacer>
+<p:row>
+<p:column>
+				<p:dataTable id="resultSearchDataTable"
+					value="#{statutMBean.listStatuts}" var="statut" paginator="true"
+					rowKey="#{statut.id}" rowIndexVar="rowIndex"
+					paginatorPosition="bottom" selectionMode="single" lazy="false"
+					rows="10"
+					emptyMessage="#{grhmsgs.statuts_no_result}"
+					>
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{statutMBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" 
+						onsuccess="PF('page').unblock()"
+						update=":form_view_statut" />
+
+					<f:facet name="header">
+						<h:outputText value="#{grhmsgs.grh_statut_list}" />
+					</f:facet>
+					<p:column headerText="N°">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_date_publication}">
+						<h:outputText value="#{statut.datePublication}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{grhmsgs.intitule}">
+						<h:outputText value="#{statut.intitule}"/>
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_date_effet}">
+						<h:outputText value="#{statut.dateEffet}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_date_fin_validation}">
+						<h:outputText value="#{statut.dateFinValidation}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+				</p:column>
+</p:row>
+			
+
+			<p:spacer height="20px"></p:spacer>
+<p:row>
+<p:column>
+			<h:form id="form_view_statut" >
+				<p:panel rendered="#{statutMBean.editStatut!=null}" header="#{grhmsgs.add_statut}">
+							<p:panelGrid columns="4" styleClass="ui-panelgrid-full-width">
+							
+								<h:outputLabel value="#{grhmsgs.grh_statut_numero} " styleClass="required"/>
+								<h:panelGroup>
+								<p:inputText id="numStatut" 
+									styleClass="labelValue"
+									value="#{statutMBean.editStatut.numero}"
+									label="#{grhmsgs.grh_statut_numero}" 
+									required="true"
+									requiredMessage="#{grhmsgs.grh_statut_numero_required}"/>
+								<span class="ui-separator">
+								</span>
+								<p:inputText id="anneeStatut" 
+									styleClass="labelValue"
+									style="width: 30px;"
+									value="#{statutMBean.editStatut.annee}"
+									label="#{grhmsgs.grh_statut_numero}" 
+									required="true"
+									requiredMessage="#{grhmsgs.grh_statut_numero_required}"/>
+								</h:panelGroup>
+								
+								<h:outputLabel value="#{grhmsgs.intitule}" styleClass="required"/>
+								<p:inputText id="intitule" 
+									styleClass="labelValue"
+									value="#{statutMBean.editStatut.intitule}"
+									label="#{grhmsgs.intitule}" 
+									required="true"
+									requiredMessage="#{grhmsgs.grh_statut_intitule_required}"/>
+
+								<h:outputLabel value="#{grhmsgs.grh_statut_type}" styleClass="required"/>
+								<p:selectOneMenu id="typeStatut"
+									label="#{grhmsgs.grh_statut_type}"
+									value="#{statutMBean.editStatut.typeStatutDto.id}"
+									styleClass="labelValue"
+									required="true"
+									requiredMessage="#{grhmsgs.grh_statut_type_required}">
+									<f:selectItem itemLabel="--Type statut--" />
+									<f:selectItems value="#{statutMBean.typeStatutList}" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="#{grhmsgs.grh_date_publication}" styleClass="required"/>
+								<p:calendar navigator="true" widgetVar="calwidget"
+									readonlyInput="true" styleClass="labelValue"
+									value="#{statutMBean.editStatut.datePublication}" id="datePublication"
+									label="#{grhmsgs.grh_date_publication}"
+									pattern="dd/MM/yyyy" 
+									required="true"
+									requiredMessage="#{grhmsgs.grh_date_publication_required}"/>
+								
+								<h:outputLabel value="#{grhmsgs.grh_date_effet}" styleClass="required"/>
+								<p:calendar navigator="true" widgetVar="calwidget"
+									readonlyInput="true" styleClass="labelValue"
+									value="#{statutMBean.editStatut.dateEffet}" id="dateEffet"
+									label="#{grhmsgs.grh_date_effet}"
+									pattern="dd/MM/yyyy" 
+									required="true"
+									requiredMessage="#{grhmsgs.grh_date_effet_required}"/>
+									
+									
+								<h:outputLabel value="#{grhmsgs.grh_statut_parent}"/>
+								<p:selectOneMenu id="statutParent"
+									label="#{grhmsgs.grh_statut_parent}"
+									value="#{statutMBean.editStatut.statutParentDto.id}"
+									styleClass="labelValue">
+									<f:selectItem itemLabel="--Statut--" />
+									<f:selectItems value="#{statutMBean.statutList}" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="#{grhmsgs.grh_date_fin_validation}" />
+								<p:calendar navigator="true" widgetVar="calwidget"
+									readonlyInput="true" styleClass="labelValue"
+									value="#{statutMBean.editStatut.dateFinValidation}" id="dateFinValidation"
+									label="#{grhmsgs.grh_date_fin_validation}"
+									pattern="dd/MM/yyyy"/>
+								
+							</p:panelGrid>
+					<p:toolbar id="statutToolBar" styleClass="toolBarMesrs"
+						style="width:100%;margin:0;">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								id="saveBtn" icon="ui-icon-disk"
+								onstart="PF('page').block()" 
+								oncomplete="PF('page').unblock()"
+								action="#{statutMBean.saveStatut()}"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_statut])">
+							</p:commandButton>
+							<span class="ui-separator">
+								<span class="ui-icon ui-icon-grip-dotted-vertical" />
+							</span>
+							<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+								id="deleteBtn" icon="ui-icon-disk"
+								onstart="PF('page').block()" 
+								oncomplete="PF('page').unblock()"
+								action="#{statutMBean.deleteStatut()}"
+								styleClass="ui-button-delete-o"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_statut])"
+								rendered="#{statutMBean.editStatut.id != null}">
+							</p:commandButton>
+						</p:toolbarGroup>
+
+					</p:toolbar>
+
+
+				</p:panel>
+
+			</h:form>
+			</p:column>
+			</p:row>
+</h:panelGrid>
+
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

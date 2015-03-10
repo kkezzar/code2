@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.DossierDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Dossier</class-b>
+		<field>
+			<a>pieceConstitutiveDtos</a>
+			<b>pieceConstitutives</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.PieceConstitutiveDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.PieceConstitutive</class-b>
+		<field>
+			<a>typePiece</a>
+			<b>refTypePieceConstitutive</b>
+		</field>
+		<field>
+			<a>dossierDto</a>
+			<b>dossier</b>
+		</field>
+	</mapping>
+
+
+</mappings>

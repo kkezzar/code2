@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_periode}" style="border:0;">
+			<h:form id="periodeEditForm">
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<br />
+				<br />
+				<br />
+				<p:fieldset legend="#{commonmsgs.common_periode}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_identifiant} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="identifiant"
+									style="text-align: left;font-weight: bold"
+									value="#{periodeBckBean.refPeriodeDto.identifiant}"
+									label="#{periodemsgs.periode_identifiant}" readonly="true"
+									valueChangeListener="#{periodeBckBean.idfPeriodeChanged}"
+									requiredMessage="#{periodemsgs.periode_identite_required}">
+								</p:inputText>
+							</p:column>
+
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_nom} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="nom" style="text-align: left"
+									value="#{periodeBckBean.refPeriodeDto.nom}"
+									label="#{periodemsgs.periode_nom}" required="true"
+									requiredMessage="#{periodemsgs.periode_nom_required}"
+									valueChangeListener="#{periodeBckBean.namePeriodeChanged}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_date_debut} *" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" id="dateDebut" style="width:40px"
+									binding="#{firstDate}" showButtonPanel="true"
+									widgetVar="_firstDate"
+									value="#{periodeBckBean.refPeriodeDto.dateDebut}"
+									pattern="dd/MM/yyyy" label="#{periodemsgs.periode_date_debut}"
+									required="true"
+									valueChangeListener="#{periodeBckBean.infoChanged}"
+									requiredMessage="#{periodemsgs.periode_date_debut_required}">
+								</p:calendar>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_date_fin} *" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" id="dateFin" style="width:40px"
+									value="#{periodeBckBean.refPeriodeDto.dateFin}"
+									pattern="dd/MM/yyyy" binding="#{secondDate}"
+									label="#{periodemsgs.periode_date_fin}" required="true"
+									showButtonPanel="true" validator="dateValidator"
+									valueChangeListener="#{periodeBckBean.infoChanged}"
+									requiredMessage="#{periodemsgs.periode_date_fin_required}">
+									<f:attribute name="firstDate" value="#{firstDate}" />
+								</p:calendar>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:selectBooleanCheckbox id="periodique"
+									value="#{periodeBckBean.refPeriodeDto.periodique}"
+									itemLabel="#{periodemsgs.periode_periodique}" label="Checkbox"
+									valueChangeListener="#{periodeBckBean.infoChanged}">
+									<f:attribute name="firstDate" value="#{firstDate}" />
+									<f:attribute name="secondDate" value="#{secondDate}" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_save}"
+								icon="ui-icon-disk" process="periodeEditForm"
+								update="periodeEditForm" actionListener="#{periodeBckBean.save}">
+								<f:param name="idp" value="#{periodeBckBean.idp}" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton id="addButton" icon="ui-icon-plusthick"
+								value="#{commonmsgs.button_add}"
+								rendered="#{periodeDroitBean.createAllow}"
+								disabled="#{periodeBckBean.idp==null}" process="@this"
+								actionListener="#{periodeBckBean.addPeriode()}"
+								update="periodeEditForm">
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{periodeBckBean.back}">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_cancel_modification_confirmation}"
+									icon="ui-icon-alert" />
+								<f:param name="searchValue"
+									value="#{periodeBckBean.searchValue}" />
+								<f:param name="idp" value="#{periodeBckBean.idp}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

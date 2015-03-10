@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_configuration}" style="border:0;">
+			<h:form id="searchForm"
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+			
+
+
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{parametreDroitBean.readAllow}"
+							icon="ui-icon-document" action="#{parametreSearchBean.toNew}">
+							<f:param name="searchValue"
+								value="#{parametreSearchBean.searchValue}" />
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="configurationData"
+								fileName="listeDesconfiguration" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right" rendered="#{parametreDroitBean.readAllow}">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{parametreSearchBean.searchValue}"
+							id="searchInput" rendered="#{parametreDroitBean.readAllow}"
+							style="width:200px" binding="#{searchValue}" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton 
+							onstart="PF('blockUIWidget').block()" id="searchButton"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							actionListener="#{parametreSearchBean.findGeneric(searchValue.value)}" />
+						<p:separator />
+
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br />
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<br />
+				<p:dataTable resizableColumns="true" id="configurationsData"
+					rendered="#{parametreSearchBean.listRefParametreDto!=null}"
+					value="#{parametreSearchBean.listRefParametreDto}"
+					var="current" paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue"
+						value="#{parametreSearchBean.searchValue}" />
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="configurationsData"
+						process="configurationsData" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{parametragemsgs.parametrage_configuration_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.key}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration_key}" />
+						</f:facet>
+						<h:outputText value="#{current.key}" />
+					</p:column>
+
+					<p:column sortBy="#{current.description}"  width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration_description}" />
+						</f:facet>
+						<h:outputText value="#{current.description}" />
+					</p:column>
+
+					<p:column sortBy="#{current.defaultValue}" width="10%">
+						<f:facet name="header">
+							<h:outputText 
+								value="#{parametragemsgs.parametrage_configuration_value}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.defaultValue}" />
+					</p:column>
+					<p:column sortBy="#{current.general}"  width="5%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration_general}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.general?'Oui':'Non'}" />
+					</p:column>
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{parametreSearchBean.toDetails}"
+							icon="ui-icon-document" title="#{commonmsgs.button_consulter}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{parametreDroitBean.readAllow}">
+							<f:param name="searchValue"
+								value="#{parametreSearchBean.searchValue}" />
+							<f:param name="idpc" value="#{current.id}" />
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{parametreSearchBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{parametreDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:param name="searchValue"
+								value="#{parametreSearchBean.searchValue}" />
+							<f:param name="idpc" value="#{current.id}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="removeButton" process="@this"
+							actionListener="#{parametreSearchBean.delete(current)}"
+							rendered="#{parametreDroitBean.deleteAllow}"
+							update="configurationsData" icon="ui-icon-trash"
+							upadate="configurationsData" title="#{commonmsgs.button_delete}">
+
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="searchValue"
+								value="#{parametreSearchBean.searchValue}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

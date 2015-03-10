@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	
+	<application>	
+		<!-- RECHERCHE resources bundle -->
+		<resource-bundle>
+			<base-name>locale/RechercheStrcutureMessages</base-name>
+			<var>rchStructureMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/RechercheProgrammesMessages</base-name>
+			<var>rchProgrammeMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/RechercheCircuitValidationMessages</base-name>
+			<var>rchCircuitMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/RechercheDemandeBudgetMessages</base-name>
+			<var>rchBudgetMsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.referentielSelectGroupMessages</base-name>
+			<var>cmpGroupMsgs</var>
+		</resource-bundle>
+	
+		<resource-bundle>
+			<base-name>locale.referentielSelectPartnerMessages</base-name>
+			<var>cmpPartnerMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/RechercheProjetsRechercheMessages</base-name>
+			<var>rchProjetsMsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale/RechercheEvaluationChercheurMessages</base-name>
+			<var>rchEvalChrMsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.situationMessages</base-name>
+			<var>cmpSituationMsgs</var>
+		</resource-bundle>
+		
+	</application>
+</faces-config>

@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_gerer_affectations_nomenclatures_budget}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="Nouveau"
+							action="#{affectationNomenclaturesBudgetBean.addAction()}"
+							update=":form_crud"></p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:selectOneMenu styleClass="input-xlarge-px"
+							style="margin-bottom:-10px"
+							value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleSearchDto.chapitre.id}"
+							filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{parametrageBudgetMsg.select_chapitre}"
+								itemValue="" />
+							<f:selectItems
+								value="#{affectationNomenclaturesBudgetBean.listChapitres}" />
+							<p:ajax
+								listener="#{affectationNomenclaturesBudgetBean.handleSearchChapitresSelectOneMenuChange}"
+								event="valueChange" update="filterListArticles form_search"
+								onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+						</p:selectOneMenu>
+						<p:spacer width="5px" />
+						<p:selectOneMenu styleClass="input-xlarge-px"
+							style="margin-bottom:-10px" id="filterListArticles"
+							value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleSearchDto.article.id}"
+							filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{parametrageBudgetMsg.select_article}"
+								itemValue="" />
+							<f:selectItems
+								value="#{affectationNomenclaturesBudgetBean.listArticles}" />
+							<p:ajax
+								listener="#{affectationNomenclaturesBudgetBean.handleSearchArticlesSelectOneMenuChange}"
+								event="valueChange" update="form_search"
+								onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+						</p:selectOneMenu>
+						<p:separator />
+						<p:selectOneMenu styleClass="input-xlarge-px"
+							style="margin-bottom:-10px"
+							value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleSearchDto.refEtablissement.id}"
+							filter="true" filterMatchMode="contains">
+							<f:selectItem
+								itemLabel="#{parametrageBudgetMsg.select_etablissement}"
+								itemValue="" />
+							<f:selectItems
+								value="#{affectationNomenclaturesBudgetBean.listEtablissements}" />
+							<p:ajax
+								listener="#{affectationNomenclaturesBudgetBean.handleSearchEtablissementsSelectOneMenuChange}"
+								event="valueChange" update="form_search"
+								onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+						</p:selectOneMenu>
+						<!--
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{affectationNomenclaturesBudgetBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{affectationNomenclaturesBudgetBean.model}"
+					paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{affectationNomenclaturesBudgetBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+						<h:outputText value="#{current.chapitre.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.article}">
+						<h:outputText value="#{current.article.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.etablissement}">
+						<h:outputText
+							value="#{current.refEtablissement.llEtablissementLatin}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{affectationNomenclaturesBudgetBean.crud}">
+
+					<p:tab title="Détail de l'affectation">
+
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.chapitre}"
+											styleClass="required" />
+									</p:column>
+
+									<p:column colspan="">
+										<p:selectOneMenu styleClass="input-xlarge-px"
+											value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleDto.chapitre.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_chapitre}"
+												itemValue="" />
+											<f:selectItems
+												value="#{affectationNomenclaturesBudgetBean.listChapitres}" />
+											<p:ajax
+												listener="#{affectationNomenclaturesBudgetBean.handleChapitresSelectOneMenuChange}"
+												event="change" update="listArticles" process="@this" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.article}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu styleClass="input-xlarge-px"
+											id="listArticles"
+											value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleDto.article.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_article}"
+												itemValue="" />
+											<f:selectItems
+												value="#{affectationNomenclaturesBudgetBean.listArticles}"
+												process="@this" />
+											<p:ajax event="change" process="@this" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.etablissement}"
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu styleClass="input-xxlarge-px"
+											value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleDto.refEtablissement.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_etablissement}"
+												itemValue="" />
+											<f:selectItems
+												value="#{affectationNomenclaturesBudgetBean.listEtablissements}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column>
+										<p:inputTextarea styleClass="input-xxlarge"
+											value="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_search :form_crud"
+												icon="ui-icon-disk" styleClass="ui-button-save"
+												actionListener="#{affectationNomenclaturesBudgetBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												rendered="#{affectationNomenclaturesBudgetBean.affectationEtabChapitreArticleDto.id ne null}"
+												id="deleteBtn" update=":form_crud :form_search"
+												styleClass="ui-button-bleu-o"
+												actionListener="#{affectationNomenclaturesBudgetBean.deleteAction()}">
+												<p:confirm header="Confirmation"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_search :form_crud"
+												process="@this"
+												actionListener="#{affectationNomenclaturesBudgetBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

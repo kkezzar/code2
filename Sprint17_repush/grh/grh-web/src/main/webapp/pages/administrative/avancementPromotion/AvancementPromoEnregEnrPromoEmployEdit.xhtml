@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		 #{avancementEchelonmsgs.pnl_enreg_title_enreg_result_com}
+	</ui:define>
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	<style>
+	.max-duree {
+        background: #F6D8CE  !important ;
+    }
+	</style>	
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative//avancementPromotion/AvancementPromoEnregEnrPromoEmploySearch.xhtml" >
+				<ui:param name="renderedNouveau"  value="true"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty avancementPromotionEnregPromoEmp.dossierEmployeDto}">
+					<h:form id="form_avancement_promotion_edit">
+		             <p:panelGrid columns="1" cellspacing="0"	styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			             <p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">		
+			                          <p:row>
+											<p:column>
+												<h:outputLabel value="#{avancementEchelonmsgs.employe}"	/>
+											</p:column>
+											<p:column   colspan="3" >
+											<h:outputLabel value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.matricule}" styleClass="value" />
+											</p:column>
+										</p:row>
+										<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.corps} "/>
+										</p:column>
+										<p:column>										
+										<h:outputLabel value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.corpsDto.nomenclatureByIdNomenclatureCorps.libelleCourtFr}" styleClass="value" />
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.grade} "/>
+										</p:column>
+										<p:column>	
+										<h:outputLabel value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.gradeDto.nomenclatureDto.libelleCourtFr}" styleClass="value" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.echelon} " />
+										</p:column>
+										<p:column>											
+										<h:outputLabel value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.echlon}" styleClass="value" />
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{avancementEchelonmsgs.indice} " />
+										</p:column>
+										<p:column>											
+										<h:outputLabel value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.indice}" styleClass="value" />
+										</p:column></p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_derniere_promotion} " >											
+											</h:outputLabel>
+										</p:column>
+										<p:column colspan="3">											
+										
+								<h:outputText  id="datedernieravancement"  styleClass="value" value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.dateEffetGrade}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>											
+										</p:column>																			
+									</p:row>
+			                           
+
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.type_promotion}" />
+										</p:column>
+										<p:column colspan="3">
+						<p:selectOneMenu id="typepromo" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{avancementEchelonmsgs.type_promo_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedTypePromoId}"
+							label="#{avancementEchelonmsgs.type_promotion}">
+							<p:ajax 	partialSubmit="true" listener="#{avancementPromotionEnregPromoEmp.onPromoSelected}" 
+								update="form_avancement_promotion_edit"	onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem	itemLabel="#{avancementEchelonmsgs.promotion_select}"	itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeTypePromo}" />                                 
+						</p:selectOneMenu>
+										</p:column>
+										
+										</p:row>
+									
+									
+									<p:row  rendered="#{avancementPromotionEnregPromoEmp.selectedTypePromoId==648753}">
+									<p:column    >
+											<h:outputLabel value="#{avancementEchelonmsgs.titre} " />
+										</p:column>
+										
+						<p:column>
+							<p:selectOneMenu id="titre" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{avancementEchelonmsgs.corps_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedTitreId}"
+							label="#{avancementEchelonmsgs.corps}">
+							<p:ajax 		update="grade"				
+							partialSubmit="true"  
+										
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.titres_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeTitres}" />                                 
+						</p:selectOneMenu>
+					</p:column>		
+							<p:column>
+							<h:outputLabel value="#{avancementEchelonmsgs.diplome} " />
+							</p:column>
+							<p:column>
+							<p:selectOneMenu id="diplomeselect" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						    required="true" requiredMessage="#{avancementEchelonmsgs.corps_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedDiplomeId}"
+							label="#{avancementEchelonmsgs.corps}">
+							<p:ajax 		update="grade"				
+							partialSubmit="true" 									
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.diplome_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeDiplome}" />                                 
+						</p:selectOneMenu>
+					</p:column>		
+									</p:row>
+									<p:row   rendered="#{avancementPromotionEnregPromoEmp.selectedTypePromoId==648753}"   >	
+									<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_obtention} " />
+									</p:column>
+									<p:column colspan="3"   >
+					<p:calendar id="dateObtention" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_obtention}"
+							value="#{avancementPromotionEnregPromoEmp.carriereDto.dateObtentionDiplome}" style="text-align: center" >
+						</p:calendar>						
+					</p:column>		
+										
+									</p:row>
+		
+									<p:row rendered="#{avancementPromotionEnregPromoEmp.selectedTypePromoId==648754}">
+									<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_debut_formation} " />
+										</p:column>
+									<p:column>
+					<p:calendar id="datedebutformation" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_debut_formation}"
+							value="#{avancementPromotionEnregPromoEmp.carriereDto.dateDebutFormation}" style="text-align: center" >
+						</p:calendar>						
+					</p:column>			
+						<p:column>
+							<h:outputLabel value="#{avancementEchelonmsgs.date_fin_formation} " />
+						</p:column>
+						<p:column>
+					    <p:calendar id="datefinformation" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_fin_formation}"
+							value="#{avancementPromotionEnregPromoEmp.carriereDto.dateFinFormation}" style="text-align: center" >
+						</p:calendar>						
+					</p:column>						
+								</p:row>
+									<p:row   rendered="#{avancementPromotionEnregPromoEmp.selectedTypePromoId==648754}"   >	
+									<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.objet_formation} " />
+									</p:column>
+									<p:column colspan="3" >
+					<p:inputText styleClass="value" id="intitule" value="#{avancementPromotionEnregPromoEmp.carriereDto.objetFormation}"  style="width:100%" >
+						</p:inputText>	
+					</p:column>
+										
+									</p:row>
+									
+									<p:row   rendered="#{avancementPromotionEnregPromoEmp.selectedTypePromoId==648755}"   >
+									<p:column>
+							<h:outputLabel value="#{avancementEchelonmsgs.date_exam_text_prof} " />
+						</p:column>
+						<p:column  colspan="3"  >
+					    <p:calendar id="dateexamen" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_exam_text_prof}"
+							value="#{avancementPromotionEnregPromoEmp.carriereDto.dateExament}" style="text-align: center" >
+						</p:calendar>						
+					</p:column>	
+									
+                                    </p:row>
+
+
+
+
+
+<p:row>
+										<p:column colspan="4" >
+											<h:outputLabel value="#{avancementEchelonmsgs.Promotion_corps_grade_suivants}" styleClass="value" />
+										</p:column>	
+									</p:row>
+
+
+								
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.corps} " />
+										</p:column>
+										<p:column>
+										<p:selectOneMenu id="corps" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{avancementEchelonmsgs.corps_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedCorpsId}"
+							label="#{avancementEchelonmsgs.corps}">
+							<p:ajax 		update="grade"				
+							partialSubmit="true"  
+										listener="#{avancementPromotionEnregPromoEmp.onCorpsSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.corps_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeCorps}" />                                 
+						</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.grade} " />
+										</p:column>
+										<p:column>	
+						<p:selectOneMenu id="grade" style="width:100%" filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						    required="true" requiredMessage="#{avancementEchelonmsgs.grade_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedGradeId}"
+							label="#{avancementEchelonmsgs.grade}">
+							<p:ajax  update="nouveauIndice"	  partialSubmit="true"
+										listener="#{avancementPromotionEnregPromoEmp.onGradeSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.grade_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeGrade}" />
+						</p:selectOneMenu>										
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.echelon} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  
+												value="#{avancementPromotionEnregPromoEmp.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.echlon}" styleClass="value"/>	
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{avancementEchelonmsgs.indice} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  id="nouveauIndice"
+												value="#{avancementPromotionEnregPromoEmp.carriereDto.grilleIndiciaireDto.indice}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_effet} " />
+										</p:column>									
+										<p:column colspan="3" >
+					    <p:calendar id="dateeffetgrade" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_exam_text_prof}"
+							value="#{avancementPromotionEnregPromoEmp.carriereDto.dateEffetGrade}" style="text-align: center" >
+						</p:calendar>						
+					</p:column>										
+									</p:row>			
+			<p:row>
+			<p:column  colspan="4"  >	
+			<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										process="@this" styleClass="ui-button-save"
+										id="saveEMPLOYE" icon="ui-icon-disk"
+										update=":pnl_Gerer"
+										actionListener="#{avancementPromotionEnregPromoEmp.ajouterEmploye()}"
+										onstart="PF('page').block()" oncomplete="PF('page').unblock()"
+										onsuccess="employerproposeDialog.hide()">
+										<p:confirm header="Confirmation"
+											message="#{avancementEchelonmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+					</p:column>		
+			</p:row>
+						
+	</p:panelGrid>	
+    	</p:panelGrid>
+	</h:form>
+		<p:dialog position="center"
+		header="#{avancementEchelonmsgs.pnl_Enregistrer_avis_commission}" id="employerproposeDialog"
+		widgetVar="employerproposeDialog" modal="true" showEffect="fade"
+		hideEffect="fade" resizable="true" width="850px" >
+		<p:outputPanel id="pnl-employe" style="width:800px"  >
+		<h:form id="form_poste_edit">		
+			<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">			
+			     <p:row>
+								<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.employe}"	styleClass="required" />
+											</p:column>
+											<p:column   colspan="3" >
+											<p:inputText value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.matricule}"
+										 	required="true"	requiredMessage="#{mutationMgs.employe_required}"	onclick="PF('dossierEmployeDialogSearch').show()" />												
+											</p:column>
+										</p:row>
+										<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.corps} " />
+										</p:column>
+										<p:column>
+										<h:outputText  id="corpsconfirm"
+										                 
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.corpsDto.nomenclatureByIdNomenclatureCorps.libelleCourtFr}" styleClass="value"/>
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.grade} " />
+										</p:column>
+										<p:column>	
+											<h:outputText  id="gradeconfirm"
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.gradeDto.nomenclatureDto.libelleCourtFr}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.echelon} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  id="echelonconfirm"
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.echlon}" styleClass="value"/>	
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{avancementEchelonmsgs.indice} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  id="choixindice"
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.indice}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_derniere_promotion} " />
+										</p:column>
+										<p:column colspan="3">											
+																		
+								<h:outputText  id="datePropositionconfirm"  styleClass="value" value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.dateEffetGrade}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>	
+								
+										
+										</p:column>										
+									</p:row>
+			                           <p:row>
+										<p:column colspan="4" >
+											<h:outputLabel value="#{avancementEchelonmsgs.Promotion_corps_grade_suivants}" styleClass="value" />
+										</p:column>	
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.corps} " />
+										</p:column>
+										<p:column>
+										<p:selectOneMenu id="corps" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{avancementEchelonmsgs.corps_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedCorpsId}"
+							label="#{avancementEchelonmsgs.corps}">
+							<p:ajax 		update="grade"				
+							partialSubmit="true"  
+										listener="#{avancementPromotionEnregPromoEmp.onCorpsSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.corps_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeCorps}" />
+                                 
+						</p:selectOneMenu>
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.grade} " />
+										</p:column>
+										<p:column>	
+											<p:selectOneMenu id="grade" style="width:100%" filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{avancementEchelonmsgs.grade_required}"
+							value="#{avancementPromotionEnregPromoEmp.selectedGradeId}"
+							label="#{avancementEchelonmsgs.grade}">
+							<p:ajax  update="nouveauIndice"	  partialSubmit="true"
+										listener="#{avancementPromotionEnregPromoEmp.onGradeSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{avancementEchelonmsgs.grade_select}"
+								itemValue="" />
+							<f:selectItems value="#{avancementPromotionEnregPromoEmp.listeGrade}" />
+
+						</p:selectOneMenu>
+										
+										
+										
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.echelon} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.carriereCouranteDto.grilleIndiciaireDto.echlon}" styleClass="value"/>	
+										</p:column>
+										<p:column>
+											<h:outputLabel
+												value="#{avancementEchelonmsgs.indice} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  id="nouveauIndice"
+												value="#{avancementPromotionEnregPromoEmp.employeProposeDto.grilleIndiciaireDto.indice}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.date_effet} " />
+										</p:column>
+									
+										<p:column headerText="#{avancementEchelonmsgs.date_effet}" style="text-align: left"    colspan="3">
+										
+						
+						<p:calendar id="dateProposition" navigator="true" required="true" requiredMessage="#{avancementEchelonmsgs.date_proposition_required}" disabled="#{avancementPromotionEnregPromoEmp.employeProposeDto.dossierEmployeDto.matricule == null}"
+							value="#{avancementPromotionEnregPromoEmp.datepropositionPromotion}" style="text-align: center" >
+						</p:calendar>
+						
+						
+						</p:column>											
+									</p:row>			
+			<p:row>
+			<p:column>	
+			<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										process="@this" styleClass="ui-button-save"
+										id="saveEMPLOYE" icon="ui-icon-disk"
+										update=":pnl_Gerer"
+										actionListener="#{avancementPromotionEnregPromoEmp.ajouterEmploye()}"
+										onstart="PF('page').block()" oncomplete="PF('page').unblock()"
+										onsuccess="employerproposeDialog.hide()">
+										<p:confirm header="Confirmation"
+											message="#{avancementEchelonmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+					</p:column>		
+			</p:row>
+			
+			
+	</p:panelGrid>		
+		</h:form>
+		</p:outputPanel>
+	</p:dialog>	
+			</p:outputPanel>
+		</p:outputPanel>
+</p:outputPanel>
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

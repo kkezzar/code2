@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.NiveauDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.Niveau
+		</class-b>
+		<field>
+			<a>idCycle</a>
+			<b>cycle.id</b>
+		</field>
+		<field>
+			<a>libelleCourtLtCycle</a>
+			<b>cycle.libelleCourtLt</b>
+		</field>
+		<field>
+			<a>libelleLongLtCycle</a>
+			<b>cycle.libelleLongLt</b>
+		</field>
+		
+		<field>
+			<a>codeCycle</a>
+			<b>cycle.code</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.PeriodeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.Periode
+		</class-b>
+		<field>
+			<a>idNiveau</a>
+			<b>niveau.id</b>
+		</field>
+		<field>
+			<a>rangNiveau</a>
+			<b>niveau.rang</b>
+		</field>
+		<field>
+			<a>ncPeriodeId</a>
+			<b>ncPeriode.id</b>
+		</field>
+
+		<field>
+			<a>ncPeriodeCode</a>
+			<b>ncPeriode.code</b>
+		</field>
+
+		<field>
+			<a>ncPeriodeLibelle</a>
+			<b>ncPeriode.libelleLongFr</b>
+		</field>
+		
+		<field>
+			<a>libelleLongFrNiveau</a>
+			<b>niveau.libelleLongLt</b>
+		</field>
+		
+		<field>
+			<a>libelleLongFrCycle</a>
+			<b>niveau.cycle.libelleLongLt</b>
+		</field>
+		
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.CycleDiplomeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.CycleDiplome
+		</class-b>
+		<field>
+			<a>cycleId</a>
+			<b>cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>cycle.code</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>cycle.libelleLongLt</b>
+		</field>
+		<field>
+			<a>diplomeId</a>
+			<b>diplome.id</b>
+		</field>
+		<field>
+			<a>diplomeCode</a>
+			<b>diplome.code</b>
+		</field>
+		<field>
+			<a>diplomeLibelle</a>
+			<b>diplome.libelleLongFr</b>
+		</field>
+		<field>
+			<a>diplomeLibelleAr</a>
+			<b>diplome.libelleLongAr</b>
+		</field>
+		<field>
+			<a>niveauDiplomeId</a>
+			<b>diplome.nomenclature.id</b>
+		</field>
+		<field>
+			<a>niveauDiplomeCode</a>
+			<b>diplome.nomenclature.code</b>
+		</field>
+		<field>
+			<a>niveauDiplomeLibelle</a>
+			<b>diplome.nomenclature.libelleLongFr</b>
+		</field>
+	</mapping>
+
+
+</mappings>

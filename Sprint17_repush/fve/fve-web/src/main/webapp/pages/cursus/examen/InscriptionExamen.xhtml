@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:head>
+		<style>
+.ui-picklist .ui-picklist-list {
+	height: 400px;
+	width: 500px !important;
+}
+
+.ui-picklist-button-move-up {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-top {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-down {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-bottom {
+	visibility: hidden !important;
+}
+</style>
+	</h:head>
+
+
+	<pe:blockUI target="inscritField" widgetVar="inscritBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+<p:outputPanel styleClass="examenTabStyle">
+	<p:panel header="Inscrire les étudiants à l'examen"
+		id="inscritField"
+		rendered="#{planningSessionSaveBean.planningSessionDto.id!=0}">
+		<p:panelGrid styleClass="ui-panelgrid-full-width" id="inscritPanel">
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_salle}" for="salle" />
+				</p:column>
+				<p:column colspan="3">
+					<p:selectOneMenu id="salle" filter="true" style="width:100%"
+						required="true"
+						requiredMessage="#{examenMsgs.examen_salle_required}"
+						filterMatchMode="contains" styleClass="labelValue"
+						value="#{inscriptionExamenBean.salleExamenDto.id}"
+						label="#{examenMsgs.examen_examen}">
+						<p:ajax update="inscritField" process="@this"
+							onstart="PF('detailSessionBlock').block()"
+							onsuccess="PF('detailSessionBlock').unblock()"
+							listener="#{inscriptionExamenBean.salleChanged()}" />
+						<f:selectItem itemLabel="#{examenMsgs.examen_salle_select}"
+							itemValue="" />
+						<f:selectItems value="#{inscriptionExamenBean.salleExamenList}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column colspan="4"></p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:12%">
+					<p:outputLabel value="#{examenMsgs.examen_nbre_etudiants}"/>
+				</p:column>
+				<p:column style="width:13%">
+					<h:outputText value="#{inscriptionExamenBean.nbreEtudiants}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:12%">
+					<p:outputLabel value="#{examenMsgs.examen_capacite}" />
+				</p:column>
+				<p:column style="width:13%">
+					<h:outputText value="#{inscriptionExamenBean.capacite}"
+						styleClass="value" />
+				</p:column>
+			
+				<p:column style="width:12%">
+					<p:outputLabel value="#{examenMsgs.examen_nbre_inscrits}"/>
+				</p:column>
+				<p:column style="width:13%">
+					<h:outputText value="#{inscriptionExamenBean.nbreInscrits}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:12%">
+					<p:outputLabel value="#{examenMsgs.examen_place_disponibles}"/>
+				</p:column>
+				<p:column style="width:13%">
+					<h:outputText value="#{inscriptionExamenBean.reste}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<br></br>
+		<p:pickList id="InscriptionPickList"
+			value="#{inscriptionExamenBean.inscriptionDualList}"
+			var="inscription" style="text-align:left" itemValue="#{inscription}"
+			itemLabel="#{inscription.individuNomLatin}" showCheckbox="true"
+			label="Ajouter ou retirer des étudiants"
+			addLabel="#{examenMsgs.examen_pickList_ajouter_label}"
+			addAllLabel="#{examenMsgs.examen_pickList_ajouter_tout_label}"
+			removeLabel="#{examenMsgs.examen_pickList_supprimer_label}"
+			removeAllLabel="#{examenMsgs.examen_pickList_supprimer_tout_label}"
+			showSourceFilter="true" showTargetFilter="true" showSourceControls="true" showTargetControls="true"
+			filterMatchMode="contains" converter="#{entityConverter}">
+			<p:ajax event="transfer" onstart="PF('inscritBlock').block()"
+				onsuccess="PF('inscritBlock').unblock()"
+				listener="#{inscriptionExamenBean.onTransfer}" update="InscriptionPickList" />
+			<f:facet name="sourceCaption">#{examenMsgs.examen_liste_inscrit_source}</f:facet>
+			<f:facet name="targetCaption">#{examenMsgs.examen_liste_inscrit_target}</f:facet>
+		<p:column style="width:15%">
+				<p:graphicImage value="#{photoEtudiantBB.photo}"
+					rendered="#{inscription.urlPhoto!=null}" width="40" height="40">
+					<f:param name="url" value="#{inscription.urlPhoto}" />
+				</p:graphicImage>
+				<p:graphicImage value="/resources/images/boy.png"
+					rendered="#{inscription.urlPhoto==null}" width="40" height="40">
+				</p:graphicImage>
+
+			</p:column>
+			<p:column style="width:85%;">
+				<h:outputText
+					value="#{inscription.individuNomLatin} #{inscription.individuPrenomLatin}"
+					style="text-align:left" />
+			</p:column>
+
+
+		</p:pickList>
+		<br></br>
+		<p:toolbar id="examenToolBar" styleClass="toolBarMesrs"
+			style="width:100%;margin:0;">
+			<p:toolbarGroup>
+
+				<p:commandButton id="btnSaveInscrits"
+					value="#{commonmsgs.bouton_enregistrer}" process="inscritField"
+					actionListener="#{inscriptionExamenBean.save()}"
+					icon="ui-icon-disk" onstart="PF('inscritBlock').block()"
+					update="inscritField"
+					disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+					onsuccess="PF('inscritBlock').unblock()">
+				</p:commandButton>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</p:panel>
+	</p:outputPanel>
+
+</ui:composition>
+

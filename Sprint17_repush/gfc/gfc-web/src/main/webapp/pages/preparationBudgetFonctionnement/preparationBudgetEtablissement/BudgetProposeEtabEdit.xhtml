@@ -1,0 +1,439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{preparationBudgetFonctionnementMsgs.page_title_enregistrer_budget_propose_etablissement}
+	</ui:define>
+
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+
+			<style>
+.ui-datatable .ui-datatable-header,.ui-datatable .ui-datatable-footer {
+	text-align: left !important;
+}
+</style>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<!-- 
+						<p:selectOneMenu styleClass="input-xlarge-px"
+							value="#{budgetProposeEtabBean.projetBudgetDto.id}">
+							<f:selectItem
+								itemLabel="#{preparationBudgetFonctionnementMsgs.select_projet_budget}"
+								itemValue="" />
+							<f:selectItems value="#{budgetProposeEtabBean.listProjetsBudgets}" />
+							<p:ajax
+								listener="#{budgetProposeEtabBean.handleProjetBudgetSelectOneMenuChange}"
+								event="valueChange"
+								update="ResultSearchDataTable :form_detail_projet"
+								onstart="PF('page').block()" oncomplete="PF('page').unblock()"></p:ajax>
+						</p:selectOneMenu> 
+						-->
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{budgetProposeEtabBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{budgetProposeEtabBean.modelProjetsBudgets}" paginator="true"
+					paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{budgetProposeEtabBean.onRowSelectProjetBudget}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_detail_projet" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="Identité">
+						<h:outputText value="#{current.identite}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.budget} ">
+						<h:outputText value="#{current.description}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.typeBudget.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.exercice_budgetaire}">
+						<h:outputText
+							value="#{current.projetBudget.exerciceBudgetaire.annee} - #{current.projetBudget.exerciceBudgetaire.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_detail_projet">
+				<h:form id="form">
+					<p:tabView rendered="#{budgetProposeEtabBean.crud}" id="tab">
+
+						<p:tab title="Détail du budget">
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.identite}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.identite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{gfcMsgs.description}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.exercice_budgetaire}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.exerciceBudgetaire.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.projet_budget_parent}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.projetBudget.identite} - #{budgetProposeEtabBean.projetBudgetDto.projetBudget.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="#{gfcMsgs.type}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.typeBudget.libelleLongFr}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.unite_monetaire}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{budgetProposeEtabBean.projetBudgetDto.uniteMonetaire.libelleLongFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4">
+										<p:dataTable var="current" resizableColumns="false"
+											rowIndexVar="rowIndex" id="ccc"
+											value="#{budgetProposeEtabBean.projetBudgetDto.detailsProjetBudgets}"
+											paginator="true" paginatorPosition="bottom"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}"
+											rows="5" rowKey="#{current.id}"
+											paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+											currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+											<f:facet name="header">
+												<h:outputText value="Le budget proposé pour le ministère" />
+											</f:facet>
+
+											<p:column headerText="#{commonmsgs.column_numero_ligne}">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+
+											<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+												<h:outputText
+													value="#{current.chapitre.code} - #{current.chapitre.intituleFr}" />
+											</p:column>
+
+											<p:column headerText="#{parametrageBudgetMsg.article}">
+												<h:outputText
+													value="#{current.article.code} - #{current.article.intituleFr}" />
+											</p:column>
+
+											<p:column headerText="#{gfcMsgs.montant} demandé">
+												<h:outputText value="#{current.montantBesoins}" />
+											</p:column>
+
+										</p:dataTable>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="Consolider le budget du ministère"
+												disabled="#{budgetProposeEtabBean.projetBudgetDto.situation.codeSituation eq gfcConstantBean.situationConsolideeCode}"
+												id="consBtn" update=":form_detail_projet"
+												styleClass="ui-button-orange-o"
+											
+												actionListener="#{budgetProposeEtabBean.consolidAction()}" onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{preparationBudgetFonctionnementMsgs.msg_consolidation_demandes_budgetaires_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="Valider"
+												disabled="#{budgetProposeEtabBean.projetBudgetDto.id eq null}"
+												id="validBtn" update=":form_search :form_detail_projet"
+												styleClass="ui-button-validate-o"
+												actionListener="#{budgetProposeEtabBean.validateAction()}" 	onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+											<p:commandButton value="Retour" id="retBtn"
+												update=":form_search :form_detail_projet" process="@this"
+												actionListener="#{budgetProposeEtabBean.cancelAction()}">
+											</p:commandButton>
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+
+						</p:tab>
+
+						<p:tab title="Budgets proposés par établissement/central"
+							id="fichesBesoinsTableTab">
+							<p:dataTable id="fichesBesoinsTable" var="current"
+								resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+								value="#{budgetProposeEtabBean.projetBudgetDto.fichesBesoins}"
+								paginator="true" paginatorPosition="bottom"
+								emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+								rowKey="#{current.id}" selectionMode="single"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+								currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+								<p:ajax event="rowSelect" immediate="true"
+									listener="#{budgetProposeEtabBean.onRowSelect}" process="@this"
+									onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+									update=":form:tab:form_view" />
+
+								<p:column headerText="#{commonmsgs.column_numero_ligne}"
+									style="width:40px">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column headerText="#{parametrageBudgetMsg.etablissement}">
+									<h:outputText
+										value="#{current.etablissement.llEtablissementLatin}">
+									</h:outputText>
+								</p:column>
+
+								<p:column
+									headerText="#{preparationBudgetFonctionnementMsgs.budget} / #{gfcMsgs.identite}">
+									<h:outputText value="#{current.identite}">
+									</h:outputText>
+								</p:column>
+
+								<p:column
+									headerText="#{preparationBudgetFonctionnementMsgs.budget} / #{gfcMsgs.intitule_fr}">
+									<h:outputText value="#{current.intituleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Montant demandé">
+									<h:outputText value="">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Montant proposé">
+									<h:outputText value="">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="Situation">
+									<h:outputText value="#{current.situation.codeSituation}">
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+
+							<p:spacer height="20px"></p:spacer>
+
+							<p:outputPanel id="form_view">
+
+								<p:tabView rendered="#{budgetProposeEtabBean.viewDetailBudget}">
+
+									<p:tab title="Les propositions">
+
+										<p:panelGrid
+											styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+											<p:row>
+												<p:column>
+													<h:outputText value="Identité du budget" />
+												</p:column>
+
+												<p:column colspan="">
+													<h:outputText styleClass="value"
+														value="#{budgetProposeEtabBean.ficheBesoinsDto.identite}" />
+												</p:column>
+
+												<p:column>
+													<h:outputText value="Inititulé du budget" />
+												</p:column>
+												<p:column colspan="">
+													<h:outputText styleClass="value"
+														value="#{budgetProposeEtabBean.ficheBesoinsDto.intituleFr}" />
+												</p:column>
+											</p:row>
+
+											<p:row>
+												<p:column>
+													<h:outputText value="Etablissement" />
+												</p:column>
+												<p:column colspan="">
+													<h:outputText styleClass="value"
+														value="#{budgetProposeEtabBean.ficheBesoinsDto.etablissement.llEtablissementLatin}" />
+												</p:column>
+
+												<p:column>
+													<h:outputText value="Situation" />
+												</p:column>
+												<p:column>
+													<h:outputText styleClass="value"
+														value="#{budgetProposeEtabBean.ficheBesoinsDto.situation.libelleSituation}" />
+												</p:column>
+											</p:row>
+
+											<p:row>
+												<p:column colspan="4">
+													<p:dataTable var="current" resizableColumns="false"
+														rowIndexVar="rowIndex" id="detailsFicheBesoinsTable"
+														value="#{budgetProposeEtabBean.ficheBesoinsDto.consolidationBesoins}"
+														paginator="true" paginatorPosition="bottom"
+														emptyMessage="#{commonmsgs.data_table_empty_Message}"
+														rows="5" rowKey="#{current.id}"
+														paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+														currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+														<f:facet name="header">
+															<h:outputText value="Les propositions budgétaires" />
+														</f:facet>
+
+														<p:column headerText="#{commonmsgs.column_numero_ligne}">
+															<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+
+														<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+															<h:outputText
+																value="#{current.chapitre.code} - #{current.chapitre.intituleFr}" />
+														</p:column>
+
+														<p:column headerText="#{parametrageBudgetMsg.article}">
+															<h:outputText
+																value="#{current.article.code} - #{current.article.intituleFr}" />
+														</p:column>
+
+														<p:column headerText="#{gfcMsgs.montant} demandé">
+															<h:outputText value="#{current.montantDemande}" />
+														</p:column>
+
+														<p:column headerText="#{gfcMsgs.montant} proposé">
+															<h:outputText value="#{current.montantPropose}" />
+														</p:column>
+
+													</p:dataTable>
+												</p:column>
+											</p:row>
+
+											<!-- Actions -->
+											<f:facet name="footer">
+												<p:row>
+
+													<p:column colspan="2">
+
+														<p:commandButton value="#{commonmsgs.bouton_retour}"
+															id="cancelBtn" update=":form:tab:form_view"
+															process="@this"
+															actionListener="#{budgetProposeEtabBean.cancelDetailBudgetAction()}">
+														</p:commandButton>
+
+													</p:column>
+												</p:row>
+											</f:facet>
+										</p:panelGrid>
+
+									</p:tab>
+
+								</p:tabView>
+
+							</p:outputPanel>
+
+						</p:tab>
+					</p:tabView>
+				</h:form>
+			</p:outputPanel>
+
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

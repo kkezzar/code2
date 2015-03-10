@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panelGrid id="panelEdit" styleClass="ui-panelgrid-full-width">
+		<p:row>
+			<p:column style="width:20%">
+				<p:outputLabel
+					value="#{bilanMsgs.deliberation_data_table_list_column_date_deliberation}"></p:outputLabel>
+			</p:column>
+			<p:column style="width:30%">
+				<h:outputText styleClass="value"
+					value="#{deliberationBean.deliberationSessionDto.dateDeliberation}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:20%">
+				<p:outputLabel
+					value="#{bilanMsgs.deliberation_data_table_list_column_heure_deliberation}"/>
+			</p:column>
+			<p:column style="width:30%">
+				<h:outputText styleClass="value"
+					value="#{deliberationBean.deliberationSessionDto.heureDeliberation}">
+					<f:convertDateTime type="heure" pattern="hh:mm" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:20%">
+				<p:outputLabel value="#{bilanMsgs.deliberation_bilan_annuel}" />
+			</p:column>
+			<p:column style="width:30%">
+				<h:outputText styleClass="value"
+					value="#{deliberationBean.deliberationSessionDto.bilanAnnuel?'Oui':'Non'}" />
+			</p:column>
+			<p:column style="width:20%">
+				<p:outputLabel value="#{bilanMsgs.deliberation_bilan_periode}" />
+			</p:column>
+			<p:column style="width:30%">
+				<h:outputText styleClass="value"
+					value="#{deliberationBean.deliberationSessionDto.bilanPeriode?'Oui':'Non'}" />
+			</p:column>
+
+
+		</p:row>
+		<p:row>
+			<p:column style="width:20%">
+				<p:outputLabel
+					value="#{bilanMsgs.deliberation_data_table_list_column_situation}"></p:outputLabel>
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText
+					value="#{deliberationBean.deliberationSessionDto.situationLibelleFr}"
+					style="#{deliberationBean.deliberationSessionDto.situationStyleCss}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+</ui:composition>
+

@@ -1,0 +1,650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{dossierTransfertMsgs.dossier_transfert_gerer_mes_demandes}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+
+			<h:form id="form_search">
+				<!-- toolbar -->
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton icon="ui-icon-plus" value="Nouveau"
+							disabled="#{!dossierTransfertEtudiantMBean.autoriseACree}"
+							style="margin:5px 5px 0px 5px;" onstart="PF('allWidget').block()"
+							onsuccess="PF('allWidget').unblock()"
+							actionListener="#{dossierTransfertEtudiantMBean.addDemandeTransfertAction()}"
+							update=":form_crud"></p:commandButton>
+					</p:toolbarGroup>
+
+					<!--                             <p:toolbarGroup align="right">
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Année academique " />
+                                    <p:selectOneMenu id="selectAnnee"
+                                                     value="#{dossierTransfertEtudiantMBean.anneeAcademiqueId}"
+                                                     label="#{printMsgs.print_anne_univeristaire}">
+                                        <f:selectItem
+                                            itemLabel="#{printMsgs.print_select_annee_academique}"
+                                            itemValue="" />
+                                        <f:selectItems value="#{dossierTransfertEtudiantMBean.listAnneeAcademique}" />
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>
+                                
+                            </p:toolbarGroup> -->
+
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable"
+					value="#{dossierTransfertEtudiantMBean.dossierTransfertResultSearch}"
+					var="dossierTransfert" rowKey="#{dossierTransfert.id}"
+					paginator="true" paginatorPosition="bottom" selectionMode="single"
+					lazy="true" resizableColumns="true"
+					emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+					<p:ajax event="rowSelect"
+						listener="#{dossierTransfertEtudiantMBean.onRowSelect}"
+						process="@this" onstart="PF('allWidget').block()"
+						onsuccess="PF('allWidget').unblock()" update=":form_crud" />
+
+					<f:facet name="header">
+						<h:outputText
+							value="#{dossierTransfertMsgs
+                                             .dossier_transfert_liste_title}" />
+					</f:facet>
+
+					<!--                             <p:column
+                                headerText="#{dossierTransfertMsgs.dossier_transfert_anne_univeristaire}"
+                                width="10%">
+                                <h:outputText value="#{dossierTransfert.anneeAcademiqueCode}">
+                                </h:outputText>
+                            </p:column> -->
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_date_depot}"
+						width="8%">
+						<h:outputText value="#{dossierTransfert.dateDepot}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<!-- 					<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_etab_origine}"
+							width="20%">
+
+							<h:outputText value="#{dossierTransfert.refLibelleEtabOrigine}"
+								>
+							</h:outputText>
+						</p:column> -->
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_origine}"
+						width="15%">
+
+						<h:outputText value="#{dossierTransfert.domaineOrigineLibelleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_origine}"
+						width="15%">
+
+						<h:outputText value="#{dossierTransfert.filiereOrigineLibelleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_etab_accueil}"
+						width="15%">
+
+						<h:outputText value="#{dossierTransfert.refLibelleEtabAccueil}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+						width="15%">
+
+						<h:outputText value="#{dossierTransfert.domaineDemandeLibelleFr}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}"
+						width="15%">
+
+						<h:outputText value="#{dossierTransfert.filiereDemandeeLibelleFr}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_situation}"
+						width="20%">
+
+						<h:outputText value="#{dossierTransfert.situationLibelleFr}">
+						</h:outputText>
+
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{dossierTransfertEtudiantMBean.crud}">
+
+					<p:tab title="Information Demande">
+						<!-- CRUD form -->
+						<h:form>
+
+							<p:panelGrid styleClass="ui-panelgrid-full-width"
+								rendered="#{dossierTransfertEtudiantMBean.crud}">
+
+								<p:row>
+									<p:column colspan="4" styleClass="ui-widget-header">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_detail_demande}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_date_depot} " />
+									</p:column>
+									<p:column style="width:70%">
+										<h:outputText styleClass="value"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.dateDepot}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_etab_origine} " />
+									</p:column>
+									<p:column style="width:70%">
+										<h:outputText styleClass="value"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refLibelleEtabOrigine}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_domaine_origine} " />
+									</p:column>
+									<p:column style="width:70%">
+										<h:outputText styleClass="value"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.domaineOrigineLibelleFr}" />
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_filiere_origine} " />
+									</p:column>
+									<p:column style="width:70%">
+										<h:outputText styleClass="value"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.filiereOrigineLibelleFr}" />
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<p:outputLabel
+											value="#{dossierTransfertMsgs.dossier_transfert_type_transfert}"
+											for="typeTransfert" />
+									</p:column>
+									<p:column style="width:70%">
+										<p:selectOneMenu id="typeTransfert"
+											label="#{dossierTransfertMsgs.dossier_transfert_type_transfert}"
+											required="true" style="width:100%" filter="true"
+											filterMatchMode="contains"
+											requiredMessage="#{dossierTransfertMsgs.dossier_transfert_type_transfert_required}"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeTypeTransfert}">
+
+											<f:selectItem
+												itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_type_transfert}"
+												itemValue="" />
+
+											<f:selectItems
+												value="#{dossierTransfertEtudiantMBean.listTypesTransfert}" />
+
+											<p:ajax event="valueChange" update="etabAccueil, :form_crud"
+												onstart="PF('allWidget').block()"
+												onsuccess="PF('allWidget').unblock()"
+												listener="#{dossierTransfertEtudiantMBean.typeTransfertChanged()}"></p:ajax>
+										</p:selectOneMenu>
+
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<p:outputLabel
+											value="#{dossierTransfertMsgs.dossier_transfert_etab_accueil}"
+											for="etabAccueil" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<p:selectOneMenu id="etabAccueil" filter="true"
+											filterMatchMode="contains" style="width:100%"
+											disabled="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeTypeTransfert ne 'TIU' and dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeTypeTransfert ne 'TIC'}"
+											required="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeTypeTransfert eq 'TIU' or dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeTypeTransfert eq 'TIC'}"
+											requiredMessage="#{dossierTransfertMsgs.dossier_transfert_etab_accueil_required}"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeEtabAccueil}">
+
+											<f:selectItem
+												itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_etablissement}"
+												itemValue="" />
+
+											<f:selectItems
+												value="#{dossierTransfertEtudiantMBean.listEtablissements}" />
+											<p:ajax event="valueChange" onstart="PF('allWidget').block()"
+												onsuccess="PF('allWidget').unblock()"
+												listener="#{dossierTransfertEtudiantMBean.handleEtablissementChange}"
+												update="domaineDemande,filiereDemande, :form_crud" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<p:outputLabel
+											value="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+											for="domaineDemande" />
+									</p:column>
+									<p:column style="width:70%">
+										<p:selectOneMenu id="domaineDemande" required="true"
+											filter="true" filterMatchMode="startsWith" style="width:100%"
+											requiredMessage="#{dossierTransfertMsgs.dossier_transfert_domaine_demande_required}"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeDomaineDemande}">
+											<f:selectItem
+												itemLabel="#{dossierTransfertMsgs.dossier_transfert_select_domaine}"
+												itemValue="" />
+											<f:selectItems
+												value="#{dossierTransfertEtudiantMBean.listDomaines}" />
+											<p:ajax onstart="PF('allWidget').block()"
+												onsuccess="PF('allWidget').unblock()"
+												listener="#{dossierTransfertEtudiantMBean.handleDomainesListChange}"
+												event="valueChange" update="filiereDemande,:form_crud" />
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}" />
+									</p:column>
+									<p:column style="width:70%">
+										<p:selectOneMenu id="filiereDemande" filter="true"
+											filterMatchMode="startsWith" style="width:100%"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeFiliereDemandee}">
+											<f:selectItem
+												itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_filiere}"
+												itemValue="" />
+											<f:selectItems
+												value="#{dossierTransfertEtudiantMBean.listFilieres}" />
+											<p:ajax update=":form_crud" event="valueChange"
+												onstart="PF('allWidget').block()"
+												onsuccess="PF('allWidget').unblock()" process="@this"
+												listener="#{dossierTransfertEtudiantMBean.handleFiliersListChange}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<p:outputLabel
+											value="#{dossierTransfertMsgs.dossier_transfert_motif_transfert}"
+											for="motif" />
+									</p:column>
+									<p:column style="width:70%">
+										<p:selectOneMenu id="motif"
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.refCodeMotif}"
+											required="true" style="width:100%"
+											requiredMessage="#{dossierTransfertMsgs.dossier_transfert_motif_transfert_required}">
+											<f:selectItem
+												itemLabel="#{dossierTransfertMsgs.dossier_transfert_select_motif}"
+												itemValue="" />
+											<f:selectItems
+												value="#{dossierTransfertEtudiantMBean.listMotifsTransfert}" />
+											<p:ajax event="valueChange" onstart="PF('allWidget').block()"
+												onsuccess="PF('allWidget').unblock()" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<p:outputLabel
+											value="#{dossierTransfertMsgs.dossier_transfert_objet}"
+											for="objet" />
+									</p:column>
+									<p:column style="width:70%">
+										<p:inputTextarea
+											value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.objet}"
+											required="true" id="objet"
+											requiredMessage="#{dossierTransfertMsgs.dossier_transfert_objet_transfert_required}"
+											style="width:100%"></p:inputTextarea>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4" styleClass="ui-widget-header">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces_acces_wilaya}" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionDroitAccessWilaya eq true}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_verifiee}" />
+										</c:if>
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionDroitAccessWilaya eq false}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_non_verifiee}" />
+											<p:spacer width="20px"></p:spacer>
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertEtudiantMBean.dossTrsftMsgCondDroitAccessWilaya}" />
+										</c:if>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces_serie_bac}" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionSerieBac eq true}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_verifiee}" />
+										</c:if>
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionSerieBac eq false}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_non_verifiee}" />
+											<p:spacer width="20px"></p:spacer>
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertEtudiantMBean.dossTrsftMsgCondSerieBac}" />
+										</c:if>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces_moyenne_bac}" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionMoyenneBac eq true}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_verifiee}" />
+										</c:if>
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionMoyenneBac eq false}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_non_verifiee}" />
+											<p:spacer width="20px"></p:spacer>
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertEtudiantMBean.dossTrsftMsgCondMoyenneBac}" />
+										</c:if>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces_notes_matieres_bac}" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionNotesMatieresBac eq true}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_verifiee}" />
+										</c:if>
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionNotesMatieresBac eq false}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_non_verifiee}" />
+											<p:spacer width="20px"></p:spacer>
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertEtudiantMBean.dossTrsftMsgCondNotesMatieresBac}" />
+										</c:if>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:30%">
+										<h:outputText
+											value="#{dossierTransfertMsgs.dossier_transfert_conditions_acces_moyenne_notes_matieres_bac}" />
+									</p:column>
+
+									<p:column style="width:70%">
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionMoyenneCalculeeMatieresBac eq true}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_verifiee}" />
+										</c:if>
+										<c:if
+											test="#{dossierTransfertEtudiantMBean.conditionMoyenneCalculeeMatieresBac eq false}">
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertMsgs.dossier_transfert_condition_non_verifiee}" />
+											<p:spacer width="20px"></p:spacer>
+											<h:outputText styleClass="value"
+												value="#{dossierTransfertEtudiantMBean.dossTrsftMsgCondMoyenneCalculeeMatieresBac}" />
+										</c:if>
+									</p:column>
+								</p:row>
+
+
+
+
+							</p:panelGrid>
+							<br />
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										id="saveBtn" update=":form_search,:form_crud,valideBtn"
+										icon="ui-icon-disk" onstart="PF('allWidget').block()"
+										onsuccess="PF('allWidget').unblock()"
+										disabled="#{dossierTransfertEtudiantMBean.conditionsAccess ne true}"
+										actionListener="#{dossierTransfertEtudiantMBean.saveDemandeTransfertAction()}">
+									</p:commandButton>
+
+									<p:spacer width="5px" />
+
+									<p:commandButton value="#{commonmsgs.bouton_validate}"
+										id="valideBtn" icon="ui-icon-disk"
+										onstart="PF('allWidget').block()"
+										onsuccess="PF('allWidget').unblock()"
+										disabled="#{dossierTransfertEtudiantMBean.dossierTransfertDto.id eq null}"
+										update=":form_search,:form_crud"
+										actionListener="#{dossierTransfertEtudiantMBean.validateDemandeTransfert()}">
+										<p:confirm header="Confirmation"
+											message="Voulez-vous confirmer la validation de la demande ?"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+									<p:spacer width="5px" />
+
+									<p:commandButton value="#{commonmsgs.bouton_desister}"
+										disabled="#{dossierTransfertEtudiantMBean.dossierTransfertDto.id eq null}"
+										id="withdrawBtn" icon="ui-icon-disk"
+										onstart="PF('allWidget').block()"
+										onsuccess="PF('allWidget').unblock()"
+										update=":form_search,:form_crud"
+										actionListener="#{dossierTransfertEtudiantMBean.withdrawDemandeTransfert()}">
+										<p:confirm header="Confirmation"
+											message="Voulez-vous confirmer le désistement du transfert ?"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+									<p:spacer width="10px" />
+
+									<p:commandButton id="cancelBtn" icon="ui-icon-cancel"
+										value="#{commonmsgs.bouton_annuler}" immediate="true"
+										update=":form_search,:form_crud"
+										onstart="PF('allWidget').block()"
+										onsuccess="PF('allWidget').unblock()"
+										action="#{dossierTransfertEtudiantMBean.cancelDemandeTransfert()}"></p:commandButton>
+
+								</p:toolbarGroup>
+							</p:toolbar>
+
+						</h:form>
+
+					</p:tab>
+
+					<!-- Information du bac -->
+					<p:tab title="Information Bac">
+						<p:panelGrid styleClass="ui-panelgrid-full-width">
+							<p:row>
+								<p:column style="width:15%">
+									<h:outputText
+										value="#{dossierTransfertMsgs.dossier_transfert_serie_bac}" />
+								</p:column>
+								<p:column style="width:35%">
+									<h:outputText styleClass="value"
+										value="#{dossierTransfertEtudiantMBean.dossierBachelierDto.refCodeSerieBac}" />
+								</p:column>
+								<p:column style="width:15%">
+									<h:outputText
+										value="#{dossierTransfertMsgs.dossier_transfert_matricule_bac}" />
+								</p:column>
+								<p:column style="width:35%">
+									<h:outputText styleClass="value"
+										value="#{dossierTransfertEtudiantMBean.dossierBachelierDto.matricule}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:15%">
+									<h:outputText
+										value="#{dossierTransfertMsgs.dossier_transfert_wilaya_bac}" />
+								</p:column>
+
+								<p:column style="width:35%">
+									<h:outputText styleClass="value"
+										value="#{dossierTransfertEtudiantMBean.dossierBachelierDto.refCodeWilayaBac}" />
+								</p:column>
+
+								<p:column style="width:15%">
+									<h:outputText
+										value="#{dossierTransfertMsgs.dossier_transfert_moyenne_generale}" />
+								</p:column>
+								<p:column style="width:35%">
+									<h:outputText styleClass="value"
+										value="#{dossierTransfertEtudiantMBean.dossierBachelierDto.moyenneBac}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:15%">
+									<h:outputText
+										value="#{dossierTransfertMsgs.dossier_transfert_notes_bac}" />
+								</p:column>
+								<p:column colspan="3">
+									<p:dataTable var="noteBac"
+										value="#{dossierTransfertEtudiantMBean.notesBacheliersDtos}">
+										<f:facet name="header">#{dossierTransfertMsgs.dossier_transfert_notes_bac}</f:facet>
+
+										<p:column
+											headerText="#{dossierTransfertMsgs.dossier_transfert_matiere_bac}">
+											<h:outputText value="#{noteBac.refCodeMatiereLibelleFr}" />
+										</p:column>
+
+										<p:column
+											headerText="#{dossierTransfertMsgs.dossier_transfert_note_bac}"
+											width="100px">
+											<h:outputText value="#{noteBac.note}" />
+										</p:column>
+
+										<p:column style="width:32px">
+											<p:rowEditor />
+										</p:column>
+
+									</p:dataTable>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab title="Documents"
+						disabled="#{dossierTransfertEtudiantMBean.dossierTransfertDto.id==null}">
+						<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+							<c:set var="entity" value="DossierTransfert" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DossierTransfert" />
+							<ui:param name="identifiant"
+								value="#{dossierTransfertEtudiantMBean.dossierTransfertDto.id.toString()}" />
+							<ui:param name="editionMode" value="#{true}" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,105 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<p:panelGrid columns="1" cellspacing="0"
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+		<p:panelGrid id="descriptionDemande"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText styleClass="value" value="#{absenceMsgs.label_demande}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{absenceMsgs.label_frequence}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.nomenclatureDto.libelleLongFr}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{absenceMsgs.label_date_demande}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateDemande}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{absenceMsgs.label_date_debut}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateDebut}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{absenceMsgs.label_date_fin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateFin}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row rendered="#{autorisationAbsenceMBean.displayJourSemaine}">
+				<p:column>
+					<h:outputText value="Dimanche" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dimanche == 'true' ? 'Oui': 'Non'}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Lundi" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.lundi == 'true' ? 'Oui': 'Non'}" styleClass="value"/>
+				</p:column>
+			</p:row>
+			<p:row rendered="#{autorisationAbsenceMBean.displayJourSemaine}">
+				<p:column>
+					<h:outputText value="Mardi" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.mardi == 'true' ? 'Oui': 'Non'}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Mercredi" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.mercredi == 'true' ? 'Oui': 'Non'}" styleClass="value"/>
+				</p:column>
+			</p:row>
+			<p:row rendered="#{autorisationAbsenceMBean.displayJourSemaine}">
+				<p:column>
+					<h:outputText value="Jeudi" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.jeudi == 'true' ? 'Oui': 'Non'}" styleClass="value"/>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

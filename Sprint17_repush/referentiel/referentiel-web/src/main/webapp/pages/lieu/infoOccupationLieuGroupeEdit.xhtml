@@ -1,0 +1,118 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:outputStylesheet library="./css" name="style.css" />
+    <ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+   <p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+    <p:panel style="height:600px" id="modificationoccupatiolieugroupe" header="#{commonmsgs.menu_lieu}"   > 
+    <ui:include src="/pages/lieu/lieuHeader.xhtml"/>
+    <br></br>
+    <p:fieldset legend="Modification">
+
+      <p:panel >  
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+		<h:outputText value="#{occupationLieuMgrBean.entitiname} : "  style="font-weight: bold;" />
+		<h:outputText value="#{occupationLieuMgrBean.idr}" style="font-weight: bold;"/>
+		</p:column>		 
+	  </p:row>
+      </p:panelGrid>          
+      </p:panel>
+     
+   
+      <br></br>
+		<h:form id="listGroupeOccupationForm" prependId="false">
+			<p:panelGrid id="descriptionGrp" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{lieumsgs.lieu_occupationLieu_selection_groupe}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="selectGroupeData"
+							value="#{occupationLieuMgrBean.refOccupationLieuDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{lieumsgs.lieu_occupationLieu_groupe}" required="true"
+							requiredMessage="#{lieumsgs.lieu_groupe_required}">
+							<f:selectItem
+								itemLabel="#{lieumsgs.lieu_occupationLieu_selection_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_Type_Occupation}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="occupationLieuTypeOccupationData"
+							value="#{occupationLieuMgrBean.refOccupationLieuDto.idTypeOccupation}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{lieumsgs.lieu_Type_Occupation}" required="true"
+							requiredMessage="#{lieumsgs.lieu_TypeOccupation_required}">
+							<f:selectItem
+								itemLabel="#{lieumsgs.lieu_selection_Type_Occupation}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_debut} *" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{occupationLieuMgrBean.refOccupationLieuDto.dateDebut}"
+							id="datedebutgroupe" showButtonPanel="true"
+							label="#{lieumsgs.lieu_occupation_date_debut}" required="true"
+							requiredMessage="#{lieumsgs.lieu_occupation_date_debut_recired}">
+							<f:ajax render="datedebutgroupe" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{occupationLieuMgrBean.refOccupationLieuDto.dateFin}"
+							id="datefingroupe" showButtonPanel="true"
+							label="#{lieumsgs.lieu_occupation_date_fin}">
+							<f:ajax render="datefingroupe" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+		
+				<p:row>
+					<br></br>
+					<p:column>
+					<p:commandButton value="#{commonmsgs.button_save}" icon="ui-icon-check" actionListener="#{occupationLieuMgrBean.save}" update="@form" >
+					<f:param name="idf" value="#{occupationLieuMgrBean.idf}"/>
+					<f:param name="idr" value="#{occupationLieuMgrBean.idr}"/>
+					</p:commandButton>		
+					</p:column>
+					<p:column>
+					<p:commandButton value="#{commonmsgs.button_close}" onclick="" icon="ui-icon-close" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	  </p:fieldset>  
+      </p:panel>  
+     </ui:define>
+      </ui:composition>            
+</ui:composition>

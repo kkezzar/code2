@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="groupe pédagogique" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2456764-d4d6-4e51-bf93-e70927d587e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="1e2c439e-a76f-4931-9e2c-ae6a8da89e5a">
+		<field name="numeroInscription" class="java.lang.String"/>
+		<field name="nom" class="java.lang.String"/>
+		<field name="prenom" class="java.lang.String"/>
+		<field name="dateNaissance" class="java.lang.String"/>
+		<field name="urlPhoto" class="java.lang.String"/>
+		<field name="nomPrenom" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\smakerri\\Desktop\\gp\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="OFFRE_FORMATION" class="java.lang.String"/>
+	<parameter name="ANNEE_ACADEMIQUE" class="java.lang.String"/>
+	<parameter name="PERIODE" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.nomAffichage" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.capaciteMin" class="java.lang.Integer"/>
+	<field name="groupePedagogiqueDto.capaciteMax" class="java.lang.Integer"/>
+	<field name="etudiants" class="java.util.Collection"/>
+	<field name="groupePedagogiqueDto.nomSection" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.codeAnneeAcademique" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.periodeLibelleLongLt" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.ofLibelleFr" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.sectionSansGroupe" class="java.lang.Boolean"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="98" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="389793f3-1233-48ca-b5fc-5a06fe36814e" x="223" y="53" width="290" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ وزارة التـعليـم العــالي و البــحث العلـــمي]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c93d3b18-0c8f-4208-80c4-2e8c0d6394bd" x="223" y="6" width="290" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[République Algérienne Démocratique et Populaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1a6017c8-459f-4368-8775-43f35050b4cf" x="223" y="21" width="290" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[الجـمهوريــــة الجــزائريــة الديمــقراطيــة الشــعبية]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cdce2a17-ad7f-4041-9c2f-eb9c34053203" x="223" y="36" width="290" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ministère de l’Enseignement Supérieur et de la Recherche Scientifique]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="58556dc5-5345-4a6b-af62-78f3442604e7" x="223" y="78" width="318" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OFFRE_FORMATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="48fe2908-5776-44e8-bac7-9615ca086736" x="3" y="78" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ANNEE_ACADEMIQUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40773f5e-d57b-48a0-a4c0-6f605baf87b6" x="103" y="78" width="117" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="c367dd82-2e62-43cc-9199-aa6cdc31bbaf" x="0" y="95" width="800" height="1"/>
+			</line>
+			<image>
+				<reportElement uuid="f1f42168-f861-4f6a-b2af-1bba7ea561da" x="6" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="8482cbd1-53cf-40c2-a61a-1d195bd1c170" x="692" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="2689ab88-6ffb-4aba-8917-28161c8bed05" x="553" y="80" width="81" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.nomSection}.equals( null )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{groupePedagogiqueDto.nomSection}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="4"/>
+	</columnHeader>
+	<detail>
+		<band height="131" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="b9b1fcf8-fe82-401a-a186-812abcba6b49" key="table" style="table" x="3" y="23" width="797" height="108"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="6b1d2c05-e893-4226-91a1-50c2390383dd">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{etudiants})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="216" uuid="c4c815f3-2732-4de2-ac4b-9977242dac12">
+						<jr:columnHeader style="table_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="87c74709-0d7e-45e5-b2a5-8a945847a02e" x="6" y="2" width="205" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[N° inscription]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="086a4b86-3dfd-4143-915f-04ea0db3c78e" x="6" y="2" width="210" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{numeroInscription}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="224" uuid="9a9fbf41-23e7-4f79-a4ac-7225b3b558e5">
+						<jr:columnHeader style="table_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="e67f164e-db7d-4959-b88c-e83ee3eeb52b" x="6" y="2" width="203" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nom]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="7ea9cf7b-457e-4b17-8b68-f62630948d15" x="6" y="2" width="218" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="195" uuid="1ce71f1d-aa75-4250-9e1e-5e3c65b554be">
+						<jr:columnHeader style="table_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6cc1eb31-fa88-4744-aeab-ea556f5f05ab" x="6" y="2" width="158" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Prénom]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="fa925eb3-4416-435e-8740-4d1282291dd3" x="6" y="2" width="189" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{prenom}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="160" uuid="9c221fe5-0eb7-4eec-8684-26fc1cb5e5d1">
+						<jr:columnHeader style="table_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2dbdb3df-81ae-4850-93bd-8c5966a518bb" x="6" y="2" width="154" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Date de naissance]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField pattern="dd/MM/yyyy">
+								<reportElement uuid="878b3954-a12b-44c9-bf51-ed45becb3c57" x="6" y="2" width="154" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{dateNaissance}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="922c698e-cadd-4495-8e3a-1a09e216480f" x="6" y="2" width="52" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.sectionSansGroupe}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Groupe : ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d01dbd84-3705-41d1-b40c-211cd1ca67cd" x="58" y="2" width="151" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.sectionSansGroupe}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{groupePedagogiqueDto.nomAffichage}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch">
+			<break>
+				<reportElement uuid="455b5856-599d-48e8-8ab1-de76b41eec79" x="0" y="4" width="100" height="1"/>
+			</break>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement uuid="c4ac5766-05a3-48ea-8ab6-67308e940862" x="1" y="1" width="552" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement uuid="318170f0-cbaa-4462-a86d-69e34eb7669b" x="4" y="2" width="165" height="12"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:form id="handicapForm" prependId="false">
+		<p:dataTable id="handicapDataTable" var="row"
+			value="#{handicapManagerBean.listSituationHandicapDto}"
+			rowKey="#{row.id}" 
+			emptyMessage="#{handicapMsgs.handicap_data_table_seacrh_result_no_result}" rowIndexVar="rowIndex">
+			<f:param name="dossierEtudiantId"
+				value="#{handicapManagerBean.dossierEtudiantId}" />
+			<f:param name="situationId"
+				value="#{handicapManagerBean.situationId}" />
+
+			<p:ajax event="page" update="@all" process="@form"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()" />
+			<p:ajax event="sort" update="@all" process="@form" />
+
+
+			<f:facet name="header">
+				<h:outputText
+					value="Informations besoins spéciaux" />
+			</f:facet>
+
+			<!-- 			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_column_index}"
+				style="width:20px">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column> -->
+			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_list_column_handicap_type_libelle_latin}"
+				style="width:15%">
+				<h:outputText value="#{row.refLlLatinTypeHandicap}" />
+			</p:column>
+
+			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_list_column_handicap_type_libelle_arabe}"
+				style="width:15%">
+				<h:outputText value="#{row.refLlArabeTypeHandicap}" />
+			</p:column>
+
+			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_list_column_date_debut}"
+				styleClass="textOnLeft" style="width:15%">
+				<h:outputText value="#{row.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_list_column_date_fin}"
+				styleClass="textOnLeft" style="width:15%">
+				<h:outputText value="#{row.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column
+				headerText="#{handicapMsgs.handicap_data_table_list_column_observation}"
+				styleClass="textOnLeft">
+				<h:outputText value="#{row.observation}" style="width:100%" />
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>

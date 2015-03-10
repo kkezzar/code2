@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		Gérer les concours
+	</ui:define>
+	
+	<ui:define name="centerContent" >
+		<p:panel id="mainContent">
+			<pe:blockUI target="mainContent" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<h:form id="searchConcoursForm" styleClass="searchConcoursForm">
+		
+				
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+				
+				<p:fieldset legend="Recherche" toggleable="true">
+					<p:panelGrid id="panelSearch">
+						<p:row>
+							<p:column>
+								<h:outputText value="Année académique" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu value="#{concoursMBean.selectedAnneeAcademiqueId}">
+									<f:selectItem itemLabel="--Année Académique--"/>
+									<f:selectItems value="#{concoursMBean.anneeAcademiquesSearch}"/>
+									<p:ajax update="@(.searchConcoursForm),@(.concoursForm)"
+											listener="#{concoursMBean.onSearchConcours()}" 
+											onstart="PF('globalWidget').block()"
+											onsuccess="PF('globalWidget').unblock()"/>
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<p:commandButton id="btnAdd"
+								rendered="#{sessionDroitBean.createAllow}"
+								value="#{commonmsgs.bouton_nouveau}" 
+								update="@(.concoursForm)" style="text-align:left"
+								immediate="true"
+								onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								actionListener="#{concoursMBean.onNew}"
+								icon="ui-icon-plusthick"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					<p:panel id="resultSearchDataPanel"  styleClass="resultSearchDataPanel" rendered="#{concoursMBean.renderConcoursDataTable}">
+						<p:dataTable
+						value="#{concoursMBean.concoursDtos}"
+						var="concours"
+						rowKey="#{concours.id}"
+						rowIndexVar="rowId"
+						selectionMode="single"
+						emptyMessage="Aucun concours trouvé"
+						>
+							<f:facet name="header">Les concours</f:facet>
+							<p:ajax event="rowSelect" immediate="true"
+									listener="#{concoursMBean.onConcoursSelect}" process="@this"
+									onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									update="@(.concoursForm)" />
+							<p:column style="width:30px;" headerText="N°">
+								<h:outputText value="#{rowId+1}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Intitulé">
+								<h:outputText value="#{concours.intituleLatin}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Domaine">
+								<h:outputText value="#{concours.libelleDomaine}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Date début">
+								<h:outputText value="#{concours.dateDebut}" >
+									<f:convertDateTime pattern="MM/dd/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:30px;" headerText="Publié">
+								<h:outputText value="#{concours.datePublicationConcours == null ? 'Non':'Oui'}" />
+							</p:column>				
+						</p:dataTable>
+					</p:panel>
+					<br/>
+				</p:fieldset>
+		</h:form>
+			<h:form id="concoursForm" styleClass="concoursForm">
+				<p:panel id="editPanel" rendered="#{concoursMBean.renderEditPanel}" styleClass="editPanel">
+						<p:tabView>
+							<p:tab title="Concours" >
+								<p:panelGrid id="panelEditConcours" styleClass="panelEditConcours">
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Identifiant" for="identifiant"/>
+										</p:column>
+										<p:column style="width:250px">
+											<h:outputText value="#{concoursMBean.concoursDto.identifiant}" id="identifiant"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Année académique" for="anneeAcademique"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:selectOneMenu value="#{concoursMBean.concoursDto.anneeAcademiqueId}" 
+												style="width:100%;text-align:left"
+												label="Choisir une année académique" 
+												required="true"
+												requiredMessage="L'année académique est obligatoire"
+												id="anneeAcademique">
+													<f:selectItem itemLabel="Choisir une année académique"/>
+													<f:selectItems value="#{concoursMBean.anneeAcademiques}" />
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Intitulé (lt)" for="intituleLt"/>
+										</p:column>
+										<p:column id="intituleLt" style="width:250px">
+											<p:inputText value="#{concoursMBean.concoursDto.intituleLatin}" 
+												required="true"
+												requiredMessage="L'intitulé latin est obligatoire"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Intitulé (Ar)" for="intituleAr"/>
+										</p:column>
+										<p:column id="intituleAr" style="width:250px">
+											<p:inputText value="#{concoursMBean.concoursDto.intituleArabe}"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Domaine" for="domaine"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:selectOneMenu id="domaine" 
+												required="true"
+												requiredMessage="La nationalité est obligatoire"
+												value="#{concoursMBean.concoursDto.domaineId}"
+												style="width:100%;text-align:left"
+												label="domaine">
+												<f:selectItem
+													itemLabel="--Domaine--"/>
+												<f:selectItems value="#{concoursMBean.domaines}" />
+												<p:ajax update="filiere,specialite"
+												listener="#{concoursMBean.onDomaineSelected}" process="@this" 
+												onstart="PF('globalWidget').block()"
+												onsuccess="PF('globalWidget').unblock()"/>
+											</p:selectOneMenu>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Filiere" for="filiere"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:selectOneMenu id="filiere" 
+												value="#{concoursMBean.concoursDto.filiereId}"
+												style="width:100%;text-align:left"
+												label="filiere"
+												disabled="#{concoursMBean.filieres != null}">
+												<f:selectItem
+													itemLabel="--Filiere--"/>
+												<f:selectItems value="#{concoursMBean.filieres}" />
+												<p:ajax update="specialite"
+												listener="#{concoursMBean.onFiliereSelected}" process="@this" 
+												onstart="PF('globalWidget').block()"
+												onsuccess="PF('globalWidget').unblock()"/>
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Specialité" for="specialite"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:selectOneMenu id="specialite" 
+												value="#{concoursMBean.concoursDto.specialiteId}"
+												style="width:100%;text-align:left"
+												label="specialite"
+												disabled="#{concoursMBean.specialites != null}">
+												<f:selectItem
+													itemLabel="--Specialite--"/>
+												<f:selectItems value="#{concoursMBean.specialites}" />
+											</p:selectOneMenu>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Type concours" for="typeConcours"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:selectOneMenu id="typeConcours" 
+												value="#{concoursMBean.concoursDto.typeConcoursId}"
+												style="width:100%;text-align:left"
+												label="typeConcours"
+												required="true">
+												<f:selectItem
+													itemLabel="--Type concours--"/>
+												<f:selectItems value="#{concoursMBean.typeConcours}" />
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Date début" for="dateDebut"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:calendar id="dateDebut" style="width:100%;text-align:left"
+												navigator="true"
+												required="true"
+												requiredMessage="La date de début est obligatoire"
+												value="#{concoursMBean.concoursDto.dateDebut}" 
+												pattern="dd/MM/yyyy"
+												mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Date fin" for="dateFin"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:calendar id="dateFin" style="width:100%;text-align:left"
+												navigator="true"
+												required="true"
+												requiredMessage="La date de fin est obligatoire"
+												value="#{concoursMBean.concoursDto.dateFin}" 
+												pattern="dd/MM/yyyy"
+												mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Date limite de dépôt des dossiers" for="dateDepot"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:calendar id="dateDepot" style="width:100%;text-align:left"
+												navigator="true"
+												required="true"
+												requiredMessage="La date limite de dépôt des dossiers est obligatoire"
+												value="#{concoursMBean.concoursDto.dateLimite}" 
+												pattern="dd/MM/yyyy"
+												mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Concours national" for="national"/>
+										</p:column>
+										<p:column style="width:250px">
+											<h:selectBooleanCheckbox value="#{concoursMBean.concoursDto.national}" id="national"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:250px">
+											<p:outputLabel value="Note de base" for="noteBase"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:inputText id="noteBase" value="${concoursMBean.concoursDto.noteBase}"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:outputLabel value="Date de publication" for="datePublicationConcours"/>
+										</p:column>
+										<p:column style="width:250px">
+											<p:calendar id="datePublicationConcours"
+												disabled="#{!concoursMBean.isConcoursPubliable()}" 
+												style="width:100%;text-align:left"
+												navigator="true"
+												value="#{concoursMBean.concoursDto.datePublicationConcours}" 
+												pattern="dd/MM/yyyy"
+												mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<br/>
+						<p:dataTable id="etablissementAdmissionTable"
+							value="#{concoursMBean.concoursDto.etablissementAdmissionDtos}"
+							var="row"
+							rowIndexVar="rowIndex" 
+							emptyMessage="Auncun établissement d'admission"
+							style="width:500px;">
+							<f:facet name="header">Les établissements d'admission</f:facet>
+							<p:column headerText="N°" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{rowIndex+1}" styleClass="center"/>
+							</p:column>
+							<p:column headerText="Etablissement" style="width:200px;"> 	
+								<h:outputText value="#{row.etablissementLibelleFr}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectEtablissment"
+									value="#{row.etablissementId}"
+									required="true"
+									requiredMessage="L'Etablissement d'admission est obligatoire"
+									rendered="#{concoursMBean.editMode}"
+									style="width:100%;">
+									<f:selectItem itemLabel="--Etablissement--"/>
+									<f:selectItems value="#{concoursMBean.etablissementsAdmission}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column headerText="Nombre à admettre" style="width:30px;text-align:center;"> 	
+	 							<h:outputText value="#{row.nombreAdmettre}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+	               				<p:inputText value="#{row.nombreAdmettre}" label="Nombre à admettre" style="width:30px;" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column style="width:30px;" styleClass="center" rendered="#{concoursMBean.editMode}">	
+								<p:commandButton id="btnRemoveEtablissementAdmssion"  
+									action="#{concoursMBean.removeEtablissementAdmission()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="etablissementAdmissionTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{concoursMBean.selectedEtablissementAdmissionIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+							</p:column>
+						
+						
+						</p:dataTable>
+						<p:toolbar>
+							<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddEtablissementAdmission" 
+										icon="ui-icon-plusthick"  
+										process="@this etablissementAdmissionTable" 
+										ajax="true"
+										immediate="true" 
+										update="etablissementAdmissionTable @this"
+										action="#{concoursMBean.addEtablissementAdmission()}">
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+						<br/>
+						<br/>
+						<p:dataTable id="examensConcoursTable"
+							value="#{concoursMBean.concoursDto.examenConcoursDtos}"
+							var="row1"
+							rowIndexVar="rowIndex1" 
+							emptyMessage="Aucun examen"
+							style="width:1000px;">
+							<f:facet name="header">Les examens du concours</f:facet>
+							<p:column headerText="N°" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{rowIndex1+1}" styleClass="center"/>
+							</p:column>
+							<p:column headerText="Intitulé" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{row1.intitule}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+	               				<p:inputText value="#{row1.intitule}" label="Intitulé" rendered="#{concoursMBean.editMode}" style="width:200px;"/>
+							</p:column>
+							<p:column headerText="Responsable" style="width:200px;text-align:center;"> 	
+								<h:outputText value="#{row1.responsableNom} #{row1.responsablePrenom}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectResponsable"
+									value="#{row1.responsableId}"
+									required="true"
+									requiredMessage="Le responsable est obligatoire"
+									rendered="#{concoursMBean.editMode}"
+									style="width:200px;">
+									<f:selectItem itemLabel="--Responsable--"/>
+									<f:selectItems value="#{concoursMBean.responsables}" />
+								</p:selectOneMenu>
+							</p:column>
+							
+							<p:column headerText="Type examen" style="width:200px;text-align:center;"> 	
+								<h:outputText value="#{row1.typeExamenLibelleFr}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectTypeExamen"
+									value="#{row1.typeExamenId}"
+									required="true"
+									requiredMessage="Le type d'examen est obligatoire"
+									rendered="#{concoursMBean.editMode}"
+									style="width:200px;">
+									<f:selectItem itemLabel="--Type Examen--"/>
+									<f:selectItems value="#{concoursMBean.typeExamens}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column headerText="Epreuve" style="width:200px;text-align:center;"> 	
+								<h:outputText value="#{row1.epreuveLibelleFr}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectEpreuve"
+									value="#{row1.epreuveId}"
+									required="true"
+									requiredMessage="L'épreuve est obligatoire"
+									rendered="#{concoursMBean.editMode}"
+									style="width:200px;">
+									<f:selectItem itemLabel="--Epreuve--"/>
+									<f:selectItems value="#{concoursMBean.epreuves}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column headerText="Date début" style="width:200px;text-align:center;">
+								<h:outputText value="#{row1.dateDebut}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:calendar id="dateDebut" style="width:100%;text-align:left"
+												navigator="true"
+												required="true"
+												requiredMessage="La date de début est obligatoire"
+												value="#{row1.dateDebut}" 
+												pattern="dd/MM/yyyy HH:mm"
+												mindate="1/1/1800" maxdate="#{localeBean.currentDate}"
+												rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column headerText="Durée" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{row1.duree}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+	               				<p:inputText value="#{row1.duree}" label="Durée" style="width:30px;" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column headerText="Note de base" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{row1.noteBase}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+	               				<p:inputText value="#{row1.noteBase}" label="Note de base" style="width:30px;" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column headerText="Coefficient" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{row1.coefficient}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+	               				<p:inputText value="#{row1.coefficient}" label="Coefficient" style="width:30px;" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column headerText="Lieu" style="width:150px;text-align:center;"> 	
+								<h:outputText value="#{row1.lieuLibelleFr}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectLieu"
+									value="#{row1.lieuId}"
+									required="true"
+									requiredMessage="Le lieu est obligatoire"
+									rendered="#{concoursMBean.editMode}">
+									<f:selectItem itemLabel="--Lieu--"/>
+									<f:selectItems value="#{concoursMBean.lieux}" />
+								</p:selectOneMenu>
+							</p:column>
+							
+							<p:column style="width:30px" styleClass="center" rendered="#{concoursMBean.editMode}">	
+								<p:commandButton id="btnRemoveExamen"  
+									action="#{concoursMBean.removeExamen()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="examensConcoursTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{concoursMBean.selectedExamenIndex}" value="#{rowIndex1}" />
+								</p:commandButton>
+							</p:column>
+							
+						</p:dataTable>
+						<p:toolbar>
+							<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddExamen" 
+										icon="ui-icon-plusthick"  
+										process="@this examensConcoursTable" 
+										ajax="true"
+										immediate="true" 
+										update="examensConcoursTable @this"
+										action="#{concoursMBean.addExamen()}">
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+						<br/>
+						<br/>
+						<p:dataTable id="piecesConstitutivesTable"
+							value="#{concoursMBean.concoursDto.pieceConstitutiveDtos}"
+							var="row"
+							rowIndexVar="rowIndex" 
+							emptyMessage="Auncune pièce consitutive"
+							style="width:500px;">
+							<f:facet name="header">Les pièces constitutives</f:facet>
+							<p:column headerText="Rang" style="width:30px;text-align:center;"> 	
+								<h:outputText value="#{rowIndex+1}" styleClass="center"/>
+							</p:column>
+							<p:column headerText="Intitulé" style="width:200px;text-align:center;"> 	
+								<h:outputText value="#{row.intitule}" styleClass="center" rendered="#{!concoursMBean.editMode}"/> 
+	               				<p:inputText value="#{row.intitule}" label="Nombre à admettre" style="width:200px;" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column headerText="Type pièce" style="width:150px;text-align:center;"> 	
+								<h:outputText value="#{row.typeLibelleFr}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<p:selectOneMenu id="selectTypePiece"
+									value="#{row.typeId}"
+									required="true"
+									requiredMessage="Le type de la pièce est obligatoire"
+									rendered="#{concoursMBean.editMode}">
+									<f:selectItem itemLabel="--Type--"/>
+									<f:selectItems value="#{concoursMBean.typePieces}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column headerText="Obligatoire" style="width:150px;text-align:center;"> 	
+								<h:outputText value="#{row.obligatoire}" styleClass="center" rendered="#{!concoursMBean.editMode}"/>
+								<h:selectBooleanCheckbox value="#{row.obligatoire}" rendered="#{concoursMBean.editMode}"/>
+							</p:column>
+							<p:column style="width:30px;" styleClass="center" rendered="#{concoursMBean.editMode}">	
+								<p:commandButton id="btnRemovePieceConstitutive"  
+									action="#{concoursMBean.removePieceConstitutive()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="piecesConstitutivesTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{concoursMBean.selectedPieceConstitutiveIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+						<p:toolbar>
+							<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddPieceConstitutive" 
+										icon="ui-icon-plusthick"  
+										process="@this piecesConstitutivesTable" 
+										ajax="true"
+										immediate="true" 
+										update="piecesConstitutivesTable @this"
+										action="#{concoursMBean.addPieceConstitutive()}">
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+							</p:tab>
+							<p:tab title="#{commonmsgs.tab_situations}" >
+								<f:facet name="title">
+									<h:outputText value="" />
+									<i class="fa fa-history"></i>
+								</f:facet>
+								<eh:EntityHistoryComponent 
+									list="#{concoursMBean.concoursHistory}"
+									idParamName="id"
+									idParamValue="#{concoursMBean.concoursDto.id}">
+								</eh:EntityHistoryComponent>
+							</p:tab>
+						</p:tabView>
+						
+						
+						<br/>		
+						<p:panelGrid styleClass="rowStyle" id="actionPanel">
+									<p:row>
+										<p:column>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												rendered="#{sessionDroitBean.createAllow}"
+												id="saveBtn" icon="ui-icon-disk"
+												onstart="PF('globalWidget').block()" 
+												oncomplete="PF('globalWidget').unblock()"
+												actionListener="#{concoursMBean.onSave}"
+												update="concoursForm"
+												process="concoursForm">
+											</p:commandButton>
+										</p:column>
+										<p:column>
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												rendered="#{sessionDroitBean.createAllow}" id="delBtn"
+												icon="ui-icon-trash" onstart="PF('globalWidget').block()"
+												oncomplete="PF('globalWidget').unblock()"
+												update="concoursForm"
+												actionListener="#{concoursMBean.onDelete}"
+												immediate="true">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous vraiment supprimer ce concours ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:column>
+										<p:column>
+											<p:commandButton value="#{commonmsgs.bouton_valider}"
+												rendered="#{sessionDroitBean.createAllow}" 
+												id="validateBtn"
+												disabled="#{concoursMBean.concoursDto == null or concoursMBean.concoursDto.identifiant == null}"
+												icon="ui-icon-trash" onstart="PF('globalWidget').block()"
+												oncomplete="PF('globalWidget').unblock()"
+												update="concoursForm"
+												process="concoursForm"
+												actionListener="#{concoursMBean.onValidate}">
+												<p:confirm header="Confirmation"
+													message="Êtes-vous sur de vouloir valider ce concours ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+										</p:column>
+									</p:row>
+			
+						</p:panelGrid>
+							
+				</p:panel>
+			</h:form>
+		</p:panel>
+		
+	</ui:define>	
+</ui:composition>		
+</html>

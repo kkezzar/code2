@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{dossierEmployemsgs.dossier_employe_pnl_gestion_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/dossierEmploye/DossierEmployeSearch.xhtml" >
+				<ui:param name="nameMBean"  value="#{dossierEmployeBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty dossierEmployeBean.dossierEmployeDto}">
+					<ui:include
+						src="/pages/administrative/dossierEmploye/DossierEmployeHeader.xhtml" >
+						<ui:param name="dossierEmployeDtoParam"  value="#{dossierEmployeBean.dossierEmployeDto}"></ui:param>
+						<ui:param name="rendredModifPhotoParam"  value="true"></ui:param>
+						</ui:include>
+					<br></br>
+
+
+
+
+
+					<p:tabView orientation="left" id="tabViewEdit" style="background:none important">
+						<p:tab
+							title="#{dossierEmployemsgs.dossier_employe_dosier_employe}">
+							<ui:include src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml" >
+							<ui:param name="dossierEmployeDtoParam"  value="#{dossierEmployeBean.dossierEmployeDto}"></ui:param>
+							</ui:include>
+						</p:tab>
+						
+						<p:tab
+							title="#{dossierEmployemsgs.dossier_employe_autres_infos_title}">
+							<ui:include src="/pages/administrative/dossierEmploye/DossierEmployeAutreInfoEdit.xhtml" />
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_conjoints}" rendered="#{dossierEmployeBean.married}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeConjoints.xhtml" />
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_enfants}" rendered="#{dossierEmployeBean.married}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeEnfants.xhtml" />
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_diplomes}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDiplomes.xhtml" />	
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_distinctions}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDistinctions.xhtml" />
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_carriere}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeCarriere.xhtml" />
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_positions}">
+						<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployePositions.xhtml" />	
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_conge}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeConges.xhtml" />	
+						</p:tab>
+						<p:tab title="#{dossierEmployemsgs.dossier_employe_absence}">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeAbsence.xhtml" />	
+						</p:tab>
+					</p:tabView>
+					<br></br>
+					<!-- Les liens de consultat 
+					 <div class="row"
+					style="border: 1px solid #E2E2E2; box-shadow: 0px 1px 1px #ECECEC; background-color: #F5F5F5; padding: 10px 0px;">
+					
+					<table style="width:100%; margin-left:5px">
+					<tr>
+					<td style="width:300px"  >
+		            <h:outputText  styleClass="value" value=" #{dossierEmployemsgs.dossier_employe_lien_consultation}"  /> 
+						</td>	
+					<td>
+			 <p:commandLink id="lienCarriere"   value="#{dossierEmployemsgs.dossier_employe_carriere}" 
+						></p:commandLink>
+						</td>	
+						<td>
+						 <p:commandLink id="lienPositions"   value="#{dossierEmployemsgs.dossier_employe_positions}" 
+						></p:commandLink>
+						</td>	
+						<td>
+						 <p:commandLink id="lienConge"   value="#{dossierEmployemsgs.dossier_employe_conge}" 
+						></p:commandLink>
+						</td>	
+						<td>
+						 <p:commandLink id="lienAbsence"   value="#{dossierEmployemsgs.dossier_employe_absence}" 
+						></p:commandLink>
+						</td>	
+					
+						</tr>
+		</table>
+		</div>-->
+				</p:outputPanel>
+			
+			</p:outputPanel>
+
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

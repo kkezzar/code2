@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationEntiteDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.habilitation.SituationEntite
+		</class-b>
+		<field>
+			<a>idSituation</a>
+			<b>situation.id</b>
+		</field>
+		<field>
+			<a>idEntite</a>
+			<b>entite.id</b>
+		</field>
+		<field>
+			<a>codeSituation</a>
+			<b>situation.code</b>
+		</field>
+		<field>
+			<a>codeEntite</a>
+			<b>entite.code</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationI18nDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.habilitation.SituationI18n
+		</class-b>
+
+		<field>
+			<a>idSituation</a>
+			<b>situation.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationEntiteOccurrenceDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.habilitation.SituationEntiteOccurrence
+		</class-b>
+
+		<field>
+			<a>idSituation</a>
+			<b>situationEntite.id</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationEntiteOccurrenceDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationI18nDto
+		</class-b>
+
+		<field>
+			<a>libelleSituation</a>
+			<b>libelle</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationEntiteDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.business.model.dto.habilitation.SituationI18nDto
+		</class-b>
+
+		<field>
+			<a>libelleSituation</a>
+			<b>libelle</b>
+		</field>
+	</mapping>
+</mappings>

@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+<ui:define name="main">
+	<p:fieldset id="editNcltFieldSet" legend="#{commonmsgs.menu_nomenclature_objet}">
+	<h:form id="ncEditForm">  
+        <p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+	    <ui:include src="/pages/nomenclature/ncItemEdit.xhtml"/>     
+     </h:form>  
+      </p:fieldset>
+       </ui:define> 
+</ui:composition>
+
+</html>

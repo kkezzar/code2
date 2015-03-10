@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+
+<ui:define name="title">#{ofBB.pageTitle}</ui:define>
+<ui:define name="pageTitleContent">#{ofBB.pageTitle}</ui:define>
+<ui:define name="centerContent">
+		<of:OfComponent ofDto="#{ofBB.ofDto}"  toEdit="false"	/>
+			<!-- OFFRE DE FORMATION - TOOLBAR BUTTONS  -->
+	<h:form id="formButtons">
+		<p:toolbar style="font-size:11px;" >
+			<p:toolbarGroup align="right">
+				<p:commandButton value="#{ofEditMsgs.EDIT_OF_BTN_GO_BACK}" 	action="#{ofBB.goBack()}">
+						<f:param name="keyWords" value="#{txtKeyWordsSearch.value}" />
+						<f:param name="searchMode" value="#{txtSearchModeSearch.value}" />
+						<f:param name="outcomePage" value="#{txtOutcomePage.value}" />
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+</ui:define>
+</ui:composition>

@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{posteMsgs.affect_poste_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_poste_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "/>
+						<p:spacer width="10px"></p:spacer>
+							<p:inputText id="keyWordsID" value="#{affectationPosteMBean.searchPosteKeyWords}"    
+								placeholder="#{commonmsgs.search_watermark_text_key_words}"
+										 label="#{commonmsgs.search_label_mots_cles}" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_poste_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{affectationPosteMBean.onSearchPoste}"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+				<p:dataTable var="poste" lazy="true"
+					value="#{affectationPosteMBean.posteDtos}"
+					widgetVar="postesTable" rowKey="#{poste.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{posteMsgs.poste_datable_list_no_result}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{affectationPosteMBean.onPosteSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 update=":pnl_detail" />
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:column headerText="#{posteMsgs.poste_numero}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="code" 
+						headerText="#{posteMsgs.label_code}">
+						<h:outputText value="#{poste.code}"/>
+					</p:column>
+					<p:column sortBy="objet" 
+						headerText="#{posteMsgs.label_objet}">
+						<h:outputText value="#{poste.objet}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.employe}">
+							<h:outputText value="#{poste.affectationDto.dossierEmployeDto.refIndividuDto.prenomLatin} #{poste.affectationDto.dossierEmployeDto.refIndividuDto.nomLatin}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<br></br>
+			
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_edit" rendered="#{not empty affectationPosteMBean.selectedPosteDto}">
+					<h:form id="form_affectation_poste_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="posteAffectation" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{posteMsgs.label_affectation_employe}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_code}"/>
+									</p:column>
+									<p:column>
+										<p:commandLink id="selectedPosteLink" onclick="PF('emploiDetailDialog').show()" immediate="true">
+											<h:outputText value="#{affectationPosteMBean.selectedPosteDto.code}"  styleClass="value"/>
+										</p:commandLink>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_affectation_employe}" styleClass="required"/>
+									</p:column>
+									<p:column>
+										<p:commandLink id="selectedEmployeLink" onclick="PF('employeDetailDialog').show()"
+											immediate="true">
+											<h:outputText value="#{affectationPosteMBean.selectedEmployeDto.refIndividuDto.nomLatin}
+												#{affectationPosteMBean.selectedEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value"/>
+										</p:commandLink>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_date_debut_affectation}" styleClass="required"/>
+									</p:column>
+									<p:column>
+										<p:calendar id="dateDebutAffectation" 
+											navigator="true" 
+											required="true" 
+											requiredMessage="#{posteMsgs.msg_date_debut_affectation_required}"
+											value="#{affectationPosteMBean.affectationDto.dateDebutAffectation}"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_date_fin_affectation}"/>
+									</p:column>
+									<p:column>
+										<p:calendar id="dateFinAffectation" 
+											navigator="true" 
+											value="#{affectationPosteMBean.affectationDto.dateFinAffectation}"/>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column  styleClass="title">
+										<h:outputText value="#{posteMsgs.label_employes_proposes}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column >
+										<p:dataTable var="employePropose" lazy="true"
+											value="#{affectationPosteMBean.employeProposesDtos}"
+											widgetVar="employeProposesTable" rowKey="#{employePropose.id}"
+											style="margin-top:5px;width:100%" resizableColumns="true"
+											paginator="true" rows="5" paginatorPosition="bottom"
+											selectionMode="single"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{posteMsgs.employe_propose_datable_list_no_result}">
+											<p:ajax event="rowSelect" immediate="true"
+												listener="#{affectationPosteMBean.onEmployeProposedSelected}" 
+												process="@this"
+												onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+				 								update=":pnl_detail" />
+											<p:column headerText="#{finActiviteMgs.label_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_matricule_employe}">
+												<h:outputText value="#{employePropose.matricule}" />
+											</p:column>
+											<p:column headerText="#{grhmsgs.employe}">
+												<h:outputText value="#{employePropose.refIndividuDto.prenomLatin} #{employePropose.refIndividuDto.nomLatin}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_date_naissance}">
+												<h:outputText value="#{employePropose.refIndividuDto.dateNaissance}" >
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_affectation}">
+												<h:outputText value="#{employePropose.affectationCourante}" />
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column  styleClass="title">
+										<h:outputText value="#{posteMsgs.label_employes}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4">
+											<h:form id="employe_search_form">
+												<p:toolbar styleClass="toolBarMesrs">
+													<p:toolbarGroup align="right">
+														<p:inputText placeholder="#{dossierEmployemsgs.dossier_employe_nom}"
+															value="#{affectationPosteMBean.searchEmployeDto.refIndividuDto.nomLatin}"></p:inputText>
+														<p:spacer width="5px"></p:spacer>
+														<p:inputText
+															placeholder="#{dossierEmployemsgs.dossier_employe_prenom}"
+															value="#{affectationPosteMBean.searchEmployeDto.refIndividuDto.prenomLatin}"></p:inputText>
+														<p:separator />
+														<p:inputText
+															placeholder="#{dossierEmployemsgs.dossier_employe_matricule_employe}"
+															value="#{affectationPosteMBean.searchEmployeDto.matricule}"></p:inputText>
+														<p:separator />
+														<p:commandButton icon="ui-icon-search" update=":pnl_detail"
+															styleClass="ui-button-bleu" process="employe_search_form"
+															onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+															title="Rechercher"
+															actionListener="#{affectationPosteMBean.onSearchEmploye()}"></p:commandButton>
+										
+													</p:toolbarGroup>
+												</p:toolbar>
+											</h:form>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column >
+										<p:dataTable var="employe" lazy="true"
+											value="#{affectationPosteMBean.employeDtos}"
+											widgetVar="employeTable" rowKey="#{employe.id}"
+											style="margin-top:5px;width:100%" resizableColumns="true"
+											paginator="true" rows="5" paginatorPosition="bottom"
+											selectionMode="single"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{posteMsgs.employe_datable_list_no_result}">
+											<p:ajax event="rowSelect" immediate="true"
+												listener="#{affectationPosteMBean.onEmployeSelected}" 
+												process="@this"
+												onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+				 								update=":pnl_detail" />
+											<p:column headerText="#{finActiviteMgs.label_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_matricule_employe}">
+												<h:outputText value="#{employe.matricule}" />
+											</p:column>
+											<p:column headerText="#{grhmsgs.employe}">
+												<h:outputText value="#{employe.refIndividuDto.prenomLatin} #{employe.refIndividuDto.nomLatin}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_date_naissance}">
+												<h:outputText value="#{employe.refIndividuDto.dateNaissance}" >
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_affectation}">
+												<h:outputText value="#{employe.affectationCourante}" />
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:toolbar id="posteAffectationToolBar" styleClass="toolBarMesrs" rendered="#{affectationPosteMBean.selectedPosteDto != null}">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+									id="savePosteEmploiBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+									actionListener="#{affectationPosteMBean.onAffectationPoste}"/>
+							</p:toolbarGroup>
+						</p:toolbar>
+			</h:form>
+				</p:outputPanel>
+				<p:dialog position="center" appendTo="@(body)" header="Poste d'emploi"
+					id="emploiDetailDialog" widgetVar="emploiDetailDialog"
+					modal="true" resizable="false">
+						<ui:include src="/pages/emploi/PosteEmploiDetail.xhtml">
+							<ui:param name="dto" value="#{affectationPosteMBean.selectedPosteDto}"/>
+						</ui:include>
+				</p:dialog>
+				<p:dialog position="center" appendTo="@(body)" header="Employé"
+					id="employeDetailDialog" widgetVar="employeDetailDialog"
+					modal="true" resizable="false">
+						<ui:include src="/pages/competence/CompetenceEmployeDetail.xhtml">
+							<ui:param name="dto" value="#{affectationPosteMBean.selectedEmployeDto}"/>
+						</ui:include>
+				</p:dialog>
+			</p:outputPanel>
+			
+			
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

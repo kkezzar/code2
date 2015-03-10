@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+
+
+
+
+		<pe:blockUI target="pnl_valider_parcours"
+			widgetVar="parcoursIndividualiseFormBlock">
+			<h:graphicImage library="images" name="ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:panel styleClass="globalPanelStyle"
+			header="#{parcoursIndividualiseMsgs.parcours_individualise_pnl_consultation_tous_title}"
+			id="pnl_valider_parcours">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+
+			<h:form id="form_parcoursList">
+				<br> </br>
+				<p:panelGrid id="toolbar" >
+					<p:row>
+						<p:column style="width:150px">
+
+
+							<p:selectOneMenu id="annee"  style="width:150px" filter="true" required="true"
+								filterMatchMode="startsWith"
+								value="#{parcoursIndividualiseStatisticBean.searchDto.anneeAcademiqueId}"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}">
+								<p:ajax update="toolbar"
+									onstart="PF('parcoursIndividualiseFormBlock').block()"
+									onsuccess="PF('parcoursIndividualiseFormBlock').unblock()"
+									listener="#{parcoursIndividualiseStatisticBean.anneeChanged}" />
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseStatisticBean.anneeAcademiqueList}" />
+							</p:selectOneMenu>
+
+						</p:column>
+						<p:column style="width:250px">
+
+							<p:selectOneMenu id="ofSearch"  style="width:250px" required="true"
+								value="#{parcoursIndividualiseStatisticBean.searchDto.ouvertureOffreFormationId}"
+								filter="true" filterMatchMode="startsWith"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_offre_formation}">
+								<p:ajax update="toolbar"
+									onstart="PF('parcoursIndividualiseFormBlock').block()"
+									onsuccess="PF('parcoursIndividualiseFormBlock').unblock()"
+									listener="#{parcoursIndividualiseStatisticBean.ofChanged}" />
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_offre_formation}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseStatisticBean.offreFormationList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+<!-- 						</p:row> -->
+<!-- 						<p:row> -->
+						<p:column  width="width:250px">
+
+							<p:selectOneMenu id="periodeSearch"  required="true"
+								value="#{parcoursIndividualiseStatisticBean.searchDto.idPeriode}"
+								filter="true" filterMatchMode="startsWith"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_periode}">
+								<p:ajax update="toolbar"
+									onstart="PF('parcoursIndividualiseFormBlock').block()"
+									onsuccess="PF('parcoursIndividualiseFormBlock').unblock()"
+									listener="#{parcoursIndividualiseStatisticBean.periodeChanged}" />
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_periode}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseStatisticBean.periodeList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column style="width:250px">
+
+							<p:selectOneMenu id="ueSearch" style="width:250px" required="true"
+								value="#{parcoursIndividualiseStatisticBean.idUe}"
+								filter="true" filterMatchMode="startsWith"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_offre_formation}">
+								
+								<f:selectItem
+									itemLabel="choisir Unité d'enseignement"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseStatisticBean.ueList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column style="width:200px">
+							<p:commandButton id="btnSearch" value="Rechercher"
+								update="parcoursTable"
+								process="@parent" icon="ui-icon-refresh"
+								actionListener="#{parcoursIndividualiseStatisticBean.search}"
+								onstart="PF('dWidget').block()"
+								oncomplete="PF('dWidget').unblock()">
+
+							</p:commandButton>
+						</p:column>
+
+					</p:row>
+
+				</p:panelGrid>
+
+<br></br>
+				<p:dataTable id="parcoursTable" var="parcours" value="#{parcoursIndividualiseStatisticBean.parcoursIndividualiseList}"  widgetVar="parcoursTable" emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}" resizableColumns="true"> 
+				                   
+                     <p:column rendered="#{not empty parcoursIndividualiseStatisticBean.parcoursIndividualiseList}" style="width:200px">
+						<f:facet name="header">
+							<h:outputText
+								value="Etudiant"  />
+						</f:facet>
+
+						<h:outputText value="#{parcours.individuNomLatin} #{parcours.individuPrenomLatin}"  />
+					</p:column>
+        
+        <p:columns value="#{parcoursIndividualiseStatisticBean.columns}" var="column" columnIndexVar="colIndex"  style="text-align:center">
+         
+            <f:facet name="header">
+                <h:outputText value="#{column.header}" />
+            </f:facet>
+            <h:outputText value="#{(((parcours.parcoursIndividualiseMatiereList.get(column.property).optionnelle==true and parcours.parcoursIndividualiseMatiereList.get(column.property).choix) or(parcours.parcoursIndividualiseMatiereList.get(column.property).optionnelle==null or parcours.parcoursIndividualiseMatiereList.get(column.property).optionnelle==false)) and parcours.parcoursIndividualiseMatiereList.get(column.property).mcLibelleFr eq column.header) ? 'x':'' }" />
+        </p:columns>
+       
+         <p:columnGroup type="footer" rendered="#{not empty parcoursIndividualiseStatisticBean.parcoursIndividualiseList}">
+            <p:row>
+                <p:column  style="text-align:right;width:200px" footerText="Total:" />
+               
+                <c:forEach var="total" items="#{parcoursIndividualiseStatisticBean.totals}">
+                    <p:column style="text-align:center" footerText="#{total}" />
+               </c:forEach>
+            </p:row>
+        </p:columnGroup>
+    </p:dataTable>
+				
+
+
+			</h:form>
+
+		</p:panel>
+
+
+
+
+
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

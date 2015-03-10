@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<pe:blockUI target="pnl_mcDetail" widgetVar="tabUIWidget">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	
+	<p:panel id="pnl_mcDetail"
+		header="#{(mcBB.mc.id == 0) ? matiereConstitutiveMsgs.matiere_constitutive_page_title_nouveau : matiereConstitutiveMsgs.matiere_constitutive_page_title_modification} #{mcBB.mc.libelleFr}">
+
+		<p:tabView id="tbvw_mcDetail">
+			<p:tab
+				title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_descriptif}">
+				<ui:include src="/pages/offreformation/mc/McInfoEdit.xhtml" />
+			</p:tab>
+			<p:tab
+				title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_detail}"
+				disabled="#{mcBB.mc.id == 0}">
+				<ui:include src="/pages/offreformation/mc/McDetailInfoEdit.xhtml" />
+			</p:tab>
+
+			<p:tab id="apTab"
+				title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_List_ap}"
+				disabled="#{mcBB.mc.id == 0}">
+				<ui:include src="/pages/offreformation/mc/McApList.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</p:panel>
+</ui:composition>

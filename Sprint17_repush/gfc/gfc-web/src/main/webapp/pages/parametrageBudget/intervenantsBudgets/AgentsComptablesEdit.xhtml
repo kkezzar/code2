@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_gerer_agents_comptables}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="Nouveau"
+							action="#{agentsComptablesBean.addAction()}" update=":form_crud" process="@this"></p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{agentsComptablesBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{agentsComptablesBean.model}" paginator="true"
+					paginatorPosition="bottom" rows="5" rowKey="#{current.id}"
+					rowIndexVar="rowIndex" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{agentsComptablesBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}" style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.code}">
+						<h:outputText value="#{current.code}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_nom}">
+						<h:outputText value="#{current.refIndividu.nomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_preom}">
+						<h:outputText value="#{current.refIndividu.prenomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.date_nomination}">
+						<h:outputText value="#{current.dateNomination}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{agentsComptablesBean.crud}" id="tabview">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_agent_comptable}">
+
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.agent_comptable}" />
+									</p:column>
+									<p:column>
+										<p:commandButton id="btnAddIndividu"
+											styleClass="ui-button-bleu"
+											title="#{individumsgs.dialog_header_individu}"
+											icon="ui-icon-plusthick" process="@this" ajax="true"
+											immediate="true" onsuccess="PF('individuDialog').show()"></p:commandButton>
+										<h:outputText id="detail_individu" styleClass="value"
+											value="#{agentsComptablesBean.agentComptableDto.refIndividu.nomLatin} #{agentsComptablesBean.agentComptableDto.refIndividu.prenomLatin}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.code}" />
+									</p:column>
+									<p:column>
+										<p:inputText
+											value="#{agentsComptablesBean.agentComptableDto.code}"
+											required="true" styleClass="input-mini" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.date_nomination}" />
+									</p:column>
+									<p:column>
+										<p:calendar required="true"
+											value="#{agentsComptablesBean.agentComptableDto.dateNomination}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.decision_nomination}" />
+									</p:column>
+									<p:column>
+										<p:inputText styleClass="input-xxlarge"
+											value="#{agentsComptablesBean.agentComptableDto.decisionNomination}"
+											required="true" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.date_fin_nomination}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:calendar
+											value="#{agentsComptablesBean.agentComptableDto.dateFinNomination}"
+											pattern="#{applicationBean.datePattern()}"
+											mindate="#{agentsComptablesBean.agentComptableDto.dateNomination}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.etablissements_structures_affectes}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:dataTable var="currentAff" id="affectationTable"
+											value="#{agentsComptablesBean.agentComptableDto.affectationEtabStrAgentComptables}"
+											editable="true"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+														<p:commandButton id="btnAddConjoint"
+															styleClass="ui-button-bleu-o" title="Ajouter affectation"
+															icon="ui-icon-plusthick" ajax="true" update=":form_affectation"
+															action="#{agentsComptablesBean.addAffectationAction()}"
+															immediate="true" onsuccess="PF('gererAffWidget').show()"></p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{parametrageBudgetMsg.etablissement}">
+												<h:outputText
+													value="#{currentAff.refEtablissement.llEtablissementLatin}" />
+											</p:column>
+											<p:column headerText="#{parametrageBudgetMsg.structure}">
+												<h:outputText
+													value="#{currentAff.refStructure.llStructureLatin}" />
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.date_affectation}">
+												<h:outputText value="#{currentAff.dateAffectation}">
+													<f:convertDateTime type="date"
+														pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.decision_affectation}">
+												<h:outputText value="#{currentAff.decisionAffectation}" />
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.date_fin_affectation}">
+												<h:outputText value="#{currentAff.dateFinAffectation}">
+													<f:convertDateTime type="date"
+														pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+											<p:column style="width:80px">
+												<p:commandButton id="btnEditAff"
+													actionListener="#{agentsComptablesBean.editAffectationAction(currentAff)}"
+													styleClass="ui-button-edit-o" icon="ui-icon-pencil"
+													ajax="true" process="@this" immediate="true"  update=":form_affectation"
+													onsuccess="PF('gererAffWidget').show()">
+												</p:commandButton>
+												<p:commandButton id="btnRmvAff"
+													action="#{agentsComptablesBean.removeAffectationAction(currentAff)}"
+													styleClass="ui-button-delete-o" icon="ui-icon-trash" 
+													ajax="true" update="affectationTable" process="@this"
+													immediate="true">
+												</p:commandButton>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_search :form_crud"
+												styleClass="ui-button-save"
+												actionListener="#{agentsComptablesBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="removeBtn" update=":form_crud :form_search"
+												rendered="#{agentsComptablesBean.agentComptableDto.id ne null}"
+												styleClass="ui-button-delete-o"
+												actionListener="#{agentsComptablesBean.deleteAction()}">
+												<p:confirm header="Confirmation"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												process="@this"
+												actionListener="#{agentsComptablesBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+
+				<p:dialog header="Gérer l'affectation" id="gererAff"
+					position="center" widgetVar="gererAffWidget" modal="true"
+					showEffect="fade" hideEffect="fade" resizable="true">
+					<p:outputPanel>
+						<h:form id="form_affectation">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border"
+								id="searchPanel">
+								<p:row>
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.etablissement}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu required="true" styleClass="input-full-width"
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.refEtablissement.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_etablissement}"
+												itemValue="" />
+											<f:selectItems
+												value="#{agentsComptablesBean.listEtablissements}" />
+											<p:ajax
+												listener="#{agentsComptablesBean.handleEtabSelectOneMenuChange}"
+												event="valueChange" update="listStructures" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.structure}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="listStructures"
+											styleClass="input-full-width"
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.refStructure.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_structure}"
+												itemValue="" />
+											<f:selectItems value="#{agentsComptablesBean.listStructures}" />
+											<p:ajax
+												listener="#{agentsComptablesBean.handleStrSelectOneMenuChange}"
+												event="valueChange"></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:outputLabel
+											value="#{parametrageBudgetMsg.date_affectation}"
+											styleClass="required" />
+									</p:column>
+
+									<p:column>
+										<p:calendar required="true"
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.dateAffectation}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+
+									<p:column>
+										<p:outputLabel
+											value="#{parametrageBudgetMsg.decision_affectation}"
+											styleClass="required" />
+									</p:column>
+
+									<p:column>
+										<p:inputText required="true" styleClass="input-full-width"
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.decisionAffectation}"
+											requiredMessage="#{individumsgs.individu_prenom_required}">
+										</p:inputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:outputLabel
+											value="#{parametrageBudgetMsg.date_fin_affectation}" />
+									</p:column>
+
+									<p:column>
+										<p:calendar
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.dateFinAffectation}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+
+									<p:column>
+										<p:inputTextarea styleClass="input-full-width"
+											value="#{agentsComptablesBean.affectationEtabStrAgentComptableDto.observation}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4">
+										<p:commandButton value="#{commonmsgs.bouton_ok}"
+											onsuccess="gererAffWidget.hide()"
+											update=":tabview:form:affectationTable "
+											actionListener="#{agentsComptablesBean.saveAffectationAction()}">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+
+						</h:form>
+					</p:outputPanel>
+				</p:dialog>
+	
+				<ui:include src="/pages/commons/IndividuComponent.xhtml">
+					<ui:param name="updateAjax" value=":tabview:form:detail_individu"></ui:param>
+					<ui:param name="nameOfManagedBean" value="#{agentsComptablesBean}"></ui:param>
+					<ui:param name="dialogWidgetVar" value="individuDialog"></ui:param>
+					<!-- 	<ui:param name="dialogHeader" value="Sélectionner un individu"></ui:param> -->
+					<!-- 					<ui:param name="dialogWidgetVar" value="individuDialog"></ui:param> -->
+				</ui:include>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

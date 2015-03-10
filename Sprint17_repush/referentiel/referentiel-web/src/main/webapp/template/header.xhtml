@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<h:head>
+
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>#{title}</title>
+			
+		</f:facet>
+		<script type="text/javascript"
+			src="#{facesContext.externalContext.request.contextPath}/js/calandar.js"></script>
+		<script type="text/javascript"
+			src="#{facesContext.externalContext.request.contextPath}/js/sigsep.js"></script>
+	
+		<style type="text/css">
+		</style>
+		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
+
+	<!--  <ui:include src="/views/timeOut.xhtml" />-->
+	</h:head>
+
+
+</ui:composition>

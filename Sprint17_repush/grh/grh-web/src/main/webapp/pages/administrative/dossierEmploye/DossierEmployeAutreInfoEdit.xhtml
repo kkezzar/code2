@@ -1,0 +1,151 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- <ui:include src="/pages/administrative/dossierEmploye/DossierEmployeIndividuEdit.xhtml" />  -->
+	<!-- 		<p:spacer height="10px"></p:spacer> -->
+	<h:form id="form_dossier_employe_autre_info_edit">
+
+
+		<p:panelGrid columns="1" cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:panelGrid id="descriptionDossier"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				
+
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_affiliation_securite_sociale}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel value="#{dossierEmployemsgs.dossier_employe_nss} " />
+					</p:column>
+					<p:column>
+						<p:inputText id="nss"
+							value="#{dossierEmployeBean.dossierEmployeDto.numeross}">
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<h:outputLabel
+							value="#{dossierEmployemsgs.dossier_employe_date_affiliation} " />
+					</p:column>
+					<p:column>
+						<p:calendar id="datAff" navigator="true"
+							value="#{dossierEmployeBean.dossierEmployeDto.dateAffiliation}">
+						</p:calendar>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_coordonnes_bancaires}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel
+							value="#{dossierEmployemsgs.dossier_employe_type_compte} " />
+					</p:column>
+
+					<p:column style="width:25%">
+						<p:selectOneMenu id="typeCompte" style="width:100%"
+							value="#{dossierEmployeBean.dossierEmployeDto.nomenclatureByTypeCompteDto.id}"
+							label="#{dossierEmployemsgs.dossier_employe_type_compte}">
+							<f:selectItem
+								itemLabel="#{dossierEmployemsgs.dossier_employe_type_compte_select}"
+								itemValue="" />
+							<f:selectItems value="#{dossierEmployeBean.listeTypeCompte}" />
+
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column>
+						<h:outputLabel
+							value="#{dossierEmployemsgs.dossier_employe_numero_compte} " />
+					</p:column>
+					<p:column>
+						<p:inputText id="ncompte"
+							value="#{dossierEmployeBean.dossierEmployeDto.numeroCompte}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_permis_conduire}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel
+							value="#{dossierEmployemsgs.dossier_employe_categorie} " />
+					</p:column>
+					<p:column style="width:25%">
+						<p:selectOneMenu id="categorie" style="width:100%"
+							value="#{dossierEmployeBean.dossierEmployeDto.nomenclatureByTypePermisDto.id}"
+							label="#{dossierEmployemsgs.dossier_employe_categorie}">
+							<f:selectItem
+								itemLabel="#{dossierEmployemsgs.dossier_employe_categorie_select}"
+								itemValue="" />
+							<f:selectItems value="#{dossierEmployeBean.listeCategorie}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputLabel
+							value="#{dossierEmployemsgs.dossier_employe_date_obtention} " />
+					</p:column>
+					<p:column>
+						<p:calendar id="dateObten" navigator="true"
+							value="#{dossierEmployeBean.dossierEmployeDto.dateObtention}">
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<p:toolbar id="emploiInfoToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" process="@form"
+						id="saveEmployeBtn" icon="ui-icon-disk" update=":tabViewEdit:form_dossier_employe_autre_info_edit :form_dossier_employe_search"
+						actionListener="#{dossierEmployeBean.onSave}">
+
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{dossierEmployeBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

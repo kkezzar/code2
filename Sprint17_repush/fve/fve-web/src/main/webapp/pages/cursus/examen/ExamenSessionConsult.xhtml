@@ -1,0 +1,328 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:tabView id="tabViewResult">
+		<p:tab title="#{examenMsgs.examen_tab_examens_title}">
+<!-- 			<p:toolbar id="examenBYDateToolBar"> -->
+<!-- 				<p:toolbarGroup> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 				<p:toolbarGroup align="right"> -->
+<!-- 					<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}" -->
+<!-- 						immediate="true"> -->
+<!-- 						<p:graphicImage name="/images/pdf.png" /> -->
+<!-- 						<pe:exporter type="pdf" target="dtTbl_examens" -->
+<!-- 							facetBackground="#AAFFBB" datasetPadding="10" -->
+<!-- 							fileName="examensParDate" orientation="Landscape" -->
+<!-- 							encoding="ISO-8859-1" /> -->
+<!-- 					</h:commandLink> -->
+<!-- 					<p:spacer width="20" /> -->
+<!-- 					<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}" -->
+<!-- 						immediate="true"> -->
+<!-- 						<p:graphicImage name="/images/excel.png" /> -->
+<!-- 						<pe:exporter type="xlsx" target="dtTbl_examens" -->
+<!-- 							fileName="examensParDate" /> -->
+<!-- 					</h:commandLink> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 			</p:toolbar> -->
+
+
+			<p:dataTable id="dtTbl_examens" resizableColumns="true"
+				value="#{planningSessionSaveBean.examensSessionList}" var="examen"
+				emptyMessage="#{examenMsgs.examen_datable_list_examnes_no_result}">
+
+
+				<f:facet name="header">
+					<h:outputText
+						value=" #{planningSessionSaveBean.planningSessionDto.niveauLibelleLongLt} #{planningSessionSaveBean.planningSessionDto.offreFormationLibelleFr} "
+						styleClass="value" />
+				</f:facet>
+				<p:column style="width:25%" sortBy="#{examen.mcLibelleFr}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_matiere}" />
+					</f:facet>
+					<h:outputText value="#{examen.mcLibelleFr} " />
+				</p:column>
+				<p:column style="width:10%" sortBy="#{examen.refTypeExamenLibelle}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_type_examen}" />
+					</f:facet>
+					<h:outputText value="#{examen.refTypeExamenLibelle} " />
+				</p:column>
+
+				<p:column style="width:9%" sortBy="#{examen.dateExamen}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_date_examen}" />
+					</f:facet>
+					<h:outputText value="#{examen.dateExamen}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+
+				<p:column style="width:8%" sortBy="#{examen.heureDebut}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_heure_debut}" />
+					</f:facet>
+					<h:outputText value="#{examen.heureDebut}">
+						<f:convertDateTime type="date" pattern="HH:mm" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%" sortBy="#{examen.heureFin}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_heure_fin}" />
+					</f:facet>
+					<h:outputText value="#{examen.heureFin}">
+						<f:convertDateTime type="date" pattern="HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:10%">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_salle}" />
+					</f:facet>
+					<ui:repeat value="#{examen.salleExamenDtos}" var="_salle">
+						<h:outputText value="#{_salle.refLieuLibelle}" />
+						<br />
+					</ui:repeat>
+
+
+
+				</p:column>
+				<p:column style="width:30%">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_responsable}" />
+					</f:facet>
+					<ui:repeat value="#{examen.responsableExamenDtosGrouped}" var="_resp">
+						<h:outputText value="#{_resp.nomPrenom}" />
+						<br />
+					</ui:repeat>
+
+
+				</p:column>
+
+			</p:dataTable>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_imprime}"
+						icon="ui-icon-print" ajax="false" immediate="true"
+						onstart="PF('globalWidget').block()"
+						oncomplete="PF('globalWidget').unblock()"
+						actionListener="#{planningSessionSaveBean.imprimerExamens}">
+					</p:commandButton>
+
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:tab>
+		<p:tab title="#{examenMsgs.examen_tab_etudiant_salle_matiere_title}">
+
+<!-- 			<p:toolbar id="studentBYSalleToolBar"> -->
+<!-- 				<p:toolbarGroup> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 				<p:toolbarGroup align="right"> -->
+<!-- 					<p:commandLink ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/pdf.png" /> -->
+
+<!-- 						<pe:exporter type="pdf" target="dtTbl_etudiants" -->
+<!-- 							fileName="EtudiantsParSalleExamen" subTable="true" -->
+<!-- 							datasetPadding="10" facetBackground="#FAFAFA" facetFontSize="10" -->
+<!-- 							facetFontStyle="BOLD" fontName="Courier New" cellFontSize="10" -->
+<!-- 							orientation="Landscape" encoding="ISO-8859-1" /> -->
+
+<!-- 					</p:commandLink> -->
+
+<!-- 					<p:spacer width="20" /> -->
+
+<!-- 					<p:commandLink ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/excel.png" /> -->
+
+<!-- 						<pe:exporter type="xlsx" target="dtTbl_etudiants" -->
+<!-- 							fileName="EtudiantsParSalleExamen" subTable="true" /> -->
+
+<!-- 					</p:commandLink> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 			</p:toolbar> -->
+
+			<p:dataGrid var="examen" style="width:200px;overflow-x:hidden"
+				value="#{planningSessionSaveBean.examensSessionList}" columns="1"
+				layout="grid" rows="1" paginator="true" id="inscDatagrid"
+				emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+				rowsPerPageTemplate="6,12,16">
+				<p:ajax event="page" onstart="PF('globalWidget').block()"
+					oncomplete="PF('globalWidget').unblock()">
+				</p:ajax>
+				<p:panel header="#{planningSessionSaveBean.headerExamen(examen)}"
+					style="text-align:center;font-size:9pt">
+					<p:dataTable id="dtTbl_etudiants"
+						value="#{examen.inscriptionExamenDtos}" var="inscription"
+						emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}"
+						paginator="true" lazy="true" paginatorPosition="bottom"
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+						<p:column style="width:20%;text-align:left"
+							sortBy="#{inscription.numeroInscription}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_numero_inscription}" />
+							</f:facet>
+							<h:outputText value="#{inscription.numeroInscription} " />
+						</p:column>
+						<p:column style="width:25%;text-align:left"
+							sortBy="#{inscription.individuNomLatin}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_nom}" />
+							</f:facet>
+							<h:outputText value="#{inscription.individuNomLatin}" />
+						</p:column>
+						<p:column style="width:25%;text-align:left"
+							sortBy="#{inscription.individuPrenomLatin}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_prenom}" />
+							</f:facet>
+							<h:outputText value="#{inscription.individuPrenomLatin}" />
+						</p:column>
+						<p:column style="width:10%"
+							sortBy="#{inscription.individuDateNaissance}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_date_naissance}" />
+							</f:facet>
+							<h:outputText value="#{inscription.individuDateNaissance}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:20%;text-align:left"
+							sortBy="#{inscription.refLieuLibelle}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_salle}" />
+							</f:facet>
+							<h:outputText value="#{inscription.refLieuLibelle} " />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:dataGrid>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_imprime}"
+						icon="ui-icon-print" ajax="false" immediate="true"
+						onstart="PF('globalWidget').block()"
+						oncomplete="PF('globalWidget').unblock()"
+						actionListener="#{planningSessionSaveBean.imprimerExamenInscriptions()}">
+					</p:commandButton>
+
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:tab>
+		<p:tab
+			title="#{examenMsgs.examen_tab_responsable_salle_matiere_title}">
+
+<!-- 			<p:toolbar id="responsableBYSalleToolBar"> -->
+<!-- 				<p:toolbarGroup> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 				<p:toolbarGroup align="right"> -->
+<!-- 					<p:commandLink ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/pdf.png" /> -->
+
+<!-- 						<pe:exporter type="pdf" target="dtTbl_responsables" -->
+<!-- 							fileName="ResponsablesParSalleExamen" subTable="true" -->
+<!-- 							datasetPadding="10" facetBackground="#FAFAFA" facetFontSize="10" -->
+<!-- 							facetFontStyle="BOLD" fontName="Courier New" cellFontSize="10" -->
+<!-- 							orientation="Landscape" encoding="ISO-8859-1" /> -->
+
+<!-- 					</p:commandLink> -->
+
+<!-- 					<p:spacer width="20" /> -->
+
+<!-- 					<p:commandLink ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/excel.png" /> -->
+
+<!-- 						<pe:exporter type="xlsx" target="dtTbl_responsables" -->
+<!-- 							fileName="ResponsablesParSalleExamen" subTable="true" /> -->
+
+<!-- 					</p:commandLink> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 			</p:toolbar> -->
+
+			<p:dataGrid var="examen" style="width:200px;overflow-x:hidden"
+				value="#{planningSessionSaveBean.examensSessionList}" columns="1"
+				layout="grid" paginator="true" id="respDatagrid"
+				emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+				rowsPerPageTemplate="6,12,16">
+				<p:ajax event="page" onstart="PF('globalWidget').block()"
+					oncomplete="PF('globalWidget').unblock()">
+				</p:ajax>
+				<p:panel header="#{planningSessionSaveBean.headerExamen(examen)}"
+					style="text-align:center;font-size:9pt">
+					<p:dataTable id="dtTbl_responsables"
+						value="#{examen.responsableExamenDtos}" var="responsable"
+						emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}"
+						paginator="true" lazy="true" paginatorPosition="bottom"
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+						<p:column style="width:35%;text-align:left"
+							sortBy="#{responsable.individuNomLatin}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_nom}" />
+							</f:facet>
+							<h:outputText value="#{responsable.individuNomLatin} " />
+						</p:column>
+						<p:column style="width:35%;text-align:left"
+							sortBy="#{responsable.individuPrenomLatin}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_prenom}" />
+							</f:facet>
+							<h:outputText value="#{responsable.individuPrenomLatin}" />
+						</p:column>
+
+						<p:column style="width:10%"
+							sortBy="#{responsable.individuDateNaissance}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_date_naissance}" />
+							</f:facet>
+							<h:outputText value="#{responsable.individuDateNaissance}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:20%;text-align:left"
+							sortBy="#{responsable.refLieuLibelle}">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_salle}" />
+							</f:facet>
+							<h:outputText value="#{responsable.refLieuLibelle} " />
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:dataGrid>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_imprime}"
+						icon="ui-icon-print" ajax="false" immediate="true"
+						onstart="PF('globalWidget').block()"
+						oncomplete="PF('globalWidget').unblock()"
+						actionListener="#{planningSessionSaveBean.imprimerExamenResponsables()}">
+					</p:commandButton>
+
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:tab>
+		<p:tab title="#{examenMsgs.examen_deroulement_info_filed_title}">
+
+			<ui:include
+				src="/pages/cursus/examen/PlanningSessionInfoConsult.xhtml" />
+		</p:tab>
+	</p:tabView>
+
+</ui:composition>
+

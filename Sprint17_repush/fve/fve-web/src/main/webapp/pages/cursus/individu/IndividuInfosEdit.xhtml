@@ -1,0 +1,357 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+		<h:form id="idvFormEdit">
+			<pe:blockUI target="idvFormEdit" widgetVar="idvWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			
+
+				<p:panelGrid id="descriptionIdv"
+					styleClass="ui-panelgrid-full-width">
+					<p:row>
+						<p:column style="width:15%">
+						<p:outputLabel value="#{individuMsgs.individu_identite}"
+							for="identifiantIdv" />
+					</p:column>
+						<p:column colspan="3">
+							<p:inputText id="identifiantIdv"
+								style="text-align: left;width:100%" maxlength="18"
+								value="#{individuBean.individuDto.identifiant}"
+								label="#{individuMsgs.individu_identite}"
+								valueChangeListener="#{individuBean.identifiantChanged}"
+								required="true"
+								disabled="#{individuBean.individuDto.identifiant.length()==18}"
+								requiredMessage="#{individuMsgs.individu_identite_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_civilite}"
+								for="Civilite" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="Civilite"
+								style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.civiliteId}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_civilite}">
+								<f:selectItem
+									itemLabel="#{individuMsgs.select_civilite_individu}"
+									itemValue="" />
+								<f:selectItems value="#{individuBean.listeCivilite}" />
+								<p:ajax update="descriptionIdv2" process="@this">
+								</p:ajax>
+							</p:selectOneMenu>
+						</p:column>
+
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_nom_latin}"
+								for="Nom" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="Nom" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.nomLatin}"
+								label="#{individuMsgs.individu_nom_latin}" required="true"
+								valueChangeListener="#{individuBean.entityChanged}"
+								requiredMessage="#{individuMsgs.individu_nom_required}"
+								autocomplete="off"
+								onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</p:column>
+
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_nom_arabe}"
+								for="NomArabe" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="NomArabe" style="text-align: right; width:100%"
+								dir="rtl" value="#{individuBean.individuDto.nomArabe}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_nom_arabe}" required="true"
+								requiredMessage="#{individuMsgs.individu_nomarabe_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_prenom_latin}"
+								for="préNom" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="préNom" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.prenomLatin}"
+								required="true"
+								valueChangeListener="#{individuBean.entityChanged}"
+								requiredMessage="#{individuMsgs.individu_prenom_required}"
+								autocomplete="off"
+								onkeyup="this.value = this.value.substr(0,1).toUpperCase() + this.value.substr(1).toLowerCase();">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_prenom_arabe}"
+								for="préNomArabe" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="préNomArabe"
+								style="text-align: right;width:100%" dir="rtl"
+								value="#{individuBean.individuDto.prenomArabe}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_prenom_arabe}" required="true"
+								requiredMessage="#{individuMsgs.individu_prenomarabe_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+			
+				
+					<p:row id="descriptionIdv2"
+						rendered="#{individuBean.individuDto.civiliteId eq individuMsgs.individu_civilite_idMme}">
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{individuMsgs.individu_nomJeuneFille_latin} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="nomJeuneFilleLatin"
+								style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.nomJeuneFilleLatin}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_nomJeuneFille_latin}"
+								autocomplete="off"
+								onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{individuMsgs.individu_nomJeuneFille_arabe} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="nomJeuneFilleArabe"
+								style="text-align: right;width:100%" dir="rtl"
+								valueChangeListener="#{individuBean.entityChanged}"
+								value="#{individuBean.individuDto.nomJeuneFilleArabe}"
+								label="#{individuMsgs.individu_nomJeuneFille_arabe}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+				
+				
+					<p:row id="descriptionIdv3">
+						<p:column style="width:15%">
+						<h:outputText
+								value="#{individuMsgs.individu_presume} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectBooleanCheckbox id="presume" style="width:100%"
+								value="#{individuBean.individuPresume}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="Checkbox">
+								<p:ajax update="datenaissance"/>
+								
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_datenaissance}"
+								for="datenaissance" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:calendar navigator="true"
+								value="#{individuBean.individuDto.dateNaissance}"
+								id="datenaissance" style="width:100%"
+								label="#{individuMsgs.individu_datenaissance}"
+								pattern="#{individuBean.individuPresume==true ? 'yyyy': 'dd/MM/yyyy'}"
+								required="true"
+								valueChangeListener="#{individuBean.entityChanged}"
+								requiredMessage="#{individuMsgs.individu_datenaissance_required}"
+								mindate="1/1/1800" maxdate="#{localeBean.currentDate}" />
+						</p:column>
+
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_qualite}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="qualite" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.qualite}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_qualite}">
+							</p:inputText>
+						</p:column>
+
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{individuMsgs.individu_nationalite}"
+								for="nationalite" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="nationalite"
+								style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.nationaliteId}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_nationalite}" required="true"
+								requiredMessage="#{individuMsgs.select_nationalite_individu}">
+								<f:selectItem
+									itemLabel="#{individuMsgs.select_nationalite_individu}"
+									itemValue="" />
+								<f:selectItems value="#{individuBean.listeNationalite}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_SitFamiliale}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="SitFamiliale"
+								style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.situationFamilialeId}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_SitFamiliale}">
+								<f:selectItem
+									itemLabel="#{individuMsgs.select_individu_SitFamiliale}"
+									itemValue="" />
+								<f:selectItems value="#{individuBean.listeSituationFamiliale}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_service_national}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="servicenational"
+								style="text-align: left;width:100%"
+								valueChangeListener="#{individuBean.entityChanged}"
+								value="#{individuBean.individuDto.serviceNatId}"
+								label="#{individuMsgs.individu_service_national}">
+								<f:selectItem
+									itemLabel="#{individuMsgs.select_service_national}"
+									itemValue="" />
+								<f:selectItems value="#{individuBean.listeSitSceNat}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_Groupe_Sanguin}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="GroupeSanguin"
+								style="text-align: left;width:100%"
+								valueChangeListener="#{individuBean.entityChanged}"
+								value="#{individuBean.individuDto.groupeSanguinId}"
+								label="#{individuMsgs.individu_Groupe_Sanguin}">
+								<f:selectItem itemLabel="#{individuMsgs.select_Groupe_Sanguin}"
+									itemValue="" />
+								<f:selectItems value="#{individuBean.listeGroupeSanguin}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+				
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_prenompere_latin} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="préNompere" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.prenomPereLatin}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_prenompere_latin}"
+								autocomplete="off"
+								onkeyup="this.value = this.value.substr(0,1).toUpperCase() + this.value.substr(1).toLowerCase();">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_prenompere_arabe} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="préNompereArabe"
+								style="text-align: right;width:100%" dir="rtl"
+								valueChangeListener="#{individuBean.entityChanged}"
+								value="#{individuBean.individuDto.prenomPereArabe}"
+								label="#{individuMsgs.individu_prenompere_arabe}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_nommere_latin} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="Nommere" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.nomMereLatin}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_nommere_latin}"
+								autocomplete="off"
+								onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_nommere_arabe} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="NommereArabe"
+								style="text-align: right;width:100%" dir="rtl"
+								value="#{individuBean.individuDto.nomMereArabe}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_nommere_arabe}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_prenommere_latin} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="preNommere" style="text-align: left;width:100%"
+								value="#{individuBean.individuDto.prenomMereLatin}"
+								valueChangeListener="#{individuBean.entityChanged}"
+								label="#{individuMsgs.individu_prenommere_latin}"
+								autocomplete="off"
+								onkeyup="this.value = this.value.substr(0,1).toUpperCase() + this.value.substr(1).toLowerCase();">
+							</p:inputText>
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{individuMsgs.individu_prenommere_arabe} " />
+						</p:column>
+						<p:column style="width:35%">
+							<p:inputText id="preNommereArabe"
+								style="text-align: right;width:100%" dir="rtl"
+								value="#{individuBean.individuDto.prenomMereArabe}"
+								label="#{individuMsgs.individu_prenommere_arabe}"
+								valueChangeListener="#{individuBean.entityChanged}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+						id="saveBtn" update="@(.dossierStyle)"
+						onstart="PF('idvWidget').block()"
+						onsuccess="PF('idvWidget').unblock()" icon="ui-icon-disk"
+						action="#{individuBean.saveIndividu}">
+						
+					</p:commandButton>
+					<p:separator />
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						icon="ui-icon-arrowthick-1-w"
+						action="#{dossierEtudiantBean.cancel}" immediate="true">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+		</h:form>
+	
+
+</ui:composition>

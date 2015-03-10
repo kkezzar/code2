@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.EvaluationPeriodeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.EvaluationPeriode
+		</class-b>
+		<field>
+			<a>etablissementDto.id</a>
+			<b>etablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.EvaluationEmployeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.EvaluationEmploye
+		</class-b>
+		<field>
+			<a>periodeDto</a>
+			<b>periode</b>
+		</field>
+		<field>
+			<a>employeDto</a>
+			<b>employe</b>
+		</field>
+		<field>
+			<a>detailDtos</a>
+			<b>details</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.EvaluationDetailDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.EvaluationDetail
+		</class-b>
+		<field>
+			<a>evaluationEmployeDto</a>
+			<b>evaluationEmploye</b>
+		</field>
+		<field>
+			<a>critereDto.id</a>
+			<b>critere.id</b>
+		</field>
+		<field>
+			<a>critereDto.libelleLongFr</a>
+			<b>critere.libelleLongFr</b>
+		</field>
+		<field>
+			<a>niveauDto.id</a>
+			<b>niveau.id</b>
+		</field>
+		<field>
+			<a>niveauDto.libelleLongFr</a>
+			<b>niveau.libelleLongFr</b>
+		</field>
+	</mapping>
+
+
+</mappings>

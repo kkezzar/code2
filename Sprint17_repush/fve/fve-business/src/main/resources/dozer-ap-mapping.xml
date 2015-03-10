@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+	<!-- ***************** AtomePedagogiqueDto - AtomePedagogique **************** -->
+
+	<mapping>
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.AtomePedagogiqueDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.AtomePedagogique
+		</class-b>
+
+		<field>
+			<a>matiereConstitutiveId</a>
+			<b>matiereConstitutive.id</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>matiereConstitutive.libelleFr</b>
+		</field>
+
+		<field>
+			<a>ncTypeApId</a>
+			<b>ncTypeAp.id</b>
+		</field>
+		<field>
+			<a>ncTypeApLibelleLongFr</a>
+			<b>ncTypeAp.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncTypeApCode</a>
+			<b>ncTypeAp.code</b>
+		</field>
+		<field>
+			<a>ncModeEnseignementApId</a>
+			<b>ncModeEnseignementAp.id</b>
+		</field>
+		<field>
+			<a>ncModeEnseignementApLibelleLongFr</a>
+			<b>ncModeEnseignementAp.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncModeEnseignementApCode</a>
+			<b>ncModeEnseignementAp.code</b>
+		</field>
+
+
+	</mapping>
+
+</mappings>

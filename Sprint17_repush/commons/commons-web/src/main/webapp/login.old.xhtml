@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+<h:head>
+	<title>#{authentificationMsgs.authentification_title} - #{applicationBean.appName}</title>
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<!-- Basic Styles -->
+	<h:outputStylesheet name="css/bootstrap.min.css" />
+	<h:outputStylesheet name="css/font-awesome.min.css" />
+	<h:outputStylesheet name="css/progres-production.css" />
+</h:head>
+
+<h:body id="login" class="animated fadeInDown">
+	<!-- possible classes: minified, no-right-panel, fixed-ribbon, fixed-header, fixed-width-->
+
+	
+	<div id="main" role="main">
+
+		<!-- MAIN CONTENT -->
+		<div id="content" class="container">
+	
+				<div class="col-md-4 col-md-offset-4">
+					<div class="logo" style="padding:10px;text-align:center">																	 
+					<img
+					src="#{facesContext.externalContext.request.contextPath}/images/logo-proges-3.png"
+					alt="Progresle" />
+					</div>
+					<div class="well no-padding">
+					
+						<h:form id="loginFrm" class="smart-form client-form">
+							<header>#{authentificationMsgs.authentification_title}</header>
+							<fieldset>
+							
+								<p:messages id="messages" autoUpdate="true" closable="true" />
+								
+								<section> <label class="label">#{authentificationMsgs.authentification_user}</label>
+								<label class="input"> <i class="icon-append fa fa-user"></i>
+									<p:inputText id="j_username" 
+										autocomplete="off" required="true" value="#{loginBean.userName}"
+										label="#{authentificationMsgs.authentification_user}"
+										requiredMessage="#{authentificationMsgs.authentification_user_required}">
+										<f:validateLength minimum="2" />
+									</p:inputText> <b class="tooltip tooltip-top-right"><i
+										class="fa fa-user txt-color-teal"></i>#{authentificationMsgs.authentification_entrer_pseudo}</b></label> </section>
+
+								<section> <label class="label">#{authentificationMsgs.authentification_password}</label>
+								<label class="input"> <i class="icon-append fa fa-lock"></i>
+									<p:password id="j_password"  value="#{loginBean.password}"
+										autocomplete="off" required="true"
+										label="#{authentificationMsgs.authentification_password}"
+										requiredMessage="#{authentificationMsgs.authentification_password_required}" />
+									<b class="tooltip tooltip-top-right"><i
+										class="fa fa-lock txt-color-teal"></i> #{authentificationMsgs.authentification_entrer_passwd}</b>
+								</label>
+								<div class="note">
+									<a href="forgotpassword.html">#{authentificationMsgs.authentification_passwd_perdu}</a>
+								</div>
+								</section>
+
+								<section> <label class="checkbox"> <input
+									type="checkbox" name="remember" checked="false" /> <i> </i>#{authentificationMsgs.authentification_passwd}
+								</label> </section>
+							</fieldset>
+							<footer> <p:commandButton id="loginBtn" ajax="false" icon="fa fa-sign-in"
+								type="submit" update="@form" value="#{commonmsgs.bouton_login}"
+								action="#{loginBean.doLogin}" styleClass="btn btn-success" /> </footer>
+							
+						</h:form>
+
+					</div>
+					
+							<p style="font-size: 10px">
+			#{commonmsgs.footer_copyright} <a href="https://www.mesrs.dz/"><strong>#{commonmsgs.footer_mesrs}</strong></a>
+		</p>
+		<h:outputText style="font-size: 10px" value="#{commonmsgs.version} " />
+				</div>
+					
+		</div>
+	</div>
+
+</h:body>
+</html>

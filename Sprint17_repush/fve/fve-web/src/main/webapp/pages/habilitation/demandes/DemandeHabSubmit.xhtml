@@ -1,0 +1,118 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of" >
+	<ui:define name="centerContent">
+	<h:form id="form_demandeSubmit">
+	<p:panel id="pnl_demandeSubmit" header="#{demandeHabilitationMsgs.demande_habilitation_soumettre_title}">
+    <p:accordionPanel multiple="false" activeIndex="1">  
+    <p:tab title="#{demandeHabilitationMsgs.demande_habilitation_infos_of_title}" > 	
+		 <of:OfComponent 		ofDto="#{ofBB.ofDto}" 	ofI18nDtoFr="#{ofBB.ofDtoI18ns['fr']}"  ofI18nDtoAr="#{ofBB.ofDtoI18ns['ar']}" toEdit="false"	/> 
+     </p:tab>  
+    <p:tab title="#{demandeHabilitationMsgs.demande_habilitation_infos_demande_title}">  
+  <p:panel>
+    <p:panelGrid  columns="2" style="width:815px"
+						columnClasses="oneCol, twoCol">
+
+						<f:facet name="header">  
+        							#{demandeHabilitationMsgs.demande_habilitation_infos_demande_title}
+    						</f:facet>
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_code} * " />
+					
+						<h:inputText id="codeDemande" value="#{demandeHabBean.demandeDto.code}"   required="true" requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_code_required}"/>
+					
+						<h:outputText
+							value="#{demandeHabilitationMsgs.demande_habilitation_objet_fr} * " />
+					
+						<h:inputTextarea id="objetFr" value="#{demandeHabBean.mapDemandeI18n['fr'].objet}" required="true" requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_objet_fr_required}" style="width:400px" />
+					
+						<h:outputText
+							value="#{demandeHabilitationMsgs.demande_habilitation_objet_ar} * " />
+					
+						<h:inputTextarea id="objetAr" value="#{demandeHabBean.mapDemandeI18n['ar'].objet}" required="true" requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_objet_ar_required}" style="width:400px" />
+					
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_observations}" />
+					
+						<h:inputTextarea id="observationsDmde" value="#{demandeHabBean.mapDemandeI18n['fr'].observations}"   style="width:400px"/>
+					
+				</p:panelGrid>
+ 
+      <!-- DEMANDE - FOOTER  -->
+	    <p:panelGrid id="demandeFooterPanelID" style="margin-top:5px; width:815px" rendered="#{not empty demandeHabBean.demandeDto.dateCreation}">
+	    
+		<p:row>
+		<p:column styleClass="left" rendered="#{not empty demandeHabBean.demandeDto.dateCreation}">
+				<h:outputLabel
+					value="#{demandeHabilitationMsgs.demande_habilitation_date_creation}" />
+				<h:outputLabel value="#{demandeHabBean.demandeDto.dateCreation}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+			<p:column styleClass="right" rendered="#{not empty demandeHabBean.demandeDto.dateDemande}">
+				<h:outputLabel
+					value="#{demandeHabilitationMsgs.demande_habilitation_date_demande}" />
+				<h:outputLabel value="#{demandeHabBean.demandeDto.dateDemande}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+
+			
+		</p:row>
+
+	</p:panelGrid>
+	</p:panel>
+    </p:tab>     
+</p:accordionPanel>
+			<!-- SUBMIT DEMANDE HABILITATION - TOOLBAR BUTTONS  -->
+	
+		<p:toolbar  style="margin-top:5px"  >
+				
+					<p:toolbarGroup    align="left">
+								<p:commandButton value="#{commonmsgs.bouton_retour}" action="#{demandeHabBean.goBack}"  immediate="true" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+										
+        						</p:commandButton>  
+        			</p:toolbarGroup>
+					
+					<p:toolbarGroup  align="right">
+					           <p:separator />
+        						<p:commandButton  id="btnSaveID" value="#{commonmsgs.bouton_enregistrer}"  actionListener="#{demandeHabBean.save()}"  onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update="form_demandeSubmit">
+        						<f:param name="ofId" value="#{ofBB.ofId}" />
+        						<f:param name="demandeId" value="#{demandeHabBean.demandeId}" />
+        						<p:confirm		header="Confirmation"	 message="Voulez-vous confirmer la Sauvegarde de la demande Habilitation  ?"	icon="ui-icon-alert" />
+        						</p:commandButton>
+ 								<p:separator />
+        						<p:commandButton  id="btnSoumettreID" value="#{commonmsgs.bouton_soumettre}"  action="#{demandeHabBean.submit}"  onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+        						<f:param name="ofId" value="#{ofBB.ofId}" />
+        						<f:param name="demandeId" value="#{demandeHabBean.demandeId}" />
+        						   
+        						   <p:confirm		header="Confirmation"	 message="Voulez-vous confirmer la Soumission de la demande Habilitation  ?"	icon="ui-icon-alert" />
+        						
+        						</p:commandButton>
+					</p:toolbarGroup>
+					
+		</p:toolbar>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>	
+			</p:panel>
+		
+		 <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>

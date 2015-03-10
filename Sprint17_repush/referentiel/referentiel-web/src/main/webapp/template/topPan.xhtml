@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form id="topPanelId">
+
+		<center>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{loginBean.user.nomLatin} #{loginBean.user.prenomLatin}" />
+					</p:column>
+					<p:column>
+						<h:outputText rendered="#{etablissementPgiBean.id != null}"
+							value="#{etablissementPgiBean.refEtablissementDto.llEtablissementLatin} (#{etablissementPgiBean.refEtablissementDto.lcEtablissementLatin})" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</center>
+
+		<p:dock position="top">
+			<p:menuitem value="#{commonmsgs.accueil}"
+				icon="/images/Homebleu48.png" url="/template/centertemplate.xhtml" />
+			<c:forEach var="dockItem" items="#{menuBean.dockItems}"
+				varStatus="status">
+				<p:menuitem value="#{dockItem.infobul}" icon="#{dockItem.image}"
+					url="#{dockItem.url}" />
+			</c:forEach>
+			<!--  
+			<p:menuitem value="#{commonmsgs.FCT0001}" icon="/images/folder_user148.png"
+				url="#{menuBean.mapFctUrl['FCT0001']}"
+					rendered="#{menuBean.mapFctRendered['FCT00001']}" />
+				<p:menuitem value="#{commonmsgs.FCT00002}" icon="/images/folder_sites48.png"
+				url="#{menuBean.mapFctUrl['FCT00002']}"
+					rendered="#{menuBean.mapFctRendered['FCT00002']}" />
+				<p:menuitem value="#{commonmsgs.FCT00003}" icon="/images/folder_users48.png"
+				url="#{menuBean.mapFctUrl['FCT00003']}"
+					rendered="#{menuBean.mapFctRendered['FCT00003']}" />
+				<p:menuitem value="#{commonmsgs.FCT00005}" icon="/images/folder_docs_alt_248.png"
+				url="#{menuBean.mapFctUrl['FCT00005']}"
+					rendered="#{menuBean.mapFctRendered['FCT00005']}" />
+				<p:menuitem value="#{commonmsgs.FCT00006}" icon="/images/folder_docs_alt48.png"
+				url="#{menuBean.mapFctUrl['FCT00006']}"
+					rendered="#{menuBean.mapFctRendered['FCT00006']}" />
+				<p:menuitem value="#{commonmsgs.FCT_GST_EVN}" icon="/images/folder_target48.png"
+				url="#{menuBean.mapFctUrl['FCT_GST_EVN']}"
+					rendered="#{menuBean.mapFctRendered['FCT_GST_EVN']}" />
+				<p:menuitem value="#{commonmsgs.FCT000977}" icon="/images/folder_docs_alt48.png"
+				url="#{menuBean.mapFctUrl['FCT000977']}"
+					rendered="#{menuBean.mapFctRendered['FCT000977']}" />
+				<p:menuitem value="#{commonmsgs.FCT0000800}" icon="/images/folder_pictures_alt48.png"
+				url="#{menuBean.mapFctUrl['FCT0000800']}"
+					rendered="#{menuBean.mapFctRendered['FCT0000800']}" />
+				<p:menuitem value="#{commonmsgs.FCT0000900}" icon="/images/folder_utilities_alt48.png"
+				url="#{menuBean.mapFctUrl['FCT0000900']}"
+					rendered="#{menuBean.mapFctRendered['FCT0000900']}" />
+				<p:menuitem value="#{commonmsgs.FCT00020}" icon="/images/User_Icon_48.png"
+				url="#{menuBean.mapFctUrl['FCT00020']}"
+					rendered="#{menuBean.mapFctRendered['FCT00020']}" />
+					-->
+			<p:menuitem value="#{commonmsgs.deconnexion}"
+				icon="/images/disconnect.gif"
+				url="#{request.contextPath}/j_spring_security_logout" /><!-- http://localhost:8080/casProgres/logout-->
+			<p:menuitem value="Aide en ligne" icon="/images/folder_book48.png" onclick="javascript:window.open('#{menuBean.getHelpUrl()}',' _blank');"/>
+                 
+		</p:dock>
+	</h:form>
+</ui:composition>
+

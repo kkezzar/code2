@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus">
+
+	<pe:blockUI target="panelSearch" widgetVar="searchBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	<p:fieldset legend="#{examenMsgs.examen_search_title}" id="searchField"
+		toggleable="true" style="width:100%">
+		<p:outputPanel id="panelSearch" style="width:100%">
+			<sp:SearchPeriodeComponent beanName="#{planningSessionSaveBean}"
+				periodeListenerName="periodeChanged" editMode="true"
+				updateForm=":form_planning_session_search" />
+
+			<br />
+			<p:toolbar id="planningSearchToolBar" styleClass="toolBarMesrs"
+				style="margin:0;">
+				<p:toolbarGroup align="left">
+					<p:commandButton id="btnSearch" value="Rechercher"
+						update=":form_planning_session_search" icon="ui-icon-search"
+						process="panelSearch"
+						actionListener="#{planningSessionSaveBean.searchPlanningSessions()}"
+						onstart="PF('searchBlock').block()"
+						oncomplete="PF('searchBlock').unblock()">
+					</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton id="btnAddPlanningSession"
+						value="#{commonmsgs.bouton_nouveau}" process="panelSearch"
+						rendered="#{planningSessionSaveBean.editMode and !planningSessionSaveBean.deroulementMode}"
+						action="#{planningSessionSaveBean.addPlanning()}"
+						icon="ui-icon-plusthick" update=":form_planning_session_search"
+						onstart="PF('searchBlock').block()"
+						onsuccess="PF('searchBlock').unblock()">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+
+			<p:dataTable id="planningSessionDataTable" var="planning"
+				rendered="#{planningSessionSaveBean.showTableSearch}"
+				value="#{planningSessionSaveBean.planningSessionList}"
+				currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowKey="#{planning.id}" style="margin-top:5px;"
+				resizableColumns="true" selectionMode="single" paginator="true"
+				rows="5" paginatorPosition="bottom"
+				columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+				emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}"
+				rowIndexVar="rowIndex">
+				<p:ajax event="rowSelect"
+					listener="#{planningSessionSaveBean.onPlanningSelect}"
+					update=":form_planning_session_search"
+					process="planningSessionDataTable"
+					onstart="PF('globalWidget').block()"
+					onsuccess="PF('globalWidget').unblock()" />
+				<p:ajax event="page" onstart="PF('globalWidget').block()"
+					onsuccess="PF('globalWidget').unblock()" />
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_resultat_recherche}" />
+				</f:facet>
+
+				<p:column headerText="#{examenMsgs.examen_numero}" style="width:5%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column width="10%" sortBy="#{planning.ncTypeSessionLibelleFr}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_type_session}" />
+					</f:facet>
+					<h:outputText value="#{planning.ncTypeSessionLibelleFr}">
+
+					</h:outputText>
+				</p:column>
+				<p:column width="10%" sortBy="#{planning.intitule}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_intitule_session}" />
+					</f:facet>
+					<h:outputText value="#{planning.intitule}">
+
+					</h:outputText>
+				</p:column>
+
+				<p:column width="10%" sortBy="#{planning.anneeAcademiqueCode}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_annee_academique}" />
+					</f:facet>
+					<h:outputText value="#{planning.anneeAcademiqueCode}" />
+				</p:column>
+
+				<p:column width="33%" sortBy="#{planning.offreFormationLibelleFr}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_offre_formation}" />
+					</f:facet>
+					<h:outputText value="#{planning.offreFormationLibelleFr}" />
+				</p:column>
+
+				<p:column width="15%" sortBy="#{planning.niveauLibelleLongLt}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_niveau}" />
+					</f:facet>
+					<h:outputText value="#{planning.niveauLibelleLongLt}" />
+				</p:column>
+				<p:column width="10%" sortBy="#{planning.libellePeriode}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_periode}" />
+					</f:facet>
+					<h:outputText value="#{planning.libellePeriode}" />
+				</p:column>
+				<p:column width="10%" sortBy="#{planning.dateDebut}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{planning.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column width="10%" sortBy="#{planning.dateFin}">
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{planning.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+	</p:fieldset>
+
+</ui:composition>
+

@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchProgrammeMsgs.prgrammes_recherche_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+	<!-- RECHERCHE PROGRAMMES -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchProgramsID" 
+						  searchKeyWords="#{programmeBB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{programmeBB.searchPrograms()}"
+						  searchAdvancedMethodName="#{programmeBB.searchPrograms()}"
+						  toUpdateOnSearch=":mainForm"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  withAdvancedSearch="false"
+						  textWatermark="#{rchProgrammeMsgs.programmes_recherche_search_text_key_words}">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddProgram" 
+									value="#{rchProgrammeMsgs.programmes_recherche_button_add_processus_label}" 
+									action="#{programmeBB.prepareAddProgram}"
+									process="@this"
+									update="mainForm:programOutPutPanelDetails"
+									icon="ui-icon-plusthick"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+						</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<br />
+	<!-- LISTE CIRCUITS DE VALIDATION -->
+	<p:dataTable id="programsDataTable" var="row"
+							value="#{programmeBB.listPrograms}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{programmeBB.selectedProgram}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{programmeBB.onProgramRowSelect}" update=":mainForm:programOutPutPanelDetails"	
+				onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_code}" style="text-align:center;">
+				<h:outputText value="#{row.code}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_intitule_fr}" style="text-align:center;">
+				<h:outputText value="#{row.intituleFr}" style="color:#336699;float:left;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_date_debut}" style="text-align:center;">
+				<h:outputText value="#{row.dateDebut}" style="color:#336699;">
+				<f:convertDateTime pattern="dd-MM-yyyy" />
+				</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_date_fin}" style="text-align:center;">
+				<h:outputText value="#{row.dateFin}" style="color:#336699;">
+				<f:convertDateTime pattern="dd-MM-yyyy" />
+				</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_type}" style="text-align:center;">
+				<h:outputText value="#{row.typeProgrammeLibelle}" style="color:#336699;"/>
+				</p:column>
+				
+	</p:dataTable>
+	
+	<p:outputPanel id="programOutPutPanelDetails">
+	<p:panel header="#{programmeBB.titleDetailsProgram}" 
+					rendered="#{programmeBB.canShowProgramDetails}" style="margin-bottom:8px;">
+	 <p:tabView orientation="left" id="tvProgram">
+     <p:tab title="#{rchProgrammeMsgs.programmes_recherche_programme_detail_tabview_tab_identification}">
+   
+	<p:panelGrid  id="panelGridProgramEdit" style="width:100%;margin-bottom:8px;">
+	  <p:row>
+           <p:column colspan="4" styleClass="title">#{rchProgrammeMsgs.programmes_recherche_programme_detail_tabview_tab_identification}</p:column>
+      </p:row>
+	 <p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_type}" for="listTypesProgramsEditID"/></p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu id="listTypesProgramsEditID" 	value="#{programmeBB.currentProgram.typeProgrammeId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_type_required}">
+								<f:selectItems value="#{programmeBB.listProgramsTypes}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+	</p:row>
+	<p:row>
+						<p:column style="text-align:right;"><p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_circuit_validation}" for="listCircuitsValidationID"/></p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu id="listCircuitsValidationID" 	value="#{programmeBB.currentProgram.circuitValidationId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_validation_process_required}">
+								<f:selectItems value="#{programmeBB.listValidationProcess}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;"><p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_code}" for="txtCodeProgram"/></p:column>
+			<p:column colspan="3"><p:inputText id ="txtCodeProgram" value="#{programmeBB.currentProgram.code}" required="true" requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_code_required}"/>	</p:column>
+	</p:row>
+	
+	<p:row>
+			<p:column style="text-align:right;"><p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_intitule_fr}"  for="txtIntituleFrProgram"/></p:column>
+			<p:column colspan="3"><p:inputText id="txtIntituleFrProgram" value="#{programmeBB.currentProgram.intituleFr}" required="true" style="width:100%;"
+			requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_intitule_fr_required}"/>	</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;"><h:outputText value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_intitule_ar}" /></p:column>
+			<p:column colspan="3"><p:inputText value="#{programmeBB.currentProgram.intituleAr}"  style="width:100%;text-align:right;"/>	</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;">
+				<p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_date_debut}" for="txtBeginDateProgram"/>	
+			</p:column>
+			<p:column>
+				<p:calendar value="#{programmeBB.currentProgram.dateDebut}"  pattern="dd/MM/yyyy" required="true"	 id="txtBeginDateProgram"
+										requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_begin_date_required}"/>
+			</p:column>
+			<p:column style="text-align:right;">	<p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_datatable_list_programs_column_date_fin}" for="txtEndDateProgram" />	
+			</p:column>
+			<p:column>
+								<p:calendar value="#{programmeBB.currentProgram.dateFin}"  pattern="dd/MM/yyyy" required="true"	id="txtEndDateProgram"
+														requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_program_end_date_required}"/>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup align="left">
+	<p:commandButton id="saveProgramButtonID" 
+							action="#{programmeBB.saveProgram()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchProgrammeMsgs.programmes_recherche_button_enregistrer_program_libelle}"
+							process="@this :mainForm:tvProgram:panelGridProgramEdit" 
+							ajax="true" 
+							update=":mainForm:programsDataTable :mainForm:tvProgram :mainForm:msgProgram"
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+		</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	
+	</p:tab>
+	<p:tab title="#{rchProgrammeMsgs.programmes_recherche_programme_detail_tabview_tab_axes}" disabled="#{not programmeBB.toEditProgram}">
+	<p:outputPanel id="axesToolbarOutputpanel">
+	    <p:toolbar id="programAxesToolBar" style="margin-bottom:8px;" rendered="#{programmeBB.canAddAxe}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddAxe" 
+									action="#{programmeBB.prepareAddAxe()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":dlgAddAxeId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddAxe').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+		</p:toolbar>	
+		</p:outputPanel>
+	<p:dataTable id="axesDataTable" var="row"
+							value="#{programmeBB.listProgramAxes}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchProgrammeMsgs.programmes_recherche_datatable_list_axes_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<f:facet name="header">#{rchProgrammeMsgs.programmes_recherche_datatable_list_axes_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_axes_column_libelle}" style="text-align:center;">
+						<h:outputText value="#{row.axeNomenclatureLibelleFr}" style="color:#336699;float:left;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_axes_column_description}" style="text-align:center;">
+						<h:outputText value="#{row.description}" style="color:#336699;float:left;"/>
+				</p:column>
+				<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemoveAxe"  
+															action="#{programmeBB.removeOneAxe()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:tvProgram:axesDataTable :mainForm:msgProgram"   
+															process="@this">
+								<p:confirm		header="#{rchProgrammeMsgs.programmes_recherche_dialog_axe_confirm_title}"	
+														message="#{rchProgrammeMsgs.programmes_recherche_dialog_axe_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{programmeBB.selectedAxeId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editAxeButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{programmeBB.prepareEditOneAxe()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddAxe').show();"
+									update=":dlgAddAxeId"	>
+									<f:setPropertyActionListener target="#{programmeBB.selectedAxeId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+	</p:dataTable>
+	</p:tab>
+	<p:tab title="#{rchProgrammeMsgs.programmes_recherche_programme_detail_tabview_tab_partenaires}" disabled="#{not programmeBB.toEditProgram}">
+	
+<!-- 	<p:toolbar id="programPartnersToolBar" style="margin-bottom:8px;"> -->
+<!-- 					<p:toolbarGroup align="right"> -->
+<!-- 						<p:commandButton id="btnAddMultiplePartners"  -->
+<!-- 									action="#{structureBB.prepareAddStructurePartners}"   -->
+<!-- 									icon="ui-icon-plusthick"   -->
+<!-- 									process="@this"  -->
+<!-- 									ajax="true" -->
+<!-- 									update=":dlgFormPartenaire" -->
+<!-- 									oncomplete="PF('dlgAddPartenaire').show();"> -->
+<!-- 						</p:commandButton> -->
+<!-- 					</p:toolbarGroup> -->
+<!-- 	</p:toolbar>	 -->
+	<p:dataTable id="programPartnersDataTable" var="row"
+								value="#{programmeBB.listProgramPartners}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_empty}"
+								rowIndexVar="rowIndex"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								style="margin-bottom:8px;">
+				<f:facet name="header">#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> 
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_column_designation}">
+						<h:outputText value="#{row.partenaireStructureDesignationLatin} #{row.partenaireGroupeDesignationLatin} #{row.partenaireIndividuNomLatin} #{row.partenaireIndividuPrenomLatin}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_column_contrat_objet}">
+						<h:outputText value="#{row.contratObjet}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_column_contrat_reference}"  style="text-align:center;">
+					<h:outputText value="#{row.contratReference}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_column_contrat_date_debut_validite}" style="text-align:center;">
+					<h:outputText value="#{row.contratDateDebutValidite}" style="color:#336699;">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProgrammeMsgs.programmes_recherche_datatable_list_partners_column_contrat_date_fin_validite}" style="text-align:center;">
+					<h:outputText value="#{row.contratDateFinValidite}" style="color:#336699;">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemovePartner"  
+															action="#{programmeBB.removeOnePartner()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:tvProgram:programPartnersDataTable :mainForm:msgProgram"   
+															process="@this">
+								<p:confirm		header="#{rchProgrammeMsgs.programmes_recherche_dialog_partner_confirm_title}"	message="#{rchProgrammeMsgs.programmes_recherche_dialog_partner_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{programmeBB.selectedProgramPartnerId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+			</p:dataTable>
+	</p:tab>
+	</p:tabView>
+	<p:messages id="msgProgram" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	</p:panel>
+	</p:outputPanel>
+</h:form>			
+
+<p:dialog  widgetVar="dlgAddAxe"  
+					appendTo="@(body)" modal="true" 
+					header="#{programmeBB.titleDetailsAxeProgram}"
+ 					id="dlgAddAxeId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormAxe">
+	<p:messages id="msgAxeDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridAxes" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_add_axe_dialog_grid_axe_libelle}" for="listNcAxes"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcAxes" 	value="#{programmeBB.selectedAxe.axeNomenclatureId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchProgrammeMsgs.programmes_recherche_msg_add_axe_dialog_grid_axe_required}">
+								<f:selectItems value="#{programmeBB.listNcAxesRecherche}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;vertical-align:top;">	
+						<p:outputLabel value="#{rchProgrammeMsgs.programmes_recherche_add_axe_dialog_grid_axe_description_libelle}"  for="txtAxeDescriptionID"/>	</p:column>
+						<p:column colspan="3">
+								<p:inputTextarea id="txtAxeDescriptionID" value="#{programmeBB.selectedAxe.description}"  style="width:100%;">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddAxeDialogID"
+							 value="#{rchProgrammeMsgs.programmes_recherche_button_dialog_ajouter_axe_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddAxe').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveAxe" 
+							action="#{programmeBB.saveOneAxe()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchProgrammeMsgs.programmes_recherche_button_dialog_ajouter_axe_enregistrer_libelle}"
+							process="@this :dlgFormAxe:panelGridAxes" 
+							ajax="true" 
+							update=":mainForm:tvProgram:axesDataTable :mainForm:msgProgram :dlgFormAxe" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateAxeRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateAxeRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddAxe').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddAxe').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<pe:blockUI target="mainForm" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

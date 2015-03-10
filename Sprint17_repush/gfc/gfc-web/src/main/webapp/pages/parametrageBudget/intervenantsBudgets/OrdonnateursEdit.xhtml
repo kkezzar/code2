@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_gerer_ordonnateurs}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="Nouveau"
+							action="#{ordonnateursBean.addAction()}" update=":form_crud"></p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{ordonnateursBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{ordonnateursBean.model}" paginator="true"
+					paginatorPosition="bottom" rows="5" rowKey="#{current.id}" rowIndexVar="rowIndex" 
+					selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{ordonnateursBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}" style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.code}">
+						<h:outputText value="#{current.code}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.type_ordonnateur}">
+						<h:outputText value="#{current.type.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_nom}">
+						<h:outputText value="#{current.refIndividu.nomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intervernant_preom}">
+						<h:outputText value="#{current.refIndividu.prenomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.date_nomination}">
+						<h:outputText value="#{current.dateNomination}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.etablissement}">
+						<h:outputText
+							value="#{current.etablissement.llEtablissementLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.structure}">
+						<h:outputText value="#{current.structure.llStructureLatin}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{ordonnateursBean.crud}" id="tabview">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_ordonnateur}">
+
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.ordonnateur}" />
+									</p:column>
+
+									<p:column>
+										<p:commandButton id="btnAddIndividu"
+											styleClass="ui-button-default-o"
+											title="#{individumsgs.dialog_header_individu}"
+											icon="ui-icon-plusthick" process="@this" ajax="true"
+											immediate="true" onsuccess="PF('individuDialog').show()"></p:commandButton>
+										<p:spacer width="5px"></p:spacer>	
+										<h:outputText id="detail_individu"
+											value="#{ordonnateursBean.ordonnateurDto.refIndividu.nomLatin} #{ordonnateursBean.ordonnateurDto.refIndividu.prenomLatin}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.code}" />
+									</p:column>
+									<p:column>
+										<p:inputText value="#{ordonnateursBean.ordonnateurDto.code}"
+											required="true" styleClass="input-mini" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.type_ordonnateur}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:selectOneMenu required="true" styleClass="input-xlarge-px"
+											value="#{ordonnateursBean.ordonnateurDto.type.id}">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_type_ordonnateur}"
+												itemValue="" />
+											<f:selectItems
+												value="#{ordonnateursBean.listTypesOrdonnateurs}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.date_nomination}" />
+									</p:column>
+									<p:column>
+										<p:calendar required="true"
+											value="#{ordonnateursBean.ordonnateurDto.dateNomination}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.decision_nomination}" />
+									</p:column>
+									<p:column>
+										<p:inputText styleClass="input-xxlarge"
+											value="#{ordonnateursBean.ordonnateurDto.decisionNomination}"
+											required="true" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.etablissement}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu required="true" styleClass="input-xxlarge-px"
+											value="#{ordonnateursBean.ordonnateurDto.etablissement.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_etablissement}"
+												itemValue="" />
+											<f:selectItems value="#{ordonnateursBean.listEtablissements}" />
+											<p:ajax
+												listener="#{ordonnateursBean.handleEtabSelectOneMenuChange}"
+												event="valueChange" update="listStructures" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.structure}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="listStructures"
+											styleClass="input-xxlarge-px"
+											value="#{ordonnateursBean.ordonnateurDto.structure.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_structure}"
+												itemValue="" />
+											<f:selectItems value="#{ordonnateursBean.listStructures}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.date_fin_nomination}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:calendar
+											value="#{ordonnateursBean.ordonnateurDto.dateFinNomination}"
+											pattern="#{applicationBean.datePattern()}"
+											mindate="#{ordonnateursBean.ordonnateurDto.dateNomination}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_search" icon="ui-icon-disk"
+												styleClass="ui-button-save"
+												actionListener="#{ordonnateursBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="closingBtn" update=":form_crud :form_search"
+												disabled="#{ordonnateursBean.ordonnateurDto.id eq null}"
+												styleClass="ui-button-delete-o"
+												actionListener="#{ordonnateursBean.deleteAction()}">
+													<p:confirm header="Confirmation"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud" process="@this"
+												actionListener="#{ordonnateursBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+				</p:tabView>
+
+				<ui:include src="/pages/commons/IndividuComponent.xhtml">
+					<ui:param name="updateAjax" value=":tabview:form:detail_individu"></ui:param>
+					<ui:param name="nameOfManagedBean" value="#{ordonnateursBean}"></ui:param>
+					<ui:param name="dialogWidgetVar" value="individuDialog"></ui:param>
+				</ui:include>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

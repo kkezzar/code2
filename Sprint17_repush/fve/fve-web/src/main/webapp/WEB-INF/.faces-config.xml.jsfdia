@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeDetail.xhtml"
+  PATH="/pages/offreformation/ue/UeDetail.xhtml" SHAPE="328,48,50,25"
+  model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeSearch.xhtml"
+  PATH="/pages/offreformation/ue/UeSearch.xhtml" SHAPE="544,104,50,25"
+  model-entity="JSFProcessGroup" persistent="true">
+  <PROCESS-ITEM ID="rules:#pages#offreformation#ue#UeSearch.xhtml:0"
+   NAME="item" PATH="/pages/offreformation/ue/UeSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="ofSearch::#pages#offreformation#of#OfSearch.xhtml" NAME="output"
+    PATH="/pages/offreformation/of/OfSearch.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfSearch.xhtml"
+    TITLE="ofSearch" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ofEdit::#pages#offreformation#of#OfEdit.xhtml" NAME="output1"
+    PATH="/pages/offreformation/of/OfEdit.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfEdit.xhtml" TITLE="ofEdit" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:" SHAPE="40,112,53,42" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="ueEdit::#pages#offreformation#ue#UeEdit.xhtml" NAME="output"
+    PATH="/pages/offreformation/ue/UeEdit.xhtml"
+    TARGET="rules:#pages#offreformation#ue#UeEdit.xhtml" TITLE="ueEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ueDetail::#pages#offreformation#ue#UeDetail.xhtml"
+    NAME="output1" PATH="/pages/offreformation/ue/UeDetail.xhtml"
+    TARGET="rules:#pages#offreformation#ue#UeDetail.xhtml"
+    TITLE="ueDetail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ueSearch::#pages#offreformation#ue#UeSearch.xhtml"
+    NAME="output2" PATH="/pages/offreformation/ue/UeSearch.xhtml"
+    TARGET="rules:#pages#offreformation#ue#UeSearch.xhtml"
+    TITLE="ueSearch" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="mcEdit::#pages#offreformation#mc#McEdit.xhtml" NAME="output5"
+    PATH="/pages/offreformation/mc/McEdit.xhtml"
+    TARGET="rules:#pages#offreformation#mc#McEdit.xhtml" TITLE="mcEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="mcDetail::#pages#offreformation#mc#McDetail.xhtml"
+    NAME="output6" PATH="/pages/offreformation/mc/McDetail.xhtml"
+    TARGET="rules:#pages#offreformation#mc#McDetail.xhtml"
+    TITLE="mcDetail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="mcSearch::#pages#offreformation#mc#McSearch.xhtml"
+    NAME="output7" PATH="/pages/offreformation/mc/McSearch.xhtml"
+    TARGET="rules:#pages#offreformation#mc#McSearch.xhtml"
+    TITLE="mcSearch" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="apDetail::#pages#offreformation#ap#ApDetail.xhtml"
+    NAME="output8" PATH="/pages/offreformation/ap/ApDetail.xhtml"
+    TARGET="rules:#pages#offreformation#ap#ApDetail.xhtml"
+    TITLE="apDetail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="apEdit::#pages#offreformation#ap#ApEdit.xhtml" NAME="output9"
+    PATH="/pages/offreformation/ap/ApEdit.xhtml"
+    TARGET="rules:#pages#offreformation#ap#ApEdit.xhtml" TITLE="apEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="mcSelectPopup::#pages#offreformation#mc#McSelectPopup.xhtml"
+    NAME="output10" PATH="/pages/offreformation/mc/McSelectPopup.xhtml"
+    TARGET="rules:#pages#offreformation#mc#McSelectPopup.xhtml"
+    TITLE="mcSelectPopup" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ueSelectPopup::#pages#offreformation#ue#UeSelectPopup.xhtml"
+    NAME="output11" PATH="/pages/offreformation/ue/UeSelectPopup.xhtml"
+    TARGET="rules:#pages#offreformation#ue#UeSelectPopup.xhtml"
+    TITLE="ueSelectPopup" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeEdit.xhtml"
+  PATH="/pages/offreformation/ue/UeEdit.xhtml" SHAPE="352,160,50,25" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ap#ApDetail.xhtml"
+  PATH="/pages/offreformation/ap/ApDetail.xhtml" SHAPE="318,250,0,0"
+  model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules::1" SHAPE="40,368,53,42" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::1" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="dossierInscriptionEdit::#pages#cursus#dossierinscription#DossierInscriptionEdit.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/dossierinscription/DossierInscriptionEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossierinscription#DossierInscriptionEdit.xhtml"
+    TITLE="dossierInscriptionEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="dossierInscriptionDetail::#pages#cursus#dossierinscription#DossierInscriptionDetail.xhtml"
+    NAME="output1"
+    PATH="/pages/cursus/dossierinscription/DossierInscriptionDetail.xhtml"
+    TARGET="rules:#pages#cursus#dossierinscription#DossierInscriptionDetail.xhtml"
+    TITLE="dossierInscriptionDetail" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#mc#McDetail.xhtml"
+  PATH="/pages/offreformation/mc/McDetail.xhtml" SHAPE="304,753,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#mc#McEdit.xhtml"
+  PATH="/pages/offreformation/mc/McEdit.xhtml" SHAPE="304,497,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#mc#McSearch.xhtml"
+  PATH="/pages/offreformation/mc/McSearch.xhtml" SHAPE="304,1505,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ap#ApEdit.xhtml"
+  PATH="/pages/offreformation/ap/ApEdit.xhtml" SHAPE="304,1617,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#ue#UeSelectPopup.xhtml"
+  PATH="/pages/offreformation/ue/UeSelectPopup.xhtml"
+  SHAPE="304,1841,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#mc#McSelectPopup.xhtml"
+  PATH="/pages/offreformation/mc/McSelectPopup.xhtml"
+  SHAPE="304,1729,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#of#OfDetail.xhtml"
+  PATH="/pages/offreformation/of/OfDetail.xhtml" SHAPE="304,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabSubmitSearch.xhtml"
+  SHAPE="496,2641,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml:0"
+   NAME="item"
+   PATH="/pages/habilitation/demandes/DemandeHabSubmitSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toSubmit::#pages#habilitation#demandes#DemandeHabSubmit.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabSubmit.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabSubmit.xhtml"
+    TITLE="toSubmit" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabSubmit.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabSubmit.xhtml"
+  SHAPE="48,2977,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabSubmit.xhtml:0"
+   NAME="item"
+   PATH="/pages/habilitation/demandes/DemandeHabSubmit.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toSearch::#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabSubmitSearch.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    TITLE="toSearch" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="succesSubmit::#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    NAME="output2"
+    PATH="/pages/habilitation/demandes/DemandeHabSubmitSearch.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    TITLE="succesSubmit" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabValiderSearch.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabValiderSearch.xhtml"
+  SHAPE="32,3489,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabValiderSearch.xhtml:0"
+   NAME="item"
+   PATH="/pages/habilitation/demandes/DemandeHabValiderSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toValidate::#pages#habilitation#demandes#DemandeHabValider.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabValider.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabValider.xhtml"
+    TITLE="toValidate" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabGererSearch.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabGererSearch.xhtml"
+  SHAPE="32,3601,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabGererSearch.xhtml:0"
+   NAME="item"
+   PATH="/pages/habilitation/demandes/DemandeHabGererSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toView::#pages#habilitation#demandes#DemandeHabView.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabView.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabView.xhtml"
+    TITLE="toView" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabView.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabView.xhtml"
+  SHAPE="240,3617,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabView.xhtml:0"
+   NAME="item" PATH="/pages/habilitation/demandes/DemandeHabView.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="goBack::#pages#habilitation#demandes#DemandeHabGererSearch.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabGererSearch.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabGererSearch.xhtml"
+    TITLE="goBack" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeHabValider.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeHabValider.xhtml"
+  SHAPE="240,3505,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeHabValider.xhtml:0"
+   NAME="item"
+   PATH="/pages/habilitation/demandes/DemandeHabValider.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="goBack::#pages#habilitation#demandes#DemandeHabValiderSearch.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabValiderSearch.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabValiderSearch.xhtml"
+    TITLE="goBack" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::2" SHAPE="32,4193,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::2" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="*::#pages#offreformation#of#OfSearch.xhtml"
+    NAME="output" PATH="/pages/offreformation/of/OfSearch.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfSearch.xhtml" TITLE="*" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ofEdit::#pages#offreformation#of#OfEdit.xhtml" NAME="output1"
+    PATH="/pages/offreformation/of/OfEdit.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfEdit.xhtml" TITLE="ofEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ofDetail::#pages#offreformation#of#OfDetail.xhtml"
+    NAME="output2" PATH="/pages/offreformation/of/OfDetail.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfDetail.xhtml"
+    TITLE="ofDetail" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="ofSearch::#pages#offreformation#of#OfSearch.xhtml"
+    NAME="output3" PATH="/pages/offreformation/of/OfSearch.xhtml"
+    TARGET="rules:#pages#offreformation#of#OfSearch.xhtml"
+    TITLE="ofSearch" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#of#OfEdit.xhtml"
+  PATH="/pages/offreformation/of/OfEdit.xhtml" SHAPE="304,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#evaluation#EvalDmdSubmit.xhtml"
+  PATH="/pages/evaluation/EvalDmdSubmit.xhtml" SHAPE="240,4209,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#offreformation#of#OfSearch.xhtml"
+  PATH="/pages/offreformation/of/OfSearch.xhtml" SHAPE="752,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#habilitation#demandes#DemandeOfSearch.xhtml"
+  PATH="/pages/habilitation/demandes/DemandeOfSearch.xhtml"
+  SHAPE="48,3489,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#habilitation#demandes#DemandeOfSearch.xhtml:0"
+   NAME="item" PATH="/pages/habilitation/demandes/DemandeOfSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="goBack::#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    NAME="output"
+    PATH="/pages/habilitation/demandes/DemandeHabSubmitSearch.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabSubmitSearch.xhtml"
+    TITLE="goBack" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toSubmit::#pages#habilitation#demandes#DemandeHabSubmit.xhtml"
+    NAME="output1"
+    PATH="/pages/habilitation/demandes/DemandeHabSubmit.xhtml"
+    TARGET="rules:#pages#habilitation#demandes#DemandeHabSubmit.xhtml"
+    TITLE="toSubmit" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#evaluation#EvalDmdValidate.xhtml"
+  PATH="/pages/evaluation/EvalDmdValidate.xhtml" SHAPE="256,4801,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#ouverture#OuvertureOfSelect.xhtml"
+  PATH="/pages/ouverture/OuvertureOfSelect.xhtml" SHAPE="64,3489,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#ouverture#OuvertureOfSelect.xhtml:0"
+   NAME="item" PATH="/pages/ouverture/OuvertureOfSelect.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toOpenOf::#pages#ouverture#OuvertureOfEdit.xhtml" NAME="output"
+    PATH="/pages/ouverture/OuvertureOfEdit.xhtml"
+    TARGET="rules:#pages#ouverture#OuvertureOfEdit.xhtml"
+    TITLE="toOpenOf" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#ouverture#OuvertureOfEdit.xhtml"
+  PATH="/pages/ouverture/OuvertureOfEdit.xhtml" SHAPE="240,5361,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#ouverture#OuvertureOfEdit.xhtml:0"
+   NAME="item" PATH="/pages/ouverture/OuvertureOfEdit.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toSelectOf::#pages#ouverture#OuvertureOfSelect.xhtml"
+    NAME="output" PATH="/pages/ouverture/OuvertureOfSelect.xhtml"
+    TARGET="rules:#pages#ouverture#OuvertureOfSelect.xhtml"
+    TITLE="toSelectOf" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toSearch::#pages#ouverture#OuvertureOfSearch.xhtml"
+    NAME="output1" PATH="/pages/ouverture/OuvertureOfSearch.xhtml"
+    TARGET="rules:#pages#ouverture#OuvertureOfSearch.xhtml"
+    TITLE="toSearch" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#ouverture#OuvertureOfSearch.xhtml"
+  PATH="/pages/ouverture/OuvertureOfSearch.xhtml" SHAPE="32,5793,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#ouverture#OuvertureOfSearch.xhtml:0"
+   NAME="item" PATH="/pages/ouverture/OuvertureOfSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toUpdate::#pages#ouverture#OuvertureOfEdit.xhtml" NAME="output"
+    PATH="/pages/ouverture/OuvertureOfEdit.xhtml"
+    TARGET="rules:#pages#ouverture#OuvertureOfEdit.xhtml"
+    TITLE="toUpdate" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#evaluation#EvalDmdConsult.xhtml"
+  PATH="/pages/evaluation/EvalDmdConsult.xhtml" SHAPE="272,4833,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossier#DossierEtudiantSearch.xhtml"
+  PATH="/pages/cursus/dossier/DossierEtudiantSearch.xhtml"
+  SHAPE="32,6529,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#cursus#dossier#DossierEtudiantSearch.xhtml:0"
+   NAME="item" PATH="/pages/cursus/dossier/DossierEtudiantSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toEditDossierEtudiant::#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    NAME="output" PATH="/pages/cursus/dossier/DossierEtudiantEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    TITLE="toEditDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toDetailDossierEtudiant::#pages#cursus#dossier#DossierEtudiantDetail.xhtml"
+    NAME="output1"
+    PATH="/pages/cursus/dossier/DossierEtudiantDetail.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantDetail.xhtml"
+    TITLE="toDetailDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+  <PROCESS-ITEM
+   ID="rules:#pages#cursus#dossier#DossierEtudiantSearch.xhtml:1"
+   NAME="item1" PATH="/pages/cursus/dossier/DossierEtudiantSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toParcoursIndividualise::#pages#cursus#dossierinscription#parcours#ParcoursEdit.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/dossierinscription/parcours/ParcoursEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossierinscription#parcours#ParcoursEdit.xhtml"
+    TITLE="toParcoursIndividualise" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+  PATH="/pages/cursus/dossier/DossierEtudiantEdit.xhtml"
+  SHAPE="256,6433,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#cursus#dossier#DossierEtudiantEdit.xhtml:0"
+   NAME="item" PATH="/pages/cursus/dossier/DossierEtudiantEdit.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toParcoursIndividualise::#pages#cursus#dossierinscription#parcours#ParcoursEdit.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/dossierinscription/parcours/ParcoursEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossierinscription#parcours#ParcoursEdit.xhtml"
+    TITLE="toParcoursIndividualise" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossier#DossierEtudiantDetail.xhtml"
+  PATH="/pages/cursus/dossier/DossierEtudiantDetail.xhtml"
+  SHAPE="256,7105,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules::3" SHAPE="32,4785,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::3" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="evalDmdSubmit::#pages#evaluation#EvalDmdSubmit.xhtml"
+    NAME="output" PATH="/pages/evaluation/EvalDmdSubmit.xhtml"
+    TARGET="rules:#pages#evaluation#EvalDmdSubmit.xhtml"
+    TITLE="evalDmdSubmit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="evalDmdValidate::#pages#evaluation#EvalDmdValidate.xhtml"
+    NAME="output1" PATH="/pages/evaluation/EvalDmdValidate.xhtml"
+    TARGET="rules:#pages#evaluation#EvalDmdValidate.xhtml"
+    TITLE="evalDmdValidate" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="evalDmdConsult::#pages#evaluation#EvalDmdConsult.xhtml"
+    NAME="output2" PATH="/pages/evaluation/EvalDmdConsult.xhtml"
+    TARGET="rules:#pages#evaluation#EvalDmdConsult.xhtml"
+    TITLE="evalDmdConsult" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossierinscription#DossierInscriptionDetail.xhtml"
+  PATH="/pages/cursus/dossierinscription/DossierInscriptionDetail.xhtml"
+  SHAPE="256,689,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossier#DossierEtudiantAddNewBac.xhtml"
+  PATH="/pages/cursus/dossier/DossierEtudiantAddNewBac.xhtml"
+  SHAPE="32,7041,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#cursus#dossier#DossierEtudiantAddNewBac.xhtml:0"
+   NAME="item"
+   PATH="/pages/cursus/dossier/DossierEtudiantAddNewBac.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toNewDossierEtudiant::#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    NAME="output" PATH="/pages/cursus/dossier/DossierEtudiantEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    TITLE="toNewDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#groupepedagogique#GroupePedagogiqueSearch.xhtml"
+  PATH="/pages/cursus/groupepedagogique/GroupePedagogiqueSearch.xhtml"
+  SHAPE="32,9121,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM
+   ID="rules:#pages#cursus#groupepedagogique#GroupePedagogiqueSearch.xhtml:0"
+   NAME="item"
+   PATH="/pages/cursus/groupepedagogique/GroupePedagogiqueSearch.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toEdit::#pages#cursus#groupepedagogique#GroupePedagogiqueEdit.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/groupepedagogique/GroupePedagogiqueEdit.xhtml"
+    TARGET="rules:#pages#cursus#groupepedagogique#GroupePedagogiqueEdit.xhtml"
+    TITLE="toEdit" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toDetail::#pages#cursus#groupepedagogique#GroupePedagogiqueEdit.xhtml"
+    NAME="output1"
+    PATH="/pages/cursus/groupepedagogique/GroupePedagogiqueEdit.xhtml"
+    TARGET="rules:#pages#cursus#groupepedagogique#GroupePedagogiqueEdit.xhtml"
+    TITLE="toDetail" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#groupepedagogique#GroupePedagogiqueEdit.xhtml"
+  PATH="/pages/cursus/groupepedagogique/GroupePedagogiqueEdit.xhtml"
+  SHAPE="256,9137,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="32,9937,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#pages#index.xhtml" NAME="output"
+    PATH="/pages/index.xhtml" TARGET="rules:#pages#index.xhtml"
+    TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::4" SHAPE="48,7265,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::4" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toSearchDossierEtudiant::#pages#cursus#dossier#DossierEtudiantSearch.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/dossier/DossierEtudiantSearch.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantSearch.xhtml"
+    TITLE="toSearchDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toEditDossierEtudiant::#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    NAME="output1"
+    PATH="/pages/cursus/dossier/DossierEtudiantEdit.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantEdit.xhtml"
+    TITLE="toEditDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="toDetailDossierEtudiant::#pages#cursus#dossier#DossierEtudiantDetail.xhtml"
+    NAME="output2"
+    PATH="/pages/cursus/dossier/DossierEtudiantDetail.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantDetail.xhtml"
+    TITLE="toDetailDossierEtudiant" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::5" SHAPE="48,7009,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::5" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="test::#pages#cursus#dossier#DossierEtudiantSearch.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/dossier/DossierEtudiantSearch.xhtml"
+    TARGET="rules:#pages#cursus#dossier#DossierEtudiantSearch.xhtml"
+    TITLE="test" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::6" SHAPE="32,10721,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::6" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toNotificationSearch::#pages#notification#NotificationAdminSearch.xhtml"
+    NAME="output"
+    PATH="/pages/notification/NotificationAdminSearch.xhtml"
+    TARGET="rules:#pages#notification#NotificationAdminSearch.xhtml"
+    TITLE="toNotificationSearch" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::7" SHAPE="32,10833,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::7" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toDetailDemandePreinscription::#pages#cursus#preinscription#PreinscriptionDetail.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/preinscription/PreinscriptionDetail.xhtml"
+    TARGET="rules:#pages#cursus#preinscription#PreinscriptionDetail.xhtml"
+    TITLE="toDetailDemandePreinscription" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::8" SHAPE="32,10945,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::8" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toEditDemandePreinscription::#pages#cursus#preinscription#PreinscriptionEdit.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/preinscription/PreinscriptionEdit.xhtml"
+    TARGET="rules:#pages#cursus#preinscription#PreinscriptionEdit.xhtml"
+    TITLE="toEditDemandePreinscription" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules::9" SHAPE="32,11057,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::9" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="toSearchPreinscription::#pages#cursus#preinscription#PreinscriptionSearch.xhtml"
+    NAME="output"
+    PATH="/pages/cursus/preinscription/PreinscriptionSearch.xhtml"
+    TARGET="rules:#pages#cursus#preinscription#PreinscriptionSearch.xhtml"
+    TITLE="toSearchPreinscription" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#pages#notification#NotificationAdminSearch.xhtml"
+  PATH="/pages/notification/NotificationAdminSearch.xhtml"
+  SHAPE="240,10737,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#preinscription#PreinscriptionEdit.xhtml"
+  PATH="/pages/cursus/preinscription/PreinscriptionEdit.xhtml"
+  SHAPE="240,10961,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#preinscription#PreinscriptionDetail.xhtml"
+  PATH="/pages/cursus/preinscription/PreinscriptionDetail.xhtml"
+  SHAPE="240,10849,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#preinscription#PreinscriptionSearch.xhtml"
+  PATH="/pages/cursus/preinscription/PreinscriptionSearch.xhtml"
+  SHAPE="240,11073,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#index.xhtml" PATH="/pages/index.xhtml"
+  SHAPE="240,10625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#pages#cursus#dossierinscription#DossierInscriptionEdit.xhtml"
+  PATH="/pages/cursus/dossierinscription/DossierInscriptionEdit.xhtml"
+  SHAPE="256,689,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

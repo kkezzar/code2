@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping>
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefGroupeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefGroupe
+		</class-b>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+		<field>
+			<a>idfEtablissement</a>
+			<b>refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>idTypeGroupe</a>
+			<b>typeGroupe.id</b>
+		</field>
+		<field>
+			<a>llTypeGroupe</a>
+			<b>typeGroupe.libelleLongFr</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefGroupeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+</mappings>

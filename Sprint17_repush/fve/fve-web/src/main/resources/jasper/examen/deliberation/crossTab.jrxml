@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="crossTab" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="0" bottomMargin="0" uuid="b3840972-967e-4b0b-80a6-2a20a941ea28">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BILAN_PERIODE_LIBELLE" class="java.lang.String"/>
+	<field name="column" class="java.lang.String"/>
+	<field name="row" class="java.lang.String"/>
+	<field name="value" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="55" splitType="Stretch">
+			<crosstab>
+				<reportElement uuid="c7de2a98-e3d5-43f0-8673-44507585047d" positionType="Float" x="30" y="0" width="555" height="55"/>
+				<crosstabDataset isDataPreSorted="true"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<rectangle>
+							<reportElement uuid="c8209b2a-7cd5-4de1-a4dc-8977fe9bb383" style="Crosstab Data Text" mode="Opaque" x="0" y="0" width="200" height="12" backcolor="#F0F8FF"/>
+							<graphicElement>
+								<pen lineWidth="0.5"/>
+							</graphicElement>
+						</rectangle>
+						<staticText>
+							<reportElement uuid="d085b986-16b2-4dea-b63d-75f29aba44ac" style="Crosstab Data Text" x="2" y="0" width="198" height="11"/>
+							<textElement textAlignment="Left">
+								<font size="8"/>
+							</textElement>
+							<text><![CDATA[Unités d'enseignement et les matières contitutives]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="row" width="200">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{row}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="4993b0cc-4af2-4987-ae28-eeec8773c813" style="Crosstab Data Text" x="2" y="0" width="198" height="11"/>
+								<textElement textAlignment="Left">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{row}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="column" height="12" headerPosition="Stretch">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{column}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement uuid="5bc3d4d0-d6ad-4ecf-b424-7c7e4baafc4f" style="Crosstab Data Text" x="0" y="0" width="53" height="12"/>
+								<textElement>
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{column}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="valueMeasure" class="java.lang.String" calculation="Count">
+					<measureExpression><![CDATA[$F{value}]]></measureExpression>
+				</measure>
+				<crosstabCell width="55" height="12">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="72086732-cc67-4b83-818f-3da0c3ed108d" style="Crosstab Data Text" x="0" y="0" width="53" height="11"/>
+							<textElement>
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="row">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="c5835e96-9fd7-4f43-b7a9-abcb3564c5e0" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="column">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="534fde74-5f75-483a-9b58-f8e40cca8754" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="row" columnTotalGroup="column">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement uuid="adf40fc3-4299-49ba-801e-6e70277a2bfe" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<rectangle>
+				<reportElement uuid="acd1ae8e-df24-43cd-8948-70fdf7cbfb50" stretchType="RelativeToBandHeight" x="0" y="0" width="30" height="55" backcolor="#BFE1FF"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="14b93221-ee5f-44da-97bb-51951ebeebfa" positionType="Float" stretchType="RelativeToBandHeight" x="8" y="0" width="12" height="52"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="Left">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BILAN_PERIODE_LIBELLE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

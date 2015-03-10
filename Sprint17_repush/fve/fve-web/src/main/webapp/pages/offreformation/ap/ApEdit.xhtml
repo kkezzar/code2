@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:fieldset legend="#{ofmsgs.offre_formation_ap_field_title}">
+		<p:panelGrid style="width:100%" id="apInfo">
+			<p:row>
+				<p:column>
+					<p:outputLabel value="#{ofmsgs.offre_formation_ap_edit_code}"
+						for="apCode" />
+				</p:column>
+				<p:column>
+					<p:inputText value="#{apBB.ap.code}" style="width:100%" id="apCode"
+						required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_ap_code_required}" />
+				</p:column>
+				<p:column colspan="4" />
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel value="#{ofmsgs.offre_formation_ap_edit_type_ap}"
+						for="apType" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu value="#{apBB.ap.ncTypeApId}" filter="true"
+						filterMatchMode="contains"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_ap_type_required}"
+						style="width:100%" required="true" id="apType">
+						<f:selectItem
+							itemLabel="#{ofmsgs.offre_formation_ap_edit_combobox_select_type_ap}"
+							itemValue="" />
+						<f:selectItems value="#{apBB.typeAPList}" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:outputLabel for="mode"
+						value="#{ofmsgs.offre_formation_ap_edit_mode_enseignement}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						value="#{apBB.ap.ncModeEnseignementApId}"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_ap_mode_required}"
+						id="mode" required="true" style="width:100%">
+						<f:selectItem
+							itemLabel="#{ofmsgs.offre_formation_ap_edit_combobox_select_mode_enseignement}"
+							itemValue="" />
+						<f:selectItems value="#{apBB.modeEnseignementList}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel value="#{ofmsgs.offre_formation_ap_edit_seuil}"
+						for="seuil" />
+				</p:column>
+				<p:column>
+				<pe:inputNumber id="seuil" minValue="0.00" decimalSeparator="."
+					value="#{apBB.ap.seuil}" style="width:100%">
+				</pe:inputNumber>
+				</p:column>
+				<p:column>
+					<p:outputLabel
+						value="#{ofmsgs.offre_formation_ap_edit_volume_horaire}" for="vh" />
+				</p:column>
+				<p:column>
+				<pe:inputNumber id="vh" minValue="1.00" decimalSeparator="." required="true"
+				requiredMessage="#{ofmsgs.offre_formation_ap_volume_horaire_required}"
+					value="#{apBB.ap.volumeHoraire}" style="width:100%">
+				</pe:inputNumber>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:outputLabel
+						value="#{ofmsgs.offre_formation_ap_edit_groupes_prevus}" for="gp" />
+				</p:column>
+				<p:column>
+				<pe:inputNumber id="gp" minValue="0.00" decimalSeparator="."
+					value="#{apBB.ap.groupesPrevus}" style="width:100%">
+				</pe:inputNumber>
+				</p:column>
+				<p:column colspan="4" />
+				<!-- 				<p:column> -->
+				<!-- 					<h:outputLabel -->
+				<!-- 						value="#{ofmsgs.offre_formation_ap_edit_pourcentage_evaluation}" /> -->
+				<!-- 				</p:column> -->
+				<!-- 				<p:column> -->
+				<!-- 					<h:inputText value="#{apBB.ap.pourcentage}" size="2" -->
+				<!-- 						style="width:100%" /> -->
+				<!-- 				</p:column> -->
+
+			</p:row>
+		</p:panelGrid>
+	</p:fieldset>
+
+</ui:composition>
+

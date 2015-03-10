@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefStructureDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefStructure
+		</class-b>
+		<field>
+			<a>typeId</a>
+			<b>nomenclatureByTypeStructure.id</b>
+		</field>
+		<field>
+			<a>typeLibelleLongFr</a>
+			<b>nomenclatureByTypeStructure.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeLibelleLongAr</a>
+			<b>nomenclatureByTypeStructure.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeLibelleCourtFr</a>
+			<b>nomenclatureByTypeStructure.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeLibelleCourtAr</a>
+			<b>nomenclatureByTypeStructure.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeCode</a>
+			<b>nomenclatureByTypeStructure.code</b>
+		</field>
+
+		<field>
+			<a>formeJuridiqueId</a>
+			<b>nomenclatureByNcformejuridiqueid.id</b>
+		</field>
+		<field>
+			<a>formeJuridiqueLibelleLongFr</a>
+			<b>nomenclatureByNcformejuridiqueid.libelleLongFr</b>
+		</field>
+		<field>
+			<a>formeJuridiqueLibelleLongAr</a>
+			<b>nomenclatureByNcformejuridiqueid.libelleLongAr</b>
+		</field>
+		<field>
+			<a>formeJuridiqueLibelleCourtFr</a>
+			<b>nomenclatureByNcformejuridiqueid.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>formeJuridiqueLibelleCourtAr</a>
+			<b>nomenclatureByNcformejuridiqueid.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>formeJuridiqueCode</a>
+			<b>nomenclatureByNcformejuridiqueid.code</b>
+		</field>
+
+		<field>
+			<a>statusId</a>
+			<b>nomenclatureByNcstatutstructureid.id</b>
+		</field>
+		<field>
+			<a>statusLibelleLongFr</a>
+			<b>nomenclatureByNcstatutstructureid.libelleLongFr</b>
+		</field>
+		<field>
+			<a>statusLibelleLongAr</a>
+			<b>nomenclatureByNcstatutstructureid.libelleLongAr</b>
+		</field>
+		<field>
+			<a>statusLibelleCourtFr</a>
+			<b>nomenclatureByNcstatutstructureid.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>statusLibelleCourtAr</a>
+			<b>nomenclatureByNcstatutstructureid.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>statusCode</a>
+			<b>nomenclatureByNcstatutstructureid.code</b>
+		</field>
+
+
+		<field>
+			<a>idMotherStructure</a>
+			<b>refStructure.id</b>
+		</field>
+
+		<field>
+			<a>lcArMotherStructure</a>
+			<b>refStructure.lcStructureArabe</b>
+		</field>
+
+		<field>
+			<a>lcLtMotherStructure</a>
+			<b>refStructure.lcStructureLatin</b>
+		</field>
+
+		<field>
+			<a>llArMotherStructure</a>
+			<b>refStructure.llStructureArabe</b>
+		</field>
+
+		<field>
+			<a>llLtMotherStructure</a>
+			<b>refStructure.llStructureLatin</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefStructureDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+</mappings>

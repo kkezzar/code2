@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{preparationBudgetFonctionnementMsgs.page_title_enregistrer_demandes_budgetaires}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:selectOneMenu id="listFichesBesoinsFilter"
+							styleClass="input-xx-large"
+							value="#{preparationBudgetCentralBean.ficheBesoinsSearchDto.id}"
+							filter="true" filterMatchMode="contains">
+							<f:selectItem
+								itemLabel="#{preparationBudgetFonctionnementMsgs.select_fiche_besoins}"
+								itemValue="" onstart="PF('page').block()"
+								onsuccess="PF('page').unblock()" />
+							<f:selectItems
+								value="#{preparationBudgetCentralBean.listFichesBesoins}" />
+							<p:ajax event="change" update=":form_search"
+								onstart="PF('page').block()" onsuccess="PF('page').unblock()"  process="@this"  />
+						</p:selectOneMenu>
+						<p:spacer width="10px"></p:spacer>
+						<p:selectOneMenu id="listStructuresFilter"
+							styleClass="input-xx-large "
+							value="#{preparationBudgetCentralBean.structureSearchDto.id}"
+							filter="true" filterMatchMode="contains">  
+							<f:selectItem
+								itemLabel="#{parametrageBudgetMsg.select_structure}"
+								itemValue="" />
+							<f:selectItems
+								value="#{preparationBudgetCentralBean.listStructures}" />
+							<p:ajax event="change" update=":form_search" onstart="PF('page').block()" onsuccess="PF('page').unblock()" process="@this" />
+						</p:selectOneMenu>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton value="Nouveau" update=":form_crud"
+							actionListener="#{preparationBudgetCentralBean.addAction()}"></p:commandButton>
+
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{preparationBudgetCentralBean.modelDetailsFicheBesoins}"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="20"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{preparationBudgetCentralBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.structure}">
+						<h:outputText value="#{current.structure.llStructureLatin}" />
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+						<h:outputText
+							value="#{current.chapitre.code} - #{current.chapitre.intituleFr}" />
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.article}">
+						<h:outputText
+							value="#{current.article.code} - #{current.article.intituleFr}" />
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.montant}">
+						<h:outputText value="#{current.montant}" />
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{preparationBudgetCentralBean.crud}"
+					id="tabview">
+
+					<p:tab title="Détail de la demande budgétaire">
+
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column style="width:20%">
+										<p:outputLabel
+											value="#{preparationBudgetFonctionnementMsgs.fiche_besoins}"
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="listFichesBesoins"
+											styleClass="input-xx-large-px"
+											value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.ficheBesoins.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{preparationBudgetFonctionnementMsgs.select_fiche_besoins}"
+												itemValue="" onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()" />
+											<f:selectItems
+												value="#{preparationBudgetCentralBean.listFichesBesoins}" />
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.structure}"
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="listStructures"
+											styleClass="input-full-width"
+											value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.structure.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_structure}"
+												itemValue="" />
+											<f:selectItems
+												value="#{preparationBudgetCentralBean.listStructures}" />
+											<p:ajax process="@this"
+												listener="#{preparationBudgetCentralBean.handleStrSelectOneMenuChange}"
+												event="change"></p:ajax>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.chapitre}"
+											styleClass="required" />
+									</p:column>
+
+									<p:column>
+										<p:selectOneMenu styleClass="input-full-width"
+											value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.chapitre.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_chapitre}"
+												itemValue="" />
+											<f:selectItems
+												value="#{preparationBudgetCentralBean.listChapitres}" />
+											<p:ajax
+												listener="#{preparationBudgetCentralBean.handleChapitresSelectOneMenuChange}"
+												event="change" update="listArticles" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column>
+										<p:outputLabel value="#{parametrageBudgetMsg.article}" />
+									</p:column>
+
+									<p:column>
+										<p:selectOneMenu styleClass="input-full-width"
+											id="listArticles"
+											value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.article.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_article}"
+												itemValue="" />
+											<f:selectItems
+												value="#{preparationBudgetCentralBean.listArticles}" />
+										</p:selectOneMenu>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<p:outputLabel value="#{gfcMsgs.montant}"
+											styleClass="required" />
+									</p:column>
+
+									<p:column colspan="3">
+										<p:inputMask required="true" mask="9?9999" maxlength="5"
+											placeHolder=" " styleClass="input-medium"
+											value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.montant}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud :form_search"
+												styleClass="ui-button-save"
+												actionListener="#{preparationBudgetCentralBean.saveDetailsFicheBesoinsAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<!-- 											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												id="validateBtn" update=":form_crud :form_search"
+												styleClass="ui-button-validate-o"
+												actionListener="#{preparationBudgetCentralBean.validateAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton> -->
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search" process="@this"
+												actionListener="#{preparationBudgetCentralBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}"
+						disabled="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.id eq null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="DetailsFicheBesoins" scope="request" />
+							<c:set var="identifiant"
+								value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DetailsFicheBesoins" />
+							<ui:param name="identifiant"
+								value="#{preparationBudgetCentralBean.detailsFicheBesoinsDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

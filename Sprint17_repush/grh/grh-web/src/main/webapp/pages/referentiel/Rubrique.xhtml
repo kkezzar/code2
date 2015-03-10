@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{rubriquemsgs.rubrique_message_rubriques}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<!-- toolbar -->
+
+				<p:dataTable id="resultSearchDataTable" filteredValue="#{rubriqueBean.listRubriques}" 
+					value="#{rubriqueBean.rubriqueList}" var="rubriques" widgetVar="rubTable" 
+					rowKey="#{rubriques.id}"
+						style="margin-top:5px;width:100%"  resizableColumns="true"
+					 paginator="true" rows="5"
+					paginatorPosition="bottom" selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+				    rowIndexVar="rowIndex">
+
+					<p:ajax event="rowSelect" 
+						listener="#{rubriqueBean.onRowSelect}" 
+						onstart="PF('page').block()" 
+						onsuccess="PF('page').unblock()"
+						update=":form_view_rubrique" />
+				    	
+
+					<f:facet name="header">			
+						<p:toolbar>
+					<p:toolbarGroup align="left">
+
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+							action="#{rubriqueBean.addNewRubrique}"
+							styleClass="ui-buttpn-bleu" 
+							update=":form_view_rubrique"
+							style="text-align:left" 
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()">
+
+						</p:commandButton>
+
+					</p:toolbarGroup>
+	
+		
+			<p:toolbarGroup align="right">
+            <p:outputPanel >
+						<h:outputText value="Recherche : " />
+						<p:inputText id="globalFilter" onkeyup="PF('rubTable').filter()"
+							 placeholder="saisir un mot clé" />
+
+			</p:outputPanel>
+
+			</p:toolbarGroup>
+	
+				</p:toolbar>
+	
+						<h:outputText value="#{rubriquemsgs.rubrique_rubrique_list}" />
+					</f:facet>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_numero}" sortBy="#{rubriques.identifiant}" width="100">
+						<h:outputText value="#{rubriques.identifiant}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_rubrique}" sortBy="#{rubriques.nomenclatureByRubriqueDto.libelleLongFr}"  width="350">
+						<h:outputText value="#{rubriques.nomenclatureByRubriqueDto.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_type_rubrique}"  sortBy="#{rubriques.nomenclatureByTypeRubriqueDto.libelleLongFr}" >
+						<h:outputText value="#{rubriques.nomenclatureByTypeRubriqueDto.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_commune}"  style="text-align:center">
+						<h:outputText value="#{rubriques.commune?'Oui':'Non'}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_periode}" sortBy="#{rubriques.nomenclatureByPeriodiciteDto.libelleLongFr}" >
+						<h:outputText value="#{rubriques.nomenclatureByPeriodiciteDto.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					
+					<p:column headerText="#{rubriquemsgs.rubrique_taux}" style="text-align:center">
+						<h:outputText value="#{rubriques.taux} %">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{rubriquemsgs.rubrique_montant}" style="text-align:center">
+						<h:outputText value="#{rubriques.montant}">
+						</h:outputText>
+					</p:column>
+
+
+					<p:column headerText="#{rubriquemsgs.rubrique_sss}" style="text-align:center">
+						<h:outputText value="#{rubriques.soumise_securite?'Oui':'Non'}">
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+
+			<h:form id="form_view_rubrique">
+				<p:panel rendered="#{rubriqueBean.showView}" toggleable="true" >
+					<center>
+						<p:fieldset id="detail" legend="#{rubriquemsgs.add_rubrique}" 	toggleable="true">
+
+							<p:panelGrid columns="4" styleClass="ui-panelgrid-full-width" id="panelTauxOuRubrique">
+
+								<p:outputLabel value="#{rubriquemsgs.rubrique_numero} *"></p:outputLabel>
+								<p:inputText id="numRubrique" styleClass="labelValue"
+									value="#{rubriqueBean.rubriqueDto.identifiant}"
+									label="#{rubriquemsgs.rubrique_rubrique_decret_num}"
+									required="true" requiredMessage="#{rubriquemsgs.rubrique_rubrique_required}">
+								</p:inputText>
+								<p:outputLabel value="#{rubriquemsgs.rubrique_decret} "></p:outputLabel>
+								<p:inputText id="decret" styleClass="labelValue"
+									value="#{rubriqueBean.rubriqueDto.decret}"
+									label="#{rubriquemsgs.rubrique_rubrique_decret_num}" >
+								</p:inputText>
+
+							<p:outputLabel value="#{rubriquemsgs.rubrique_rubrique} *"></p:outputLabel>
+								<p:selectOneMenu id="rubriqueNc2" 
+									label="#{rubriquemsgs.rubrique_rubrique}"
+									value="#{rubriqueBean.rubriqueDto.nomenclatureByRubriqueDto.id}"
+									styleClass="labelValue"	
+									required="true"
+									requiredMessage="#{rubriquemsgs.rubrique_rubrique_required}">
+									
+									<f:selectItem
+										itemLabel="--rubrique--" itemValue="" />
+									<f:selectItems 	value="#{rubriqueBean.listeNcRubriques}"/>
+									
+								</p:selectOneMenu>
+
+								<p:outputLabel value="#{rubriquemsgs.rubrique_type_rubrique} *"></p:outputLabel>
+								<p:selectOneMenu id="typerubrique" 
+									label="#{rubriquemsgs.rubrique_type_rubrique}"
+									value="#{rubriqueBean.rubriqueDto.nomenclatureByTypeRubriqueDto.id}"
+									styleClass="labelValue"	
+									required="true"
+									requiredMessage="#{rubriquemsgs.rubrique_type_rubrique_required}">
+									<f:selectItem itemLabel="--type rubrique--"/>
+									<f:selectItems value="#{rubriqueBean.listeNcTypeRubriques }" />
+								</p:selectOneMenu>
+								
+								
+									<p:outputLabel value="#{rubriquemsgs.rubrique_periodicite} *"></p:outputLabel>
+								<p:selectOneMenu id="periode" 
+									label="#{rubriquemsgs.rubrique_periodicite}"
+									value="#{rubriqueBean.rubriqueDto.nomenclatureByPeriodiciteDto.id}"
+									styleClass="labelValue"	
+									required="true"
+									requiredMessage="#{rubriquemsgs.rubrique_periodicite_required}">
+									<f:selectItem itemLabel="--périodicité--"/>
+									<f:selectItems value="#{rubriqueBean.listeNcPeriodecite }" />
+								</p:selectOneMenu>
+							
+								
+							<p:outputLabel ></p:outputLabel>
+								<p:inputText disabled="true"/>
+							
+								<p:outputLabel value="#{rubriquemsgs.rubrique_commune} "></p:outputLabel>
+								<p:selectBooleanCheckbox value="#{rubriqueBean.rubriqueDto.commune}" >	
+								</p:selectBooleanCheckbox>
+								
+									<p:outputLabel value="#{rubriquemsgs.rubrique_sss} "></p:outputLabel>
+								<p:selectBooleanCheckbox value="#{rubriqueBean.rubriqueDto.soumise_securite}" >	
+								</p:selectBooleanCheckbox>
+								
+								
+	
+<!-- 							<p:selectOneRadio value="#{rubriqueBean.rubriqueDto.tauxOuMantant}" valueChangeListener="#{rubriqueBean.entityChanged}">   -->
+<!--                                 <f:selectItem itemLabel="Taux" itemValue="Taux" />   -->
+<!--                                 <f:selectItem itemLabel="Montant" itemValue="Montant" />   -->
+<!--                                 	<p:ajax update="panelTauxOuRubrique" /> -->
+<!--                             </p:selectOneRadio> -->
+                            
+                           <p:outputLabel value="#{rubriquemsgs.rubrique_taux_mantant} "></p:outputLabel>
+                             <p:selectBooleanCheckbox value="#{rubriqueBean.rubriqueDto.tauxOuMantant}"  valueChangeListener="#{rubriqueBean.entityChanged}">
+						<p:ajax update="panelTauxOuRubrique" />
+					    </p:selectBooleanCheckbox>
+						
+							
+								<p:outputLabel value="#{rubriquemsgs.rubrique_taux} %" rendered="#{rubriqueBean.rubriqueDto.tauxOuMantant==true}"></p:outputLabel>
+													
+								<p:inputText id="tauxRubrique" styleClass="labelValue" rendered="#{rubriqueBean.rubriqueDto.tauxOuMantant==true}"
+									value="#{rubriqueBean.rubriqueDto.taux}" 
+									label="#{rubriquemsgs.rubrique_taux}">
+								</p:inputText>
+								
+								<p:outputLabel value="#{rubriquemsgs.rubrique_montant}" rendered="#{rubriqueBean.rubriqueDto.tauxOuMantant==false}"></p:outputLabel>
+								<p:inputText id="montantRubrique" styleClass="labelValue" rendered="#{rubriqueBean.rubriqueDto.tauxOuMantant==false}"
+									value="#{rubriqueBean.rubriqueDto.montant}"
+									label="#{rubriquemsgs.rubrique_montant}">
+								</p:inputText>
+
+							</p:panelGrid>
+							
+			
+				
+				
+							<br/>
+						<p:dataTable id="filiereTable"
+							value="#{rubriqueBean.filieresListe}"
+							var="row"
+							rowIndexVar="rowIndex" 
+							emptyMessage="Auncune filière trouvée" >
+							<f:facet name="header">Les filières professionnelles concernées</f:facet>
+							
+							<p:column headerText="N°" style="width:20px;text-align:center;"> 	
+								<h:outputText value="#{rowIndex+1}" styleClass="center"/>
+							</p:column>
+														
+							<p:column headerText="Filière" style="width:250px;"> 	
+								
+								<p:selectOneMenu id="selectFiliere" 
+									value="#{row.nomenclatureByFiliereDto.id}"
+									required="true"
+									requiredMessage="La filière est obligatoirere"
+									
+									style="width:70%;">
+									<f:selectItem itemLabel="--Filiere--"/>
+									<f:selectItems value="#{rubriqueBean.listeNcFiliere}" />
+								</p:selectOneMenu>
+								
+							</p:column>
+							
+							<p:column headerText="Taux" style="width:70px;text-align:center;"> 	
+	               				<p:inputText value="#{row.tauxservi}" styleClass="center" />
+							</p:column>
+							
+							<p:column headerText="Montant" style="width:170px;text-align:center;"> 	
+	               				<p:inputText value="#{row.montant}" label="Montant" styleClass="center" />
+							</p:column>
+
+							<p:column style="width:80px;"  >	
+								    <p:commandButton id="btnRemove"  
+									action="#{rubriqueBean.removeFiliere()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="filiereTable"   
+									process="@this"
+									immediate="true">
+									<p:confirm header="Confirmation" message="#{commonmsgs.msg_delete_confirmation}" 	icon="ui-icon-alert" />
+									<f:setPropertyActionListener target="#{rubriqueBean.selectedFiliereIndex}" value="#{rowIndex}" />		 
+							       </p:commandButton>
+							</p:column>
+						
+						
+						</p:dataTable>
+							<p:column>
+																
+						<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddFiliere" styleClass="ui-button-bleu" title="ajouter filière" icon="ui-icon-plusthick"  
+										
+										process="@this filiereTable" 
+										ajax="true"
+										immediate="true" 
+										update="filiereTable @this"
+										action="#{rubriqueBean.addFiliere()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+								</p:column>
+								
+							</p:fieldset>
+					</center>
+				<p:toolbar id="rubriqueInfoToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+						id="saveBtn" icon="ui-icon-disk" update=":form_search"
+						actionListener="#{rubriqueBean.onSave()}">
+
+						<p:confirm header="Confirmation" message="#{commonmsgs.msg_save}" 	icon="ui-icon-alert" />
+					</p:commandButton>
+						<span class="ui-separator"> <span
+								class="ui-icon ui-icon-grip-dotted-vertical" />
+							</span>
+				  <p:commandButton id="btnRemoveRub"   value="#{commonmsgs.bouton_supprimer}"
+									actionListener="#{rubriqueBean.removeRubrique()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update=":form_search"   
+									process="@this"
+									immediate="true">
+									 <p:confirm header="Confirmation" message="#{commonmsgs.msg_delete_confirmation}" 	icon="ui-icon-alert" />
+				<f:setPropertyActionListener target="#{rubriqueBean.selectedFiliereIndex}" value="#{rowIndex}" />	
+										
+				  </p:commandButton>
+				</p:toolbarGroup>
+
+		     	</p:toolbar>
+
+				</p:panel>
+
+			</h:form>
+
+
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

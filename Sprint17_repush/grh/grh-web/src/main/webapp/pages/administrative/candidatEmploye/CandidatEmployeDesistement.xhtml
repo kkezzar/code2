@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{candidatEmployemsgs.pn_desistement_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/besoinRecrutement/BesoinRecrutementSearch.xhtml" >
+				<ui:param name="renderedNouveau"  value="false"></ui:param>
+				<ui:param name="nameMBean"  value="#{candidatEmployeDesistementMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty candidatEmployeDesistementMBean.besoinRecrutementDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{candidatEmployemsgs.pn_desistement_title}" >
+					<h:form id="form_candidat_employe_desistement">
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<ui:include
+				src="/pages/administrative/besoinRecrutement/BesoinRecrutementDetail.xhtml" >
+				
+				<ui:param name="besoinRecrutementDtoParam"  value="#{candidatEmployeDesistementMBean.besoinRecrutementDto}"></ui:param>
+				</ui:include>
+							
+							
+
+							<p:panelGrid id="postesPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column styleClass="title" colspan="4">
+										<h:outputText
+											value="#{candidatEmployemsgs.desistement_detail_title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable var="candidat"
+											value="#{candidatEmployeDesistementMBean.listCandidatEmployeDtos}"
+											id="candidatsTable" widgetVar="candidatsTable"
+											rowKey="#{candidat.id}" style="margin-top:5px; "
+											resizableColumns="true" paginator="true" rows="5"
+											paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex" selectionMode="single"
+											emptyMessage="#{candidatEmployemsgs.datable_list_candidat_no_result}">
+											<p:ajax event="rowSelect"
+												listener="#{candidatEmployeDesistementMBean.onCandidatSelect}"
+												process="@this" update=":pnl_desistement"
+												oncomplete="PF('desistementCandidatDialog').show()" />
+
+											<f:facet name="header">
+
+											</f:facet>
+											<p:column headerText="#{besoinRecrutementmsgs.numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{individumsgs.individu_nom_latin}"
+												sortBy="#{candidat.refIndividuDto.nomLatin}"
+												style="width:15%">
+												<h:outputText value="#{candidat.refIndividuDto.nomLatin}"
+													style="width:100%">
+												</h:outputText>
+
+											</p:column>
+											<p:column headerText="#{individumsgs.individu_prenom_latin}"
+												sortBy="#{candidat.refIndividuDto.prenomLatin}"
+												style="width:15%">
+												<h:outputText value="#{candidat.refIndividuDto.prenomLatin}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_depot_dossier}"
+												sortBy="#{candidat.dateDepot}" style="width:15%">
+												<h:outputText value="#{candidat.dateDepot}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+
+											</p:column>
+											<p:column headerText="#{candidatEmployemsgs.poste_demande}"
+												sortBy="#{candidat.detailRecrutementDto.reference}"
+												style="width:15%">
+												<h:outputText
+													value="#{candidat.detailRecrutementDto.reference}"
+													style="width:100%"></h:outputText>
+
+											</p:column>
+
+											<p:column headerText="#{candidatEmployemsgs.admis}"
+												sortBy="#{candidat.admis}" style="width:8%">
+												<h:outputText value="#{candidat.admis?'Oui':'Non'}"
+													style="width:100%"></h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_decision}"
+												sortBy="#{candidat.dateDecesion}" style="width:15%">
+												<h:outputText value="#{candidat.dateDecesion}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_convocation}"
+												sortBy="#{candidat.dateConvocationRec}" style="width:15%">
+												<h:outputText value="#{candidat.dateConvocationRec}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{candidatEmployemsgs.desistement}"
+												sortBy="#{candidat.desistement}" style="width:8%">
+												<h:outputText value="#{candidat.desistement?'Oui':'Non'}"
+													style="width:100%"></h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_desistement}"
+												sortBy="#{candidat.dateDesistement}" style="width:15%">
+												<h:outputText value="#{candidat.dateDesistement}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+
+								</p:row>
+
+
+							</p:panelGrid>
+							<p:toolbar id="DecisionToolBar" styleClass="toolBarMesrs">
+								<p:toolbarGroup>
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										styleClass="ui-button-save" id="saveCandidatsBtn"
+										icon="ui-icon-disk" update=":tabView:form_candidat_employe_desistement"
+										actionListener="#{candidatEmployeDesistementMBean.onSave}">
+
+										<p:confirm header="Confirmation"
+											message="#{besoinRecrutementmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+                       <p:spacer width="10px"></p:spacer>
+					<p:commandButton value="#{commonmsgs.bouton_envoyer}" disabled="#{ empty candidatEmployeDesistementMBean.besoinRecrutementDto}"
+						id="sendsaveCandidatsBtn" icon="ui-icon-extlink" update=":pnl_Gerer"
+						actionListener="#{candidatEmployeDesistementMBean.onSend}"  >
+
+						<p:confirm header="Confirmation"
+							message="#{besoinRecrutementmsgs.save_confirm_msg}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+								</p:toolbarGroup>
+
+
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.bouton_retour}"
+										immediate="true" process="@this" id="backBtn"
+										icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+										actionListener="#{candidatEmployeDesistementMBean.init()}">
+
+
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+</p:tab>
+	<p:tab title="#{commonmsgs.tab_historique}" disabled="#{candidatEmployeDesistementMBean.besoinRecrutementDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{candidatEmployeDesistementMBean.besoinRecrutementHistory}"
+															idParamName="id"
+															idParamValue="#{candidatEmployeDesistementMBean.besoinRecrutementDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+					<p:dialog header="#{candidatEmployemsgs.pn_desistement_title}"  appendTo="@(body)"
+						position="center" id="desistementCandidatDialog"
+						widgetVar="desistementCandidatDialog" modal="true" 
+						 resizable="false" >
+						<p:outputPanel id="pnl_desistement" style="width:800px">
+							<h:form id="form_decision_candidat">
+								<p:panelGrid columns="1" cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<ui:include
+				src="/pages/common/IndividuMinDetailComponent.xhtml" >
+				<ui:param name="title"  value="Candidat"></ui:param>
+				<ui:param name="refIndividuDtoParam"  value="#{candidatEmployeDesistementMBean.candidatEmployeDto.refIndividuDto}"></ui:param>
+				</ui:include>
+									<p:panelGrid id="desistementPnlGrid"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+
+												<h:outputText styleClass="value" value="Sélection" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.retenu}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.retenu?'Oui':'Non' }" />
+
+											</p:column>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_selection}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.dateSelection}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_convocation}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.dateConvocation}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.classement}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.classement}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="Décision" />
+											</p:column>
+										</p:row>
+										<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{candidatEmployemsgs.poste_recrutement}" />
+									</p:column>
+
+									<p:column>
+                                     <h:outputText value="#{candidatEmployeDesistementMBean.candidatEmployeDto.detailRecrutementDto.reference}" styleClass="value"/>
+									</p:column>								
+								</p:row>
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.admis}" />
+										</p:column>
+										<p:column style="width:25%">
+											<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.admis?'Oui':'Non' }" />
+										</p:column>
+                                         <p:column>
+										<h:outputLabel value="#{candidatEmployemsgs.date_decision}"  />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.dateDecesion}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{candidatEmployemsgs.date_convocation}" />
+									</p:column>
+
+									<p:column >
+                                    	<h:outputText styleClass="value"
+													value="#{candidatEmployeDesistementMBean.candidatEmployeDto.dateConvocationRec}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+
+									<p:column >
+										<h:outputLabel 
+											value="#{candidatEmployemsgs.reference_decision} " styleClass="required" />
+									</p:column>
+									<p:column >
+                                    <h:outputText styleClass="value" value="#{candidatEmployeDesistementMBean.candidatEmployeDto.referenceDecision}"  ></h:outputText>
+									</p:column>
+								</p:row>
+
+								
+									<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="#{candidatEmployemsgs.desistement}" />
+											</p:column>
+										</p:row>
+										
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.desistement} ? " styleClass="required" />
+										</p:column>
+										<p:column style="width:25%">
+											<p:selectBooleanCheckbox id="estDesiste" 
+								label="#{candidatEmployemsgs.desistement}"
+								value="#{candidatEmployeDesistementMBean.candidatEmployeDto.desistement}"
+								>
+								<p:ajax update="desistementPnlGrid"></p:ajax>
+							</p:selectBooleanCheckbox>
+										</p:column>
+                                         <p:column>
+										<h:outputLabel value="#{candidatEmployemsgs.date_desistement} " styleClass="required"  />
+									</p:column>
+									<p:column>
+										<p:calendar id="date_desistement" navigator="true" required="true" requiredMessage="#{candidatEmployemsgs.date_desistement_required}" 
+							value="#{candidatEmployeDesistementMBean.candidatEmployeDto.dateDesistement}"></p:calendar>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{candidatEmployemsgs.motif} " />
+									</p:column>
+
+									<p:column colspan="3">
+                                    <p:inputText value="#{candidatEmployeDesistementMBean.candidatEmployeDto.motifDesistement}" styleClass="input-large" ></p:inputText>
+									</p:column>
+
+									
+								</p:row>	
+										
+										
+									</p:panelGrid>
+									<p:toolbar id="CandidatsToolBar" styleClass="toolBarMesrs">
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												styleClass="ui-button-save" 
+												id="saveSelectionCandidatBtn" icon="ui-icon-disk"
+												update=":tabView:form_candidat_employe_desistement"
+												action="#{candidatEmployeDesistementMBean.onSaveDesistement()}" onstart="PF('page').block()" onsuccess="PF('page').unblock()" oncomplete="if (!args.validationFailed) {desistementCandidatDialog.hide()}">
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+
+
+										<p:toolbarGroup align="right">
+
+										</p:toolbarGroup>
+									</p:toolbar>
+								</p:panelGrid>
+
+							</h:form>
+						</p:outputPanel>
+					</p:dialog>
+
+
+
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,149 @@
+
+	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+	<h:form id="form_AttestationPrint">
+	<p:panel id="pnl_AttestationPrint" header="Impression des attestations d'inscription et des cartes bibliotheques">
+	<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>
+	 <p:outputPanel styleClass="resultContentStyle" >
+	<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left" >	
+					 <h:panelGrid columns="3" styleClass="noBorder1">						
+	        		<h:outputText value="#{printMsgs.print_anne_univeristaire}: " />	
+	        		
+	<p:selectOneMenu id="selectAnnee" style="width:150px"
+								value="#{printBean.bacYear}" 
+								label="#{printMsgs.print_anne_univeristaire}">
+					     <f:selectItem 
+									itemLabel="#{printMsgs.print_select_annee_academique}"
+									itemValue="" />							
+								<f:selectItems value="#{printBean 
+								.listeAnneeAcademiques}"  />
+							</p:selectOneMenu>
+							
+								<p:commandButton value="#{commonmsgs.bouton_rechercher}" style="width:100px"
+									id="btnSearch" title="#{commonmsgs.bouton_rechercher}"
+									 icon="ui-icon-search"  
+									 actionListener="#{printBean.init()}"							
+									onstart="PF('blockUIWidget').block()"
+						            oncomplete="PF('blockUIWidget').unblock()" 
+						            update="@(.resultContentStyle)">
+								</p:commandButton>
+				</h:panelGrid>			
+   	</p:toolbarGroup>
+   	<p:toolbarGroup align="right">
+   	<p:separator rendered="#{not empty printBean.dossierBachelierResultSearch}"/>
+   	<p:commandButton rendered="#{not empty printBean.dossierBachelierResultSearch}" value="#{printMsgs.print_bouton_imprimer_attestatations}" actionListener="#{printBean.viewAttestationPDF()}" ajax="true"
+						           >
+						            <f:param value="#{printBean.bacYear}" name="bacYear"></f:param>
+						            </p:commandButton>
+						            	<p:separator rendered="#{not empty printBean.dossierBachelierResultSearch}"/>
+   	<p:commandButton rendered="#{not empty printBean.dossierBachelierResultSearch}" value="#{printMsgs.print_bouton_imprimer_cartes}" actionListener="#{printBean.viewAttestationPDF()}" ajax="true" 
+						            >
+						            <f:param value="#{printBean.bacYear}" name="bacYear"></f:param>
+						            </p:commandButton>
+   	</p:toolbarGroup>
+   	</p:toolbar>						
+ 
+						            
+	<p:dataTable id="ResultSearchDataTable" var="dossierBachelier"
+						resizableColumns="false"
+						value="#{printBean.dossierBachelierResultSearch}"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.warn_info_aucun_result}"
+						rows="10"
+						
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+						style="margin:8px">
+						<f:facet name="header">#{printMsgs.print_datable_list_dossier_title}</f:facet>
+						 <p:column
+							headerText="#{printMsgs.print_matricule}"
+						>
+							<h:outputText value="#{dossierBachelier.matricule}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+                          <p:column
+							headerText="#{printMsgs.print_nom}"
+						>
+							<h:outputText value="#{dossierBachelier.nomFr}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column> 
+ <p:column
+							headerText="#{printMsgs.print_prenom}"
+						>
+							<h:outputText value="#{dossierBachelier.prenomFr}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{printMsgs.print_nom_ar}"
+						>
+							<h:outputText value="#{dossierBachelier.nomAr}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{printMsgs.print_prenom_ar}"
+						>
+							<h:outputText value="#{dossierBachelier.prenomAr}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{printMsgs.print_date_naissance}"
+						>
+							<h:outputText value="#{dossierBachelier.dateNaissance}"
+								styleClass="labelValue">
+								<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{printMsgs.print_lieu_naissance}"
+						>
+							<h:outputText value="#{dossierBachelier.libelleVilleNaissance}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="Imprimer"
+						>
+							 	<p:commandButton  value="Attestation d'inscription" actionListener="#{printBean.viewAttestationPDF()}" ajax="false" onstart="PF('blockUIWidget').block()"
+						            oncomplete="PF('blockUIWidget').unblock()" >
+						            <f:param value="#{printBean.bacYear}" name="bacYear"></f:param>
+						            </p:commandButton>
+						
+						
+							 	<p:commandButton value="Carte Bibliotheque " actionListener="#{printBean.viewAttestationPDF()}" ajax="false" onstart="PF('blockUIWidget').block()"
+						            oncomplete="PF('blockUIWidget').unblock()" >
+						            <f:param value="#{printBean.bacYear}" name="bacYear"></f:param>
+						            </p:commandButton>
+						</p:column>
+					</p:dataTable>					            
+					
+</p:outputPanel>						
+			</p:panel>
+			 <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

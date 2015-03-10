@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		Gérer les articles du budget
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) {event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="Nouveau"
+							action="#{articleBean.addAction()}" update=":form_crud"></p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+							<h:outputLabel for="keyWordsID" value="#{commonmsgs.search_label_mots_cles}" style="font-size:11px" /> 	
+						<p:separator />
+							<p:inputText id="keyWordsID" value="#{articleBean.searchKeyWord}"   
+										style="width:40%"	 label="#{commonmsgs.search_label_mots_cles}" />
+						<p:watermark for="keyWordsID" value="#{referentielMsgs.gfc_referentiel_recherche}" />  
+						<p:separator />
+						<p:separator />
+							<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"  		
+							actionListener="#{articleBean.searchAction()}"    
+							onstart="PF('page').block()" 
+							oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{articleBean.modelArticle}" paginator="true"
+					paginatorPosition="bottom" emptyMessage="" rows="5" 
+					rowKey="#{current.id}" selectionMode="single" rowIndexVar="rowIndex"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{articleBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+					<f:facet name="header">
+						<h:outputText value="#{referentielMsgs.gfc_referentiel_gerer_article}" />
+					</f:facet>
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_numero}">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_code}">
+						<h:outputText value="#{current.code}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_label}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_label_ar}">
+						<h:outputText value="#{current.intituleAr}">
+						</h:outputText>
+					</p:column>
+					
+						<p:column headerText="#{referentielMsgs.gfc_referentiel_chapitre_parent}">
+						<h:outputText value="#{current.chapitre.intituleFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_description}">
+						<h:outputText value="#{current.description}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{articleBean.crud}">
+
+					<p:tab title="#{referentielMsgs.gfc_referentiel_gerer_article}">
+
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_code}" styleClass="required" />
+									</p:column>
+									<p:column colspan="">
+										<p:inputText 
+											value="#{articleBean.articleDto.code}" required="true"   styleClass="input-large" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_label}" styleClass="required" />
+									</p:column>
+									<p:column colspan="">
+										<p:inputText 
+											value="#{articleBean.articleDto.intituleFr}" required="true"   styleClass="input-large"  />
+									</p:column>
+									
+								</p:row>
+	
+								<p:row>	
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_label_ar}" styleClass="required" />
+									</p:column>
+									<p:column colspan="">
+										<p:inputText 
+											value="#{articleBean.articleDto.intituleAr}" required="true"   styleClass="input-large"  />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_chapitre_parent}"  styleClass="required" />
+									</p:column>
+										<p:column>
+										<p:selectOneMenu value="#{articleBean.articleDto.chapitre.id}"  required="true">
+											<f:selectItem
+												itemLabel="#{referentielMsgs.gfc_referentiel_select_chapitre}"
+												itemValue="" />
+											<f:selectItems
+												value="#{articleBean.listChapitres}" />
+										</p:selectOneMenu>
+									</p:column>
+									
+							
+									
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_label_fr_court}"  />
+									</p:column>
+									<p:column colspan="">
+										<p:inputText 
+											value="#{articleBean.articleDto.intituleFrCourt}"  styleClass="input-large" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_label_ar_court}" />
+									</p:column>
+									<p:column colspan="">
+										<p:inputText 
+											value="#{articleBean.articleDto.intituleArCourt}"   styleClass="input-large"  />
+									</p:column>
+									
+								</p:row>
+
+								<p:row>
+									<p:column  style="vertical-align:top" >
+										<h:outputText value="#{referentielMsgs.gfc_referentiel_description}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea rows="3" styleClass="input-large"
+											value="#{articleBean.articleDto.description}"  />
+									</p:column>
+									<p:column></p:column>
+									<p:column></p:column>
+								</p:row>
+								
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud :form_search" icon="ui-icon-disk"
+												styleClass="ui-button-save"
+												actionListener="#{articleBean.saveAction()}">
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+											
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="deleteBtn" update=":form_crud :form_search"
+												actionListener="#{articleBean.deleteAction()}">
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												actionListener="#{articleBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

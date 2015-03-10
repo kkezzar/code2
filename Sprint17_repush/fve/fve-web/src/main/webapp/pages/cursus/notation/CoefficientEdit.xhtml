@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{examenMsgs.examen_panel_gestion_coefficient_examen_title}
+	</ui:define>
+	<ui:define name="centerContent">
+		<pe:blockUI target="paramForm" widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" closable="true"
+			showSummary="false" life="5000" />
+		<h:form id="paramForm">
+			<p:outputPanel id="panelSearch" style="width:100%">
+				<sp:SearchPeriodeComponent beanName="#{coefficientBean}"
+					periodeListenerName="periodeChanged" editMode="true"
+					updateForm=":paramForm" />
+				<br />
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton rendered="#{sessionDroitBean.readAllow}"
+							value="#{commonmsgs.bouton_rechercher}" update="paramForm"
+							style="text-align:left" process="panelSearch"
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{coefficientBean.findCoefficient()}"
+							icon="ui-icon-search">
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton rendered="#{sessionDroitBean.createAllow}"
+							value="#{commonmsgs.bouton_nouveau}" update="paramForm"
+							style="text-align:left" process="panelSearch"
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{coefficientBean.addCoefficient()}"
+							icon="ui-icon-plusthick">
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+			</p:outputPanel>
+			<br />
+			<p:outputLabel id="coeffTable"
+				rendered="#{coefficientBean.showTable}">
+				<p:dataTable id="coefDataTable" var="current"
+					value="#{coefficientBean.coefficientExamenDtos}"
+					currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowKey="#{current.id}" style="margin-top:5px;"
+					resizableColumns="true" paginator="true" rows="15"
+					paginatorPosition="bottom" emptyMessage="#{examenMsgs.examen_coefficient_matiere_empty}"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex">
+					<p:ajax event="page" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()" />
+					<f:facet name="header">
+						<h:outputText value="#{examenMsgs.examen_resultat_recherche}" />
+					</f:facet>
+
+					<p:column headerText="#{examenMsgs.examen_numero}" style="width:5%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column width="50%" sortBy="#{current.mcLibelleFr}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_matiere}" />
+						</f:facet>
+						<h:outputText value="#{current.mcLibelleFr}">
+
+						</h:outputText>
+					</p:column>
+					<p:column width="15%"
+						sortBy="#{current.coefficientControleContinu}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{examenMsgs.examen_coefficient_controle_continu}" />
+						</f:facet>
+						<pe:inputNumber id="controleContinu" required="true"
+							style="width:95%;border: none; color: black;text-align:left"
+							requiredMessage="#{examenMsgs.examen_coefficient_controle_continu_required}"
+							minValue="0.00" maxValue="1.00" decimalSeparator="."
+							value="#{current.coefficientControleContinu}">
+						</pe:inputNumber>
+					</p:column>
+
+					<p:column width="15%"
+						sortBy="#{current.coefficientControleIntermediaire}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{examenMsgs.examen_coefficient_controle_intermediaire}" />
+						</f:facet>
+						<pe:inputNumber id="controleContinuInter" required="true"
+							style="width:95%;border: none; color: black;text-align:left"
+							requiredMessage="#{examenMsgs.examen_coefficient_controle_intermediaire_required}"
+							minValue="0.00" maxValue="1.00" decimalSeparator="."
+							value="#{current.coefficientControleIntermediaire}">
+						</pe:inputNumber>
+					</p:column>
+
+					<p:column width="15%" sortBy="#{current.coefficientExamen}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_coefficient_examen}" />
+						</f:facet>
+						<pe:inputNumber id="examen" required="true"
+							style="width:95%;border: none; color: black;text-align:left"
+							requiredMessage="#{examenMsgs.examen_coefficient_examen_required}"
+							minValue="0.00" maxValue="1.00" decimalSeparator="."
+							value="#{current.coefficientExamen}">
+						</pe:inputNumber>
+
+					</p:column>
+
+
+				</p:dataTable>
+				<br />
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+							update="paramForm" style="text-align:left" process="coeffTable"
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{coefficientBean.saveCoefficientMc()}"
+							icon="ui-icon-disk">
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+			</p:outputLabel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
+

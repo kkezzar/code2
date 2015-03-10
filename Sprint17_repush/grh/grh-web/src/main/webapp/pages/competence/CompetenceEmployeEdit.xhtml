@@ -1,0 +1,435 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{competenceMsgs.enrg_competence_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_employe_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+		
+						<p:inputText placeholder="#{dossierEmployemsgs.dossier_employe_nom}"
+							value="#{employeCompetenceMBean.searchDto.refIndividuDto.nomLatin}"/>
+						<p:spacer width="5px"></p:spacer>
+		
+						<p:inputText
+							placeholder="#{dossierEmployemsgs.dossier_employe_prenom}"
+							value="#{employeCompetenceMBean.searchDto.refIndividuDto.prenomLatin}"/>
+						<p:separator />
+		
+						<p:inputText
+							placeholder="#{dossierEmployemsgs.dossier_employe_matricule_employe}"
+							value="#{employeCompetenceMBean.searchDto.matricule}"/>
+						<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu" process="form_employe_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{employeCompetenceMBean.onSearch()}"/>
+		
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+				<p:dataTable var="employe" lazy="true"
+					value="#{employeCompetenceMBean.dtos}"
+					widgetVar="employesTable" rowKey="#{employe.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_employe_no_result}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{employeCompetenceMBean.onRowSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 update=":pnl_detail" />
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:column headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="matricule" 
+						headerText="#{finActiviteMgs.label_matricule}">
+						<h:outputText value="#{employe.matricule}"/>
+					</p:column>
+					<p:column sortBy="refIndividu.nomLatin" 
+						headerText="#{finActiviteMgs.label_employe}">
+						<h:outputText value="#{employe.refIndividuDto.prenomLatin} #{employe.refIndividuDto.nomLatin}" />
+					</p:column>
+					<p:column sortBy="refIndividu.dateNaissance" 
+						headerText="#{dossierEmployemsgs.dossier_employe_date_naissance}">
+						<h:outputText value="#{employe.refIndividuDto.dateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column  sortBy="nomenclatureByPosition.libelleLongFr"
+						headerText="#{grhmsgs.label_etat_civil}">
+						<h:outputText value="#{employe.refIndividuDto.situationFamilialeLibelleLongFr}"/>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<br></br>
+			
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty employeCompetenceMBean.dto}">
+					<h:form id="form_employe_competence_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="employeCompetence" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{competenceMsgs.label_employe_competence}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe} " />
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											immediate="true">
+											<h:outputText
+												value="#{employeCompetenceMBean.dto.refIndividuDto.nomLatin} #{employeCompetenceMBean.dto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{competenceMsgs.label_niveau_qualification}" />
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:selectOneMenu id="selectNiveauQualification"
+											value="#{employeCompetenceMBean.dto.niveauQualificationDto.id}">
+											<f:selectItem itemLabel="#{competenceMsgs.label_niveau_qualification}"/>
+											<f:selectItems value="#{employeCompetenceMBean.niveauQualificationList}"/>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{competenceMsgs.label_niveau_competence}" />
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:selectOneMenu id="selectNiveauCompetence"
+											value="#{employeCompetenceMBean.dto.niveauCompetenceDto.id}">
+											<f:selectItem itemLabel="#{competenceMsgs.label_niveau_competence}"/>
+											<f:selectItems value="#{employeCompetenceMBean.niveauCompetenceList}"/>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+						</p:panelGrid>
+						<p:toolbar id="employeCompetenceToolBar" styleClass="toolBarMesrs" rendered="#{employeCompetenceMBean.dto != null}">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+									id="saveDemandeDemssionBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+									actionListener="#{employeCompetenceMBean.onSave}"
+									rendered="#{employeCompetenceMBean.dto != null}"/>
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:panelGrid id="connaissancesGrid" columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border connaissancesGrid">
+							<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column styleClass="title">
+										<h:outputText value="#{competenceMsgs.label_employe_connaissance}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable id="connaissanceDataTable"
+											value="#{employeCompetenceMBean.dto.connaissanceDtos}"
+											var="connaissance"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{competenceMsgs.msg_employe_connaissance_empty}">
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+													<p:commandButton id="btnAddConnaissance" styleClass="ui-button-bleu" 
+															title="ajouter connaisssance" icon="ui-icon-plusthick"  
+															process="@this" 
+															ajax="true"
+															immediate="true" 
+															update="@(.connaissanceDialog)"
+															action="#{employeCompetenceMBean.onNewConnaissance()}"
+															oncomplete="PF('connaissanceDialog').show()">
+													</p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{competenceMsgs.label_type_connaissance}" >
+												<h:outputText value="#{connaissance.typeDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{competenceMsgs.label_connaissance}" >
+												<h:outputText value="#{connaissance.description}" />
+											</p:column>
+											<p:column style="width:80px;">	
+											    <p:commandButton id="btnRemoveConnaisance"  
+													action="#{employeCompetenceMBean.onRemoveConnaissance()}" 
+													icon="ui-icon-trash" 
+													ajax="true" 
+													update="connaissanceDataTable"   
+													process="@this"
+													immediate="true">
+													<p:confirm header="Confirmation" 
+														message="#{competenceMsgs.msg_delete_connaissance_confirmation}" 	
+														icon="ui-icon-alert" />
+													<f:setPropertyActionListener 
+														target="#{employeCompetenceMBean.connaissanceSelectIndex}" value="#{rowIndex}" />		 
+										       </p:commandButton>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:panelGrid id="habileteGrid" columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border habileteGrid">
+							<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column styleClass="title">
+										<h:outputText value="#{competenceMsgs.label_employe_habliete}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable id="habileteDataTable"
+											value="#{employeCompetenceMBean.dto.habileteDtos}"
+											var="habilete"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{competenceMsgs.msg_employe_habilete_empty}">
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+													<p:commandButton id="btnAddHabilete" styleClass="ui-button-bleu" 
+															title="ajouter habilete" icon="ui-icon-plusthick"  
+															process="@this" 
+															ajax="true"
+															immediate="true" 
+															update="@(.habileteDialog)"
+															action="#{employeCompetenceMBean.onNewHabilete()}"
+															oncomplete="PF('habileteDialog').show()">
+													</p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{competenceMsgs.label_type_habilete}" >
+												<h:outputText value="#{habilete.typeDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{competenceMsgs.label_niveau_habilete}" >
+												<h:outputText value="#{habilete.niveauDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{competenceMsgs.label_habilitation}" >
+												<h:outputText value="#{habilete.description}" />
+											</p:column>
+											<p:column style="width:80px;">	
+											    <p:commandButton id="btnRemoveConnaisance"  
+													action="#{employeCompetenceMBean.onRemoveHabilete()}" 
+													icon="ui-icon-trash" 
+													ajax="true" 
+													update="habileteDataTable"   
+													process="@this"
+													immediate="true">
+													<p:confirm header="Confirmation" 
+														message="#{competenceMsgs.msg_delete_habilete_confirmation}" 	
+														icon="ui-icon-alert" />
+													<f:setPropertyActionListener 
+														target="#{employeCompetenceMBean.habileteSelectIndex}" value="#{rowIndex}" />		 
+										       </p:commandButton>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						
+
+		
+						
+				</p:panelGrid>
+			</h:form>
+				</p:outputPanel>
+				<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{employeCompetenceMBean.dto}"/>
+						</ui:include>
+			</p:dialog>
+			</p:outputPanel>
+			
+			
+			<p:dialog position="center" appendTo="@(body)" header="#{competenceMsgs.label_connaissance}"
+						id="connaissanceDialog" widgetVar="connaissanceDialog"
+						styleClass="connaissanceDialog"
+						modal="true" showEffect="fade"
+						hideEffect="fade" resizable="true">
+						<p:outputPanel>
+							<h:form id="connaissanceForm">
+								<p:panelGrid columns="1" cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:row>
+											<p:column colspan="2" styleClass="title">
+												<h:outputText value="#{competenceMsgs.enrg_connaissance_dialog_title}" styleClass="value"/>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="width: 250px;">
+												<h:outputText value="#{competenceMsgs.label_type_connaissance}" styleClass="required"/>
+											</p:column>
+											<p:column>
+												<p:selectOneMenu id="selectionTypeConnaissance" 
+													required="true"
+													requiredMessage="#{competenceMsgs.msg_type_connaissance_required}"
+													value="#{employeCompetenceMBean.connaissanceDto.typeDto.id}">
+													<f:selectItem itemLabel="#{competenceMsgs.label_type_connaissance}"/>
+													<f:selectItems value="#{employeCompetenceMBean.typeConnaissanceList}"/>
+												</p:selectOneMenu>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputText value="#{competenceMsgs.label_connaissance}" styleClass="required"/>
+											</p:column>
+											<p:column>
+												<h:inputText value="#{employeCompetenceMBean.connaissanceDto.description}" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+									<p:toolbar id="employeConnaissanceToolBar" styleClass="toolBarMesrs" >
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+												id="saveConnaissanceBtn" icon="ui-icon-disk" 
+												update="@(.connaissancesGrid)"
+												action="#{employeCompetenceMBean.onSaveConnaissance()}"
+												onstart="PF('page').block()" 
+												onsuccess="PF('page').unblock()" 
+												oncomplete="if (!args.validationFailed) {connaissanceDialog.hide()} "/>
+											<p:spacer width="10px"/>
+										</p:toolbarGroup>
+									</p:toolbar>
+								</p:panelGrid>
+							</h:form>
+						</p:outputPanel>
+			</p:dialog>
+			<p:dialog position="center" appendTo="@(body)" header="#{competenceMsgs.label_habilete}"
+							id="habileteDialog" widgetVar="habileteDialog"
+							styleClass="habileteDialog"
+							modal="true" showEffect="fade"
+							hideEffect="fade" resizable="true">
+							<p:outputPanel >
+								<h:form id="habileteForm">
+									<p:panelGrid columns="1" cellspacing="0"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:panelGrid id="decisionPnlGrid"
+											styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+											<p:row>
+												<p:column colspan="2" styleClass="title">
+													<h:outputText value="#{competenceMsgs.enrg_habilete_dialog_title}" styleClass="value"/>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column style="width: 250px;">
+													<h:outputText value="#{competenceMsgs.label_type_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<p:selectOneMenu id="selectionTypeHabilete" 
+														required="true"
+														requiredMessage="#{competenceMsgs.msg_type_habilete_required}"
+														value="#{employeCompetenceMBean.habileteDto.typeDto.id}">
+														<f:selectItem itemLabel="#{competenceMsgs.label_type_habilete}"/>
+														<f:selectItems value="#{employeCompetenceMBean.typeHabileteList}"/>
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column>
+													<h:outputText value="#{competenceMsgs.label_niveau_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<p:selectOneMenu id="selectionNiveauHabilete" 
+														required="true"
+														requiredMessage="#{competenceMsgs.msg_niveau_habilete_required}"
+														value="#{employeCompetenceMBean.habileteDto.niveauDto.id}">
+														<f:selectItem itemLabel="#{competenceMsgs.label_niveau_habilete}"/>
+														<f:selectItems value="#{employeCompetenceMBean.niveauHabileteList}"/>
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column>
+													<h:outputText value="#{competenceMsgs.label_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<h:inputText value="#{employeCompetenceMBean.habileteDto.description}" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+										<p:toolbar id="employeHabileteToolBar" styleClass="toolBarMesrs" >
+											<p:toolbarGroup>
+												<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+													id="saveHabileteBtn" icon="ui-icon-disk" 
+													update="@(.habileteGrid)"
+													action="#{employeCompetenceMBean.onSaveHabilete()}"
+													onstart="PF('page').block()" 
+													onsuccess="PF('page').unblock()" 
+													oncomplete="if (!args.validationFailed) {habileteDialog.hide()}"/>
+											<p:spacer width="10px"/>
+											</p:toolbarGroup>
+										</p:toolbar>
+									</p:panelGrid>
+								</h:form>
+							</p:outputPanel>
+				</p:dialog>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

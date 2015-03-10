@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel header="#{commonmsgs.menu_habilitation_module_objet}"
+			style="border:0;" id="globalPanel">
+
+
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+
+			<h:form id="moduleFromId" prependId="false">
+				<ui:include src="/pages/domaine/domaineInfo.xhtml" />
+				<br />
+				<br />
+				<p:fieldset legend="#{habilitationmsgs.module_fieldset}">
+					<p:panelGrid id="editmoduleDescription"
+						styleClass="ui-panelgrid-full-width">
+						<p:row rendered="#{moduleBckBean.refModuleDto.idDomaine==null}">
+							<p:column style="width:15%">
+								<h:outputText
+									value="#{habilitationmsgs.module_domaine_name_label} *" />
+							</p:column>
+							<p:column style="width:85%">
+								<p:selectOneMenu id="listDomaine" filter="true"
+									filterMatchMode="startsWith" style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.idDomaine}"
+									label="#{habilitationmsgs.module_name_infobull}"
+									required="true"
+									valueChangeListener="#{moduleBckBean.nameDomaineChanged}"
+									requiredMessage="#{habilitationmsgs.module_module_name_required}">
+
+									<f:selectItem
+										itemLabel="#{habilitationmsgs.module_domaine_name_select}"
+										itemValue="" />
+									<f:selectItems value="#{moduleBckBean.listDomaine}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText
+									value="#{habilitationmsgs.module_identifiant_label} *" />
+							</p:column>
+							<p:column style="width:85%">
+								<h:outputText value="#{moduleBckBean.refModuleDto.identifiant}"
+									styleClass="value" />
+
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{habilitationmsgs.module_name_label} *" />
+							</p:column>
+							<p:column style="width:85%">
+								<p:inputText id="nameModule" style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.nom}"
+									label="#{habilitationmsgs.module_name_infobull}"
+									required="true"
+									valueChangeListener="#{moduleBckBean.nameModuleChanged}"
+									disabled="false"
+									requiredMessage="#{habilitationmsgs.module_name_required}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText
+									value="#{habilitationmsgs.module_name_arabe_label} *" />
+							</p:column>
+							<p:column style="width:85%">
+								<p:inputText id="nameArabeModule"
+									style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.nomArabe}"
+									label="#{habilitationmsgs.module_name_arabe_infobull}"
+									required="true"
+									valueChangeListener="#{moduleBckBean.nameArabeModuleChanged}"
+									disabled="false"
+									requiredMessage="#{habilitationmsgs.module_name_arabe_required}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="Description" />
+							</p:column>
+
+							<p:column style="width:85%">
+								<p:inputTextarea id="descriptionModule"
+									style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.description}"
+									disabled="false">
+								</p:inputTextarea>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="Icon" />
+							</p:column>
+
+							<p:column style="width:85%">
+								<p:inputText id="iconModule" style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.icon}" disabled="false">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="tooltip" />
+							</p:column>
+
+							<p:column style="width:85%">
+								<p:inputText id="tooltipModule"
+									style="text-align: left;width:98%"
+									value="#{moduleBckBean.refModuleDto.tooltip}" disabled="false">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{habilitationmsgs.module_rang_label} " />
+							</p:column>
+							<p:column style="width:85%">
+								<h:outputText id="rang" style="text-align: left;"
+									value="#{moduleBckBean.refModuleDto.rang}              ">
+								</h:outputText>
+								<p:commandButton id="editRangmodule" icon="ui-icon-suitcase"
+									label="#{habilitationmsgs.module_change_rang_label}"
+									rendered="#{moduleBckBean.refModuleDto.identifiant!=null}">
+									<f:param name="idfm" value="#{moduleBckBean.idfm}" />
+									<f:param name="idfDomaine" value="#{moduleBckBean.idfDomaine}" />
+									<f:param name="searchValue"
+										value="#{moduleBckBean.searchValue}" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{habilitationmsgs.module_page_aide_label} " />
+							</p:column>
+							<p:column style="width:85%">
+								<p:inputText value="#{moduleBckBean.refModuleDto.helpPage}" valueChangeListener="#{moduleBckBean.onOtherChange}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+					<br></br>
+
+					<br />
+					<br />
+
+
+
+
+					<p:overlayPanel id="rangPanel" for="editRangmodule"
+						rendered="#{moduleBckBean.listModuleDto!=null}"
+						widgetVar="rangDlg" hideEffect="fade" dismissable="false">
+						<p:panel header="#{habilitationmsgs.module_gestion_rang}">
+							<p:orderList value="#{moduleBckBean.listModuleDto}"
+								var="currentModule" styleClass="smallList"
+								itemValue="#{currentModule}" converter="#{moduleBckBean}"
+								controlsLocation="right" id="orderListModule"
+								moveBottomLabel="#{commonmsgs.move_bottom_label}"
+								moveTopLabel="#{commonmsgs.move_top_label}"
+								moveDownLabel="#{commonmsgs.move_down_label}"
+								moveUpLabel="#{commonmsgs.move_up_label}">
+								<f:facet name="caption">
+									<h:outputText value="#{habilitationmsgs.module_liste}" />
+								</f:facet>
+								<p:column style="width:40%">
+									<h:outputText dir="ltr" value="#{currentModule.identifiant}" />
+								</p:column>
+								<p:column style="width:60%">
+									<h:outputText dir="ltr" value="#{currentModule.nom}" />
+								</p:column>
+
+							</p:orderList>
+							<p:toolbar id="footerDomaine">
+								<p:toolbarGroup align="left">
+									<p:commandButton value="#{commonmsgs.button_save}"
+										icon="ui-icon-disk" onsuccess="PF('rangDlg').hide()"
+										update="@form" action="#{moduleBckBean.saveRang}"
+										process="@form">
+										<f:param name="idfm" value="#{moduleBckBean.idfm}" />
+										<f:param name="idfDomaine" value="#{moduleBckBean.idfDomaine}" />
+										<f:param name="searchValue"
+											value="#{moduleBckBean.searchValue}" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.button_cancel}"
+										icon="ui-icon-arrowreturnthick-1-w" process="@this"
+										onsuccess="PF('rangDlg').hide()">
+										<f:param name="idfm" value="#{moduleBckBean.idfm}" />
+										<f:param name="idfDomaine" value="#{moduleBckBean.idfDomaine}" />
+										<f:param name="searchValue"
+											value="#{moduleBckBean.searchValue}" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+							</p:toolbar>
+
+						</p:panel>
+					</p:overlayPanel>
+				</p:fieldset>
+				<br />
+				<br />
+				<p:toolbar id="footermodule">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" process="moduleFromId" update="moduleFromId"
+							actionListener="#{moduleBckBean.saveModule}">
+							<f:param name="idfm" value="#{moduleBckBean.idfm}" />
+							<f:param name="idfDomaine" value="#{moduleBckBean.idfDomaine}" />
+							<f:param name="searchValue" value="#{moduleBckBean.searchValue}" />
+
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.button_return}"
+							icon="ui-icon-arrowreturnthick-1-w" process="@this"
+							immediate="true" action="#{moduleBckBean.back}" ajax="false">
+							<f:param name="searchValue" value="#{moduleBckBean.searchValue}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

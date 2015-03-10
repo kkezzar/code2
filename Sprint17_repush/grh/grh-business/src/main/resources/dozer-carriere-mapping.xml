@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	
+<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.Carriere
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.CarriereDto
+		</class-b>
+
+		<field>
+			<a>nomenclatureBydiplome</a>
+			<b>nomenclatureBydiplomeDto</b>
+		</field>
+		<field>
+			<a>nomenclatureBytypePromotion</a>
+			<b>nomenclatureBytypePromotionDto</b>
+		</field>
+		<field>
+			<a>nomenclatureBytitre</a>
+			<b>nomenclatureBytitreDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByCarriere</a>
+			<b>nomenclatureByCarriereDto</b>
+		</field>
+		<field>
+			<a>nomenclatureBydiplome</a>
+			<b>nomenclatureBydiplomeDto</b>
+		</field>
+		<field>
+			<a>nomenclatureBytypePromotion</a>
+			<b>nomenclatureBytypePromotionDto</b>
+		</field>
+		
+		<field>
+			<a>nomenclatureBytitre</a>
+			<b>nomenclatureBytitreDto</b>
+		</field>
+		
+		<field>
+			<a>grade</a>
+			<b>gradeDto</b>
+		</field>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>categorieProfessionnelle</a>
+			<b>categorieProfessionnelleDto</b>
+		</field>
+		<field>
+			<a>grilleIndiciaire</a>
+			<b>grilleIndiciaireDto</b>
+		</field>
+		<field>
+			<a>corps</a>
+			<b>corpsDto</b>
+		</field>
+		
+		</mapping>
+</mappings>

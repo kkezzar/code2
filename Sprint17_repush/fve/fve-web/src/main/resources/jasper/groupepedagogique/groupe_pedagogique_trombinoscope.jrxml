@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="groupe pédagogique_trombinoscope" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2456764-d4d6-4e51-bf93-e70927d587e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\smakerri\\Desktop\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="OFFRE_FORMATION" class="java.lang.String"/>
+	<parameter name="ANNEE_ACADEMIQUE" class="java.lang.String"/>
+	<parameter name="PERIODE" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.nomAffichage" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.capaciteMin" class="java.lang.Integer"/>
+	<field name="groupePedagogiqueDto.capaciteMax" class="java.lang.Integer"/>
+	<field name="etudiants" class="java.util.Collection"/>
+	<field name="groupePedagogiqueDto.nomSection" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.codeAnneeAcademique" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.periodeLibelleLongLt" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.ofLibelleFr" class="java.lang.String"/>
+	<field name="groupePedagogiqueDto.sectionSansGroupe" class="java.lang.Boolean"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="98" splitType="Stretch">
+			<image>
+				<reportElement uuid="f1f42168-f861-4f6a-b2af-1bba7ea561da" x="4" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="8482cbd1-53cf-40c2-a61a-1d195bd1c170" x="684" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="922c698e-cadd-4495-8e3a-1a09e216480f" x="272" y="14" width="189" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Groupe pédagogique]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="58556dc5-5345-4a6b-af62-78f3442604e7" x="234" y="70" width="318" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OFFRE_FORMATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="48fe2908-5776-44e8-bac7-9615ca086736" x="14" y="70" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ANNEE_ACADEMIQUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40773f5e-d57b-48a0-a4c0-6f605baf87b6" x="114" y="70" width="117" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PERIODE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="c367dd82-2e62-43cc-9199-aa6cdc31bbaf" x="0" y="90" width="800" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="2689ab88-6ffb-4aba-8917-28161c8bed05" x="568" y="70" width="81" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.nomSection}.equals( null )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{groupePedagogiqueDto.nomSection}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18">
+			<staticText>
+				<reportElement uuid="922c698e-cadd-4495-8e3a-1a09e216480f" x="14" y="3" width="52" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.sectionSansGroupe}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Groupe : ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d01dbd84-3705-41d1-b40c-211cd1ca67cd" x="76" y="3" width="141" height="15">
+					<printWhenExpression><![CDATA[!$F{groupePedagogiqueDto.sectionSansGroupe}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{groupePedagogiqueDto.nomAffichage}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<elementGroup/>
+			<subreport>
+				<reportElement uuid="1f6047b1-1dad-4f7a-bb51-033f13848169" isPrintRepeatedValues="false" x="1" y="0" width="801" height="125"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{etudiants})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}+"etudiants_trombinoscope.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement uuid="c4ac5766-05a3-48ea-8ab6-67308e940862" x="1" y="1" width="552" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement uuid="318170f0-cbaa-4462-a86d-69e34eb7669b" x="4" y="2" width="165" height="12"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

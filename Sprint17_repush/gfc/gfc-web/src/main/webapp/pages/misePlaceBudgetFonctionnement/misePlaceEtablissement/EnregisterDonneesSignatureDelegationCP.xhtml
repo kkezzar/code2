@@ -1,0 +1,524 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+			#{misePlaceBudgetFonctionnementMsgs.page_title_delegation_CP_budget_signature}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search" onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+			<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					<!--  fields/buttons -->
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"  		
+							actionListener="#{delegationCPBudgetMBean.searchAction()}"    
+							onstart="PF('page').block()" 
+							oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+				
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" 
+					value="#{delegationCPBudgetMBean.listRepartitionNotofie}" 
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rows="5" rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{delegationCPBudgetMBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					
+
+					<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_refrence}">
+						<h:outputText value="#{current.decisionBudget.reference}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_intitule}">
+						<h:outputText value="#{current.decisionBudget.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_date_ordonnateur}">
+						<h:outputText value="#{current.dateSignatureOrdonnateur}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+						<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_date_wali}">
+						<h:outputText value="#{current.dateSignatureWali}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+						<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_date_visaCf}">
+						<h:outputText value="#{current.dateVisaCf}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_montant_depenses}">
+						<h:outputText value="#{current.montantTotalDepenses}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_montant_recettes}">
+						<h:outputText value="#{current.montantTotalRecettes}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{delegationCPBudgetMBean.crud}">
+					
+					<p:tab
+						title="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition}">
+						
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+							<p:row>
+								<p:column style="width:25%">
+									<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_exercice}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.projetBudget.exerciceBudgetaire.intituleFr}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_projet}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.projetBudget.description}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column colspan="4">
+									<hr />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_refrence}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.reference}"></h:outputText>
+								</p:column>
+								<p:column>
+									<h:outputText value="Date décision" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.dateDecision}">
+										<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.intituleFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_ar}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.intituleAr}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Montant" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.decisionBudget.montant}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_montant_recettes}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.montantTotalRecettes}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_montant_depenses}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{delegationCPBudgetMBean.repartitionBudgetDto.montantTotalDepenses}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							
+							<p:row>
+								<p:column colspan="4">
+									<hr />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									
+								</p:column>
+								<p:column colspan="3">
+									<h:form>
+										<p:selectOneMenu id="listStructuresFilter"
+											styleClass="input-xx-large pull-right"
+											value="#{delegationCPBudgetMBean.structureSearchDto.id}"
+											filter="true" filterMatchMode="contains"  >
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_structure}"
+												itemValue="" />
+											<f:selectItems
+												value="#{delegationCPBudgetMBean.listStructures}" />
+											<p:ajax event="change"  listener="#{delegationCPBudgetMBean.handleSectionsSelectStructure}"
+											update=":form_crud "
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()" />
+												
+										</p:selectOneMenu>
+									</h:form>
+								</p:column>
+							</p:row>
+								<p:row>
+									<p:column colspan="4">
+										<p:dataTable var="current" resizableColumns="false"
+											rowIndexVar="rowIndex" id="detailsDelegationCP"
+											value="#{delegationCPBudgetMBean.listMouvementStructures}"
+											paginator="true" paginatorPosition="bottom"
+										emptyMessage="#{commonmsgs.data_table_empty_Message}"
+											rows="5" rowKey="#{current.id}" selectionMode="single"
+											paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+											currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+																	editable="true">
+
+										<p:ajax event="rowSelect" immediate="true"
+											listener="#{delegationCPBudgetMBean.onRowEdit}"
+											process="@this" onstart="PF('page').block()"
+											onsuccess="PF('page').unblock()" update=":form_crud" />
+											<f:facet name="header">
+												<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_delegation_recp}"></h:outputText>
+											</f:facet>
+											<p:column headerText="#{commonmsgs.column_numero_ligne}">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_refrence}">
+												<h:outputText
+													value="#{current.reference}" />
+											</p:column>
+
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_intitule}">
+												<h:outputText
+													value="#{current.intituleFr}" />
+											</p:column>
+
+											<p:column headerText="#{gfcMsgs.montant} ">
+												<h:outputText value="#{current.montant}"
+													styleClass="pull-right" />
+											</p:column>
+
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_date} ">
+											
+												<h:outputText value="#{current.dateDecision}" >
+														<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+
+											
+										</p:dataTable>
+									</p:column>
+								</p:row>
+								
+								<p:row>
+								<p:column colspan="4">
+									<p:outputPanel id="crud_form_detail">
+										<p:tabView rendered="#{delegationCPBudgetMBean.crudDetail}">
+											<p:tab title="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_delegation}">
+
+												
+													<p:panelGrid
+														styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+														<p:row>
+														
+															<p:column style="width:20%">
+																<p:outputLabel value="#{parametrageBudgetMsg.structure}"
+																	 />
+															</p:column>
+															<p:column>
+																<p:selectOneMenu id="listStructures"
+																	styleClass="input-xlarge-px"  
+																	value="#{delegationCPBudgetMBean.mouvementBudgetDto.refStructure.id}"
+																	filter="true" filterMatchMode="contains" disabled="true"
+																	 process="@this" >
+																	<f:selectItem
+																		itemLabel="#{parametrageBudgetMsg.select_structure}"
+																		itemValue="" />
+																	<f:selectItems
+																		value="#{delegationCPBudgetMBean.listStructures}" />
+																	
+																</p:selectOneMenu>
+															</p:column>
+															
+															<p:column>
+																	<h:outputText  
+																		value="#{parametrageBudgetMsg.intitule_fr}" />
+																</p:column>
+																<p:column>
+																	<h:outputText  
+																		value="#{delegationCPBudgetMBean.mouvementBudgetDto.intituleFr}"
+																		styleClass="value" />
+																</p:column>
+														</p:row>
+														<p:row>
+															<p:column>
+																<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_refrence}"  />
+															</p:column>
+															<p:column>
+																<h:outputText  styleClass="value"
+																	value="#{delegationCPBudgetMBean.mouvementBudgetDto.reference}"></h:outputText >
+															</p:column>
+															
+															<p:column>
+																<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_date}"  />
+															</p:column>
+															<p:column>
+																<h:outputText  styleClass="value"
+																	value="#{delegationCPBudgetMBean.mouvementBudgetDto.dateDecision}"	>
+																	<f:convertDateTime type="date"			pattern="#{applicationBean.datePattern()}" />
+																</h:outputText>
+															
+															</p:column>
+																
+														</p:row>
+														<p:row>
+															<p:column>
+																<h:outputText value="Montant"  />
+															</p:column>
+															<p:column colspan="3">
+																<h:outputText styleClass="value"
+																	value="#{delegationCPBudgetMBean.mouvementBudgetDto.montant}"
+																	decimalPlaces="2" title="Montant en DA" /> <h:outputText value="#{delegationCPBudgetMBean.mouvementBudgetDto.repartitionBudget.uniteMonetaire.code}" />
+															</p:column>
+														</p:row>
+														<p:row>
+															<p:column colspan="4">
+																<hr />
+															</p:column>
+														</p:row>
+														<p:row>
+														<p:column>
+																<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_dateSignature}"  styleClass="required" />
+															</p:column>
+															<p:column >
+															<p:calendar required="true"
+																	value="#{delegationCPBudgetMBean.mouvementBudgetDto.dateSignature}"
+																	pattern="#{applicationBean.datePattern()}">
+																</p:calendar>
+															</p:column>
+														</p:row>
+														
+														<p:row>
+									<p:column colspan="4">
+										<p:dataTable var="current" resizableColumns="false"
+											rowIndexVar="rowIndex" id="detailsDelegationCPStructures"
+											value="#{delegationCPBudgetMBean.mouvementBudgetDto.detailsMouvementBudgets}"
+											paginator="true" paginatorPosition="bottom"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}"
+											rows="20" rowKey="#{current.id}"
+											paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+											currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+											editable="true">
+
+										
+
+											<f:facet name="header">
+												<h:outputText value="#{misePlaceBudgetFonctionnementMsgs.gfc_delegation_recp_detail}"></h:outputText>
+													
+											</f:facet>
+											<p:column headerText="#{commonmsgs.column_numero_ligne}">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_detail_repartition_date} ">
+											
+												<h:outputText value="#{current.detailsRepartitionBudgetSource.chapitre.idSection.intituleFr}">
+													
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_refrence}">
+												<h:outputText
+													value="#{current.detailsRepartitionBudgetSource.chapitre.code}" />
+											</p:column>
+
+											<p:column headerText="#{misePlaceBudgetFonctionnementMsgs.gfc_decesion_intitule}">
+												<h:outputText
+													value="#{current.detailsRepartitionBudgetSource.article.code}" />
+											</p:column>
+
+											<p:column headerText="#{gfcMsgs.montant} ">
+												<h:outputText value="#{current.montant}"
+													styleClass="pull-right" />
+											</p:column>
+
+
+											
+										</p:dataTable>
+									</p:column>
+								</p:row>
+														
+													</p:panelGrid>
+												
+
+											</p:tab>
+
+										
+	<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" title="#{commonmsgs.tab_documents}" titletip="#{commonmsgs.tab_documents_tooltip}" 
+						disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="" scope="request" />
+							<c:set var="identifiant"
+								value="#{delegationCPBudgetMBean.mouvementBudgetDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="" />
+							<ui:param name="identifiant"
+								value="#{delegationCPBudgetMBean.mouvementBudgetDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+
+					<!-- historique  -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique" title="#{commonmsgs.tab_historique_situations}" titletip="#{commonmsgs.tab_historique_situations_tooltip}" 
+						disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-history"></i>
+						</f:facet>
+						<eh:EntityHistoryComponent
+							list="#{delegationCPBudgetMBean.mvtsHistory}"
+							idParamName="id"
+							idParamValue="#{delegationCPBudgetMBean.mouvementBudgetDto.id}">
+						</eh:EntityHistoryComponent>
+					</p:tab>
+										</p:tabView>
+									</p:outputPanel>
+								</p:column>
+							</p:row>
+								</p:panelGrid>
+								
+								<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+							
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud"
+												icon="ui-icon-disk" styleClass="ui-button-save"
+												actionListener="#{delegationCPBudgetMBean.saveActionSignature()}">
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												actionListener="#{delegationCPBudgetMBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						
+						</h:form>
+					</p:tab>
+	
+				
+
+				</p:tabView>
+
+			</p:outputPanel>
+	
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{missionsMsgs.page_title_enregister_tarifs}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{missionsMsgs.nouveau_tarifs}"
+							action="#{tarifsMissionsBean.addAction()}"
+							update=":form_crud" process="@this"></p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{tarifsMissionsBean.model}"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="20"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{tarifsMissionsBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+						<p:column headerText="#{missionsMsgs.tarif_label}">
+						<h:outputText value="#{current.labelTarif}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{missionsMsgs.tarif_type}">
+						<h:outputText value="#{current.typeTarif.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+				
+					<p:column headerText="#{missionsMsgs.tarif_restauration}">
+						<h:outputText value="#{current.fraisRestauration}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="#{missionsMsgs.tarif_hebrgement}">
+						<h:outputText value="#{current.fraisHebergement}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="#{missionsMsgs.tarif_jour}">
+						<h:outputText value="#{current.totalJournalier}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+					
+			
+						<p:column headerText="#{missionsMsgs.tarif_situation}">
+						<h:outputText value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{tarifsMissionsBean.crud}">
+
+					<p:tab
+						title="#{missionsMsgs.detail_tarif_mission}">
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+						
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="#{missionsMsgs.tarif_mission_type}" />
+									</p:column>
+									<p:column >
+										<p:selectOneMenu styleClass="input-xlarge-px"
+											value="#{tarifsMissionsBean.tarifMissions.typeTarif.id}" required="true">
+											<f:selectItem
+												itemLabel="#{missionsMsgs.tarif_mission_select_type}"
+												itemValue="" />
+											<f:selectItems value="#{tarifsMissionsBean.listTypesTarifs}" />
+										</p:selectOneMenu>
+									</p:column>
+									
+									<p:column>
+										<h:outputText 
+											value="#{missionsMsgs.tarif_label}"  styleClass="required"/>
+									</p:column>
+									<p:column>
+										<p:inputText 
+											value="#{tarifsMissionsBean.tarifMissions.labelTarif}" required="true"
+											styleClass="input-xlarge" />
+									</p:column>
+								</p:row>
+									
+									
+							<p:row>
+									<p:column>
+										<h:outputText 
+											value="#{missionsMsgs.tarif_restauration}" />
+									</p:column>
+									<p:column>
+										<p:inputText 
+											value="#{tarifsMissionsBean.tarifMissions.fraisRestauration}"
+											styleClass="input-xlarge" />
+									</p:column>
+									<p:column>
+										<h:outputText 
+											value="#{missionsMsgs.tarif_hebrgement}" />
+									</p:column>
+									<p:column>
+										<p:inputText 
+											value="#{tarifsMissionsBean.tarifMissions.fraisHebergement}"
+											styleClass="input-xlarge" />
+									</p:column>
+									
+									
+								</p:row>
+								
+								<p:row>
+								<p:column>
+										<h:outputText 
+											value="#{missionsMsgs.tarif_jour}" />
+									</p:column>
+								<p:column>
+										<p:inputText 
+											value="#{tarifsMissionsBean.tarifMissions.totalJournalier}"
+											styleClass="input-xlarge" />
+									</p:column>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox 
+											value="#{tarifsMissionsBean.tarifMissions.fonctionSuperieure}">
+											  <p:ajax update="catMin, catMax" listener="#{tarifsMissionsBean.doAction}" />
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" #{missionsMsgs.tarif_fonction_sup} " />
+									</p:column>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox
+											value="#{tarifsMissionsBean.tarifMissions.missionEtrange}">
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" #{missionsMsgs.tarif_mission_etranger} " />
+									</p:column>
+									
+								</p:row>
+
+
+								<p:row>
+										<p:column>
+										<h:outputText  value="#{missionsMsgs.tarif_categorie_min}" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu  id="catMin" styleClass="input-xlarge-px" disabled="#{tarifsMissionsBean.desabledCategorie}"
+											value="#{tarifsMissionsBean.tarifMissions.categorieMin.id}" >
+											<f:selectItem
+												itemLabel="#{missionsMsgs.tarif_mission_select_categorie_min}"
+												itemValue="" />
+											<f:selectItems value="#{tarifsMissionsBean.listCatgeories}" />
+										</p:selectOneMenu>
+									</p:column>
+										<p:column>
+										<h:outputText value="#{missionsMsgs.tarif_categorie_max}" />
+									</p:column>
+									<p:column >
+										<p:selectOneMenu id="catMax" styleClass="input-xlarge-px" disabled="#{tarifsMissionsBean.desabledCategorie}"
+											value="#{tarifsMissionsBean.tarifMissions.categorieMax.id}" >
+											<f:selectItem
+												itemLabel="#{missionsMsgs.tarif_mission_select_categorie_max}"
+												itemValue="" />
+											<f:selectItems value="#{tarifsMissionsBean.listCatgeories}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+								<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox
+											value="#{tarifsMissionsBean.tarifMissions.actif}">
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" #{missionsMsgs.tarif_mission_actif} " />
+									</p:column>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									<p:column>
+										<h:outputText value=""  />
+									</p:column>
+									
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea styleClass="input-large"
+											value="#{tarifsMissionsBean.tarifMissions.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												
+												id="saveBtn" update=":form_crud :form_search"
+												styleClass="ui-button-save" onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{tarifsMissionsBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												disabled="#{tarifsMissionsBean.tarifMissions.id eq null}"
+												id="validateBtn" update=":form_crud :form_search"
+												styleClass="ui-button-validate-o"
+												onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{tarifsMissionsBean.validateAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="removeBtn" update=":form_crud :form_search"
+												disabled="#{tarifsMissionsBean.tarifMissions.id eq null}"
+												styleClass="ui-button-delete-o" onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{tarifsMissionsBean.deleteAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton  value="#{commonmsgs.bouton_retour}"
+												styleClass="pull-right" id="cancelBtn" update=":form_crud"
+												immediate="true" process="@this"
+												actionListener="#{tarifsMissionsBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="TarifMission" scope="request" />
+							<c:set var="identifiant"
+								value="#{tarifsMissionsBean.tarifMissions.getId().toString()}"
+								scope="request" />
+							<ui:param name="entity" value="TarifMission" />
+							<ui:param name="identifiant"
+								value="#{tarifsMissionsBean.tarifMissions.getId().toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+					<!-- historique  -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique"
+						title="#{commonmsgs.tab_historique_situations}"
+						titletip="#{commonmsgs.tab_historique_situations_tooltip}"
+						disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-history"></i>
+						</f:facet>
+						<eh:EntityHistoryComponent list="#{tarifsMissionsBean.tarifsMissionHistory}"
+							idParamName="id" idParamValue="#{tarifsMissionsBean.tarifMissions.id}"></eh:EntityHistoryComponent>
+					</p:tab>
+					
+					
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

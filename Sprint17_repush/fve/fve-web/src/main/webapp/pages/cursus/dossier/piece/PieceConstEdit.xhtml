@@ -1,0 +1,195 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="piecePanel" styleClass="piecePanel">
+
+		<pe:blockUI target="piecePanel" widgetVar="blockUIWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+
+		<p:dataTable id="PieceStudFourniDataTable" var="row"
+			value="#{pieceManagerBean.listPcProvided}"
+			emptyMessage="#{pieceMsgs.piece_data_table_seacrh_result_no_result}"
+			style="margin-bottom:8px" rowIndexVar="rowIndex"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+
+			<p:ajax event="page" process="@(.piecePanel)"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()" />
+			<p:ajax event="sort" process="@(.piecePanel)" />
+
+			<f:facet name="header">
+				<h:outputText
+					value="#{pieceMsgs.piece_data_table_list_provided_title}" />
+			</f:facet>
+
+			<p:column headerText="#{pieceMsgs.piece_data_table_column_index}"
+				style="width:5%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_type}"
+				style="width:40%">
+				<h:outputText
+					value="(#{row.refTypePieceNombre}) #{row.ncTypePieceLibelleLongFr}" />
+			</p:column>
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_required}"
+				style="width:10%;text-align:center">
+				<h:outputText value="#{row.refTypePieceOgligatoire ? 'Oui' : 'Non'}" />
+			</p:column>
+
+			<p:column style="width:10%;text-align:center" styleClass="textOnLeft">
+				<f:facet name="header">
+					<h:outputText
+						value="#{pieceMsgs.piece_data_table_list_column_piece_provided}" />
+				</f:facet>
+				<p:selectBooleanCheckbox value="#{row.fournie}" id="pieceProvided"
+					label="Checkbox" rendered="#{!pieceManagerBean.readOnly}" />
+				<h:outputText value="Oui" rendered="#{pieceManagerBean.readOnly}" />
+			</p:column>
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_date}"
+				styleClass="textOnLeft" style="width:10%">
+				<p:calendar navigator="true" value="#{row.dateFourniture}"
+					rendered="#{!row.fournie}" id="dateFourniture1"
+					pattern="dd/MM/yyyy" required="false"
+					requiredMessage="#{pieceMsgs.piece_data_table_required_date_fourniture}" />
+				<h:outputText value="#{row.dateFourniture}"
+					rendered="#{row.fournie}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column width="25%"
+				headerText="#{pieceMsgs.piece_data_table_list_column_observation}"
+				styleClass="textOnLeft">
+				<p:inputText value="#{row.observation}" style="width:100%" />
+			</p:column>
+
+
+		</p:dataTable>
+	
+
+		<p:toolbar rendered="#{!pieceManagerBean.readOnly}">
+			<p:toolbarGroup align="left">
+				<p:selectBooleanCheckbox value="#{pieceManagerBean.allProvided}"
+					label="Checkbox" itemLabel="#{pieceMsgs.piece_cocher_tout}">
+					<p:ajax update="PieceStudFourniDataTable"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						listener="#{pieceManagerBean.pieceProvidedCheckAll}" />
+				</p:selectBooleanCheckbox>
+			</p:toolbarGroup>
+		</p:toolbar>
+		
+	<p:separator/>
+		<p:dataTable id="PieceEtabFourniDataTable" var="row"
+			value="#{pieceManagerBean.listPcToProvid}" lazy="true"
+			editable="true"
+			emptyMessage="#{pieceMsgs.piece_data_table_seacrh_result_no_result}"
+			style="margin-bottom:8px;" rowIndexVar="rowIndex"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+
+			<f:param name="dossierId" value="#{pieceManagerBean.dossierId}" />
+
+			<f:param name="codeTypeDossier"
+				value="#{pieceManagerBean.codeTypeDossier}" />
+
+			<p:ajax event="page" update="@all" process="@(.piecePanel)"
+				onstart="PF('blockUIWidget').block()"
+				oncomplete="PF('blockUIWidget').unblock()" />
+			<p:ajax event="sort" update="@all" process="@(.piecePanel)" />
+
+			<f:facet name="header">
+				<h:outputText
+					value="#{pieceMsgs.piece_data_table_list_to_provided_title}" />
+			</f:facet>
+			<p:column headerText="#{pieceMsgs.piece_data_table_column_index}"
+				style="width:5%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_type}"
+				style="width:40%">
+				<h:outputText
+					value="(#{row.refTypePieceNombre}) #{row.ncTypePieceLibelleLongFr}" />
+			</p:column>
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_required}"
+				style="width:10%;text-align:center">
+				<h:outputText value="#{row.refTypePieceOgligatoire ? 'Oui' : 'Non'}" />
+
+			</p:column>
+
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_provided}"
+				style="width:10%;text-align:center">
+
+				<p:selectBooleanCheckbox value="#{row.fournie}" id="pieceToProvided"
+					label="Checkbox">
+
+				</p:selectBooleanCheckbox>
+			</p:column>
+
+			<p:column
+				headerText="#{pieceMsgs.piece_data_table_list_column_piece_date}"
+				styleClass="textOnLeft" style="width:10%">
+				<p:calendar navigator="true" value="#{row.dateFourniture}"
+					id="dateFourniture2" pattern="dd/MM/yyyy" required="false"
+					requiredMessage="#{pieceMsgs.piece_data_table_required_date_fourniture}" />
+			</p:column>
+
+			<p:column width="25%"
+				headerText="#{pieceMsgs.piece_data_table_list_column_observation}"
+				styleClass="textOnLeft">
+				<p:inputText value="#{row.observation}" style="width:100%" />
+			</p:column>
+
+		</p:dataTable>
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:selectBooleanCheckbox value="#{pieceManagerBean.allToProvid}"
+					label="Checkbox" itemLabel="#{pieceMsgs.piece_cocher_tout}">
+					<p:ajax update="PieceEtabFourniDataTable"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()"
+						listener="#{pieceManagerBean.pieceToProvidCheckAll}" />
+				</p:selectBooleanCheckbox>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<br />
+
+		<p:fieldset id="fspCBtabManagerBean"
+			rendered="#{!pieceManagerBean.disableSave}">
+			<p:commandButton id="btnValidateID"
+				value="#{commonmsgs.bouton_enregistrer}"
+				actionListener="#{pieceManagerBean.save()}" update="@(.piecePanel)"
+				process="@(.piecePanel)">
+				<f:param name="dossierId" value="#{pieceManagerBean.dossierId}" />
+				<f:param name="codeTypeDossier"
+					value="#{pieceManagerBean.codeTypeDossier}" />
+
+				<f:param name="dossierInscriptionId"
+					value="#{pieceManagerBean.dossierId}" />
+				<f:param name="dossierTransfertId"
+					value="#{pieceManagerBean.dossierId}" />
+
+
+			</p:commandButton>
+
+		</p:fieldset>
+
+
+	</p:outputPanel>
+</ui:composition>

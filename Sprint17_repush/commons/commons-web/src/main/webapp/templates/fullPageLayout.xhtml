@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:view contentType="text/html" locale="fr">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+			<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<title>#{applicationBean.appCode} -
+				#{applicationBean.appName}</title>
+		</f:facet>
+
+		<f:facet name="middle">
+			<h:outputStylesheet name="css/bootstrap.min.css" />
+			<h:outputStylesheet name="css/font-awesome.min.css" />
+			<h:outputStylesheet name="css/progres-production.css" />
+			<h:outputStylesheet name="css/jquery.ui.css" />
+		</f:facet>
+
+		<f:facet name="last">
+		</f:facet>
+
+	</h:head>
+	<h:body styleClass="progres-style-2">
+<style type="text/css">
+.pace {
+	-webkit-pointer-events: none;
+	pointer-events: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none
+}
+
+.pace-inactive {
+	display: none
+}
+
+.pace .pace-progress {
+	background: #20A44A;
+	position: fixed;
+	z-index: 2000;
+	top: 0;
+	left: 0;
+	height: 2px;
+	-webkit-transition: width 1s;
+	-moz-transition: width 1s;
+	-o-transition: width 1s;
+	transition: width 1s
+}
+
+.pace .pace-progress-inner {
+	display: block;
+	position: absolute;
+	right: 0;
+	width: 100px;
+	height: 100%;
+	box-shadow: 0 0 10px #29d, 0 0 5px #29d;
+	opacity: 1;
+	-webkit-transform: rotate(3deg) translate(0px, -4px);
+	-moz-transform: rotate(3deg) translate(0px, -4px);
+	-ms-transform: rotate(3deg) translate(0px, -4px);
+	-o-transform: rotate(3deg) translate(0px, -4px);
+	transform: rotate(3deg) translate(0px, -4px)
+}
+
+.pace .pace-activity {
+display: none;
+}
+
+/*
+.pace .pace-activity {
+	display: block;
+	position: fixed;
+	z-index: 2000;
+	top: 63px;
+	right: 40px;
+	width: 14px;
+	height: 14px;
+	border: solid 2px transparent;
+	border-top-color: #29d;
+	border-left-color: #29d;
+	border-radius: 10px;
+	-webkit-animation: pace-spinner 400ms linear infinite;
+	-moz-animation: pace-spinner 400ms linear infinite;
+	-ms-animation: pace-spinner 400ms linear infinite;
+	-o-animation: pace-spinner 400ms linear infinite;
+	animation: pace-spinner 400ms linear infinite
+}
+*/
+</style>
+
+		<ui:include src="confirmDialog.xhtml" />
+		<ui:include src="ajaxErrorHandler.xhtml" />
+		<!-- 	<ui:include src="affectations.xhtml" /> -->
+		<!-- HEADER -->
+		<header id="header">
+		<div id="logo-group">
+
+			<!-- PLACE YOUR LOGO HERE -->
+
+			<span id="logo"> <a href="#"><img
+					src="#{facesContext.externalContext.request.contextPath}/images/logo2.png"
+					alt="Progres" /> </a>
+			</span>
+
+			<!-- END LOGO PLACEHOLDER -->
+
+			<!-- 			<div id="hide-menu" class="btn-header">
+				<span> <a href="javascript:void(0);" title="Collapse Menu"><i
+						class="fa fa-reorder"></i></a>
+				</span>
+			</div> -->
+
+			<span id="activity" class="activity-dropdown"> <i
+				class="fa fa-user"></i> <b class="badge"> 21 </b>
+			</span>
+
+			<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
+			<div class="ajax-dropdown">
+
+				<!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+				<div class="btn-group btn-group-justified" data-toggle="buttons">
+					<label class="btn btn-default"> <input type="radio"
+						name="activity" id="" /> Messages (14)
+					</label> <label class="btn btn-default"> <input type="radio"
+						name="activity" id="" /> notifications (3)
+					</label> <label class="btn btn-default"> <input type="radio"
+						name="activity" id="" /> Tâches (4)
+					</label>
+				</div>
+
+				<!-- notification content -->
+				<div class="ajax-notifications custom-scroll">
+
+					<div class="alert alert-transparent">
+						<h4>Cliquer sur les bouttons pour afficher</h4>
+
+					</div>
+
+					<i class="fa fa-lock fa-4x fa-border"></i>
+
+				</div>
+				<!-- end notification content -->
+
+				<!-- footer: refresh area -->
+				<span>Dernière mise à jours: 12/12/2013 9:43
+					<button type="button" class="btn btn-xs btn-default pull-right">
+						<i class="fa fa-refresh"></i>
+					</button>
+				</span>
+				<!-- end footer -->
+
+			</div>
+			<!-- END AJAX-DROPDOWN -->
+		</div>
+
+		<!-- projects dropdown --> <h:form>
+			<div id="project-context">
+				<span class="label">#{applicationBean.appName}</span> <span
+					id="project-selector"
+					class="popover-trigger-element dropdown-toggle"
+					data-toggle="dropdown"><h:outputText
+						value="#{sessionBean.llLatinEtablissement} #{sessionBean.currentRole.libelleLongFr}"
+						style="color:#20A44A;font-weight:bold" /> <i
+					class="fa fa-angle-down"></i> </span>
+				<ul class="dropdown-menu">
+					<c:forEach var="affectation"
+						items="#{sessionBean.currentUser.listAffectations}">
+						<li><h:commandLink
+								value=" #{affectation.llFrRefEtablissement} [ #{affectation.roleLibelleLongFr}  #{affectation.llGroupe} ]"
+								actionListener="#{sessionBean.selectAffectation(affectation)}"
+								action="#{menuBean.load()}" immediate="true">
+								<!-- 	<f:actionListener binding="#{menuBean.load()}" /> -->
+							</h:commandLink></li>
+					</c:forEach>
+				</ul>
+				<!-- end dropdown-menu-->
+			</div>
+			<!-- end projects dropdown -->
+			<!-- pulled right: nav area -->
+			<div class="pull-right">
+
+				<ul class="nav navbar-nav pull-right panel-menu">
+
+					<li class="dropdown"><a href="#"
+						class="dropdown-toggle account" data-toggle="dropdown">
+							<div class="avatar">
+								<img
+									src="#{facesContext.externalContext.request.contextPath}/images/user.png"
+									class="img-rounded" alt="avatar" />
+							</div> <i class="fa fa-angle-down pull-right"></i>
+							<div class="user-mini pull-right">
+								<span class="welcome">Bienvenue,</span> <span> <h:outputText
+										value="#{sessionBean.user.nomLatin} #{sessionBean.user.prenomLatin}" /></span>
+							</div>
+					</a>
+						<ul class="dropdown-menu">
+							<li><a href="#"> <i class="fa fa-user"></i> <span>Mon
+										profil</span>
+							</a></li>
+							<li><a href="ajax/page_messages.html" class="ajax-link">
+									<i class="fa fa-envelope"></i> <span>Mes notifications</span>
+							</a></li>
+							<li><a href="ajax/calendar.html" class="ajax-link"> <i
+									class="fa fa-tasks"></i> <span>Mes tâches</span>
+							</a></li>
+							<li><a href="#"> <i class="fa fa-cog"></i> <span>Réglages</span>
+							</a></li>
+
+							<li><a
+								href="#{request.contextPath}/logout"><i
+									class="fa fa-sign-out"></i> <span>Déconnexion</span> </a></li>
+						</ul></li>
+				</ul>
+
+			</div>
+		</h:form> <!-- end pulled right: nav area --> </header>
+		<!-- END HEADER -->
+
+		<!-- Left panel : Navigation area -->
+		<aside id="left-panel"> <h:form id="menuForm">
+			<nav>
+			<ul>
+				<li class=""><a
+					href="#{facesContext.externalContext.request.contextPath}/pages/index.xhtml"
+					title="Accueil"><i class="fa fa-lg fa-fw fa-home"></i> <span
+						class="menu-item-parent">Accueil</span></a></li>
+
+				<c:forEach var="submenu" items="#{menuBean.listSubMenu}"
+					varStatus="status">
+					<li><a href="#"><i class="#{submenu.icon}"></i> <span
+							class="menu-item-parent">#{submenu.label}</span></a>
+						<ul>
+							<c:forEach var="item" items="#{submenu.elements}"
+								varStatus="status_">
+								<li class="#{menuBean.getMenuitemStyleClass(item.styleClass)}">
+									<a
+									href="#{facesContext.externalContext.request.contextPath}#{item.url}"
+									class="#{menuBean.getMenuitemStyleClass(item.styleClass)}">#{item.value}</a>
+								</li>
+							</c:forEach>
+						</ul></li>
+				</c:forEach>
+
+				<!-- a supprimer 
+					<ui:include src="menu_dev.xhtml" />
+					 -->
+			</ul>
+			</nav>
+		</h:form> 
+<!-- 		<span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i>
+		</span>  -->
+		</aside>
+		<!-- END NAVIGATION -->
+
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+			<!-- RIBBON -->
+			<div id="ribbon" style="">
+
+				<div class="ui-helper-clearfix">
+				</div>
+
+				<div id="hide-menu" class="btn-header pull-left"
+					style="margin-top: 3px">
+					<span> <a href="javascript:void(0);" title="Collapse Menu"><i
+							class="fa fa-reorder"></i></a>
+					</span>
+				</div>
+
+				<!-- breadcrumb -->
+				<ol class="breadcrumb">
+					<h1 class="page-title">
+						<ui:insert name="pageTitleContent"></ui:insert>
+					</h1>
+				</ol>
+
+				<span class="ribbon-button-alignment pull-right"> 
+						
+						<p:commandLink id="btnZoomIn" update="content" ajax="true"  style="display:inline-block" 
+							process="@this" 
+							action="#{sessionBean.zoomIn()}">	
+								<span  class="btn btn-ribbon hidden-xs"
+									data-title="Zoom avant"> <i class="fa fa-search-plus"></i>
+								</span>			
+						</p:commandLink> 
+						<p:commandLink id="btnZoomOut" update="content" style="display:inline-block"
+								ajax="true" process="@this" action="#{sessionBean.zoomOut()}">
+								<span class="btn btn-ribbon hidden-xs"
+									data-title="Zoom arrière"> <i class="fa fa-search-minus"></i>
+								</span>		
+						</p:commandLink>  
+						<p:commandLink
+								onclick="javascript:window.open('#{menuBean.getHelpUrl()}',' _blank');">
+								<span id="help" class="btn btn-ribbon hidden-xs"
+									data-title="Aide en ligne"> <i class="fa fa-question-circle"></i>Aide
+								</span>
+						</p:commandLink> 
+						<!-- 					
+						<div id="hide-menu" class="btn-header">
+                  				 <a href="javascript:void(0);" title="Collapse Menu"><i class="fa fa-reorder"></i></a>
+              			 </div>  
+              			 -->
+				</span>
+				<!-- end breadcrumb -->
+			</div>
+			<!-- END RIBBON -->
+
+			<!-- MAIN CONTENT -->
+			<pe:blockUI widgetVar="page">
+				<h1>
+					<i class="fa fa-spinner fa-spin"></i>
+				</h1>
+			</pe:blockUI>
+
+			<pe:blockUI target="content" widgetVar="content">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+			<p:outputPanel id="content"
+				style="font-size:#{sessionBean.fontSize}px">
+				<ui:insert name="beforePageContent"></ui:insert>
+				<ui:insert name="centerContent"></ui:insert>
+				<ui:insert name="afterPageContent"></ui:insert>
+			</p:outputPanel>
+			<!-- END MAIN CONTENT -->
+
+		</div>
+		<!-- END MAIN PANEL -->
+		<div class="page-footer" style="display: none">
+			<div class="row">
+				<div class="col-xs-12 col-sm-8">
+					<span class="txt-color-white">Programme de Gestion Intégré -
+						Ministère de l'Enseignement Supérieur et de la Recherche
+						Scientifique © 2014-2015</span>
+				</div>
+				
+				<div class="col-xs-4 col-sm-4 text-right hidden-xs">
+					<div class="txt-color-white inline-block">
+						<!--  <i class="txt-color-blueLight hidden-mobile">Last account activity <i class="fa fa-clock-o"></i> <strong>52 mins ago &nbsp;</strong> </i> -->
+						<div class="btn-group dropup">
+							<button
+								class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white"
+								data-toggle="dropdown">
+								<i class="fa fa-link"></i> <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu pull-right text-left">
+
+							</ul>
+						</div>
+						<!-- end btn-group-->
+					</div>
+					<!-- end div-->
+				</div>
+				<!-- end col -->
+			</div>
+			<!-- end row -->
+		</div>
+
+		<!-- SHORTCUT AREA -->
+		<div id="shortcut">
+			<ul>
+
+			</ul>
+		</div>
+		<!--[if IE 7]>
+        <h1>Votre navigateur n'est pas à jour, veuillez mettre à jour votre navigateur en allant à www.microsoft.com/download</h1>
+        <![endif]-->
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/js/bootstrap.min.js"></script>
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/js/pace.min.js"></script>
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/js/jarvis.widget.min.js"></script>
+		<script
+			src="#{facesContext.externalContext.request.contextPath}/js/app.js"></script> 
+	</h:body>
+</f:view>
+</html>

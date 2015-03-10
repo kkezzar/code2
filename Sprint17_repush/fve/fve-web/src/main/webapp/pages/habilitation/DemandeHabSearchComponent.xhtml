@@ -1,0 +1,126 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+
+
+
+	<p:dataTable id="DmdeResultSearchDataTable" var="dmde"
+		resizableColumns="true"
+		rendered="#{dmdeHabSearchBean.demandeResultSearch!=null}"
+		value="#{dmdeHabSearchBean.demandeResultSearch}" paginator="true"
+		paginatorPosition="bottom"
+		emptyMessage="#{demandeHabilitationMsgs.demande_habilitation_data_table_search_result_no_result}"
+		rowIndexVar="rowIndex" rows="10"
+		paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+		currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+		style="margin:8px">
+		
+		<p:columnGroup type="header">
+			<p:row>
+				<p:column colspan="1" headerText=""  width="5%"/>
+				<p:column colspan="2"
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_table_demande_header_demande}" width="50%"/>
+			    <p:column colspan="3"
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_table_demande_header_offre}" width="35%"/>
+			<p:column colspan="1"
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_table_demande_header_action}" width="10%"/>
+			</p:row>
+			<p:row>
+				<p:column
+					headerText="#{ofSearchMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_INDEX}" 
+					 />
+				
+				
+				<p:column
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_code}"
+					 />
+				<p:column
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_objet}"
+					 />
+					 <p:column
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_of_code}"
+				 />
+				<p:column
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_of_libelle}"
+					 />
+				<p:column
+					headerText="#{demandeHabilitationMsgs.demande_habilitation_of_cycle}"
+					 />
+				<p:column exportable="false" />
+			</p:row>
+		</p:columnGroup>
+		<p:column >
+			<h:outputText value="#{rowIndex+1}" />
+		</p:column>
+
+		
+		<p:column >
+			<h:outputText value="#{dmde.code}" />
+		</p:column>
+
+		<p:column >
+			<h:outputText value="#{dmde.objet}" />
+		</p:column>
+
+      <p:column >
+			<h:outputText value="#{dmde.ofCode}" />
+		</p:column>
+		<p:column >
+			<h:outputText
+				value="#{dmde.ofLibelle}" />
+		</p:column>
+
+         <p:column >
+			<h:outputText
+				value="#{dmde.ofLibelleCycle}" />
+		</p:column>
+		<p:column  exportable="false">
+
+                                                                <p:commandButton id="SubmitButtonID" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" value="#{commonmsgs.bouton_soumettre}"  ajax="false" action="#{demandeHabBean.toSubmit}"  rendered="#{dmdeHabSearchBean.fonctionParam==demandeHabilitationMsgs.demande_habilitation_fonction_soumission}"	>																
+																<f:param name="editionMode" value="detail" />
+																<f:param name="ofId" value="#{dmde.ofId}" />
+																<f:param name="demandeId" value="#{dmde.demandeId}" />
+																<f:param name="entityCode" value="#{actionHistBean.entityCode}" />
+        						                                 <f:param name="entityInstanceId" value="#{actionHistBean.entityInstanceId}" />
+																</p:commandButton>
+																
+																<p:commandButton id="ConsulterButtonID" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" value="#{commonmsgs.bouton_detail}" rendered="#{dmdeHabSearchBean.fonctionParam==demandeHabilitationMsgs.demande_habilitation_fonction_gestion}" ajax="false" action="#{demandeHabBean.toView()}"  	>																
+																<f:param name="editionMode" value="detail" />
+																<f:param name="ofId" value="#{dmde.ofId}" />
+																<f:param name="demandeId" value="#{dmde.demandeId}" />
+																<f:param name="entityCode" value="DM" />
+        						                                  <f:param name="entityInstanceId" value="#{dmde.demandeId}" />
+																</p:commandButton>
+																<p:commandButton id="ValiderButtonID" onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" value="#{commonmsgs.bouton_valider}" rendered="#{dmdeHabSearchBean.fonctionParam==demandeHabilitationMsgs.demande_habilitation_fonction_validation}" ajax="false" action="#{demandeHabBean.toValidate}"  	>																
+																<f:param name="editionMode" value="detail" />
+																<f:param name="ofId" value="#{dmde.ofId}" />
+																<f:param name="demandeId" value="#{dmde.demandeId}" />
+																<f:param name="etapeCode" value="VDMH_OF" />
+																<f:param name="entityCode" value="DM" />
+        						                                 <f:param name="entityInstanceId" value="#{dmde.demandeId}" />
+																</p:commandButton>
+
+		</p:column>
+
+	</p:dataTable>
+
+ <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+
+</ui:composition>

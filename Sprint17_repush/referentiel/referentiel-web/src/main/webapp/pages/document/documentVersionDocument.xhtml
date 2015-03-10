@@ -1,0 +1,201 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{documentEditBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="addVersionForm" rendered="#{documentCrudBean.createAllow}" style="margin-bottom:10px;">
+		
+		<p:panelGrid style="width:100%" styleClass="noBorder1 ui-panelgrid-gray" id="addVersionPanel">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="3">
+						<h:outputText value="#{documentmsgs.document_nouvelle_version}" />
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column>
+					<h:outputText
+						value="#{documentmsgs.document_numero_version_document} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="numversion" style="text-align: left" dir="auto"
+						value="#{documentEditBean.refVersionDocumentDto.numVersion}"
+						label="#{documentmsgs.document_numero_version_document}"
+						required="true">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText
+						value="#{documentmsgs.document_date_version_document} *" />
+				</p:column>
+				<p:column>
+					<p:calendar navigator="true"
+						value="#{documentEditBean.refVersionDocumentDto.dateVersion}"
+						id="dateversion" showButtonPanel="true" pattern="dd/MM/yyyy"
+						maxdate="#{documentEditBean.currentDate}"
+						label="#{documentmsgs.document_date_version_document}"
+						required="true"
+						requiredMessage="#{documentmsgs.document_date_version_required}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:calendar>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{documentmsgs.document_observation}" />
+				</p:column>
+				<p:column>
+					<p:inputText id="objet" style="text-align: left; width:200px"
+						value="#{documentEditBean.refVersionDocumentDto.observation}"
+						required="false" label="#{documentmsgs.document_observation}">
+					</p:inputText>
+				</p:column>
+
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{documentmsgs.document_fichier} *" />
+				</p:column>
+
+				<p:column>
+					<h:inputHidden id="urlversiondto"
+						style="text-align: left"
+						value="#{documentEditBean.refVersionDocumentDto.url}" />
+					<p:fileUpload 
+					    id="iduploadversion"
+						fileUploadListener="#{documentEditBean.handleFileUploadVersion}"
+						mode="advanced" auto="true"
+						multiple="false" 
+						process="@this"
+						update="urlversiondto,addVersionForm:urlversiondto,addVersionForm:nomfichier"
+						label="#{documentmsgs.document_drag_drop_selct_fichier}"
+						required="true"
+						requiredMessage="#{documentmsgs.document_document_upload_required}"
+						sizeLimit="#{documentEditBean.limit_size}"
+						invalidSizeMessage="#{documentmsgs.document_limite_size_fichier_upload} #{documentEditBean.limit_size} Octets"
+						allowTypes="#{documentEditBean.allow_types}"
+						dragDropSupport="true">
+
+						<f:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+
+					</p:fileUpload>
+					<br />
+					<h:outputText id="nomfichier"
+						value="#{documentEditBean.refVersionDocumentDto.url}" />
+				</p:column>
+
+			</p:row>
+
+			<p:row>
+				<p:column>
+
+				</p:column>
+				<p:column>
+					<p:commandButton value="#{commonmsgs.button_ok}" id="addVersionid"
+						icon="ui-icon-check"
+						actionListener="#{documentEditBean.addVersionToDocument}"
+						process="@form" update="@(.ui-datatable)">
+
+						<f:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+
+					</p:commandButton>
+					<br />
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+	</h:form>
+	
+	<h:form id="documentsVersionsFormId" enctype="multipart/form-stream">
+
+		<p:dataTable id="versionsDocumentData" paginator="true"
+			paginatorPosition="bottom"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{documentEditBean.listRefVersionDocumentDto}"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+			var="current">
+
+
+			<f:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+			<f:param name="idfVersion" value="#{current.id}" />
+
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@all" process="@form" />
+
+			<f:facet name="header">
+				<h:outputText value="#{documentmsgs.document_versions_documents}" />
+
+			</f:facet>
+
+			<p:column sortBy="#{current.numVersion}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{documentmsgs.document_numero_version_document}" />
+				</f:facet>
+				<h:outputText value="#{current.numVersion}"></h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.dateVersion}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{documentmsgs.document_date_version_document}" />
+				</f:facet>
+				<h:outputText value="#{current.dateVersion}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.observation}">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_observation}" />
+				</f:facet>
+				<h:outputText value="#{current.observation}"></h:outputText>
+			</p:column>
+
+			<p:column style="width:60px">
+				<f:facet name="header">
+					<h:outputText value="Action" />
+				</f:facet>
+
+				<p:commandButton id="downfileVersion"
+					icon="ui-icon-arrowthickstop-1-s" ajax="false">
+					<p:fileDownload value="#{documentEditBean.fileVersion}" />
+					<f:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+					<f:param name="idfVersion" value="#{current.id}" />
+					<f:param name="searchValue" value="#{documentEditBean.searchValue}" />
+				</p:commandButton>
+
+				<p:commandButton id="removeversionButton" icon="ui-icon-trash"
+				    rendered="#{documentCrudBean.deleteAllow}"
+					title="#{commonmsgs.button_delete}"
+					actionListener="#{documentEditBean.removeVersionDocument(current)}"
+					process="@form" immediate="true" update="@(.ui-datatable)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+
+					<f:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+				</p:commandButton>
+
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>

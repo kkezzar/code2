@@ -1,0 +1,138 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="mcPanel">
+		<p:dataTable resizableColumns="true" id="dtTble_mc" paginator="true"
+			paginatorPosition="bottom" rowKey="#{current.id}"
+			selectionMode="single" value="#{ueBB.ratachementMcList}"
+			rowsPerPageTemplate="5,10,15" rows="5"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PageLinks} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords}) "
+			var="current" emptyMessage="#{commonmsgs.data_table_empty_Message}">
+			<p:ajax event="rowSelect" listener="#{ueBB.mcOnRowSelect}"
+				update=":form_ueSearch:tbvw_ueDetail:mcDetail" process="dtTble_mc"
+				onstart="PF('tabUIWidget').block()"
+				onsuccess="PF('tabUIWidget').unblock()" />
+			<p:column style="width:8%" sortBy="#{current.mcCode}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{uniteEnseignementMsgs.unite_enseignement_code}" />
+				</f:facet>
+				<h:outputText value="#{current.mcCode}" />
+			</p:column>
+			<p:column style="width:14%" sortBy="#{current.mcLibelleFr}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{uniteEnseignementMsgs.unite_enseignement_libelle_fr}" />
+				</f:facet>
+
+				<h:outputText value="#{current.mcLibelleFr}" />
+			</p:column>
+			<p:column style="width:14%" sortBy="#{current.mcLibelleAr}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{uniteEnseignementMsgs.unite_enseignement_libelle_ar}" />
+				</f:facet>
+
+				<h:outputText value="#{current.mcLibelleAr}" />
+			</p:column>
+
+			<p:column width="12%" sortBy="#{current.mcOptionnel}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{uniteEnseignementMsgs.unite_enseignement_nature}" />
+				</f:facet>
+				<h:outputText value="#{current.mcOptionnel?'Oui':'Non'}" />
+			</p:column>
+
+			<p:column width="12%" sortBy="#{current.mcCredits}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{uniteEnseignementMsgs.unite_enseignement_credit}" />
+				</f:facet>
+
+				<h:outputText value="#{current.mcCredits}" />
+			</p:column>
+
+			<p:column width="12%" sortBy="#{current.mcCoefficient}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_coefficient}" />
+				</f:facet>
+
+				<h:outputText value="#{current.mcCoefficient}" />
+			</p:column>
+	
+			<p:column width="12%" sortBy="#{current.noteDeBase}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_base}" />
+				</f:facet>
+
+				<h:outputText value="#{current.noteDeBase}" />
+			</p:column>
+
+			<p:column width="8%" sortBy="#{current.noteObtension}">
+				<f:facet name="header">
+					<h:outputText align="right" width="5%"
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_obtention}" />
+				</f:facet>
+
+				<h:outputText value="#{current.noteObtension}" />
+			</p:column>
+
+			<p:column width="8%" sortBy="#{current.noteEliminatoire}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_eliminatoire}" />
+				</f:facet>
+
+				<h:outputText value="#{current.noteEliminatoire}" />
+			</p:column>
+
+		</p:dataTable>
+		<br />
+		<p:outputPanel id="mcDetail">
+			<ui:include src="/pages/offreformation/ue/McEdit.xhtml" />
+			<br/>
+			<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+			<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+							icon="ui-icon-disk" actionListener="#{ueBB.saveRattachementMc()}"
+							onstart="PF('tabUIWidget').block()"
+							onsuccess="PF('tabUIWidget').unblock()" update="mcPanel"
+							process="mcPanel">
+						</p:commandButton>
+						<p:separator/>
+						<p:commandButton id="btn_deleteAp"
+							value="#{commonmsgs.bouton_supprimer}" process="@this"
+							onstart="PF('tabUIWidget').block()"
+							onsuccess="PF('tabUIWidget').unblock()" update="mcPanel"
+							disabled="#{ueBB.rattachementMcDto.id == 0}"
+							actionListener="#{ueBB.deleteMc()}" icon="ui-icon-trash">
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:separator/>
+						<p:commandButton id="btn_newAp"
+							disabled="#{ueBB.rattachementMcDto.id == 0}" update="mcPanel"
+							value="#{commonmsgs.bouton_nouveau}" process="@this"
+							onstart="PF('tabUIWidget').block()"
+							onsuccess="PF('tabUIWidget').unblock()"
+							actionListener="#{ueBB.createNewMc}" icon="ui-icon-plusthick">
+						</p:commandButton>
+			</p:toolbarGroup>
+			</p:toolbar>
+			
+		</p:outputPanel>
+
+
+	</p:outputPanel>
+
+</ui:composition>
+

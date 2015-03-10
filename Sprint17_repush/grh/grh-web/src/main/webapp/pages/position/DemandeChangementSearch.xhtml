@@ -1,0 +1,103 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_demande_changement_search">
+
+
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.bouton_nouveau}" process="@this"  rendered="#{renderedNouveau}"
+							action="#{nameMBean.onNew}" styleClass="ui-buttpn-bleu"
+							update=":pnl_detail" 
+							onstart="PF('page').block()" 
+							onsuccess="PF('page').unblock()"/>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "/>
+						<p:spacer width="10px"></p:spacer>
+							<p:inputText id="keyWordsID" value="#{nameMBean.searchKeyWords}"    
+								placeholder="#{commonmsgs.search_watermark_text_key_words}"
+								label="#{commonmsgs.search_label_mots_cles}" />
+						 
+						<p:separator />
+
+				<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+					styleClass="ui-button-bleu"
+					process="form_demande_changement_search"
+					onstart="PF('page').block()" 
+					onsuccess="PF('page').unblock()"
+					title="Rechercher"
+					actionListener="#{nameMBean.onSearch}"/>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+
+
+
+		<p:dataTable var="demande" lazy="true"
+			value="#{nameMBean.changementPositionDtos}"
+			widgetVar="demandesTable" rowKey="#{demande.id}"
+			style="margin-top:5px;width:100%" resizableColumns="true"
+			paginator="true" rows="5" paginatorPosition="bottom"
+			selectionMode="single"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+			rowIndexVar="rowIndex"
+			emptyMessage="#{positionMgs.msg_demande_changement_no_result}">
+			
+			<p:ajax event="rowSelect" immediate="true"
+				listener="#{nameMBean.onRowSelected}" process="@this"
+				onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+				 update="#{updateAjax}" />
+			
+			<f:facet name="header">
+
+			</f:facet>
+			<p:column headerText="#{finActiviteMgs.label_numero}"
+				style="width:2%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column sortBy="employe.matricule" 
+				headerText="#{finActiviteMgs.label_matricule}">
+				<h:outputText value="#{demande.dossierEmployeDto.matricule}"/>
+			</p:column>
+			<p:column sortBy="individu.nomLatin" 
+				headerText="#{finActiviteMgs.label_employe}">
+				<h:outputText value="#{demande.dossierEmployeDto.refIndividuDto.prenomLatin} #{demande.dossierEmployeDto.refIndividuDto.nomLatin}" />
+			</p:column>
+			<p:column sortBy="#{demande.dateDemande}" 
+				headerText="#{finActiviteMgs.label_date_demande}"
+				rendered="#{droitMode == null}">
+				<h:outputText value="#{demande.dateDemande}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column  sortBy="nomenclatureByPosition.libelleLongFr"
+				headerText="#{droitMode == null ? positionMgs.label_position_demande : positionMgs.label_position}">
+				<h:outputText value="#{demande.nomenclatureByPositionDto.libelleLongFr}"/>
+			</p:column>
+			<p:column sortBy="#{demande.dateDebut}" 
+				headerText="#{droitMode == null ?  positionMgs.label_date_debut : positionMgs.label_date_debut_changement}">
+				<h:outputText value="#{demande.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{demande.dateFin}" style="width:9%"
+				headerText="#{droitMode == null ?  positionMgs.label_date_fin : positionMgs.label_date_fin_changement}">
+				<h:outputText value="#{demande.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+</ui:composition>
+

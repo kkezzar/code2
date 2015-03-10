@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.PlanningSessionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.PlanningSession
+		</class-b>
+
+
+		<!-- private OuvertureOffreFormation ouvertureOffreFormation -->
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationId</a>
+			<b>ouvertureOffreFormation.offreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>ouvertureOffreFormation.offreFormation.code</b>
+		</field>
+		<field>
+			<a>offreFormationLibelleFr</a>
+			<b>ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>ouvertureOffreFormation.refEtablissement.identifiant</b>
+		</field>
+
+		<!-- private Niveau niveau -->
+		<field>
+			<a>niveauId</a>
+			<b>niveau.id</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>niveau.code</b>
+		</field>
+		<field>
+			<a>niveauLibelleLongLt</a>
+			<b>niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>niveau.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>niveau.cycle.code</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>niveau.cycle.libelleLongLt</b>
+		</field>
+
+		<!-- AnneeAcademique anneeAcademique -->
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>anneeAcademique.code</b>
+		</field>
+		<!-- private SituationEntite situationEntite -->
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.id</b>
+		</field>
+		<field>
+			<a>situationCode</a>
+			<b>situationEntite.situation.code</b>
+		</field>
+		<!-- private Periode periode -->
+		<field>
+			<a>idPeriode</a>
+			<b>periode.id</b>
+		</field>
+		<field>
+			<a>codePeriode</a>
+			<b>periode.code</b>
+		</field>
+		<field>
+			<a>libellePeriode</a>
+			<b>periode.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>ncTypeSessionId</a>
+			<b>ncTypeSession.id</b>
+		</field>
+		<field>
+			<a>ncTypeSessionCode</a>
+			<b>ncTypeSession.code</b>
+		</field>
+		<field>
+			<a>ncTypeSessionLibelleFr</a>
+			<b>ncTypeSession.libelleLongFr</b>
+		</field>
+		
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.situation.id</b>
+		</field>
+		<field>
+			<a>situationCode</a>
+			<b>situationEntite.situation.code</b>
+		</field>
+		<field>
+			<a>situationLibelleFr</a>
+			<b>situationEntite.situation.libelleFr</b>
+		</field>
+			<field>
+			<a>situationLibelleAr</a>
+			<b>situationEntite.situation.libelleAr</b>
+		</field>
+
+<!-- 		situation -->
+
+<field>
+			<a>ncTypeSessionLibelleFr</a>
+			<b>ncTypeSession.libelleLongFr</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.ExamenSessionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.ExamenSession
+		</class-b>
+
+		<field>
+			<a>numeroSession</a>
+			<b>planningSession.numeroSession</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>planningSession.ouvertureOffreFormation.id</b>
+		</field>
+		<!-- private RattachementMc rattachementMc -->
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMc.id</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>rattachementMc.uniteEnseignement.id</b>
+		</field>
+		<field>
+			<a>ueCode</a>
+			<b>rattachementMc.uniteEnseignement.code</b>
+		</field>
+		<field>
+			<a>ueLibelleFr</a>
+			<b>rattachementMc.uniteEnseignement.libelleFr</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>rattachementMc.matiereConstitutive.id</b>
+		</field>
+		<field>
+			<a>mcCode</a>
+			<b>rattachementMc.matiereConstitutive.code</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+		<field>
+			<a>mcCoefficient</a>
+			<b>rattachementMc.coefficient</b>
+		</field>
+		<field>
+			<a>mcCredit</a>
+			<b>rattachementMc.credit</b>
+		</field>
+
+		<field>
+			<a>rattachementMcCoefficient</a>
+			<b>rattachementMc.coefficient</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteObtension</a>
+			<b>rattachementMc.noteObtension</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteDeBase</a>
+			<b>rattachementMc.noteDeBase</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteEliminatoire</a>
+			<b>rattachementMc.noteEliminatoire</b>
+		</field>
+
+
+
+		<!-- private PlanningSessionDto planningSession -->
+
+		<field>
+			<a>planningSessionId</a>
+			<b>planningSession.id</b>
+		</field>
+		<field>
+			<a>planningSessionIntitule</a>
+			<b>planningSession.intitule</b>
+		</field>
+		<field>
+			<a>idPeriode</a>
+			<b>planningSession.periode.id</b>
+		</field>
+		<field>
+			<a>codePeriode</a>
+			<b>planningSession.periode.code</b>
+		</field>
+		<field>
+			<a>libellePeriode</a>
+			<b>planningSession.periode.libelleLongLt</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>planningSession.anneeAcademique.id</b>
+		</field>
+		
+		<field>
+			<a>planningCoefficientNoteEliminatoire</a>
+			<b>planningSession.coefficientNoteEliminatoire</b>
+		</field>
+		
+		
+
+		<!-- private Niveau niveau -->
+		<field>
+			<a>niveauId</a>
+			<b>planningSession.niveau.id</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>planningSession.niveau.code</b>
+		</field>
+		<field>
+			<a>niveauLibelleLongLt</a>
+			<b>planningSession.niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>planningSession.niveau.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>planningSession.niveau.cycle.code</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>planningSession.niveau.cycle.libelleLongLt</b>
+		</field>
+		<field>
+			<a>situationId</a>
+			<b>planningSession.situationEntite.id</b>
+		</field>
+		<field>
+			<a>salleExamenDtos</a>
+			<b>salleExamens</b>
+		</field>
+		<field>
+			<a>typeSession</a>
+			<b>planningSession.ncTypeSession.libelleLongFr</b>
+		</field>
+		
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.InscriptionExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.InscriptionExamen
+		</class-b>
+
+
+		<!-- private SalleExamen salleExamen -->
+		<field>
+			<a>salleExamenId</a>
+			<b>salleExamen.id</b>
+		</field>
+		<field>
+			<a>refLieuId</a>
+			<b>salleExamen.refLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>salleExamen.refLieu.designation</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>salleExamen.refLieu.nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>salleExamen.refLieu.nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refLieuCapacite</a>
+			<b>salleExamen.refLieu.capacite</b>
+		</field>
+		<field>
+			<a>examenSessionId</a>
+			<b>salleExamen.examenSession.id</b>
+		</field>
+		<field>
+			<a>rattachementMcId</a>
+			<b>salleExamen.examenSession.rattachementMc.id</b>
+		</field>
+		<field>
+			<a>rattachementMcCoefficient</a>
+			<b>salleExamen.examenSession.rattachementMc.coefficient</b>
+		</field>
+		<field>
+			<a>rattachementMcCredit</a>
+			<b>salleExamen.examenSession.rattachementMc.credit</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteObtension</a>
+			<b>salleExamen.examenSession.rattachementMc.noteObtension</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteDeBase</a>
+			<b>salleExamen.examenSession.rattachementMc.noteDeBase</b>
+		</field>
+		<field>
+			<a>rattachementMcNoteEliminatoire</a>
+			<b>salleExamen.examenSession.rattachementMc.noteEliminatoire</b>
+		</field>
+
+		<field>
+			<a>ueId</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.id</b>
+		</field>
+		<field>
+			<a>ueCode</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.code
+			</b>
+		</field>
+		<field>
+			<a>ueNatureLlFr</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.ncNatureUe.libelleLongFr
+			</b>
+		</field>
+
+		<field>
+			<a>ueLibelleFr</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.libelleFr
+			</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.id
+			</b>
+		</field>
+		<field>
+			<a>mcCode</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.code
+			</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.libelleFr
+			</b>
+		</field>
+		
+
+		<field>
+			<a>dateExamen</a>
+			<b>salleExamen.examenSession.dateExamen
+			</b>
+		</field>
+		<field>
+			<a>heureDebut</a>
+			<b>salleExamen.examenSession.heureDebut
+			</b>
+		</field>
+		<field>
+			<a>heureFin</a>
+			<b>salleExamen.examenSession.heureFin
+			</b>
+		</field>
+		<field>
+			<a>refTypeExamen</a>
+			<b>salleExamen.examenSession.refTypeExamen
+			</b>
+		</field>
+
+
+		<field>
+			<a>planningSessionId</a>
+			<b>salleExamen.examenSession.planningSession.id</b>
+		</field>
+		<field>
+			<a>planningSessionIntitule</a>
+			<b>salleExamen.examenSession.planningSession.intitule</b>
+		</field>
+		<field>
+			<a>avecControleContinu</a>
+			<b>salleExamen.examenSession.planningSession.avecControleContinu</b>
+		</field>
+
+		<field>
+			<a>idPeriode</a>
+			<b>salleExamen.examenSession.planningSession.periode.id</b>
+		</field>
+		<field>
+			<a>codePeriode</a>
+			<b>salleExamen.examenSession.planningSession.periode.code</b>
+		</field>
+		<field>
+			<a>libellePeriode</a>
+			<b>salleExamen.examenSession.planningSession.periode.libelleLongLt
+			</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>salleExamen.examenSession.planningSession.anneeAcademique.id</b>
+		</field>
+
+		<!-- private DossierInscriptionAdministrative -->
+
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>dossierInscriptionAdministrative.id</b>
+		</field>
+		<field>
+			<a>numeroInscription</a>
+			<b>dossierInscriptionAdministrative.numeroInscription</b>
+		</field>
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.id</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule
+			</b>
+		</field>
+		<field>
+			<a>urlPhoto</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.photo
+			</b>
+		</field>
+
+		<field>
+			<a>nin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.identifiant</b>
+		</field>
+		<field>
+			<a>individuId</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.id</b>
+		</field>
+		<field>
+			<a>individuNomLatin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.nomLatin
+			</b>
+		</field>
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.prenomLatin
+			</b>
+		</field>
+		<field>
+			<a>individuDateNaissance</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.dateNaissance
+			</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.ExamenSessionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.examen.InscriptionExamenDto
+		</class-b>
+
+		<field>
+			<a>id</a>
+			<b>examenSessionId</b>
+		</field>
+
+
+		<!-- private RattachementMc rattachementMc -->
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMcId</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>ueId</b>
+		</field>
+		<field>
+			<a>ueCode</a>
+			<b>ueCode</b>
+		</field>
+		<field>
+			<a>ueLibelleFr</a>
+			<b>ueLibelleFr</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>mcId</b>
+		</field>
+		<field>
+			<a>mcCode</a>
+			<b>mcCode</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>mcLibelleFr</b>
+		</field>
+
+
+		<!-- private PlanningSessionDto planningSession -->
+
+		<field>
+			<a>planningSessionId</a>
+			<b>planningSessionId</b>
+		</field>
+		<field>
+			<a>planningSessionIntitule</a>
+			<b>planningSessionIntitule</b>
+		</field>
+		<field>
+			<a>idPeriode</a>
+			<b>idPeriode</b>
+		</field>
+		<field>
+			<a>codePeriode</a>
+			<b>codePeriode</b>
+		</field>
+		<field>
+			<a>libellePeriode</a>
+			<b>libellePeriode</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademiqueId</b>
+		</field>
+
+
+	</mapping>
+
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.InscriptionExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DossierInscriptionAdministrative
+		</class-b>
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>numeroInscription</a>
+			<b>numeroInscription</b>
+		</field>
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiant.id</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossierEtudiant.numeroMatricule</b>
+		</field>
+		<field>
+			<a>nin</a>
+			<b>dossierEtudiant.individu.identifiant</b>
+		</field>
+
+
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.InscriptionExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-b>
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>numeroInscription</a>
+			<b>numeroInscription</b>
+		</field>
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiantId</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>numeroMatricule</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.ResponsableExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.ResponsableExamen
+		</class-b>
+
+
+		<!-- private SalleExamen salleExamen -->
+		<field>
+			<a>salleExamenId</a>
+			<b>salleExamen.id</b>
+		</field>
+		<field>
+			<a>refLieuId</a>
+			<b>salleExamen.refLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>salleExamen.refLieu.designation</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>salleExamen.refLieu.nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>salleExamen.refLieu.nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>examenSessionId</a>
+			<b>salleExamen.examenSession.id</b>
+		</field>
+		<field>
+			<a>rattachementMcId</a>
+			<b>salleExamen.examenSession.rattachementMc.id</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.id</b>
+		</field>
+		<field>
+			<a>ueCode</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.code
+			</b>
+		</field>
+		<field>
+			<a>ueLibelleFr</a>
+			<b>salleExamen.examenSession.rattachementMc.uniteEnseignement.libelleFr
+			</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.id
+			</b>
+		</field>
+		<field>
+			<a>mcCode</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.code
+			</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>salleExamen.examenSession.rattachementMc.matiereConstitutive.libelleFr
+			</b>
+		</field>
+
+
+		<!-- private RefIndividu refIndividu -->
+
+		<field>
+			<a>individuId</a>
+			<b>refIndividu.id</b>
+		</field>
+
+		<!-- <field> -->
+		<!-- <a>individuIdentifiant</a> -->
+		<!-- <b>refIndividu.identifiant</b> -->
+		<!-- </field> -->
+		<!-- <field> -->
+		<!-- <a>individuNomArabe</a> -->
+		<!-- <b>refIndividu.nomArabe</b> -->
+		<!-- </field> -->
+		<field>
+			<a>individuNomLatin</a>
+			<b>refIndividu.nomLatin</b>
+		</field>
+		<!-- <field> -->
+		<!-- <a>individuPrenomArabe</a> -->
+		<!-- <b>refIndividu.prenomArabe</b> -->
+		<!-- </field> -->
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>refIndividu.prenomLatin</b>
+		</field>
+		<field>
+			<a>individuDateNaissance</a>
+			<b>refIndividu.dateNaissance</b>
+		</field>
+		
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.ResponsableExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefIndividu
+		</class-b>
+		<field>
+			<a>individuId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>individuNomLatin</a>
+			<b>nomLatin</b>
+		</field>
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>prenomLatin</b>
+		</field>
+		<!-- <field> -->
+		<!-- <a>individuIdentifiant</a> -->
+		<!-- <b>refIndividu.identifiant</b> -->
+		<!-- </field> -->
+		<!-- <field> -->
+		<!-- <a>individuNomArabe</a> -->
+		<!-- <b>refIndividu.nomArabe</b> -->
+		<!-- </field> -->
+		<!-- <field> -->
+		<!-- <a>individuPrenomArabe</a> -->
+		<!-- <b>refIndividu.prenomArabe</b> -->
+		<!-- </field> -->
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.SalleExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.SalleExamen
+		</class-b>
+		<field>
+			<a>etudiants</a>
+			<b>inscriptionExamens</b>
+		</field>
+		<field>
+			<a>responsables</a>
+			<b>responsableExamens</b>
+		</field>
+		<field>
+			<a>refLieuId</a>
+			<b>refLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>refLieu.designation</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>refLieu.nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>refLieu.nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refLieuCapacite</a>
+			<b>refLieu.capacite</b>
+		</field>
+		<!-- private ExamenSession -->
+		<field>
+			<a>examenSessionId</a>
+			<b>examenSession.id</b>
+		</field>
+		<!-- private RattachementMc rattachementMc -->
+		<field>
+			<a>rattachementMcId</a>
+			<b>examenSession.rattachementMc.id</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>examenSession.rattachementMc.uniteEnseignement.id</b>
+		</field>
+
+		<field>
+			<a>ueLibelleFr</a>
+			<b>examenSession.rattachementMc.uniteEnseignement.libelleFr</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>examenSession.rattachementMc.matiereConstitutive.id</b>
+		</field>
+
+		<field>
+			<a>mcLibelleFr</a>
+			<b>examenSession.rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+
+		<field>
+			<a>dateExamen</a>
+			<b>examenSession.dateExamen</b>
+		</field>
+		<field>
+			<a>heureDebut</a>
+			<b>examenSession.heureDebut</b>
+		</field>
+		<field>
+			<a>heureFin</a>
+			<b>examenSession.heureFin</b>
+		</field>
+
+	</mapping>
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.SalleExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefLieu
+		</class-b>
+
+
+		<field>
+			<a>refLieuId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>designation</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refLieuCapacite</a>
+			<b>capacite</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.SalleExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.examen.InscriptionExamenDto
+		</class-b>
+		<field>
+			<a>id</a>
+			<b>salleExamenId</b>
+		</field>
+		<field>
+			<a>examenSessionId</a>
+			<b>examenSessionId</b>
+		</field>
+		<field>
+			<a>refLieuId</a>
+			<b>refLieuId</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>refLieuLibelle</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>refLieuTypeId</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>refLieuTypeLibelle</b>
+		</field>
+
+		<!-- private RattachementMc rattachementMc -->
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMcId</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>ueId</b>
+		</field>
+
+
+		<field>
+			<a>mcId</a>
+			<b>mcId</b>
+		</field>
+
+
+
+
+
+
+	</mapping>
+
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.SalleExamenDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.examen.ResponsableExamenDto
+		</class-b>
+		<field>
+			<a>id</a>
+			<b>salleExamenId</b>
+		</field>
+		<field>
+			<a>examenSessionId</a>
+			<b>examenSessionId</b>
+		</field>
+		<field>
+			<a>refLieuId</a>
+			<b>refLieuId</b>
+		</field>
+		<field>
+			<a>refLieuLibelle</a>
+			<b>refLieuLibelle</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>refLieuTypeId</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelle</a>
+			<b>refLieuTypeLibelle</b>
+		</field>
+
+		<!-- private RattachementMc rattachementMc -->
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMcId</b>
+		</field>
+
+
+		<field>
+			<a>ueId</a>
+			<b>ueId</b>
+		</field>
+
+
+		<field>
+			<a>mcId</a>
+			<b>mcId</b>
+		</field>
+	</mapping>
+
+</mappings>

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel header="#{commonmsgs.menu_evenements}" style="border:0;">
+
+			<p:tabView id="evenementTabViewID" effect="#{tabBean.effect}"
+				effectDuration="normal">
+
+
+				<p:tab id="infos" title="#{commonmsgs.common_infos}">
+					<ui:include src="/pages/evenement/infoEvenementDetails.xhtml" />
+				</p:tab>
+
+
+
+				<c:forEach var="tabItem" items="#{evenementDroitBean.listActions}"
+					varStatus="status">
+					<p:tab title="#{tabItem.nomFonction}">
+						<ui:include src="#{tabItem.urlFonction}">
+							<c:set var="entity" value="evenement" scope="request" />
+							<c:set var="id" value="#{evenementMgrBean.id}" scope="request" />
+							<ui:param name="createAllow" value="false" />
+							<ui:param name="editAllow" value="false" />
+							<ui:param name="deleteAllow" value="false" />
+							<ui:param name="id" value="#{evenementMgrBean.id}" />
+							<ui:param name="idf" value="#{evenementMgrBean.idf}" />
+						</ui:include>
+					</p:tab>
+
+				</c:forEach>
+
+
+				<p:tab title="#{commonmsgs.common_documents}"
+					disabled="#{evenementMgrBean.idf==null}">
+
+					<ui:include src="/pages/evenement/evenementDocument.xhtml">
+
+						<c:set var="entity" value="evenement" scope="request" />
+						<c:set var="identifiant" value="#{evenementMgrBean.refEvenementDto.identifiant}" scope="request" />
+						<ui:param name="createAllow" value="false" />
+						<ui:param name="editAllow" value="false" />
+						<ui:param name="deleteAllow" value="false" />
+						<ui:param name="entity" value="evenement" />
+						<ui:param name="identifiant" value="#{evenementMgrBean.refEvenementDto.identifiant}" />
+
+					</ui:include>
+				</p:tab>
+			
+			</p:tabView>
+			<!-- <h:form id="evenementDetailsForm"></h:form> -->
+
+
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

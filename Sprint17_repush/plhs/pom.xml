@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>dz.gov.mesrs.sii.plhs</groupId>
+	<artifactId>plhs</artifactId>
+	<packaging>pom</packaging>
+	<name>PLHS Project</name>
+	<description>Le projet du module de &quot;Gestion du patrimoine&quot;</description>
+
+	<version>0.1.0-SNAPSHOT</version>
+	<properties>
+		<progres.commons.version>1.0.3-SNAPSHOT</progres.commons.version>
+		<progres.referentiel.version>2.1.1-SNAPSHOT</progres.referentiel.version>
+	</properties>
+
+	<parent>
+		<groupId>dz.gov.mesrs.sii.progres</groupId>
+		<artifactId>progres</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+		<relativePath>../progres</relativePath>
+	</parent>
+
+ 	<modules> 
+ 		<module>plhs-business</module> 
+ 		<module>plhs-web</module> 
+ 	</modules> 
+
+	<dependencyManagement>
+		<dependencies>
+			<!--Project -->
+ 			<dependency> 
+ 				<groupId>dz.gov.mesrs.sii.plhs</groupId> 
+ 				<artifactId>plhs-business</artifactId> 
+ 				<version>${project.version}</version> 
+ 			</dependency> 
+
+			<!-- Progres Referentiel -->
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.referentiel</groupId>
+				<artifactId>referentiel-business</artifactId>
+				<version>${progres.referentiel.version}</version>
+			</dependency>
+
+			<!-- Progres Commons -->
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-api</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-data</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-business</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-web</artifactId>
+				<version>${progres.commons.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-web</artifactId>
+				<version>${progres.commons.version}</version>
+				<classifier>classes</classifier>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<scm>
+		<developerConnection>scm:git:git://ccm@192.168.3.127/~/git/plhs</developerConnection>
+	</scm>
+
+
+
+</project>

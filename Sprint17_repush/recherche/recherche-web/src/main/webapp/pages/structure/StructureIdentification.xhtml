@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchStructureMsgs.structure_recherche_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+	
+	 <p:toolbar id="structuresListToolBar" style="margin-bottom:8px;">
+						<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOneStructure" 
+									action="#{structureBB.prepareSearchResearchStructure}"  
+									icon="ui-icon-plusthick"  
+									value="#{rchStructureMsgs.structure_recherche_button_ajouter_structure_libelle}"
+									process="@this" 
+									ajax="true"
+									update=":dlgForm"
+									oncomplete="PF('dlgAddStructure').show();">
+							</p:commandButton>
+							</p:toolbarGroup>
+</p:toolbar>	
+		<p:dataTable id="structuresDataTable" var="row"
+								value="#{structureBB.listStructures}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_structures_empty}"
+								rowIndexVar="rowIndex"
+								selection="#{structureBB.selectedStructureRecherche}"
+								selectionMode="single"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								rowsPerPageTemplate="5,10"
+								style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{structureBB.onStrcutureRechercheRowSelect}" update=":mainForm:structureOutPutPanelDetails :mainForm:msg :dlgAddThemeId"	
+				onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_structures_title}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_recherche_column_libelle_fr}"><h:outputText value="#{row.refStructureLibelleLatin}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_recherche_column_libelle_ar}"><h:outputText value="#{row.refStructureLibelleArabe}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_recherche_column_type}"><h:outputText value="#{row.refStructureTypeLibelle}" style="color:#336699;"/></p:column>
+<!-- 				<p:column style="text-align:center; width:30px;">	 -->
+<!-- 								<p:commandButton id="btnRemoveStructureRecherche"   -->
+<!-- 											action="#{structureBB.removeStructureRecherche()}"  -->
+<!-- 								 			icon="ui-icon-trash"  -->
+<!-- 											ajax="true"  -->
+<!-- 											update="structuresDataTable"   -->
+<!-- 											process="@this"> -->
+<!-- 										<p:confirm		header="#{rchStructureMsgs.structure_recherche_dialog_remove_structure_confirm_title}"	 message="#{rchStructureMsgs.structure_recherche_dialog_remove_structure_confirm_msg}" 	icon="ui-icon-alert" /> -->
+<!-- 										<f:setPropertyActionListener target="#{structureBB.selectedStructureId}" value="#{row.id}" />			 -->
+<!-- 								</p:commandButton> -->
+<!-- 			</p:column> -->
+		</p:dataTable>
+		
+<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+<p:outputPanel id="structureOutPutPanelDetails">
+<p:panel header="#{rchStructureMsgs.structure_recherche_structure_detail_panel_title} : #{structureBB.selectedStructureRecherche.refStructureLibelleLatin.toUpperCase()}" 
+					rendered="#{structureBB.canShowStructureDetail}" style="margin-bottom:8px;">
+   <p:tabView orientation="left" id="tvStructure">
+ 
+        <p:tab title="#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_identification}">
+           <p:panelGrid  id="panelGridIdentification" style="width:100%;height:auto;">
+           <p:row>
+           <p:column colspan="2" styleClass="title">#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_identification}</p:column>
+           </p:row>
+           	<p:row>
+			<p:column style="width:15%;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_libelle_fr}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureLibelleLatin}" styleClass="value" />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_libelle_ar}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureLibelleArabe}" styleClass="value"  />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_forme_juridique}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureFormeJuridiqueLibelle}" styleClass="value" />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_statut}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureStatutLibelle}" styleClass="value" />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_date_creation}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureDateCreation}"  styleClass="value" >
+				<f:convertDateTime pattern="dd-MM-yyyy" />
+				</h:outputText>
+			</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_nif}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureNif}" styleClass="value" />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_nis}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureNis}" styleClass="value" />	</p:column>
+			</p:row>
+           	<p:row>
+			<p:column>	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_identification_nrc}" />	</p:column>
+			<p:column>	<h:outputText value="#{structureBB.selectedStructureRecherche.refStructureNrc}" styleClass="value" />	</p:column>
+			</p:row>
+           </p:panelGrid>
+        </p:tab>
+        <p:tab id="tabGroupes" title="#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_groupes}">
+          
+        <p:toolbar id="structureGroupesToolBar" style="margin-bottom:8px;">
+						<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOneGroupe" 
+									action="#{structureBB.prepareSearchStructureGroupes}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":dlgFormGroupe"
+									oncomplete="PF('dlgAddGroupe').show();">
+							</p:commandButton>
+							</p:toolbarGroup>
+		</p:toolbar>	
+		
+         <p:dataTable id="structureGroupesDataTable" var="row"
+								value="#{structureBB.listStructureRechercheGroupes}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_structure_groupes_empty}"
+								rowIndexVar="rowIndex"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								style="margin-bottom:8px;">
+				<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_structure_groupes_list}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_groupes_column_libelle_fr}">
+						<h:outputText value="#{row.refGroupeLibelleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_groupes_column_libelle_ar}">
+						<h:outputText value="#{row.refGroupeLibelleAr}" style="color:#336699;"/>
+				</p:column>
+				<p:column style="text-align:center;width:20%;">
+					<p:commandLink id="groupeMemebreLink" 
+										action="#{structureBB.prepareGroupeMembres}"
+										update=":dlgFormGroupeMembres"
+										onstart="PF('ajaxprogress').block()" 
+										oncomplete="PF('ajaxprogress').unblock();PF('dlgDetailGroupeMembres').show();">
+        				<h:outputText value="#{rchStructureMsgs.structure_recherche_button_link_structure_groupe_membres_libelle}" />
+        				<f:setPropertyActionListener target="#{structureBB.selectedStructureRechercheGroupeId}" value="#{row.id}" />
+    				</p:commandLink>
+				</p:column>
+				<p:column style="text-align:center;width:30px;">
+						<p:commandButton id="btnRemoveGroupe"  
+															action="#{structureBB.removeStructureGroupe()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:tvStructure:structureGroupesDataTable :mainForm:tvStructure:msgGroupes"   
+															process="@this">
+								<p:confirm		header="#{rchStructureMsgs.structure_recherche_dialog_remove_structure_confirm_title}"	message="#{rchStructureMsgs.structure_recherche_dialog_remove_groupe_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{structureBB.selectedStructureRechercheGroupeId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:messages id="msgGroupes" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+        </p:tab>
+        
+        <p:tab title="#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_themes}">
+           	<p:toolbar id="structureThemesToolBar" style="margin-bottom:8px;">
+						<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOneTheme" 
+									action="#{structureBB.prepareAddStructureTheme}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":dlgFormTheme :mainForm:tvStructure:msgThemes"
+									oncomplete="PF('dlgAddTheme').show();">
+							</p:commandButton>
+							</p:toolbarGroup>
+			</p:toolbar>	
+           	<p:dataTable id="structureThemesDataTable" var="row"
+								value="#{structureBB.listStructureRechercheThemes}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_themes_empty}"
+								rowIndexVar="rowIndex"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								style="margin-bottom:8px;">
+				<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_themes_list}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_themes_column_theme_libelle_fr}"><h:outputText value="#{row.ncThemeLibelleLatin}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_themes_column_theme_groupe}"><h:outputText value="#{row.groupeLibelleLatin}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_themes_column_theme_date_debut}" style="text-align:center;">
+						<h:outputText value="#{row.dateDebut}" style="color:#336699;">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_themes_column_theme_date_fin}" style="text-align:center;">
+						<h:outputText value="#{row.dateFin}" style="color:#336699;">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+				</p:column>
+					<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemoveTheme"  
+															action="#{structureBB.removeStructureTheme()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:tvStructure:structureThemesDataTable :mainForm:tvStructure:msgThemes"   
+															process="@this">
+								<p:confirm		header="#{rchStructureMsgs.structure_recherche_dialog_remove_structure_confirm_title}"	message="#{rchStructureMsgs.structure_recherche_dialog_remove_theme_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{structureBB.selectedStructureRechercheThemeId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" >
+           					<p:commandButton id="editThemeButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{structureBB.prepareEditStructureTheme}" 
+									process="@this"	
+									oncomplete="PF('dlgAddTheme').show();"
+									update=":dlgFormTheme"	>
+									<f:setPropertyActionListener target="#{structureBB.selectedStructureRechercheThemeId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+				
+			</p:dataTable>
+			<p:messages id="msgThemes" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+        </p:tab>
+        
+          <p:tab title="#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_partenaire}">
+          <p:toolbar id="structurePartenairesToolBar" style="margin-bottom:8px;">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddMultiplePartners" 
+									action="#{structureBB.prepareAddStructurePartners}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":dlgFormPartenaire"
+									oncomplete="PF('dlgAddPartenaire').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+		</p:toolbar>	
+            	<p:dataTable id="structurePartenairesDataTable" var="row"
+								value="#{structureBB.listStructureRecherchePartenaires}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_empty}"
+								rowIndexVar="rowIndex"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								style="margin-bottom:8px;">
+				<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_list}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_column_designation}">
+				<h:outputText value="#{row.partenaireStructureDesignationLatin} #{row.partenaireGroupeDesignationLatin} #{row.partenaireIndividuNomLatin} #{row.partenaireIndividuPrenomLatin}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_column_contrat_objet}"><h:outputText value="#{row.contratObjet}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_column_contrat_reference}"  style="text-align:center;">
+					<h:outputText value="#{row.contratReference}" style="color:#336699;"/></p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_column_contrat_date_debut_validite}" style="text-align:center;">
+					<h:outputText value="#{row.contratDateDebutValidite}" style="color:#336699;">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_partenaires_column_contrat_date_fin_validite}" style="text-align:center;">
+					<h:outputText value="#{row.contratDateFinValidite}" style="color:#336699;">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemovePartner"  
+															action="#{structureBB.removeStructurePartner()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:tvStructure:structurePartenairesDataTable :mainForm:tvStructure:msgPartners"   
+															process="@this">
+								<p:confirm		header="#{rchStructureMsgs.structure_recherche_dialog_remove_structure_confirm_title}"	message="#{rchStructureMsgs.structure_recherche_dialog_remove_partner_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{structureBB.selectedStructureRecherchePartenaireId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:messages id="msgPartners" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+        </p:tab>
+     
+        <p:tab title="#{rchStructureMsgs.structure_recherche_structure_detail_tabview_tab_equipements}">
+           	<p:dataTable id="structureEquipementsDataTable" var="row"
+								value="#{structureBB.listStructureRechercheEquipements}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_empty}"
+								rowIndexVar="rowIndex"
+								style="margin-bottom:8px;">
+							<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_list}</f:facet>
+							<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+							<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_column_code}"><h:outputText value="#{row.code}" style="color:#336699;"/></p:column>
+							<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_column_designation}"><h:outputText value="#{row.designation}" style="color:#336699;"/></p:column>
+							<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_column_reference_externe}"><h:outputText value="#{row.referenceexterne}" style="color:#336699;"/></p:column>
+							<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_column_famille}"><h:outputText value="#{row.familleequipementLibelleLongFr}" style="color:#336699;"/></p:column>
+							<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structure_equipements_column_date_mise_disposition}" style="text-align:center;width:15%;">
+							<h:outputText value="#{row.dateMiseDispo}" style="color:#336699;">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+							</p:column>
+				</p:dataTable>
+        </p:tab>
+        
+ </p:tabView>
+
+</p:panel>
+</p:outputPanel>
+</h:form>
+
+<p:dialog  widgetVar="dlgAddGroupe"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchStructureMsgs.structure_recherche_dialog_ajouter_structure_groupe_title}"
+ 					id="dlgAddGroupeId" resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+<h:form id="dlgFormGroupe">
+		 
+		 <cmp:GroupSelectComponent 
+		 id="cmpSelectGroupeStructure" 
+		 selectedRow="#{structureBB.selectedGroupeReferentiel}" 
+		 beanName="#{structureBB}" 
+		 selectRowListenerName="onRowGroupSelect" 
+		 searchGroupMethod="#{structureBB.searchGroup()}" 
+		 searchGroupKeyWord="#{structureBB.refGroupSearchKeyWord}" 
+		 listData="#{structureBB.listGroupesReferentiel}"
+		 toUpdate=":mainForm:tvStructure:structureGroupesDataTable :mainForm:tvStructure:msgGroupes :dlgFormTheme:listThemesGroupesID"
+		dialogIdToHide="dlgAddGroupe"/>
+		
+		<p:toolbar style="margin-bottom:8px;">
+		<p:toolbarGroup>
+							<p:commandButton id="btnHideAddGroupeDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_structure_groupe_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddGroupe').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+		</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+</p:dialog>
+
+<p:dialog  widgetVar="dlgDetailGroupeMembres"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchStructureMsgs.structure_recherche_dialog_membres_structure_groupe_title}"
+ 					id="dlgMembresGroupeId" resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+		<h:form id="dlgFormGroupeMembres">
+				<cmp:GroupMembersComponent model="#{structureBB.listMembresGroupe}"></cmp:GroupMembersComponent>
+				<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideMembresGroupeDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_structure_groupe_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgDetailGroupeMembres').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+		</h:form>
+</p:dialog>
+
+<p:dialog  widgetVar="dlgAddPartenaire"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchStructureMsgs.structure_recherche_dialog_ajouter_structure_partenaire_title}"
+ 					id="dlgAddPartenaireId" resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+<h:form id="dlgFormPartenaire">
+		 <p:messages id="msgPartnersDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+		 <cmp:PartnerSelectComponent 
+					 searchPartnerKeyWord="#{structureBB.refPartnerSearchKeyWord}" 
+					 id="cmpSelectPartenaireStructure" 
+					 withSearch="false"
+					 selectedRows="#{structureBB.listPartnairesSearchSelection}" 
+					 searchPartnerMethod="#{structureBB.searchPartners}" 
+					 listData="#{structureBB.listPartnairesSearch}"
+					 toUpdate=":dlgFormPartenaire:addSelectedPartners">
+		 </cmp:PartnerSelectComponent>
+		
+		<p:toolbar style="margin-bottom:8px;">
+		<p:toolbarGroup>
+							<p:commandButton id="btnHideAddPartenaireDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_structure_groupe_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddPartenaire').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+		</p:toolbarGroup>
+		
+		<p:toolbarGroup align="right">
+						<p:commandButton id="addSelectedPartners" 
+							action="#{structureBB.addPartners()}"  
+							value = "#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_partners_ajouter_libelle}"
+							process="@this :dlgFormPartenaire" 
+							ajax="true" 
+							disabled="#{not structureBB.canAddPartners}"
+							update=":mainForm:tvStructure:structurePartenairesDataTable :mainForm:tvStructure:msgPartners @form"
+							oncomplete="handleUpdatePartnersRequest(xhr, status, args)">
+						</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdatePartnersRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddPartenaire').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddPartenaire').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+<p:dialog  widgetVar="dlgAddStructure"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchStructureMsgs.structure_recherche_dialog_ajouter_structure_title}"
+ 					id="dlgAddStructureId" resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgForm">
+	<br />
+	<p:panelGrid id="gridSelectionTypeStructure" style="margin-bottom:10px;width:100%;">
+					<p:row >
+	        		<p:column style="width:30%;text-align:right;" >
+	        		<h:outputLabel value="#{rchStructureMsgs.structure_recherche_label_dialog_type_structure}" />
+	        		</p:column>
+	        		<p:column>
+	        			<p:selectOneMenu id="listTypesStructuresD" 	value="#{structureBB.selectedTypeStructureReferentielId}" style="width:100%;" >
+								<f:selectItems value="#{structureBB.listTypesStructuresReferentiel}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+								<p:ajax listener="#{structureBB.handleTypeStructureChange}" 	event="valueChange" process="@this"  update="structuresReferentielDataTable"/>
+				</p:selectOneMenu>
+	        		</p:column>
+	        		</p:row>
+	  </p:panelGrid>
+	
+	 <p:dataTable id="structuresReferentielDataTable" var="row"
+								value="#{structureBB.listStructuresReferentiel}"
+								rowKey="#{row.id}"
+								emptyMessage="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_empty}"
+								rowIndexVar="rowIndex"
+								selection="#{structureBB.selectedStructureReferentiel}"
+								selectionMode="single"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								rowsPerPageTemplate="5,10"
+								style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{structureBB.onStrcutureReferentielRowSelect}" update=":mainForm" oncomplete="PF('dlgAddStructure').hide();"/>  
+				<f:facet name="header">#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_title}</f:facet>
+				<p:column	headerText="" style="text-align:center;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_column_type}" style="text-align:left;">
+							<h:outputText value="#{row.typeLibelleLongFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_column_libelle_fr}" style="text-align:left;">
+							<h:outputText value="#{row.llStructureLatin}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_column_libelle_ar}" style="text-align:left;">
+							<h:outputText value="#{row.llStructureArabe}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_column_nif}" style="text-align:left;">
+							<h:outputText value="#{row.nif}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchStructureMsgs.structure_recherche_datatable_list_structures_referentiel_column_nis}" style="text-align:left;">
+							<h:outputText value="#{row.nis}" style="color:#336699;"/>
+				</p:column>
+		</p:dataTable>
+		
+		<p:toolbar style="margin-bottom:8px;">
+		<p:toolbarGroup>
+							<p:commandButton id="btnHideAddStructureDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_structure_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddStructure').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+		</p:toolbarGroup>
+		</p:toolbar>
+		
+</h:form>
+</p:dialog>
+
+<p:dialog  widgetVar="dlgAddTheme"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchStructureMsgs.structure_recherche_dialog_ajouter_theme_title}"
+ 					id="dlgAddThemeId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormTheme">
+	<p:messages id="msgThemesDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+  	<p:panelGrid  id="panelGridThemes" style="width:100%;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_theme_dialog_nc_theme}" />	</p:column>
+						<p:column colspan="3">
+						<p:selectOneMenu id="listTypesThemesD" 	value="#{structureBB.selectedNomenclatureThemeId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchStructureMsgs.structure_recherche_dialog_add_theme_theme_required}">
+								<f:selectItems value="#{structureBB.listNomenclatureThemes}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_theme_dialog_groupe}" />	</p:column>
+						<p:column colspan="3">
+						<p:selectOneMenu id="listThemesGroupesID" 	value="#{structureBB.selectedStructureRechercheThemeGroupeId}" style="width:100%;">
+								<f:selectItems value="#{structureBB.listStructureRechercheGroupesItems}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_theme_dialog_date_debut}" />	</p:column>
+						<p:column>
+								<p:calendar value="#{structureBB.selectedStructureRechercheTheme.dateDebut}"  pattern="dd/MM/yyyy" required="true"	 
+														requiredMessage="#{rchStructureMsgs.structure_recherche_dialog_add_theme_begin_date_required}"/>
+						</p:column>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_theme_dialog_date_fin}" />	</p:column>
+						<p:column>
+								<p:calendar value="#{structureBB.selectedStructureRechercheTheme.dateFin}"  pattern="dd/MM/yyyy" required="true"	
+														requiredMessage="#{rchStructureMsgs.structure_recherche_dialog_add_theme_end_date_required}"/>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;vertical-align:top;">	<h:outputText value="#{rchStructureMsgs.structure_recherche_structure_detail_tab_theme_dialog_description}" />	</p:column>
+						<p:column colspan="3">
+								<p:inputTextarea value="#{structureBB.selectedStructureRechercheTheme.description}"  style="width:100%;">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+		</p:panelGrid>
+		
+		<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddThemeDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_theme_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddTheme').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right" 	rendered="#{not structureBB.toEditThemeDialog}">
+						<p:commandButton id="btnAddTheme" 
+							action="#{structureBB.saveTheme()}"  
+							icon="ui-icon-plusthick"  
+							value = "#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_theme_ajouter_libelle}"
+							process="@this :dlgFormTheme" 
+							ajax="true" 
+							update=":mainForm:tvStructure:structureThemesDataTable :mainForm:tvStructure:msgThemes @form" 
+							oncomplete="handleUpdateThemeRequest(xhr, status, args)">
+						</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right" rendered="#{structureBB.toEditThemeDialog}">
+						<p:commandButton id="btnUpdateTheme" 
+							action="#{structureBB.saveTheme()}"  
+							value = "#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_theme_modifier_libelle}"
+							process="@this :dlgFormTheme" 
+							ajax="true" 
+							update=":mainForm:tvStructure:structureThemesDataTable :mainForm:tvStructure:msgThemes @form"
+							oncomplete="handleUpdateThemeRequest(xhr, status, args)">
+						</p:commandButton>
+				</p:toolbarGroup>
+			
+	</p:toolbar>
+</h:form>
+<script type="text/javascript">
+   								 function handleUpdateThemeRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddTheme').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddTheme').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+			
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<pe:blockUI target="mainForm" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

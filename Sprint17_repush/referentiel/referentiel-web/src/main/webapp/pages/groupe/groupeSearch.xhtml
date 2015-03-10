@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_groupes}" style="border:0;">
+			<h:form id="searchForm"
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+			
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{groupeDroitBean.createAllow}" icon="ui-icon-document"
+							action="#{groupeMgrBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="groupeData"
+								fileName="listeDesGroupes" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{groupeMgrBean.searchInput}" id="searchInput"
+							rendered="#{groupeDroitBean.readAllow}" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton update=":searchForm" ajax="true" id="searchButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" icon="ui-icon-search"
+							rendered="#{groupeDroitBean.readAllow}"
+							actionListener="#{groupeMgrBean.findGeneric}" />
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()"
+							rendered="#{groupeDroitBean.readAllow}">
+							<h:outputText value="#{commonmsgs.button_advanced_search}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="groupeData"
+					rendered="#{groupeMgrBean.listRefGroupeDto!=null}"
+					value="#{groupeMgrBean.listRefGroupeDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{groupemsgs.groupe_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{groupemsgs.groupe_identite}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+					<p:column sortBy="#{current.llGroupe}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{groupemsgs.groupe_libelle_long_latin}" />
+						</f:facet>
+						<h:outputText value="#{current.llGroupe}" />
+					</p:column>
+					<p:column sortBy="#{current.lcGroupe}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{groupemsgs.groupe_libelle_court_latin}" />
+						</f:facet>
+						<h:outputText value="#{current.lcGroupe}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.llSituationFr}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{groupemsgs.groupe_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateSituation}" width="12%">
+						<f:facet name="header">
+							<h:outputText value="Date" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateSituation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column style="width:8%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{groupeMgrBean.toDetails(current)}" icon="ui-icon-document"
+							rendered="#{groupeDroitBean.readAllow}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_consulter}">
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{groupeMgrBean.toEdit(current)}" icon="ui-icon-pencil"
+							rendered="#{groupeDroitBean.editAllow}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_update}">
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			appendTo="@(body)">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{groupemsgs.groupe_identite}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="identifiantSearch" style="text-align: left"
+								value="#{groupeMgrBean.searchDto.identifiant}"
+								label="#{groupemsgs.groupe_identite}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{groupemsgs.groupe_libelle_long_latin}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtSearch" style="text-align: left"
+								value="#{groupeMgrBean.searchDto.llGroupe}"
+								label="#{groupemsgs.groupe_libelle_long_latin}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{groupemsgs.groupe_libelle_court_latin}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtCourtSearch" style="text-align: left"
+								value="#{groupeMgrBean.searchDto.lcGroupe}"
+								label="#{groupemsgs.groupe_libelle_court_latin}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{groupemsgs.groupe_libelle_long_arabe}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabeSearch" style="text-align: left"
+								value="#{groupeMgrBean.searchDto.llGroupeArabe}"
+								label="#{groupemsgs.groupe_libelle_long_arabe}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{groupemsgs.groupe_libelle_court_ar}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabecourtSearch"
+								style="text-align: left"
+								value="#{groupeMgrBean.searchDto.lcGroupeArabe}"
+								label="#{groupemsgs.groupe_libelle_court_ar}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					actionListener="#{groupeMgrBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

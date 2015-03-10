@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DossierInscriptionAdministrative
+		</class-b>
+		<field>
+			<a>bilanSessionDtos</a>
+			<b>bilanSessions</b>
+		</field>
+		<field>
+			<a>dossierInscriptionAdministrativeDtos</a>
+			<b>dossierEtudiant.dossierInscriptionAdministratives</b>
+		</field>
+
+		
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>anneeAcademique.code</b>
+		</field>
+
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationLibelleFr</a>
+			<b>ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>dossierId</a>
+			<b>dossier.id</b>
+		</field>
+		
+		<field>
+			<a>situationId</a>
+			<b>dossier.situationEntite.id</b>
+		</field>
+		<field>
+			<a>situationLibelleFr</a>
+			<b>dossier.situationEntite.situation.libelleFr</b>
+		</field>
+		<field>
+			<a>situationLibelleFr</a>
+			<b>dossier.situationEntite.situation.libelleAr</b>
+		</field>
+
+		<field>
+			<a>typeDossier</a>
+			<b>dossier.typeDossier</b>
+		</field>
+
+		<field>
+			<a>dateCreation</a>
+			<b>dossier.dateCreation</b>
+		</field>
+
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiant.id</b>
+		</field>
+
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossierEtudiant.numeroMatricule</b>
+		</field>
+
+		<field>
+			<a>photo</a>
+			<b>dossierEtudiant.photo</b>
+		</field>
+
+		<field>
+			<a>nin</a>
+			<b>dossierEtudiant.individu.identifiant</b>
+		</field>
+
+		<field>
+			<a>individuId</a>
+			<b>dossierEtudiant.individu.id</b>
+		</field>
+
+		<field>
+			<a>individuNomArabe</a>
+			<b>dossierEtudiant.individu.nomArabe</b>
+		</field>
+		<field>
+			<a>individuNomLatin</a>
+			<b>dossierEtudiant.individu.nomLatin</b>
+		</field>
+
+		<field>
+			<a>individuPrenomArabe</a>
+			<b>dossierEtudiant.individu.prenomArabe</b>
+		</field>
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>dossierEtudiant.individu.prenomLatin</b>
+		</field>
+
+		<field>
+			<a>individuDateNaissance</a>
+			<b>dossierEtudiant.individu.dateNaissance</b>
+		</field>
+
+		<field>
+			<a>individuLieuNaissance</a>
+			<b>dossierEtudiant.individu.lieuNaissance</b>
+		</field>
+
+		<field>
+			<a>individuNationaliteLibelleLongFr</a>
+			<b>dossierEtudiant.individu.nomenclatureByNationalite.libelleLongFr
+			</b>
+		</field>
+		<field>
+			<a>individuNationaliteLibelleLongAr</a>
+			<b>dossierEtudiant.individu.nomenclatureByNationalite.libelleLongAr
+			</b>
+		</field>
+
+		<field>
+			<a>matriculeBac</a>
+			<b>dossierEtudiant.dossierBachelier.matricule</b>
+		</field>
+		<field>
+			<a>moyenneBac</a>
+			<b>dossierEtudiant.dossierBachelier.moyenneBac</b>
+		</field>
+
+		<field>
+			<a>refCodeWilayaNaissance</a>
+			<b>dossierEtudiant.dossierBachelier.refCodeWilayaNaissance</b>
+		</field>
+
+		<field>
+			<a>adresseResidence</a>
+			<b>dossierEtudiant.dossierBachelier.adresseResidence</b>
+		</field>
+		<field>
+			<a>situationId</a>
+			<b>dossier.situationEntite.id</b>
+		</field>
+
+
+		<field>
+			<a>niveauId</a>
+			<b>niveau.id</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>niveau.code</b>
+		</field>
+		<field>
+			<a>niveauRang</a>
+			<b>niveau.rang</b>
+		</field>
+		
+		<field>
+			<a>niveaulibelleLongLt</a>
+			<b>niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>niveau.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>niveau.cycle.code</b>
+		</field>
+		<field>
+			<a>cyclelibelleLongLt</a>
+			<b>niveau.cycle.libelleLongLt</b>
+		</field>
+
+	<field>
+			<a>refEtablissementId</a>
+			<b>refEtablissement.id</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>llEtablissementArabe</a>
+			<b>refEtablissement.llEtablissementArabe</b>
+		</field>
+		<field>
+			<a>llEtablissementLatin</a>
+			<b>refEtablissement.llEtablissementLatin</b>
+		</field>
+		<field>
+			<a>idTypeDemandeHebergement</a>
+			<b>typeDemandeHebergement.id</b>
+		</field>
+
+		<field>
+			<a>typeDemandeHebergementLibelleFr</a>
+			<b>typeDemandeHebergement.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>typeDemandeHebergementLibelleAr</a>
+			<b>typeDemandeHebergement.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>idTypeDemandeBourse</a>
+			<b>typeDemandeBourse.id</b>
+		</field>
+
+		<field>
+			<a>typeDemandeBourseLibelleFr</a>
+			<b>typeDemandeBourse.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>typeDemandeBourseLibelleAr</a>
+			<b>typeDemandeBourse.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>idTypeHebergement</a>
+			<b>typeHebergement.id</b>
+		</field>
+
+		<field>
+			<a>typeHebergementLibelleFr</a>
+			<b>typeHebergement.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>typeHebergementLibelleAr</a>
+			<b>typeHebergement.libelleLongAr</b>
+		</field>
+		
+		<field>
+			<a>etudiantCivilite</a>
+			<b>dossierEtudiant.individu.nomenclatureByCivilite.libelleLongFr
+			</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.bac.DossierBachelierDto
+		</class-b>
+
+
+		<field>
+			<a>individuNomLatin</a>
+			<b>nomFr</b>
+		</field>
+		<field>
+			<a>individuNomArabe</a>
+			<b>nomAr</b>
+		</field>
+
+		<field>
+			<a>individuPrenomArabe</a>
+			<b>prenomAr</b>
+		</field>
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>prenomFr</b>
+		</field>
+
+		<field>
+			<a>individuDateNaissance</a>
+			<b>dateNaissance</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Dossier
+		</class-b>
+
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.id</b>
+		</field>
+	</mapping>
+
+</mappings>

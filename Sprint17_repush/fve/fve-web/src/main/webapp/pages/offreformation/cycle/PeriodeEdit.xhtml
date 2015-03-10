@@ -1,0 +1,327 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+<ui:define name="title">FVE - #{cycleMsgs.period_panel_page_title}</ui:define>
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{cycleMsgs.period_panel_page_title}</ui:define>
+	<ui:define name="centerContent">
+	<h:form id="formCycle">
+			<p:outputPanel id="mainOutputPanel">
+			<h:panelGrid id="gridListCycles" style="width:100%;margin:10px;">
+			<p:row>
+			<p:column>
+					<p:panelGrid id="gridTypeFormationSelection" style="width:100%;margin-bottom:8px;">
+					<p:row>
+					<p:column style="width:130px;"><h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_type_formation_label}"/></p:column>
+					<p:column><p:selectOneMenu id="listTypesFormationFilterID" 	value="#{periodeBB.typeFormationPeriodCode}" >
+										<f:selectItems value="#{periodeBB.listTypesFormation}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+										<p:ajax listener="#{periodeBB.handleTypesFormationFilterChange}" 	event="valueChange" process="@this" update="periodsDataTable listCyclesFilterID listLevelsFilterID periodDetailOutputPanel"
+										onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					<p:row>
+					<p:column style="width:130px;"><h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_cycles_label}" /></p:column>
+					<p:column><p:selectOneMenu id="listCyclesFilterID" 	value="#{periodeBB.cyclePeriodId}" style="width:300px;">
+										<f:selectItems value="#{periodeBB.listTypesCycles}" var="c" 	itemLabel="#{c.label}" itemValue="#{c.value}" />
+										<p:ajax listener="#{periodeBB.handleCyclesFilterChange}" 	event="valueChange" process="@this listTypesFormationFilterID" update="periodsDataTable periodDetailOutputPanel listTypesFormationFilterID listLevelsFilterID"
+										onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					<p:row>
+					<p:column  style="width:130px;"><h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_niveaux_label}" /></p:column>
+					<p:column styleClass="textOnLeft"><p:selectOneMenu id="listLevelsFilterID" 	value="#{periodeBB.levelPeriodId}" required="true" requiredMessage="#{cycleMsgs.period_message_niveau_required}" style="width:300px;">
+										<f:selectItems value="#{periodeBB.listTypesNiveaux}" var="n" 	itemLabel="#{n.label}" itemValue="#{n.value}" />
+										<p:ajax listener="#{periodeBB.handleLevelsFilterChange}" 	event="valueChange" process="@this listCyclesFilterID listTypesFormationFilterID" update="periodsDataTable periodDetailOutputPanel listCyclesFilterID listTypesFormationFilterID"
+										onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					</p:panelGrid>
+				</p:column>
+				</p:row>	
+	
+					<p:row>
+					<p:column>
+					<p:dataTable id="periodsDataTable" var="row"
+								value="#{periodeBB.listPeriods}"
+								rowKey="#{row.code}"
+								emptyMessage="#{cycleMsgs.level_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								selection="#{periodeBB.selectedPeriod}"
+								style="width:100%;margin-bottom:8px;margin-left:0px;">
+								<p:ajax event="rowSelect" listener="#{periodeBB.onPeriodRowSelect}"  	update=":formCycle:periodDetailOutputPanel"
+								onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()"/>  
+			    				<f:facet name="header">  #{cycleMsgs.period_data_table_list_header}</f:facet>  
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_rang}" style="width:30px" styleClass="center"> 	<h:outputText value="#{row.rang}" /> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_code}" style="width:20px" styleClass="center"><h:outputText value="#{row.code}"/></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" styleClass="textOnLeft">	<h:outputText value="#{row.libelleLongLt}"/></p:column>
+								
+						</p:dataTable>
+						</p:column>
+						</p:row>
+				<p:row>
+				<p:column>
+		
+				<p:outputPanel id="periodDetailOutputPanel" style="width:100%;margin:0px;">
+				<p:panel header="#{periodeBB.selectedDetailPeriodTitle}"  rendered="#{periodeBB.showPeriodDetails}"  style="width:100%;margin-bottom:8px;">
+	
+				<p:tabView id="tvPeriodDetails" style="padding:0px">
+				<p:tab title="#{cycleMsgs.period_detail_tabview_recap} #{periodeBB.selectedPeriod.libelleLongLt}">	
+				<p:panelGrid  id="pgPeriodDescriptif" rendered="#{not empty periodeBB.selectedPeriod}" style="width:100%;">
+				<p:row>
+				<p:column  style="width:130px;"><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_periodicite_label} " /></p:column>
+				<p:column>
+						<p:selectOneMenu id="listTypesPeriodiciteID" 	value="#{periodeBB.selectedPeriodiciteCode}" required="true" requiredMessage="#{cycleMsgs.level_message_periodicite_required}">
+										<f:selectItems value="#{periodeBB.listTypesPeriodicites}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+											<p:ajax listener="#{periodeBB.handlePeriodiciteChange}" 	event="valueChange" 
+														process="@this listPeriodesAnneeID" 
+														update="listPeriodesAnneeID"	/>
+						</p:selectOneMenu> 
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column  style="width:130px;"><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_periode_annee_label} " /></p:column>
+				<p:column>
+						<p:selectOneMenu id="listPeriodesAnneeID" 	value="#{periodeBB.selectedPeriodeId}" required="true" requiredMessage="#{cycleMsgs.level_message_periodee_annee_required}">
+										<f:selectItems value="#{periodeBB.listPeriodesParPeriodicite}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+						</p:selectOneMenu> 
+				</p:column>
+				</p:row>
+				<p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_code_label} " /></p:column>
+				        <p:column><p:inputText id="periodCodeID" value="#{periodeBB.selectedPeriod.code}" maxlength="5" style="width:100px;" required="true" requiredMessage="#{cycleMsgs.period_message_code_required}"/></p:column> 
+				</p:row> 
+				<p:row>       
+				      <p:column><h:outputLabel for="periodLevelId" value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_rang_label}" /></p:column>
+        			  <p:column><p:spinner id="periodLevelId" value="#{periodeBB.selectedPeriod.rang}" min="1" max="10" required="true" requiredMessage="#{cycleMsgs.period_message_rang_required}"/></p:column>
+				</p:row> 	      
+				<p:row>     
+		          	<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_fr_label} " /></p:column>
+				     <p:column><p:inputText id="periodLibelleLongFrID" value="#{periodeBB.selectedPeriod.libelleLongLt}" maxlength="150" style="width:300px;" required="true" requiredMessage="#{cycleMsgs.period_message_libelle_long_fr_required}"/></p:column> 
+				</p:row>     
+				<p:row>       
+		          	<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_ar_label} " /></p:column>
+				     <p:column><p:inputText id="periodLibelleLongArID" value="#{periodeBB.selectedPeriod.libelleLongAr}" maxlength="150" dir="rtl" style="width:300px; "/></p:column> 
+				 </p:row>     
+				 <p:row>            
+		          			<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_court_fr_label} " /></p:column>
+				        	<p:column><p:inputText id="periodLibelleCourtFrID" value="#{periodeBB.selectedPeriod.libelleCourtLt}" maxlength="50" style="width:200px;"/> </p:column>
+				  </p:row>   
+				   <p:row>             
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_credit_label} " /></p:column>
+				       <p:column> <p:inputText id="periodCreditID" value="#{periodeBB.selectedPeriod.credit}" maxlength="3"  style="width:70px;"/> </p:column>
+		    		</p:row>   
+				    </p:panelGrid>
+		            <pe:keyFilter for="periodCreditID" mask="num"/>  
+		            </p:tab>
+		            
+		             <p:tab title="#{cycleMsgs.period_detail_tabview_params} #{periodeBB.selectedPeriod.libelleLongLt}">	
+		            <p:panel id="panelListParams">
+        				<p:dataTable id="paramsDataTable" var="row"
+								value="#{periodeBB.periodeParams}"
+								rowKey="#{row.code}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+        						paginatorPosition="bottom"
+								rows="3" 
+								emptyMessage="#{cycleMsgs.period_param_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								>
+			    				<f:facet name="header">  #{cycleMsgs.period_param_data_table_list_header}</f:facet>  
+								<p:column	headerText="#{cycleMsgs.period_param_data_table_column_header_code}" style="text-align:center;">
+								<h:outputText value="#{row.code}"/>
+								</p:column>
+								<p:column headerText="#{cycleMsgs.period_param_data_table_column_header_libelle}">	
+								<h:outputText value="#{row.libelle}"/>
+								</p:column>
+								<p:column headerText="#{cycleMsgs.period_param_data_table_column_header_annee}" style="text-align:center;">	
+								<h:outputText value="#{row.premiereAnnee} / #{row.deuxiemeAnnee}"/>
+								</p:column>
+								<p:column headerText="#{cycleMsgs.period_param_data_table_column_header_value}" style="text-align:right;">	
+								<h:outputText value="#{row.valeur}"/>
+								</p:column>
+								<p:column style="width:30px" styleClass="center">	
+															<p:commandButton id="btnRemoveParamPeriode"  action="#{periodeBB.removeParamPeriode()}"  icon="ui-icon-trash" 
+																	ajax="true" update="@([id$=paramsDataTable])"  process="@this">
+																	<p:confirm		header="#{cycleMsgs.period_message_remove_confirm_title}"	 message="#{cycleMsgs.period_param_message_remove_confirmation}" 	icon="ui-icon-alert" />
+																	<f:setPropertyActionListener target="#{periodeBB.periodParamId}" value="#{row.id}" />	
+															
+															</p:commandButton>
+								</p:column>
+								<p:column  style="width:30px" styleClass="center">
+										<p:commandButton id="editPeriodParamButtonID" 	icon="ui-icon-pencil" action="#{periodeBB.prepareParamDetails()}" 
+										update="@([id$=paramDetailsOutputPanel])" process="@this" oncomplete="PF('dlgAddParam').show();"
+										>
+																<f:setPropertyActionListener target="#{periodeBB.periodParamId}" value="#{row.id}" />										
+										</p:commandButton>
+								</p:column>
+						</p:dataTable>
+						</p:panel>
+						<br />
+						<p:commandButton 	action="#{periodeBB.prepareParamDetails()}"   
+																rendered="#{periodeBB.canAddParam}"
+																ajax="true" 
+																update="@([id$=formDlgAddParam])"  
+																process="@this" 
+																icon="ui-icon-plusthick"	 
+																oncomplete="PF('dlgAddParam').show();">
+														<f:setPropertyActionListener target="#{periodeBB.periodParamId}" value="null" />
+						</p:commandButton>
+		            </p:tab>
+		            </p:tabView>
+			<br />
+		</p:panel>
+				<p:toolbar id="periodToolBar" style="width:100%;margin:0;">
+				<p:toolbarGroup>
+						<p:commandButton id="btnAddPeriod" 
+						value="#{cycleMsgs.cycle_bouton_ajouter_libelle}" 
+						action="#{periodeBB.addPeriod()}"  
+						icon="ui-icon-plusthick"  
+							process="@this listLevelsFilterID" ajax="true" update=":formCycle:periodDetailOutputPanel" 
+							onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()">
+							<f:param name="periodId" value="#{txtPeriodId.value}" />
+							<f:param name="levelPeriodId" value="#{txtLevelPeriodId.value}" />
+							<f:param name="cyclePeriodId" value="#{txtCyclePeriodId.value}" />
+							<f:param name="typeFormationPeriodCode" value="#{txtTypeFormationPeriodCode.value}" />
+							<f:setPropertyActionListener target="#{periodeBB.periodParamId}" value="null" />
+						</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup rendered="#{periodeBB.showBtnRemove}">
+				<p:separator />
+						<p:commandButton id="btnRemovePeriod" 
+							value="#{cycleMsgs.cycle_bouton_supprimer_libelle}" 
+							actionListener="#{periodeBB.removePeriod()}"  
+							icon="ui-icon-trash"     
+							process="@this listLevelsFilterID" ajax="true" 
+							update=":formCycle:periodDetailOutputPanel :formCycle:periodsDataTable" 
+							onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()" >
+							<p:confirm		header="#{cycleMsgs.period_message_remove_confirm_title}"	 message="#{cycleMsgs.period_message_remove_confirm_msg}"	icon="ui-icon-alert" />
+							<f:param name="periodId" value="#{txtPeriodId.value}" />
+							<f:param name="levelPeriodId" value="#{txtLevelPeriodId.value}" />
+							<f:param name="cyclePeriodId" value="#{txtCyclePeriodId.value}" />
+							<f:param name="typeFormationPeriodCode" value="#{txtTypeFormationPeriodCode.value}" />
+						</p:commandButton>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="left" rendered="#{periodeBB.showBtnSave}">
+				<p:separator />
+					<p:commandButton id="btnSavePeriod"
+							 value="#{cycleMsgs.cycle_bouton_enregistrer_libelle}" 
+							action="#{periodeBB.savePeriod()}"
+							 icon="ui-icon-disk"  
+							process=":formCycle:periodDetailOutputPanel" ajax="true" 
+							update=":formCycle:periodDetailOutputPanel :formCycle:periodsDataTable" 
+							onstart="PF('ajaxProgress').block()" oncomplete="PF('ajaxProgress').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+				
+				<h:inputHidden  id="txtPeriodId" binding="#{txtPeriodId}" value="#{periodeBB.periodId}"  style="font-size:12px"/>
+				<h:inputHidden  id="txtTypeFormationPeriodId" binding="#{txtTypeFormationPeriodCode}" value="#{periodeBB.typeFormationPeriodCode}"  style="font-size:12px"/>
+				<h:inputHidden  id="levelPeriodId" binding="#{txtLevelPeriodId}" value="#{periodeBB.levelPeriodId}"  style="font-size:12px"/>
+				<h:inputHidden  id="cyclePeriodId" binding="#{txtCyclePeriodId}" value="#{periodeBB.cyclePeriodId}"  style="font-size:12px"/>
+	</p:outputPanel>
+	</p:column>
+	</p:row>
+	</h:panelGrid>
+	</p:outputPanel>
+	<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+	</h:form>
+	
+			<p:dialog  widgetVar="dlgAddParam"  appendTo="@(body)" modal="true" header="#{cycleMsgs.period_param_panel_detail_param_legend}" resizable="false"
+			style="font-size:#{sessionBean.fontSize}px">  	
+					<h:form id="formDlgAddParam">
+    				
+    				<p:outputPanel id="paramDetailsOutputPanel">
+        					<p:panelGrid>
+        					<p:row>
+        						<p:column><h:outputLabel value="#{cycleMsgs.period_param_data_table_column_header_code}"></h:outputLabel></p:column>
+            					<p:column><p:inputText id="txt_code" value="#{periodeBB.selectedPeriodeParam.code}" required="true"  requiredMessage="#{cycleMsgs.period_param_message_required_code}"/></p:column>
+ 							</p:row>
+ 							<p:row>
+            						<p:column><h:outputLabel value="#{cycleMsgs.period_param_data_table_column_header_libelle}"></h:outputLabel></p:column>
+            						<p:column><p:inputText id="txt_libelle" value="#{periodeBB.selectedPeriodeParam.libelle}" required="true" style="width:350px;" requiredMessage="#{cycleMsgs.period_param_message_required_libelle}"/></p:column>
+            				</p:row>
+            				<p:row>
+            						<p:column><h:outputLabel value="#{cycleMsgs.period_param_data_table_column_header_type}"></h:outputLabel></p:column>
+            						<p:column><p:selectOneMenu id="listTypesParamsID" 	value="#{periodeBB.selectedPeriodeParam.idTypeParam}">
+										<f:selectItems value="#{periodeBB.listTypesParams}" var="tp" 	itemLabel="#{tp.label}" itemValue="#{tp.value}" />
+										<p:ajax listener="#{periodeBB.handleParamsTypesChange}" 	event="valueChange" process="@this" update="@([id$=txt_valeur])"/>
+									</p:selectOneMenu></p:column>
+							</p:row>
+							<p:row>
+									<p:column><h:outputLabel value="#{cycleMsgs.period_param_data_table_column_header_value}"></h:outputLabel></p:column>
+            						<p:column><p:inputMask  id="txt_valeur" value="#{periodeBB.selectedPeriodeParam.valeur}" required="true" mask="#{periodeBB.selectedPeriodeParam.masqueTypeParam}" requiredMessage="#{cycleMsgs.period_param_message_required_valeur}"/></p:column>
+    						</p:row>
+    						<p:row>        						
+            						<p:column><h:outputText value=" " /></p:column>
+		            				<p:column><p:selectBooleanCheckbox value="#{periodeBB.applyAllToPeriodsLevel}" itemLabel="#{cycleMsgs.period_param_check_apply_to_all_periods}" /></p:column>
+							</p:row>
+        					</p:panelGrid>
+        					
+        					<br />
+							<p:toolbar style="width:100%;margin-bottom:8px;">
+								<p:toolbarGroup>
+										<p:commandButton id="btnHideParamDialogID" value="#{cycleMsgs.period_param_dialog_bouton_annuler}" 	type="button" onclick="PF('dlgAddParam').hide();"  icon="ui-icon-close">
+										</p:commandButton>
+								</p:toolbarGroup>
+								<p:toolbarGroup>
+								<p:separator/>
+										<p:commandButton id="btn_reset" value="#{cycleMsgs.period_param_dialog_bouton_initialiser}" type="reset"/>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+									<p:commandButton id="btnSaveParamPeriode" value="#{cycleMsgs.period_param_dialog_bouton_Enregistrer}"  ajax="true"  action="#{periodeBB.savePeriodParam()}" 
+																	update="@([id$=paramsDataTable]) @([id$=formDlgAddParam])"  icon="ui-icon-disk" process="@this paramDetailsOutputPanel"
+																oncomplete="handleSaveParamRequest(xhr, status, args)" >
+            						</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+    				</p:outputPanel>
+    				</h:form>
+    				<script type="text/javascript">
+   								 function handleSaveParamRequest(xhr, status, args) {
+   									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddParam').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddParam').hide();
+	       							 }
+    							}
+					</script>
+    				</p:dialog>
+
+		<pe:blockUI target="@([id$=periodsDataTable])" widgetVar="blockUIWidget1">
+        				<h:graphicImage library="images" name="ajax-loader1.gif" width="20px" height="20px"/>  
+    </pe:blockUI>
+    <pe:blockUI target="@([id$=periodDetailOutputPanel])" widgetVar="blockUIWidget2">
+        				<h:graphicImage library="images" name="ajax-loader1.gif" width="20px" height="20px"/>  
+    </pe:blockUI>
+    <pe:blockUI target="@([id$=pgPeriodDescriptif])" widgetVar="blockUIWidget3">
+        				<h:graphicImage library="images" name="ajax-loader1.gif" width="20px" height="20px"/>  
+    </pe:blockUI>
+    <pe:blockUI target="formCycle:periodDetailOutputPanel" widgetVar="ajaxProgress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+            </style>
+	</ui:define>
+</ui:composition>

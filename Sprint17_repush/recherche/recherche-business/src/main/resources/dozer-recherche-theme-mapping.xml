@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.ThemeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.Theme</class-b>
+      		<field>
+      					<a>structureId</a>
+	  					<b>structure.id</b>
+      		</field> 
+      		<field>
+      					<a>structureLibelleLatin</a>
+	  					<b>structure.refStructure.llStructureLatin</b>
+      		</field> 
+      		<field>
+      					<a>groupeId</a>
+	  					<b>groupe.id</b>
+      		</field> 
+      		<field>
+      					<a>groupeLibelleLatin</a>
+	  					<b>groupe.refGroupe.llGroupe</b>
+      		</field> 
+      		<field>
+      					<a>ncThemeId</a>
+	  					<b>ncTheme.id</b>
+      		</field> 
+      		<field>
+      					<a>ncThemeIdentifiant</a>
+	  					<b>ncTheme.code</b>
+      		</field> 
+      		<field>
+      					<a>ncThemeLibelleLatin</a>
+	  					<b>ncTheme.libelleLongFr</b>
+      		</field> 
+      </mapping>
+      		
+</mappings>

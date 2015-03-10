@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DiplomeFinEtudeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DiplomeFinEtude
+		</class-b>
+
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>bilanSession.dossierInscriptionAdministrative.id</b>
+		</field>
+
+		<field>
+			<a>numeroMatricule</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule
+			</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.id
+			</b>
+		</field>
+
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>bilanSession.dossierInscriptionAdministrative.anneeAcademique.id
+			</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>bilanSession.dossierInscriptionAdministrative.anneeAcademique.code
+			</b>
+		</field>
+
+		<field>
+			<a>moyenne</a>
+			<b>bilanSession.moyenne</b>
+		</field>
+		<field>
+			<a>dateObtention</a>
+			<b>dateObtention</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+
+		<field>
+			<a>bilanSessionId</a>
+			<b>bilanSession.id</b>
+		</field>
+		<field>
+			<a>deliberationSessionId</a>
+			<b>bilanSession.deliberationSession.id</b>
+		</field>
+
+		<field>
+			<a>typeDecisionId</a>
+			<b>bilanSession.typeDecision.id</b>
+		</field>
+
+
+		<field>
+			<a>etudiantNomArabe</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.nomArabe
+			</b>
+		</field>
+		<field>
+			<a>etudiantNomLatin</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.nomLatin
+			</b>
+		</field>
+		<field>
+			<a>etudiantPrenomArabe</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.prenomArabe
+			</b>
+		</field>
+		<field>
+			<a>etudiantPrenomLatin</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.prenomLatin
+			</b>
+		</field>
+
+		<field>
+			<a>etudiantDateNaissance</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.dateNaissance
+			</b>
+		</field>
+
+		<field>
+			<a>etudiantLieuNaissance</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.lieuNaissance
+			</b>
+		</field>
+
+		<field>
+			<a>nin</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.individu.identifiant
+			</b>
+		</field>
+		<field>
+			<a>photo</a>
+			<b>bilanSession.dossierInscriptionAdministrative.dossierEtudiant.photo
+			</b>
+		</field>
+		<field>
+			<a>numeroInscription</a>
+			<b>bilanSession.dossierInscriptionAdministrative.numeroInscription
+			</b>
+		</field>
+
+		<field>
+			<a>offreFormationCode</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.code
+			</b>
+		</field>
+
+		<field>
+			<a>offreFormationLibelleAr</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.libelleLongAr
+			</b>
+		</field>
+
+		<field>
+			<a>offreFormationLibelleFr</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.libelleLongFr
+			</b>
+		</field>
+
+		<field>
+			<a>cycleCode</a>
+			<b>cycle.code
+			</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>cycle.id
+			</b>
+		</field>
+		<field>
+			<a>refCodeTypeFormation</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.typeFormation.code
+			</b>
+		</field>
+
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>cycle.libelleLongLt
+			</b>
+		</field>
+
+		<field>
+			<a>cycleLibelleLongAr</a>
+			<b>cycle.libelleLongAr
+			</b>
+		</field>
+
+		<field>
+			<a>refCodeDomaine</a>
+			<b>bilanSession.dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.refDomaineLMD.identifiant
+			</b>
+		</field>
+
+		<field>
+			<a>mentionId</a>
+			<b>bilanSession.mention.id</b>
+		</field>
+		<field>
+			<a>mentionCode</a>
+			<b>bilanSession.mention.code</b>
+		</field>
+		<field>
+			<a>mentionLibelleFr</a>
+			<b>bilanSession.mention.libelleLongFr</b>
+		</field>
+		<field>
+			<a>mentionLibelleAr</a>
+			<b>bilanSession.mention.libelleLongAr</b>
+		</field>
+
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.SignatureDiplomeFinEtudeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.SignatureDiplomeFinEtude
+		</class-b>
+		
+		<field>
+			<a>diplomeFinEtudeId</a>
+			<b>diplomeFinEtude.id</b>
+		</field>
+
+		<field>
+			<a>ncSignatureDiplomeId</a>
+			<b>ncSignatureDiplome.id</b>
+		</field>
+		<field>
+			<a>ncSignatureDiplomeLibelleLongFr</a>
+			<b>ncSignatureDiplome.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncSignatureDiplomeCode</a>
+			<b>ncSignatureDiplome.code</b>
+		</field>
+	</mapping>
+
+</mappings>

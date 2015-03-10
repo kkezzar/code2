@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_consulter_comptes_tresors}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="Nouveau"
+							action="#{comptesTresorsCCPBean.addCompteTresorAction()}"
+							update=":form_view" process="@this"></p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:inputText value="xc" placeholder="Mots clés" immediate="true"></p:inputText>
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{comptesTresorsCCPBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{comptesTresorsCCPBean.model}" paginator="true"
+					paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{comptesTresorsCCPBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_view" />
+
+					<p:column headerText="#{parametrageBudgetMsg.numero}">
+						<h:outputText value="#{current.numero}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.intitule_fr}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.date_ouverture}">
+						<h:outputText value="#{current.dateOuverture}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.agent_comptable}">
+						<h:outputText
+							value="#{current.agentComptable.code} - #{current.agentComptable.refIndividu.nomLatin} #{current.agentComptable.refIndividu.prenomLatin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Situation">
+						<h:outputText
+							value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+
+				<p:tabView rendered="#{comptesTresorsCCPBean.view}">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_comptes}">
+
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column style="width:20%">
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.numero}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.numero}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_ar}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.intituleAr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.date_ouverture}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.dateOuverture}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.agent_comptable}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.agentComptable.code} - #{comptesTresorsCCPBean.compteDto.agentComptable.refIndividu.nomLatin} #{comptesTresorsCCPBean.compteDto.agentComptable.refIndividu.prenomLatin}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{comptesTresorsCCPBean.compteDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_view :form_search"
+												process="@this"
+												actionListener="#{comptesTresorsCCPBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

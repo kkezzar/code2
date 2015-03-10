@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_configuration}"
+			id="infosconfigurationPanel" style="border:0;">
+			<h:form id="configurationEditForm" prependId="false">
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+
+				<p:fieldset legend="#{commonmsgs.common_configuration}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_key} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="identifiant"
+									style="text-align: left;font-weight: bold;width:250px"
+									value="#{parametreBckBean.refParametreDto.key}"
+									label="#{parametragemsgs.parametrage_configuration_key}"
+									required="true"
+									valueChangeListener="#{parametreBckBean.keyChanged}"
+									requiredMessage="#{parametragemsgs.parametrage_configuration_key_required}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_description} " />
+							</p:column>
+							<p:column>
+								<p:inputTextarea id="nom" style="text-align: left;width:250px"
+									value="#{parametreBckBean.refParametreDto.description}"
+									valueChangeListener="#{parametreBckBean.descChanged}"
+									label="#{parametragemsgs.parametrage_configuration_description}">
+								</p:inputTextarea>
+
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_default_value}" />
+							</p:column>
+							<p:column>
+								<p:inputText
+								    style="text-align: left;width:250px"
+									label="#{parametragemsgs.parametrage_configuration_default_value}"
+									value="#{parametreBckBean.refParametreDto.defaultValue}"
+									required="false"
+									valueChangeListener="#{parametreBckBean.defaultValueChanged}" />	
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_general}" />
+							</p:column>
+							<p:column>
+								<p:selectBooleanCheckbox
+									value="#{parametreBckBean.refParametreDto.general}"
+									valueChangeListener="#{parametreBckBean.entityChanged}"	>
+									 
+									<f:param name="idpc" value="#{parametreBckBean.idpc}" />
+									<f:param name="searchValue"
+										value="#{parametreBckBean.searchValue}" />
+									<f:param name="key" value="#{parametreBckBean.key}" />
+									 
+								</p:selectBooleanCheckbox>
+
+							</p:column>
+						</p:row>
+						
+					</p:panelGrid>
+				</p:fieldset>
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_save}"
+								icon="ui-icon-disk" update="configurationEditForm"
+								process="configurationEditForm"
+								onstart="PF('blockUIWidget').block()"
+							    oncomplete="PF('blockUIWidget').unblock()"
+								actionListener="#{parametreBckBean.save}">
+								<f:param name="idpc" value="#{parametreBckBean.idpc}" />
+								<f:param name="searchValue"
+									value="#{parametreBckBean.searchValue}" />
+								<f:param name="key" value="#{parametreBckBean.key}" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton id="addButton" icon="ui-icon-plusthick"
+								value="#{commonmsgs.button_add}"
+								rendered="#{configurationDroitBean.createAllow}"
+								disabled="#{parametreBckBean.refParametreDto.id==null}"
+								process="@this"
+								actionListener="#{parametreBckBean.addParameter()}"
+								update="configurationEditForm">
+								<f:param name="searchValue"
+									value="#{parametreBckBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{parametreBckBean.back}">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_cancel_modification_confirmation}"
+									icon="ui-icon-alert" />
+								<f:param name="searchValue"
+									value="#{parametreBckBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

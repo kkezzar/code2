@@ -1,0 +1,155 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_dossier_employe_enfants">
+
+
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{dossierEmployemsgs.dossier_employe_enfants}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="enfant" value="#{dossierEmployeBean.listEnfants}" id="enfantsTable"
+						widgetVar="enfantsTable" rowKey="#{enfant.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_enfant_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddEnfant" styleClass="ui-button-bleu" title="ajouter enfant" icon="ui-icon-plusthick"  
+										
+										process="@this enfantsTable" 
+										ajax="true"
+										immediate="true" 
+										update="enfantsTable @this"
+										action="#{dossierEmployeBean.addEnfant()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{individumsgs.individu_prenom_latin}">
+							<p:inputText value="#{enfant.prenomLatin}" required="true" style="width:100%"
+								requiredMessage="#{individumsgs.individu_prenom_required}">
+							</p:inputText>
+
+						</p:column>
+						<p:column headerText="#{individumsgs.individu_prenom_arabe}">
+							<p:inputText value="#{enfant.prenomArabe}" required="true" style="width:100%"
+								requiredMessage="#{individumsgs.individu_prenomarabe_required}">
+								</p:inputText>
+						</p:column>
+						<p:column headerText="#{individumsgs.individu_date_naissance}">
+							<p:calendar navigator="true" value="#{enfant.dateNaissance}" style="width:100%"
+								label="#{individumsgs.individu_datenaissance}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{individumsgs.individu_datenaissance_required}">
+							</p:calendar>
+						</p:column>
+						<p:column
+							headerText="#{dossierEmployemsgs.dossier_employe_lien_filiation}">
+							<p:selectOneMenu style="width:100%"
+								value="#{enfant.nomenclatureByLienFiliationDto.id}"
+								label="#{dossierEmployemsgs.dossier_employe_lien_filiation_select}">
+								<f:selectItem
+									itemLabel="#{dossierEmployemsgs.dossier_employe_lien_filiation_select}"
+									itemValue="" />
+								<f:selectItems value="#{dossierEmployeBean.listeFiliation}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column
+							headerText="Difficulté" style="width:10%">
+							<p:selectBooleanCheckbox 
+							value="#{enfant.avecDifficulte}"
+							>
+							
+						</p:selectBooleanCheckbox> 
+
+							
+						</p:column>
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveEtudiant"  
+									action="#{dossierEmployeBean.removeEnfant()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="enfantsTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{dossierEmployeBean.selectedEnfantIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			<p:row>
+			<p:column>
+				<p:toolbar id="emploiEnfantToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" process="@form"
+						id="saveEnfantsBtn" icon="ui-icon-disk" update=":tabViewEdit:form_dossier_employe_enfants:enfantsTable :form_dossier_employe_search"
+						actionListener="#{dossierEmployeBean.onSave}">
+
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<!-- <p:commandButton value="#{commonmsgs.bouton_annuler}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{dossierEmployeBean.init()}">
+					</p:commandButton> -->
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

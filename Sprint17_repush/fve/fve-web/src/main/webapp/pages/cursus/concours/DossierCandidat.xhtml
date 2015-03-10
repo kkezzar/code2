@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		Gérer les candidats
+	</ui:define>
+	
+	<ui:define name="centerContent" >
+		<p:panel id="mainContent" styleClass="mainContent">
+			<pe:blockUI target="mainContent" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<h:form id="searchCandidatForm" styleClass="searchCandidatForm">
+		
+				
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+				
+				<p:fieldset legend="Recherche" toggleable="true">
+					<p:panelGrid id="panelSearch">
+						<p:row>
+							<p:column>
+								<h:outputText value="Année académique* : " />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="selectionAnneeAcademique"
+								value="#{candidatMBean.currentAnneeAcademiqueId}">
+									<f:selectItem itemLabel="--Année académique--"/>
+									<f:selectItems value="#{candidatMBean.anneeAcademiques}" />
+									<p:ajax update="selectionConcours,searchCandidatForm"
+											listener="#{candidatMBean.onAnneeAcademiqueSelected()}" 
+											process="@this" 
+											onstart="PF('globalWidget').block()"
+											onsuccess="PF('globalWidget').unblock()"/>
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText value="Concours* : " />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="selectionConcours"
+								value="#{candidatMBean.currentConcoursId}">
+									<f:selectItem itemLabel="--Concours--"/>
+									<f:selectItems value="#{candidatMBean.concours}" />
+									<p:ajax update="@(.mainContent)"
+											listener="#{candidatMBean.onConcoursSelected()}" 
+											process="@this" 
+											onstart="PF('globalWidget').block()"
+											onsuccess="PF('globalWidget').unblock()"/>
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="4">
+								<p:commandButton id="btnAdd"
+								value="#{commonmsgs.bouton_nouveau}" 
+								update="@(.candidatForm),@(.actionPanel)" style="text-align:left"
+								immediate="true"
+								onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								actionListener="#{candidatMBean.onNew}"
+								rendered="#{candidatMBean.concoursDto!=null}"
+								icon="ui-icon-plusthick"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					<br/>
+					<p:panel id="candidatDataPanel"  styleClass="candidatDataPanel" rendered="#{candidatMBean.renderCandidatDataPanel}">
+						<p:dataTable 
+						value="#{candidatMBean.candidatsDtos}"
+						var="candidat" 
+						rowKey="#{candidat.id}" 
+						rowIndexVar="rowId"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+						lazy="true"
+						selectionMode="single">
+							<f:facet name="header">Les candidat du concours <h:outputText  value="#{candidatMBean.concoursDto.identifiant}"/>
+							, publié le <h:outputText value="#{candidatMBean.concoursDto.datePublicationConcours}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputText></f:facet>
+							<p:ajax event="rowSelect" immediate="true"
+									listener="#{candidatMBean.onCandidatSelect}" process="@this"
+									onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									update="@(.mainContent)" />
+							<p:column style="width:30px;" headerText="N°">
+								<h:outputText value="#{rowId+1}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Prénom" sortBy="#{candidat.individu.prenomLatin}">
+								<h:outputText value="#{candidat.individu.prenomLatin}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Nom" sortBy="#{candidat.individu.nomLatin}">
+								<h:outputText value="#{candidat.individu.nomLatin}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Date de naissance" sortBy="#{candidat.individu.dateNaissance}">
+								<h:outputText value="#{candidat.individu.dateNaissance}" >
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:100px;" headerText="Date de dépôt" sortBy="#{candidat.dateDepot}">
+								<h:outputText value="#{candidat.dateDepot}" >
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column  style="width:10px;" headerText="Selectionné" sortBy="#{candidat.accepte}">
+								<h:outputText value="#{candidat.accepte == true ? 'Oui':'Non'}" />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+					<br/>
+				</p:fieldset>
+		</h:form>
+		<h:form id="candidatForm" styleClass="candidatForm">
+			<p:panel id="editPanel" rendered="#{candidatMBean.renderEditPanel}" styleClass="editPanel">
+					<p:tabView activeIndex="#{candidatMBean.currentTabViewDossierIndex}" styleClass="dossierCandidatTabView" id="dossierCandidatTabView">
+						<p:tab title="Candidat" >
+							<p:panelGrid id="individuSearch" styleClass="individuSearch" rendered="#{candidatMBean.renderIndividuSearchPanel}">
+								<p:row>
+									<p:column style="width:100px">
+										<p:outputLabel value="Nom :" for="nom"/>
+									</p:column>
+									<p:column style="width:250px">
+										<p:inputText id="nom" value="#{candidatMBean.nomIndividuRecherche}" />
+									</p:column>
+									<p:column style="width:100px">
+										<p:outputLabel value="Prénom :" for="prenom"/>
+									</p:column>
+									<p:column style="width:250px">
+										<p:inputText id="prenom" value="#{candidatMBean.prenomIndividuRecherche}" />
+									</p:column>
+									<p:column>
+										<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+											rendered="#{sessionDroitBean.readAllow}"
+											id="searchIndividuBtn" icon="ui-icon-disk"
+											onstart="PF('globalWidget').block()" 
+											oncomplete="PF('globalWidget').unblock()"
+											actionListener="#{candidatMBean.searchIndividu}"
+											update="@(.candidatForm)"
+											process="individuSearch">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:panel id="individuDataPanel"  styleClass="individuDataPanel" rendered="#{candidatMBean.renderIndividuDataPanel}">
+								<p:dataTable 
+									value="#{candidatMBean.individuDtos}"
+									var="individu" rowKey="#{individu.id}" 
+									rowIndexVar="rowId"
+									paginator="true" paginatorPosition="bottom"
+									emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+									currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+									lazy="true"
+									selectionMode="single">
+									<f:facet name="header">Les individus</f:facet>
+									<p:ajax event="rowSelect" immediate="true"
+									listener="#{candidatMBean.onIndividuSelect}" process="@this"
+									onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									update="@(.candidatForm)" />
+									<p:column style="width:30px;" headerText="N°">
+										<h:outputText value="#{rowId+1}" />
+									</p:column>
+									<p:column style="width:100px;" headerText="Prénom" sortBy="#{individu.nomLatin}">
+										<h:outputText value="#{individu.prenomLatin}" />
+									</p:column>
+									<p:column style="width:100px;" headerText="Nom" sortBy="#{individu.prenomLatin}">
+										<h:outputText value="#{individu.nomLatin}" />
+									</p:column>
+									<p:column style="width:100px;" headerText="Date de naissance" sortBy="#{individu.dateNaissance}">
+										<h:outputText value="#{individu.dateNaissance}" >
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+							<br/>
+							<p:panelGrid id="indviduDetailPanel" styleClass="indviduDetailPanel" style="width:50%;margin-bottom:2px;" rendered="#{candidatMBean.renderIndividuDetailPanel}" columns="4">
+								<f:facet name="header">Détails de l'individu</f:facet>
+								<h:outputLabel value="Nom" />
+								<h:outputLabel value="#{candidatMBean.dto.individu.nomLatin}" style="text-align:right; color:#336699;" />
+								<h:outputLabel value="Prénom"/>
+								<h:outputLabel value="#{candidatMBean.dto.individu.prenomLatin}" style="text-align:right; color:#336699;"/>
+								<h:outputLabel value="Date de naissance"/>
+								<h:outputLabel value="#{candidatMBean.dto.individu.dateNaissance}" style="text-align:right; color:#336699;">
+									<f:convertDateTime pattern="MM/dd/yyyy" />
+								</h:outputLabel>
+								<h:outputLabel value="Email"/>
+								<h:outputLabel value="#{candidatMBean.dto.email}" style="text-align:right; color:#336699;"/>
+								<h:outputLabel value="Adresse"/>
+								<h:outputLabel value="#{candidatMBean.dto.adresse}" style="text-align:right; color:#336699;"/>
+								<h:outputLabel value="Code postal"/>
+								<h:outputLabel value="#{candidatMBean.dto.codePostal}" style="text-align:right; color:#336699;"/>
+								<h:outputLabel value="Numéro de téléphone"/>
+								<h:outputLabel value="#{candidatMBean.dto.numeroTelephone}" style="text-align:right; color:#336699;"/>
+							</p:panelGrid>
+						</p:tab>
+						<p:tab title="Dossier" disabled="#{!candidatMBean.dossierTabActive}" id="dossierTab" titleStyleClass="dossierTab" >
+							<p:panelGrid id="panelEditDossier" styleClass="panelEditDossier">
+								<p:row>
+									<p:column style="width:250px">
+										<p:outputLabel value="Date dépôt*:" for="dateDepot"/>
+									</p:column>
+									<p:column style="width:250px">
+										<h:outputText value="#{candidatMBean.dto.dateDepot}" id="dateDepot" rendered="#{!candidatMBean.candidatEditable}"/>
+										<p:calendar style="width:100%;text-align:left"
+											navigator="true"
+											required="true"
+											requiredMessage="La date de dépôt est obligatoire"
+											value="#{candidatMBean.dto.dateDepot}" 
+											pattern="dd/MM/yyyy"
+											mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:300px;" colspan="2">
+										<p:dataTable id="pieceFourniesTable"
+											value="#{candidatMBean.concoursDto.pieceConstitutiveDtos}"
+											var="row"
+											rowIndexVar="rowIndex">
+											<f:facet name="header">Les pièces à fournir</f:facet>
+											<p:column headerText="N°" style="width:30px;text-align:center;"> 	
+												<h:outputText value="#{row.rang}" styleClass="center"/>
+											</p:column>
+											<p:column headerText="Pièce" style="width:200px;">
+												<h:outputText value="#{row.intitule}" /> 	
+											</p:column>
+											<p:column headerText="Obligatoire" style="width:200px;">
+												<h:outputText value="#{row.obligatoire ? 'Oui' : 'Non'}" /> 	
+											</p:column>
+											<p:column headerText="Fournie" style="width:30px;">
+												<p:selectBooleanCheckbox label="selectPieceFournie" value="#{row.fournie}"/>
+											</p:column>
+											
+										</p:dataTable>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+									<p:panelGrid id="panelDecision" >
+										<p:row>
+											<p:column colspan="3">
+												<h:outputLabel value="Dossier accepté" />
+											</p:column>
+											<p:column>
+												<p:selectBooleanCheckbox value="#{candidatMBean.dto.accepte}"/>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="3">
+												<h:outputLabel value="Motif rejet" />
+											</p:column>
+											<p:column>
+												<p:inputTextarea value="#{candidatMBean.dto.motifRejet}"/>
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+									</p:column> 
+								</p:row>
+								
+							</p:panelGrid>
+						</p:tab>
+					</p:tabView>
+					
+					<p:panelGrid styleClass="actionPanel" id="actionPanel">
+								<p:row>
+									<p:column>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											rendered="#{sessionDroitBean.createAllow}"
+											disabled="#{!candidatMBean.saveEnabled}"
+											id="saveBtn" icon="ui-icon-disk"
+											onstart="PF('globalWidget').block()" 
+											oncomplete="PF('globalWidget').unblock()"
+											actionListener="#{candidatMBean.onSave}"
+											update="candidatForm,@(.candidatDataPanel)"
+											process="candidatForm">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+					</p:panelGrid>
+						
+			</p:panel>
+		</h:form>
+		</p:panel>
+		
+	</ui:define>	
+</ui:composition>		
+</html>

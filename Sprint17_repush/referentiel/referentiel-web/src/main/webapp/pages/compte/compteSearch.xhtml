@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+
+		<p:panel header="#{commonmsgs.menu_comptes}" style="border:0;">
+			<h:form id="searchForm" 
+			        onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+			
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{compteDroitBean.createAllow}" icon="ui-icon-document"
+							action="#{compteSearchBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="compteData"
+								fileName="listeDesComptes" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{compteSearchBean.searchInput}"
+							id="searchInput" rendered="#{compteDroitBean.readAllow}"
+							style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton rendered="#{compteDroitBean.readAllow}"  id="searchButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm" 
+							icon="ui-icon-search" action="#{compteSearchBean.findGeneric}" />
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()">
+							<h:outputText value="#{commonmsgs.button_advanced_search}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="compteData"
+					rendered="#{compteSearchBean.listRefCompteDto!=null}"
+					value="#{compteSearchBean.listRefCompteDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{comptemsgs.compte_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.nomUtilisateur}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{comptemsgs.compte_compte}" />
+						</f:facet>
+						<h:outputText value="#{current.nomUtilisateur}" />
+					</p:column>
+					<p:column sortBy="#{current.individuNomLatin}" width="30%">
+						<f:facet name="header">
+							<h:outputText value="#{comptemsgs.compte_individu}" />
+						</f:facet>
+
+						<h:outputText
+							value="#{current.individuNomLatin} #{current.individuPrenomLatin}" />
+					</p:column>
+
+
+					<p:column style="width:10%" sortBy="#{current.dateDebut}">
+						<f:facet name="header">
+							<h:outputText value="#{comptemsgs.compte_date_debut}" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateDebut}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:10%" sortBy="#{current.dateFin}">
+						<f:facet name="header">
+							<h:outputText value="#{comptemsgs.compte_date_fin}" />
+						</f:facet>
+						<h:outputText value="#{current.dateFin}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.llSituationFr}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{comptemsgs.compte_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateSituation}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="Date" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateSituation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:10%" exportable="false">
+
+
+						<p:commandButton id="modifyButton"
+							action="#{compteSearchBean.toEdit}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{compteDroitBean.editAllow}" icon="ui-icon-pencil"
+							title="#{commonmsgs.button_update}">
+							<f:param value="#{current.idCompte}" name="id"></f:param>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			appendTo="@(body)">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{comptemsgs.compte_nom_user}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="pseudoSearch" style="text-align: left"
+								value="#{compteSearchBean.searchDto.nomUtilisateur}"
+								label="#{comptemsgs.compte_nom_user}:">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{comptemsgs.compte_nom}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="nomLtSearch" style="text-align: left"
+								value="#{compteSearchBean.searchDto.individuNomLatin}"
+								label="#{comptemsgs.compte_nom}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{comptemsgs.compte_prenom}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="prenomLtSearch" style="text-align: left"
+								value="#{compteSearchBean.searchDto.individuPrenomLatin}"
+								label="#{comptemsgs.compte_prenom}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{comptemsgs.compte_date_debut}:" />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"  value="#{compteSearchBean.searchDto.dateDebut}"
+								id="dateDebutValid" showButtonPanel="true"
+								label="#{comptemsgs.compte_date_debut}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{comptemsgs.compte_date_fin}:" />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"  value="#{compteSearchBean.searchDto.dateFin}"
+								id="dateFinValid" showButtonPanel="true"
+								label="#{comptemsgs.compte_date_fin}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					action="#{compteSearchBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

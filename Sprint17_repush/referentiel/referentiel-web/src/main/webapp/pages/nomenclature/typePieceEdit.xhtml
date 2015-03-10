@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:messages id="messages" showSummary="true" autoUpdate="true"
+			closable="true" />
+		<p:panel header="#{commonmsgs.menu_type_piece_objet}" styleClass="rangStyle">
+			<br />
+
+			<ui:include src="/pages/nomenclature/typePieceInfo.xhtml" />
+
+			<br />
+			<h:form id="infosTpFromId" prependId="true">
+
+				<br></br>
+				<h:outputText value="#{typepiecemsgs.typepiece_item_description}"
+					style="font-weight: bold;" />
+				<hr></hr>
+
+				<p:panelGrid id="editNcDescription" styleClass="noBorder1">
+				
+				<p:row rendered="#{typePieceBckBean.refTypePieceConstitutiveDto.id==null}">
+						<p:column>
+							<h:outputText
+								value="#{typepiecemsgs.typepiece_item_type_piece} *" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="listTypePiece" filter="true" 
+								filterMatchMode="contains" style="text-align: left;width:210px"
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.idTypePiece}"
+								label="#{typepiecemsgs.typepiece_item_type_piece}"
+								required="true"
+								valueChangeListener="#{typePieceBckBean.typePieceChanged}"
+								requiredMessage="#{typepiecemsgs.typepiece_item_type_piece_required}">
+                                
+								<f:selectItem
+									itemLabel="#{typepiecemsgs.typepiece_item_type_piece_select}"
+									itemValue="" />
+								<f:selectItems value="#{typePieceBckBean.listItemTypePiece}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{typepiecemsgs.typepiece_item_obligatoire} *" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox id="obligatoire" styleClass="inputStyle"
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.obligatoire}"
+								
+								label="Checkbox" />
+
+
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{typepiecemsgs.typepiece_item_a_fournir} *" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox id="afournir" styleClass="inputStyle" 
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.AFournir}" 
+								
+								label="Checkbox" >
+								<f:param name="id" value="#{typePieceBckBean.id}" />
+								<f:param name="idTd"
+									value="#{typePieceBckBean.idTd}" />
+								<p:ajax event="change" update="infosTpFromId" listener="#{typePieceBckBean.fournirChanged()}"/>
+								</p:selectBooleanCheckbox>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{typepiecemsgs.typepiece_item_date_debut} *" />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.dateDebut}"
+								id="dateDebut" pattern="dd/MM/yyyy" required="true"
+								requiredMessage="#{typepiecemsgs.typepiece_item_date_debut_required}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{typepiecemsgs.typepiece_item_date_fin}" />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.dateFin}"
+								id="dateFin" pattern="dd/MM/yyyy" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{typepiecemsgs.typepiece_item_nombre} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left" styleClass="inputStyle"
+								value="#{typePieceBckBean.refTypePieceConstitutiveDto.nombre}"
+								label="#{typepiecemsgs.typepiece_item_nombre}" required="true"
+								valueChangeListener="#{typePieceBckBean.numberChanged}"
+								requiredMessage="#{typepiecemsgs.typepiece_item_nombre_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{typepiecemsgs.typepiece_item_rang} *" />
+						</p:column>
+						<p:column>
+						<h:outputText value="#{typePieceBckBean.refTypePieceConstitutiveDto.rang}  " />
+							<p:commandButton id="editRang" icon="ui-icon-suitcase" 
+								label="#{typepiecemsgs.typepiece_item_rang}"
+								rendered="#{typePieceBckBean.refTypePieceConstitutiveDto.id!=null}">
+								<f:param name="id" value="#{typePieceBckBean.id}" />
+								<f:param name="idTd"
+									value="#{typePieceBckBean.idTd}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				<p:overlayPanel id="rangPanel" for="editRang" widgetVar="rangDlg"
+					hideEffect="fade" dismissable="false"
+					rendered="#{typePieceBckBean.listRefTypePieceConstitutiveDto!=null}">
+					<p:panel header="#{typepiecemsgs.typepiece_item_rang}">
+						<p:orderList
+							value="#{typePieceBckBean.listRefTypePieceConstitutiveDto}"
+							var="current" styleClass="smallList" itemValue="#{current}"
+							converter="#{typePieceBckBean}" controlsLocation="right"
+							id="orderList" moveBottomLabel="#{commonmsgs.move_bottom_label}"
+							moveTopLabel="#{commonmsgs.move_top_label}"
+							moveDownLabel="#{commonmsgs.move_down_label}"
+							moveUpLabel="#{commonmsgs.move_up_label}">
+							<f:facet name="caption">
+								<h:outputText value="#{typepiecemsgs.typepiece_list_title}" />
+							</f:facet>
+							
+							<p:column style="width:60%">
+								<h:outputText dir="ltr" value="#{current.ncLlLatinTypePiece}" />
+							</p:column>
+
+						</p:orderList>
+						<p:panelGrid id="footer" styleClass="noBorder1">
+							<p:row>
+								<p:column>
+									<p:commandButton value="#{commonmsgs.button_save}"
+										icon="ui-icon-disk" onsuccess="PF('rangDlg').hide()"
+										action="#{typePieceBckBean.saveRang}" update="@(.rangStyle)"
+										process="rangPanel">
+										<f:param name="id" value="#{typePieceBckBean.id}" />
+										<f:param name="idTd"
+											value="#{typePieceBckBean.idTd}" />
+									</p:commandButton>
+								</p:column>
+								<p:column>
+									<p:commandButton value="#{commonmsgs.button_cancel}"
+										icon="ui-icon-arrowreturnthick-1-w" process="@this"
+										onsuccess="PF('rangDlg').hide()">
+										<f:param name="id" value="#{typePieceBckBean.id}" />
+										<f:param name="idTd"
+											value="#{typePieceBckBean.idTd}" />
+									</p:commandButton>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>
+				</p:overlayPanel>
+				<br></br>
+				<br></br>
+
+				<p:panelGrid id="oprButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_save}"
+								process="infosTpFromId" update="infosTpFromId"
+								icon="ui-icon-disk" actionListener="#{typePieceBckBean.save}">
+								<f:param name="id" value="#{typePieceBckBean.id}" />
+								<f:param name="idTd"
+									value="#{typePieceBckBean.idTd}" />
+							</p:commandButton>
+						</p:column>
+                        <!-- 
+						<p:column>
+						
+							<p:commandButton icon="ui-icon-plusthick"
+								actionListener="#{typePieceBckBean.newItem}" immediate="true"
+								process="@form" update="@form"
+								disabled="#{typePieceBckBean.refTypePieceConstitutiveDto.id==null}">
+								<f:param name="id" value="#{typePieceBckBean.id}" />
+								<f:param name="idTd"
+									value="#{typePieceBckBean.idTd}" />
+							</p:commandButton>
+						</p:column>
+						 -->
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-arrowreturnthick-1-w" process="@this"
+								action="#{typePieceBckBean.back}">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_cancel_modification_confirmation}"
+									icon="ui-icon-alert" />
+								<f:param name="id" value="#{typePieceBckBean.id}" />
+								<f:param name="idTd"
+									value="#{typePieceBckBean.idTd}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+		</p:panel>
+	</ui:define>
+
+
+</ui:composition>
+</html>

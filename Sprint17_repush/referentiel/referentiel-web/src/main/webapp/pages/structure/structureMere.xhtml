@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{structureMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<ui:include src="/pages/structure/structureHeader.xhtml" />
+	<br></br>
+	<p:outputPanel styleClass="strMereOutPanel">
+		<h:form id="structureMereFromId">
+			<p:panelGrid id="Edit" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{commonmsgs.common_structure_mere}"
+							style="font-weight: bold;" />
+					</p:column>
+					<p:column rendered="#{structureCrudBean.createAllow}">
+						<p:selectOneMenu id="structureMother"
+							style="text-align:left; width:255px" filter="true"
+							filterMatchMode="contains"
+							value="#{structureMgrBean.refStructureDto.idMotherStructure}"
+							label="#{structuremsgs.structure_structure_mere}">
+							<f:selectItem
+								itemLabel="#{structuremsgs.structure_structure_detachee}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+						</p:selectOneMenu>
+
+					</p:column>
+					<p:column rendered="#{structureCrudBean.createAllow}">
+						<p:commandButton value="#{commonmsgs.button_appliquer}"
+							icon="ui-icon-disk" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{structureMgrBean.saveStructure}"
+							rendered="#{structureCrudBean.createAllow}" process="@form"
+							update="@(.strMereOutPanel)">
+							<p:confirm header="Confirmation"
+								message="#{structuremsgs.msg_structure_mere_confirmation}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<hr></hr>
+
+			<br></br>
+
+			<p:panelGrid id="descriptionMother"
+				styleClass="ui-panelgrid-full-width"
+				rendered="#{structureMgrBean.refStructureDtoMother.id!=null}">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_identite}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="identifiantMother"
+							value="#{structureMgrBean.refStructureDtoMother.identifiant}"
+							styleClass="value" />
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_type_structure_fr}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="typeStructureMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.typeLibelleLongFr} " />
+
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="llstructLatinMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.llStructureLatin}" />
+					</p:column>
+
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle_arabe}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="llArabeMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.llStructureArabe}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle_court}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="lcLatinMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.lcStructureLatin}" />
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_libelle_court_ar}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="lcArMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.lcStructureArabe}" />
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_date_creation}" />
+					</p:column>
+					<p:column style="width:30%">
+
+						<h:outputText id="dateCreationMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.dateCreation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_decret}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="decretMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.decret}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{structuremsgs.structure_forme_juridique_fr}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="fjMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.formeJuridiqueLibelleLongFr}" />
+					</p:column>
+
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_statut_fr}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="statutMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.statusLibelleLongFr}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nis}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="nisMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.nis}" />
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nif}" />
+					</p:column>
+					<p:column style="width:30%">
+						<h:outputText id="nifMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.nif}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{structuremsgs.structure_nss}" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="nssMother" styleClass="value"
+							value="#{structureMgrBean.refStructureDtoMother.nss}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+
+	</p:outputPanel>
+
+</ui:composition>

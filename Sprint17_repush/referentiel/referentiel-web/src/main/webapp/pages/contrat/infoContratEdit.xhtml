@@ -1,0 +1,326 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panel>
+
+		<h:form>
+			<h:outputText value="#{contratmsgs.contrat_description}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_identite}"
+							for="identifiant" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="identifiant" style="text-align: left"
+							value="#{contratBckBean.refContratDto.identifiant}"
+							label="#{contratmsgs.contrat_identite}"
+							valueChangeListener="#{contratBckBean.entityChanged}"
+							required="true"
+							requiredMessage="#{contratmsgs.contrat_identite_required}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_objet_lt}"
+							for="objetContratFr" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="objetContratFr"
+							style="text-align: left; width:100%"
+							value="#{contratBckBean.refContratDto.objetContratFr}"
+							label="#{contratmsgs.contrat_objet_lt}" required="true"
+							valueChangeListener="#{contratBckBean.entityChanged}"
+							requiredMessage="#{contratmsgs.contrat_objet_lt_required}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_objet_ar}"
+							for="objetContratAr" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="objetContratAr"
+							style="text-align: right; width:100%"
+							value="#{contratBckBean.refContratDto.objetContratAr}"
+							label="#{contratmsgs.contrat_objet_ar}" required="true"
+							valueChangeListener="#{contratBckBean.entityChanged}"
+							requiredMessage="#{contratmsgs.contrat_objet_ar_required}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_nature_contrat}" for="natureContrat" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="natureContrat"
+							value="#{contratBckBean.refContratDto.natureId}"
+							label="#{contratmsgs.contrat_nature_contrat}" required="true"
+							valueChangeListener="#{contratBckBean.entityChanged}"
+							requiredMessage="#{contratmsgs.contrat_nature_contrat_required}">
+
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_select_nature_contrat}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeNatureContrat}" />
+
+						</p:selectOneMenu>
+
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{contratmsgs.contrat_reference_documentaire}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="referenceDocum" style="text-align: left"
+							value="#{contratBckBean.refContratDto.referenceDocumentaire}"
+							label="#{contratmsgs.contrat_reference_documentaire}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<h:outputText value="#{contratmsgs.contrat_gestionnaire}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="gestionnaire" styleClass="ui-panelgrid-full-width">
+				<p:row>
+
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_structure}" for="gesStructure"/>
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="gesStructure"
+							value="#{contratBckBean.refContratDto.idStructure}" filter="true"
+							filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_structure}" required="true"
+							valueChangeListener="#{contratBckBean.entityChanged}"
+							requiredMessage="#{contratmsgs.contrat_structure_required}">
+
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_structure}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+							<f:param name="idf" value="#{contratBckBean.idf}" />
+							<f:param name="editMode" value="true" />
+							<!--   
+								<p:ajax listener="#{contratBckBean.onChangeGestionnaire}"
+									update="gestionnaire" />
+									-->
+						</p:selectOneMenu>
+
+					</p:column>
+					<!--  
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_etablissement}" />
+						</p:column>
+						<p:column>
+							<p:inputText id="gesEtablissement" style="text-align: left"
+								value="#{contratBckBean.refContratDto.llEtablissementLatin}"
+								label="#{contratmsgs.contrat_etablissement}"
+								disabled="true" valueChangeListener="#{contratBckBean.entityChanged}">
+						       		
+							</p:inputText>
+						</p:column> 
+						-->
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<h:outputText value="#{contratmsgs.contrat_dates}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="dates" styleClass="ui-panelgrid-full-width">
+				<p:row>
+
+					<p:column style="width:15%">
+						<p:outputLabel value="#{contratmsgs.contrat_debut}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:calendar navigator="true"
+							value="#{contratBckBean.refContratDto.dateDebutValidite}"
+							id="debut" showButtonPanel="true"
+							label="#{contratmsgs.contrat_debut}" required="true"
+							requiredMessage="#{contratmsgs.contrat_debut_required}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+							<!--  <f:ajax render="btnPanel1" event="change"/>-->
+						</p:calendar>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_fin}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:calendar navigator="true"
+							value="#{contratBckBean.refContratDto.dateFinValidite}" id="fin"
+							showButtonPanel="true" label="#{contratmsgs.contrat_fin}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+						</p:calendar>
+					</p:column>
+					</p:row>
+					<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_duree}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="duree" style="text-align: left"
+							value="#{contratBckBean.refContratDto.duree}"
+							label="#{contratmsgs.contrat_duree}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+						</p:inputText>
+					</p:column>
+					<p:column colspan="3">
+						<p:selectBooleanCheckbox
+							value="#{contratBckBean.refContratDto.reconductible}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+						</p:selectBooleanCheckbox>
+						<h:outputText value="#{contratmsgs.contrat_reconductible}"
+							style="text-align: top" />
+					</p:column>
+
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<h:outputText value="#{contratmsgs.contrat_donnee_financiere}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="donneFinanc" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_unite_monetaire}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="uniteMonetaire"
+							value="#{contratBckBean.refContratDto.uniteMonitaireId}"
+							label="#{contratmsgs.contrat_unite_monetaire}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_select_unite_monetaire}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeUniteMonetaire}" />
+							<f:param name="idf" value="#{contratBckBean.idf}" />
+							<f:param name="editMode" value="true" />
+							<p:ajax listener="#{contratBckBean.onChangeUniteMonetaire}"
+								update="donneFinanc" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_montant_ht}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:columnGroup>
+							<p:inputText id="montantht" style="text-align: right"
+								value="#{contratBckBean.refContratDto.montantHt}"
+								label="#{contratmsgs.contrat_montant_ht}"
+								valueChangeListener="#{contratBckBean.entityChanged}">
+
+								<f:convertNumber pattern="###,###,###" />
+							</p:inputText>
+							<h:outputText
+								value=" #{contratBckBean.refContratDto.uniteMonitaireCode}" />
+						</p:columnGroup>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_montant_tva}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:columnGroup>
+							<p:inputText id="montantva" style="text-align: right"
+								value="#{contratBckBean.refContratDto.montantTva}"
+								label="#{contratmsgs.contrat_montant_tva}"
+								valueChangeListener="#{contratBckBean.entityChanged}">
+
+								<f:convertNumber pattern="###,###,###" />
+							</p:inputText>
+							<h:outputText
+								value=" #{contratBckBean.refContratDto.uniteMonitaireCode}" />
+						</p:columnGroup>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_montant_ttc}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:columnGroup>
+							<p:inputText id="montanttc" style="text-align: right"
+								value="#{contratBckBean.refContratDto.montantTtc}"
+								label="#{contratmsgs.contrat_montant_ttc}" disabled="true"
+								valueChangeListener="#{contratBckBean.entityChanged}">
+
+								<f:convertNumber pattern="###,###,###" />
+							</p:inputText>
+							<h:outputText
+								value=" #{contratBckBean.refContratDto.uniteMonitaireCode}" />
+						</p:columnGroup>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<h:outputText value="#{contratmsgs.contrat_autre_informations}" />
+			<hr></hr>
+			<p:panelGrid id="autreInfo" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_descipline}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="descipline"
+							value="#{contratBckBean.refContratDto.disciplineId}"
+							label="#{contratmsgs.contrat_descipline}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_select_descipline}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{comboBckBean.listeDescipline}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{contratmsgs.contrat_observation}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputTextarea id="observation" style="text-align: left"
+							rows="3" cols="500"
+							value="#{contratBckBean.refContratDto.observation}"
+							label="#{contratmsgs.contrat_observation}"
+							valueChangeListener="#{contratBckBean.entityChanged}">
+
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid id="btnPanel1" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" action="#{contratBckBean.saveContrat(false)}">
+							<f:param name="idc" value="#{contratBckBean.idf}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:panel>
+
+
+</ui:composition>

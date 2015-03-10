@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>dz.gov.mesrs.sii.gfc</groupId>
+	<artifactId>gfc</artifactId>
+	<packaging>pom</packaging>
+	<name>GFC Project</name>
+	<description>Le projet du module de Gestion Financière et Comptable</description>
+	<version>0.9.0-SNAPSHOT</version>
+
+	<properties>
+		<progres.commons.version>1.2.0-SNAPSHOT</progres.commons.version>
+		<progres.referentiel.version>2.2.0-SNAPSHOT</progres.referentiel.version>
+	</properties>
+
+	<parent>
+		<groupId>dz.gov.mesrs.sii.progres</groupId>
+		<artifactId>progres</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+		<relativePath>../progres</relativePath>
+	</parent>
+
+	<modules>
+		<module>gfc-business</module>
+		<module>gfc-web</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Project -->
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.gfc</groupId>
+				<artifactId>gfc-business</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- Progres Referentiel -->
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.referentiel</groupId>
+				<artifactId>referentiel-business</artifactId>
+				<version>${progres.referentiel.version}</version>
+			</dependency>
+
+			<!-- Progres Commons -->
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-api</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-data</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-business</artifactId>
+				<version>${progres.commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-web</artifactId>
+				<version>${progres.commons.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>dz.gov.mesrs.sii.commons</groupId>
+				<artifactId>commons-web</artifactId>
+				<version>${progres.commons.version}</version>
+				<classifier>classes</classifier>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

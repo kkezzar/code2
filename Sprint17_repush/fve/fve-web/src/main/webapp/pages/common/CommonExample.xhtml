@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/centertemplate.xhtml">
+
+	<ui:define name="centerContent">
+		<br></br>
+
+		<p:fieldset id="userFormFieldSet" legend="Détail UE">
+			<h:form id="ueDetailForm">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton type="button" value="Nouveau"
+							icon="ui-icon-document" />
+						<p:separator />
+						<p:commandButton type="button" title="Modifier" icon="ui-icon-print" />
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton type="button" title="Retour"/>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				
+				<br></br>
+				
+					
+				Code : <p:outputLabel value="#{ueBean.ue.code}"></p:outputLabel>	
+					
+					
+			</h:form>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>
+</html>

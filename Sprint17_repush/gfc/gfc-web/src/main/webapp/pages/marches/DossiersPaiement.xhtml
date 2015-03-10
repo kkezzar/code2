@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{marchesMsgs.page_title_consulter_dossiers_paiement}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{dossiersPaiementMarcheBean.model}"
+					rowIndexVar="rowIndex" paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossiersPaiementMarcheBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.objet}">
+						<h:outputText value="#{current.objet}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.date}">
+						<h:outputText value="#{current.dateDossier}">
+							<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Doc.Réalisation">
+						<h:outputText
+							value="#{current.documentRealisationMarche.typeDocument.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+
+					<p:column headerText="Bénéficiaire">
+						<h:outputText
+							value="#{current.documentRealisationMarche.marche.contact.nomLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant TTC">
+						<h:outputText
+							value="#{current.documentRealisationMarche.montantTtc}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Situation">
+						<h:outputText value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+				<h:form id="form">
+					<p:panelGrid rendered="#{dossiersPaiementMarcheBean.view}"
+						styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+						<p:row>
+							<p:column>
+
+								<p:tabView>
+									<p:tab title="#{marchesMsgs.detail_dossier_paiement}">
+										<p:panelGrid
+											styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+												<p:row>
+													<p:column>
+														<h:outputText value="Document de réalisation" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.dateDocument}">
+															<f:convertDateTime
+																pattern="#{applicationBean.datePattern()}" />
+														</h:outputText>
+													</p:column>
+
+													<p:column>
+														<h:outputText value="Type de document" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.typeDocument.libelleLongFr}">>
+																	</h:outputText>
+													</p:column>
+												</p:row>
+
+												<p:row>
+											
+													<p:column>
+														<h:outputText value="Montant HT" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.montantHt}">
+															<f:convertNumber type="currency" currencySymbol="" />
+																	</h:outputText> DA
+													</p:column>
+												
+													<p:column>
+														<h:outputText value="Montant TTC" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.montantTtc}">
+															<f:convertNumber type="currency" currencySymbol="" />
+																	</h:outputText> DA
+													</p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<h:outputText value="Marché" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.marche.intituleFr}">
+														</h:outputText>
+													</p:column>
+		
+													<p:column>
+														<h:outputText value="Date signature marché" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.marche.dateSignature}">
+															<f:convertDateTime
+																pattern="#{applicationBean.datePattern()}" />
+														</h:outputText>
+													</p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<h:outputText value="Bénéficiaire" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value" value="">
+														</h:outputText>
+													</p:column>
+
+													<p:column>
+														<h:outputText value="Contact" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.marche.contact.civiliteLibelleCourtFr} #{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.marche.contact.nomLatin} #{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.marche.contact.prenomLatin}">
+														</h:outputText>
+													</p:column>
+												</p:row>
+												
+												<p:row>
+													<p:column colspan="4"><hr /></p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<h:outputText value="#{gfcMsgs.objet}" />
+													</p:column>
+													<p:column>
+														<h:outputText
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.objet}"
+															styleClass="value" />
+													</p:column>
+
+													<p:column>
+														<h:outputText value="#{gfcMsgs.date}" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.dateDossier}">
+															<f:convertDateTime
+																pattern="#{applicationBean.datePattern()}" />
+														</h:outputText>
+													</p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<p:outputLabel value="Mode de paiement" />
+													</p:column>
+													<p:column>
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.modePaiement.libelleLongFr}" />
+													</p:column>
+
+													<p:column>
+														<p:outputLabel value="Montant à payer" />
+													</p:column>
+													<p:column>
+														<h:outputText id="montantAPayer" styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.documentRealisationMarche.montantTtc}" />
+													</p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<p:outputLabel value="Réference bancaire" />
+													</p:column>
+													<p:column>
+														<h:outputText
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.referenceBancaire}"
+															styleClass="value" />
+													</p:column>
+												</p:row>
+
+												<p:row>
+													<p:column>
+														<h:outputText value="#{parametrageBudgetMsg.observation}" />
+													</p:column>
+													<p:column colspan="3">
+														<h:outputText styleClass="value"
+															value="#{dossiersPaiementMarcheBean.dossierPaiementDto.observation}" />
+													</p:column>
+												</p:row>
+											</p:panelGrid>
+									</p:tab>
+
+									<!-- les documents -->
+									<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+										title="#{commonmsgs.tab_documents}"
+										titletip="#{commonmsgs.tab_documents_tooltip}">
+										<f:facet name="title">
+											<h:outputText value="" />
+											<i class="fa fa-files-o"></i>
+										</f:facet>
+										<ui:include src="/pages/document/DocumentComponent.xhtml">
+											<c:set var="entity" value="DossiersPaiementMarche"
+												scope="request" />
+											<c:set var="identifiant"
+												value="#{dossiersPaiementMarcheBean.dossierPaiementDto.getId().toString()}"
+												scope="request" />
+											<ui:param name="entity" value="DossiersPaiementMarche" />
+											<ui:param name="identifiant"
+												value="#{dossiersPaiementMarcheBean.dossierPaiementDto.getId().toString()}" />
+											<ui:param name="editionMode" value="false" />
+										</ui:include>
+									</p:tab>
+
+								</p:tabView>
+							</p:column>
+						</p:row>
+
+						<!-- Actions -->
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="4">
+									<p:commandButton value="#{commonmsgs.bouton_retour}"
+										styleClass="pull-right" id="cancelBtn" update=":form_view"
+										immediate="true" process="@this"
+										actionListener="#{dossiersPaiementMarcheBean.cancelAction()}">
+									</p:commandButton>
+								</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

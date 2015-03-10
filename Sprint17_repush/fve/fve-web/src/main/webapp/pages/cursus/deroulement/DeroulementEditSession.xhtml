@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{examenMsgs.examen_pnl_deroulement_session_title}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" closable="true"
+			showSummary="false" life="5000" />
+		<pe:blockUI target="form_planning_session_search"
+			widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+
+		<h:form id="form_planning_session_search">
+			<ui:include src="/pages/cursus/examen/PlanningSessionSearch.xhtml" />
+
+
+			<p:outputPanel rendered="#{planningSessionSaveBean.showInfoDetail}">
+				<p:tabView id="tabViewPlannigId">
+
+
+					<p:tab disabled="#{!planningSessionSaveBean.showExamenDetail}"
+						title="#{examenMsgs.examen_tab_examens_title}" id="tabExamenId">
+						<p:outputPanel id="PlanningSessionTabViewId">
+							<ui:include src="/pages/cursus/examen/ExamenSession.xhtml" />
+
+							<p:tabView
+								rendered="#{planningSessionSaveBean.showSessionDetail}">
+								<p:tab
+									title="#{examenMsgs.examen_deroulement_non_remise_filed_title}">
+									<ui:include
+										src="/pages/cursus/deroulement/DeroulementInscriptionExamen.xhtml" />
+								</p:tab>
+								<p:tab
+									title="#{examenMsgs.examen_deroulement_absence_responsable_filed_title}">
+									<ui:include
+										src="/pages/cursus/deroulement/DeroulementAbsenceResponsable.xhtml" />
+								</p:tab>
+							</p:tabView>
+						</p:outputPanel>
+					</p:tab>
+					<p:tab title="#{examenMsgs.examen_deroulement_info_filed_title}">
+
+						<ui:include
+							src="/pages/cursus/examen/PlanningSessionInfoConsult.xhtml" />
+					</p:tab>
+
+				</p:tabView>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

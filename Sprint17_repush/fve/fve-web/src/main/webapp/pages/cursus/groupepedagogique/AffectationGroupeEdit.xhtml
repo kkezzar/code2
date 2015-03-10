@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<h:head>
+		<style>
+.ui-picklist .ui-picklist-list {
+	height: 400px;
+	width: 500px !important;
+}
+
+.ui-picklist-button-move-up {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-top {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-down {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-bottom {
+	visibility: hidden !important;
+}
+</style>
+	</h:head>
+	<p:growl id="msgs" showDetail="true" autoUpdate="true"
+		showSummary="false" closable="true" life="5000" />
+	<p:outputPanel id="affectationPanel" styleClass="affectationPanel"
+		rendered="#{groupeAffectationBean.etudiants!=null}">
+		<pe:blockUI target="affectationPanel" widgetVar="widget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<p:fieldset id="itemAffData" style="text-align:left"
+			styleClass="mesrsFieldset"
+			rendered="#{!groupeAffectationBean.sectionEmpty}">
+			<p:pickList id="PojoPickList" styleClass="widePickList"
+				rendered="#{groupeAffectationBean.etudiants!=null}"
+				value="#{groupeAffectationBean.etudiants}" var="_etudiant"
+				itemValue="#{_etudiant}" itemLabel="#{_etudiant.nomPrenom}"
+				addLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_ajouter_label}"
+				addAllLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_ajouter_tout_label}"
+				removeLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_supprimer_label}"
+				removeAllLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_supprimer_tout_label}"
+				showSourceControls="true" showTargetControls="true"
+				showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
+				filterMatchMode="contains" converter="#{etudiant}">
+
+				<f:facet name="sourceCaption">#{groupeAffectationBean.sourceCaption}</f:facet>
+				<f:facet name="targetCaption">#{groupeAffectationBean.targetCaption}</f:facet>
+				<p:ajax event="transfer" onstart="PF('widget').block()"
+					onsuccess="PF('widget').unblock()"
+					listener="#{groupeAffectationBean.onTransfer}"
+					update="PojoPickList" />
+
+
+				<p:column style="width:25%">
+
+					<p:graphicImage value="#{photoEtudiantBB.photo}"
+						rendered="#{_etudiant.photoName!=null}"
+						alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+						<f:param name="url" value="#{_etudiant.photoName}" />
+					</p:graphicImage>
+					<p:graphicImage value="/resources/images/boy.png"
+						rendered="#{_etudiant.photoName==null}"
+						alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+					</p:graphicImage>
+				</p:column>
+				<p:column style="width:75%;">
+					<h:outputText value="#{_etudiant.nomPrenom}" />
+				</p:column>
+			</p:pickList>
+
+			<br />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton id="saveAffec" icon="ui-icon-disk"
+						value="#{commonmsgs.bouton_enregistrer}"
+						process="affectationPanel" onstart="PF('widget').block()"
+						onsuccess="PF('widget').unblock()"
+						actionListener="#{groupeAffectationBean.save()}">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+		</p:fieldset>
+	</p:outputPanel>
+</ui:composition>
+

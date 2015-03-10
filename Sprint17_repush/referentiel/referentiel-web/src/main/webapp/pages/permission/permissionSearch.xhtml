@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_role_list}" style="border:0;">
+
+			<h:form id="searchForm">
+				<p:toolbar>
+<!-- 					<p:toolbarGroup align="left"> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_new}" -->
+<!-- 							rendered="#{ncNamesDroitBean.createAllow}" -->
+<!-- 							icon="ui-icon-document" action="#{permissionSearchBckBean.toNew}"> -->
+<!-- 						</p:commandButton> -->
+<!-- 						<p:separator /> -->
+<!-- 						<p:commandButton title="Export Excel" icon="ui-icon-print" -->
+<!-- 							immediate="true" ajax="false"> -->
+<!-- 							<p:dataExporter type="xls" target="nomenclatureData" -->
+<!-- 								fileName="listeDesNomenclature" /> -->
+<!-- 						</p:commandButton> -->
+
+<!-- 					</p:toolbarGroup> -->
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText binding="#{searchValue}" id="searchInput"
+							value="#{permissionSearchBckBean.searchValue}"
+							rendered="#{permissionDroitBean.readAllow}" style="width:200px">
+							<p:watermark for="searchInput"
+								value="#{commonmsgs.watermark_find_generic}" />
+						</p:inputText>
+						<p:commandButton update=":searchForm" ajax="true"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" icon="ui-icon-search"
+							rendered="#{ncNamesDroitBean.readAllow}"
+							actionListener="#{permissionSearchBckBean.findGeneric(searchValue.value)}">
+							<f:param name="searchValue" value="#{searchValue.value}"></f:param>
+						</p:commandButton>
+						
+
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="contratData"
+					rendered="#{permissionSearchBckBean.listRoles!=null}"
+					value="#{permissionSearchBckBean.listRoles}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue" value="#{searchValue.value}" />
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@all" process="@form" />
+					<p:column sortBy="#{current.code}" width="10%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{permissionmsgs.permission_role_code_table}" />
+						</f:facet>
+
+						<h:outputText value="#{current.code}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.libelleCourtFr}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{permissionmsgs.permission_role_lcFr_table}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleCourtFr}" />
+					</p:column>
+					<p:column sortBy="#{current.libelleLongFr}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{permissionmsgs.permission_role_llFr_table}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleLongFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.libelleCourtAr}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{permissionmsgs.permission_role_lcAr_table}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleCourtAr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.libelleLongAr}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{permissionmsgs.permission_role_llAr_table}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleLongAr}" />
+					</p:column>
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="permissionButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							action="#{permissionSearchBckBean.toEdit(current)}"
+							rendered="#{permissionDroitBean.editAllow}"
+							icon="ui-icon-unlocked" title="#{commonmsgs.button_permission}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="idRole" value="#{current.id}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

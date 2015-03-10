@@ -1,0 +1,144 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<h:form>
+         <div class="row"
+					style="border: 1px solid #E2E2E2; box-shadow: 0px 1px 1px #ECECEC; background-color: #F5F5F5; padding: 10px 0px;">
+					<div class="col-lg-12">
+
+					<p:graphicImage value="#{photoEtudiantBB.photo}"
+						rendered="#{_etudiant.photoName!=null}"
+						alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+						
+					</p:graphicImage>
+
+						<p:graphicImage value="#{photoBean.photo}"
+							style="padding:0px; border: 5px solid #FFF;float:left;margin-right:20px"
+							rendered="#{not empty dossierEmployeDtoParam.photo}"
+							alt="" width="120"
+							height="120">
+							<f:param name="url" value="#{dossierEmployeDtoParam.photo}" />
+						</p:graphicImage>
+
+						<p:graphicImage value="/resources/images/boy.png" 
+							style="padding:0px; border: 5px solid #FFF;float:left;margin-right:20px"
+							rendered="#{empty dossierEmployeDtoParam.photo}"
+							alt="" width="100"
+							height="100">
+						</p:graphicImage>
+						
+					<h1 class="pull-right">
+						#{dossierEmployemsgs.dossier_employe_matricule_employe} : <span class="txt-color-green">#{dossierEmployeDtoParam.matricule}</span>
+<!-- 						<br></br> -->
+<!-- 						<br></br> -->
+<!-- 						#{dossierEmployemsgs.dossier_employe_date_recrutement} : <span class=""> -->
+<!-- 						<h:outputText value="#{dossierEmployeDtoParam.dateInstallation}" -->
+<!-- 							styleClass="labelValue"> -->
+<!-- 							<f:convertDateTime type="date" pattern="dd/MM/yyyy" /> -->
+<!-- 						</h:outputText></span> -->
+					</h1>
+					
+					<h1>
+						#{dossierEmployeDtoParam.refIndividuDto.nomLatin} <span class="semi-bold">
+							#{dossierEmployeDtoParam.refIndividuDto.prenomLatin}</span>
+					</h1>
+
+					<h1>
+						#{dossierEmployeDtoParam.refIndividuDto.nomArabe} <span style="">#{dossierEmployeDtoParam.refIndividuDto.prenomArabe}</span>
+					</h1>
+
+					<h4>
+						Né le
+						<h:outputText value="#{dossierEmployeDtoParam.refIndividuDto.dateNaissance}"
+							styleClass="labelValue">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+						
+					</h4>
+					<br></br>
+                       <p:commandLink id="btnPhoto"   value="Modifier la photo" rendered="#{rendredModifPhotoParam}"
+								     title="Modifier photo" 
+						              
+										immediate="true" 
+										
+										onsuccess="PF('dlgPhoto').show()"				
+						
+						></p:commandLink>	
+					
+
+				</div>
+			</div>
+</h:form>
+
+
+<p:dialog id="dlgPhoto" widgetVar="dlgPhoto" resizable="false"
+		modal="true"  closable="true" showHeader="true"
+		header="Changement de la photo">
+
+		<p:messages id="messagesdlgPhoto" showSummary="true" autoUpdate="true"
+			closable="true" />
+
+		<h:form id="photoForm" enctype="multipart/form-data"  >
+		<p:fileUpload id="iduploadDoc" 
+							fileUploadListener="#{dossierEmployeBean.onHandleFileUpload}"
+							update=":pnl_Gerer"  
+							mode="advanced"  
+							fileLimit="1"
+							label="Parcourir une photo"
+							required="true" dragDropSupport="true" process="@this"
+							requiredMessage="document_document_upload_required"
+							uploadLabel="Enregistrer"
+							cancelLabel="Annuler"
+							sizeLimit="#{sessionBean.limitSizePhoto}"
+							invalidSizeMessage="document_limite_size_fichier_upload sessionBean.limit_size_photo Octets"
+							allowTypes="#{sessionBean.allowTypesPhoto}"
+							oncomplete="dlgPhoto.hide()"
+							>
+						</p:fileUpload>
+			
+
+						
+
+
+
+						
+						
+					  
+	                 <p:outputPanel id="imgPanel">
+                     <p:graphicImage value="#{photoBean.photo}"
+							rendered="#{not empty dossierEmployeDtoParam.photo}"
+							alt="" width="120"
+							height="120">
+							<f:param name="url" value="#{dossierEmployeDtoParam.photo}" />
+						</p:graphicImage>
+
+	                 
+						<p:graphicImage value="/resources/images/boy.png" 
+							
+							rendered="#{empty dossierEmployeDtoParam.photo}"
+							alt="" width="160"
+							height="160">
+						</p:graphicImage>
+					</p:outputPanel>	
+				
+
+			
+		</h:form>
+	</p:dialog>
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

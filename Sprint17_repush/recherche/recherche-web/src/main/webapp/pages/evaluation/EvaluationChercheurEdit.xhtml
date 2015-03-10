@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components"
+	xmlns:rch="http://java.sun.com/jsf/composite/components/rch">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchEvalChrMsgs.rechercher_evaluation_chercheur_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+<p:outputPanel id="mainOutPutPanel">
+<h:form id="mainForm">
+
+<!-- RECHERCHE DES EVALUATIONS -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchEvaluationsID" 
+						  searchKeyWords="#{evlChercheurBB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{evlChercheurBB.searchEvaluations()}"
+						  searchAdvancedMethodName="#{evlChercheurBB.searchEvaluations()}"
+						  toUpdateOnSearch=":mainForm:evaluationsDataTable :mainForm:evaluationOutPutPanelDetails :mainForm:msgEvaluation"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  withAdvancedSearch="false"
+						  textWatermark="Recherche evaluations ...">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddEvaluation" 
+									value="#{rchEvalChrMsgs.rechercher_evaluation_button_add_grid_label}" 
+									action="#{evlChercheurBB.prepareAddNewEvaluation()}"
+									process="@this"
+									update=":mainForm:evaluationOutPutPanelDetails :mainForm:msgEvaluation"
+									icon="ui-icon-plusthick"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+		 </p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<br />
+	<p:dataTable id="evaluationsDataTable" var="row"
+							value="#{evlChercheurBB.listEvaluations}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{evlChercheurBB.selectedEvaluation}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{evlChercheurBB.onEvaluationRowSelect}" update=":mainForm:evaluationOutPutPanelDetails :mainForm:msgEvaluation"	
+								onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_chercheur_label}" style="text-align:left;">
+						<h:outputText value="#{row.refIndividuPrenomLatin} #{row.refIndividuNomLatin}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_debut_periode_label}" style="text-align:center;">
+						<h:outputText value="#{row.dateDebutPeriode}" styleClass="value">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_fin_periode_label}" style="text-align:center;">
+						<h:outputText value="#{row.dateFinPeriode}" styleClass="value">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_evaluation_label}" style="text-align:center;">
+						<h:outputText value="#{row.dateEvaluation}" styleClass="value">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+				</p:column>
+	</p:dataTable>
+	
+	<!-- DETAILS DE L EVALUATION CHERCHEUR SELECTIONNEE -->
+	<p:outputPanel id="evaluationOutPutPanelDetails">
+	<p:panel header="#{evlChercheurBB.titleEvaluationDetails}" rendered="#{evlChercheurBB.canShowEvaluationDetails}" style="margin-bottom:8px;">
+			<p:panelGrid  id="evaluationGridEdit" style="width:100%;margin-bottom:8px;">
+			<p:row>
+			<p:column style="text-align:right;width:20%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_chercheur_label}" for="txtChercheurID"/>
+			</p:column>
+			<p:column >
+					<p:inputText id="txtChercheurID" style="width:100%;"  
+									value="#{evlChercheurBB.currentEvaluation.refIndividuNomLatin}"
+									required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_chercheur_required}"/>
+			</p:column>
+			<p:column colspan="2">
+					<p:commandButton id="btnAddIndividu" value="..."
+								title="#{individumsgs.dialog_header_individu}"  process="@this" ajax="true"
+								onsuccess="PF('individuDialog').show()">
+					</p:commandButton>
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column style="text-align:right;width:20%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_grille_evaluation_label}" for="listGridsID"/>
+			</p:column>
+			<p:column >
+						<p:selectOneMenu id="listGridsID" 	value="#{evlChercheurBB.currentEvaluation.grilleEvaluationId}"  
+													required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_grid_required}">
+								<f:selectItems value="#{evlChercheurBB.listGridsEvaluation}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+								<p:ajax listener="#{evlChercheurBB.handleEvaluationGridChange}" 	event="valueChange" process="@this"/>
+						</p:selectOneMenu>
+			</p:column>
+			<p:column style="text-align:right;width:20%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_evaluation_label}" for="txtEvaluationDate"/>
+			</p:column>
+			<p:column style="width:30%;">
+					<p:calendar id="txtEvaluationDate" value="#{evlChercheurBB.currentEvaluation.dateEvaluation}"  pattern="dd/MM/yyyy" required="true"	 
+										requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_evaluation_date_required}"/>
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column style="text-align:right;width:20%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_debut_periode_label}" for="txtEvaluationDateBegin"/>
+			</p:column>
+			<p:column>
+					<p:calendar id="txtEvaluationDateBegin" value="#{evlChercheurBB.currentEvaluation.dateDebutPeriode}"  pattern="dd/MM/yyyy" required="true"	 
+										requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_evaluation_date_begin_required}"/>
+			</p:column>
+			<p:column style="text-align:right;width:20%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_date_fin_periode_label}" for="txtEvaluationDateEnd"/>
+			</p:column>
+			<p:column>
+					<p:calendar id="txtEvaluationDateEnd" value="#{evlChercheurBB.currentEvaluation.dateFinPeriode}"  pattern="dd/MM/yyyy" required="true"	 
+										requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_evaluation_date_end_required}"/>
+			</p:column>
+			</p:row>
+			<p:row>			
+			<p:column style="text-align:right;width:20%;vertical-align:top;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_chercheur_datatable_list_evaluations_column_appreciation_globale_label}" for="txtAppreciation"/>
+			</p:column>
+			<p:column colspan="3">
+					<p:inputTextarea id="txtAppreciation" value="#{evlChercheurBB.currentEvaluation.appreciation}"  style="width:100%;" rows="1"
+					required="true"	 requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_detail_msg_evaluation_appreciation_globale_required}"/>
+			</p:column>
+			</p:row>
+			</p:panelGrid>
+			
+			<p:outputPanel id="evaluationValuesOuputpanel">
+			
+			<p:toolbar rendered="#{evlChercheurBB.canEditEvaluationValues}">
+			<p:toolbarGroup align="right">
+							<p:commandButton id="btnAddOneEvaluationValue" 
+									action="#{evlChercheurBB.prepareAddOneEvaluationValue()}"
+									process="@this"
+									update=":dlgAddEvaluationValueId"
+									oncomplete="PF('dlgAddEvaluationValue').show();"
+									icon="ui-icon-plusthick">
+						</p:commandButton>
+			</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="evaluationValuesDataTable" var="row"
+							value="#{evlChercheurBB.currentEvaluationValues}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_chercheur_datatable_list_values_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{evlChercheurBB.selectedEvaluationValue}"
+							style="margin-bottom:8px;"
+							rendered="#{evlChercheurBB.canEditEvaluationValues}">
+				<f:facet name="header">#{rchEvalChrMsgs.rechercher_evaluation_evaluation_chercheur_datatable_list_values_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_chapter_label}" style="text-align:center;">
+					<h:outputText value="#{row.grilleEvaluationDetailNcChapitreIntituleFr}"  style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_criteria_label}" style="text-align:center;">
+					<h:outputText value="#{row.grilleEvaluationDetailNcCritereIntituleFr}"  style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_appreciation_label}" style="text-align:center;">
+					<h:outputText value="#{row.ncNiveauAppreciationIntituleFr}"  style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchEvalChrMsgs.rechercher_evaluation_grille_datatable_list_grid_chapters_criteria_column_note_label}"  style="text-align:center;">
+					<h:outputText value="#{row.note}" style="color:#336699;"/>
+				</p:column>
+					<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemoveOneEvaluationValue"  
+															action="#{evlChercheurBB.removeOneEvaluationValue()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:evaluationValuesDataTable :mainForm:msgEvaluation"   
+															process="@this">
+								<p:confirm		header="#{rchEvalChrMsgs.rechercher_evaluation_grid_detail_confirm_title}"	
+														message="#{rchEvalChrMsgs.rechercher_evaluation_evaluation_value_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{evlChercheurBB.selectedEvaluationValueId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editOneDetailButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{evlChercheurBB.prepareEditEvaluationValue()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddEvaluationValue').show();"
+									update=":dlgAddEvaluationValueId"	>
+									<f:setPropertyActionListener target="#{evlChercheurBB.selectedEvaluationValueId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+			
+			<p:toolbar style="margin-buttom:8px">
+			<p:toolbarGroup align="left">
+					<p:commandButton id="saveEvaluationButtonID" 
+							action="#{evlChercheurBB.saveEvaluation()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchEvalChrMsgs.rechercher_evaluation_button_dialog_add_grid_save_libelle}"
+							process="@this :mainForm:evaluationGridEdit" 
+							ajax="true" 
+							update=":mainForm:evaluationsDataTable :mainForm:evaluationGridEdit :mainForm:evaluationValuesOuputpanel :mainForm:msgEvaluation"
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+					</p:commandButton>
+			</p:toolbarGroup>
+			</p:toolbar>
+	
+	</p:panel>
+	</p:outputPanel>
+	<p:messages id="msgEvaluation" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+</h:form>
+<ui:include src="/pages/commons/IndividuComponent.xhtml">
+   <ui:param name="updateAjax" value=":mainForm:txtChercheurID"></ui:param>
+   <ui:param name="nameOfManagedBean" value="#{evlChercheurBB}"></ui:param>
+    <ui:param name="dialogWidgetVar" value="individuDialog"></ui:param>
+ </ui:include>
+</p:outputPanel>
+
+<p:dialog  widgetVar="dlgAddEvaluationValue"  
+					appendTo="@(body)" modal="true" 
+					header="#{evlChercheurBB.titleDialogEvaluationValue}"
+ 					id="dlgAddEvaluationValueId" 
+ 					resizable="false"
+ 					style="font-size:#{sessionBean.fontSize}px">
+	<h:form id="dlgFormEvaluationValue">
+	<p:messages id="msgEvaluationValueDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	 <p:panelGrid  id="panelGridEvaluationValue" style="width:650px;margin-bottom:8px;">
+				<p:row>
+				<p:column style="text-align:right;width:30%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_value_dilalog_grid_criteria_column_label}" for="listCriteriasID"/>
+				</p:column>
+				<p:column >
+						<p:selectOneMenu id="listCriteriasID" 	value="#{evlChercheurBB.selectedEvaluationValue.grilleEvaluationDetailId}" style="width:100%;" 
+															required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_value_detail_dialog_msg_criteria_required}">
+								<f:selectItems value="#{evlChercheurBB.listGridCriterias}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="text-align:right;width:30%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_value_dilalog_grid_appreciation_column_label}" for="listAppreciationsID"/>
+				</p:column>
+				<p:column >
+						<p:selectOneMenu id="listAppreciationsID" 	value="#{evlChercheurBB.selectedEvaluationValue.ncNiveauAppreciationId}" style="width:100%;" 
+															required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_value_detail_dialog_msg_appreciation_level_required}">
+								<f:selectItems value="#{evlChercheurBB.listAppreciations}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+				</p:column>
+				</p:row>
+				
+				<p:row>
+				<p:column style="text-align:right;width:30%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_value_dilalog_grid_note_column_label}" for="txtNoteID"/>
+				</p:column>
+				<p:column >
+						<p:inputText id="txtNoteID" 	value="#{evlChercheurBB.selectedEvaluationValue.note}"
+															required="true" requiredMessage="#{rchEvalChrMsgs.rechercher_evaluation_value_detail_dialog_msg_appreciation_note_required}">
+						</p:inputText>
+				</p:column>
+				</p:row>
+				
+				<p:row>
+				<p:column style="text-align:right;width:30%;">
+						<p:outputLabel value="#{rchEvalChrMsgs.rechercher_evaluation_value_dilalog_grid_observation_column_label}"/>
+				</p:column>
+				<p:column >
+							<p:inputTextarea id="txtObservation" value="#{evlChercheurBB.selectedEvaluationValue.observation}"  style="width:100%;"/>
+				</p:column>
+				</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddEvaluationValueDialogID"
+							 value="#{rchEvalChrMsgs.rechercher_evaluation_button_dialog_add_grid_close_label}" 	
+							 type="button" onclick="PF('dlgAddEvaluationValue').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneEvaluationValue" 
+							action="#{evlChercheurBB.saveOneEvaluationValue()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchProgrammeMsgs.programmes_recherche_button_dialog_ajouter_axe_enregistrer_libelle}"
+							process="@this :dlgFormEvaluationValue:panelGridEvaluationValue" 
+							ajax="true" 
+							update=":mainForm:evaluationValuesDataTable :mainForm:msgEvaluation :dlgFormEvaluationValue" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateEvaluationValueRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	<br />
+	</h:form>
+		<script type="text/javascript">
+   								 function handleUpdateEvaluationValueRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddEvaluationValue').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddEvaluationValue').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<pe:blockUI target="mainOutPutPanel" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

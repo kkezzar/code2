@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<p:fieldset legend="Spécialité LMD informations">
+	<p:panel style="height:600px" id="infosspecialitelmdPanel"  header="" >
+		<h:form id="infosFromId">
+	
+			<p:panelGrid id="descriptionspecialiteLMD" styleClass="noBorder1">
+				<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_identite}" />
+				</p:column>
+				<p:column>
+				<h:outputText id="identifiantfiliere" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.identifiant}" style="font-weight: bold;" />
+					
+				</p:column>
+		
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_filiere} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="filiereData" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.llFiliere}" style="font-weight: bold;" />
+				</p:column>
+				
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_domaine} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="DomaineData" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.identifiantDomaine}" style="font-weight: bold;" />
+				</p:column>
+				
+			</p:row>
+				
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcr" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.lcFiliere}" style="font-weight: bold;" />
+					
+				</p:column>
+           
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_arabe_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcrArabe"  value="#{specialitelmdMgrBean.refSpecialiteLmdDto.lcFiliereArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="lbelle" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.llFiliere}" style="font-weight: bold;" />
+					
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_arabe}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libelleArabe" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.llFiliereArabe}" style="font-weight: bold;" />
+				
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_description}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="description" 	value="#{specialitelmdMgrBean.refSpecialiteLmdDto.descriptionSpecialite}" style="font-weight: bold;" />
+					
+				</p:column>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="descriptionArabe"	value="#{specialitelmdMgrBean.refSpecialiteLmdDto.descriptionSpecialiteArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+		
+
+			</p:panelGrid>
+			
+	
+		
+			
+		</h:form>
+			<br></br>
+				<br></br>
+		<h:form id="specialitelmdDetailsForm" prependId="false">
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-disk" process="@this"
+					action="#{specialitelmdBckBean.back}">
+
+					<f:param name="searchValue"
+						value="#{specialitelmdBckBean.searchValue}" />
+				</p:commandButton>
+
+			</h:form>
+		
+	</p:panel>
+</p:fieldset>
+</ui:composition>

@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_periode}" style="border:0;">
+			<h:form>
+			<br/><br/>
+				<p:fieldset legend="#{commonmsgs.common_periode}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_identifiant}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{periodeBckBean.refPeriodeDto.identifiant}">
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_nom}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{periodeBckBean.refPeriodeDto.nom}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_date_debut}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{periodeBckBean.refPeriodeDto.dateDebut}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_date_fin}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{periodeBckBean.refPeriodeDto.dateFin}" >
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{periodemsgs.periode_periodique}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{periodeBckBean.refPeriodeDto.periodique?'Oui':'Non'}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{periodeBckBean.back}">
+								<f:param name="searchValue"
+									value="#{periodeBckBean.searchValue}" />
+								<f:param name="idp" value="#{periodeBckBean.idp}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

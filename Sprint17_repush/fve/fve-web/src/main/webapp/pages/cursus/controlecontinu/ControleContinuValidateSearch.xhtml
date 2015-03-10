@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:fieldset
+		legend="#{evalControleContinuMsgs.eval_controle_continu_field_search_title}"
+		toggleable="true">
+		<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel style="width:100%;text-align:left"
+						value="#{evalControleContinuMsgs.eval_controle_continu_annee_academique}"
+						for="annee"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="annee" filter="true" required="true"
+						rendered="#{!validateControleContinuBean.editMode}"
+						filterMatchMode="contains" style="width:100%;text-align:left"
+						requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_annee_academique_required}"
+						value="#{validateControleContinuBean.anneeAcademiqueId}"
+						label="#{evalControleContinuMsgs.eval_controle_continu_annee_academique}">
+						<p:ajax update="evalForm" onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							listener="#{validateControleContinuBean.anneeChanged}" />
+						<f:selectItem
+							itemLabel="#{evalControleContinuMsgs.eval_controle_continu_annee_academique_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{validateControleContinuBean.anneeAcademiqueList}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{sessionBeanFve.codeAnneeAcademique}"
+						styleClass="value"
+						rendered="#{validateControleContinuBean.editMode}" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<p:outputLabel style="width:100%;text-align:left"
+						value="#{evalControleContinuMsgs.eval_controle_continu_offre_formation}"
+						for="oof"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="oof" required="true"
+						style="width:100%;text-align:left"
+						value="#{validateControleContinuBean.oofId}"
+						requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_offre_formation_required}"
+						filter="true" filterMatchMode="contains"
+						label="#{evalControleContinuMsgs.eval_controle_continu_offre_formation}">
+						<p:ajax update="evalForm" onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							listener="#{validateControleContinuBean.ofChanged}" />
+						<f:selectItem
+							itemLabel="#{evalControleContinuMsgs.eval_controle_continu_offre_formation_select}"
+							itemValue="" />
+						<f:selectItems value="#{validateControleContinuBean.ofList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+			<p:row>
+
+				<p:column style="width:15">
+					<p:outputLabel
+						value="#{evalControleContinuMsgs.eval_controle_continu_periode}"
+						for="periode"></p:outputLabel>
+				</p:column>
+				<p:column  colspan="3">
+					<p:selectOneMenu id="periode" required="true" style="width:40%"
+						value="#{validateControleContinuBean.periodeId}" filter="true"
+						filterMatchMode="contains"
+						label="#{evalControleContinuMsgs.eval_controle_continu_periode}">
+						<p:ajax onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()" update="evalForm"
+							listener="#{validateControleContinuBean.periodeChanged}" />
+						<f:selectItem
+							itemLabel="#{evalControleContinuMsgs.eval_controle_continu_periode_select}"
+							itemValue="" />
+						<f:selectItems value="#{validateControleContinuBean.periodes}" />
+
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{evalControleContinuMsgs.eval_controle_continu_matiere} "
+						for="matiere"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="matiere"
+						value="#{validateControleContinuBean.rattachementMcId}"
+						required="true" style="width:100%" filter="true"
+						filterMatchMode="contains">
+						<p:ajax update="evalForm" onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							listener="#{validateControleContinuBean.mcChanged}" />
+						<f:selectItem
+							itemLabel="#{evalControleContinuMsgs.eval_controle_continu_matiere_select}"
+							itemValue="" />
+						<f:selectItems value="#{validateControleContinuBean.matieres}" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{evalControleContinuMsgs.eval_controle_continu_groupe}"
+						for="groupe"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="groupe" required="true" style="width:100%"
+						value="#{validateControleContinuBean.gpId}" filter="true"
+						filterMatchMode="contains">
+						<p:ajax onstart="PF('globalWidget').block()" update="evalForm"
+							onsuccess="PF('globalWidget').unblock()"
+							listener="#{validateControleContinuBean.groupeChanged}" />
+						<f:selectItem
+							itemLabel="#{evalControleContinuMsgs.eval_controle_continu_groupe_select}"
+							itemValue="" />
+						<f:selectItems value="#{validateControleContinuBean.groupeList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+
+<!-- 			<p:row> -->
+<!-- 				<p:column style="width:250px" colspan="4"> -->
+<!-- 					<p:commandButton rendered="#{sessionDroitBean.readAllow}" -->
+<!-- 						value="#{commonmsgs.bouton_rechercher}" update="evalForm" -->
+<!-- 						style="text-align:left" process="panelSearch" -->
+<!-- 						onstart="PF('globalWidget').block()" -->
+<!-- 						onsuccess="PF('globalWidget').unblock()" -->
+<!-- 						actionListener="#{validateControleContinuBean.findEval()}" -->
+<!-- 						icon="ui-icon-search"> -->
+<!-- 					</p:commandButton> -->
+<!-- 				</p:column> -->
+<!-- 			</p:row> -->
+		</p:panelGrid>
+	</p:fieldset>
+</ui:composition>
+

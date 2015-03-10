@@ -1,0 +1,76 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+      
+   <p:dialog header="#{individuumsgs.individu_list_title}" widgetVar="dlgIndividuList" resizable="false" width="400" draggable="true">  
+         <h:form id="listIndividuForm">
+            <p:dataTable resizableColumns="true" id="contratData"
+					value="#{comboBean.listRefIndividuDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					 <f:facet name="header">  
+                         <h:outputText value="#{individu.liste_contrat}" />
+                       </f:facet>
+					<p:column sortBy="#{current.identifiant}">
+						<f:facet name="header"   >
+							<h:outputText value="#{contratmsgs.contrat_identite}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+					<p:column sortBy="#{current.objetContratFr}">
+						<f:facet name="header">
+							<h:outputText value="#{contratmsgs.contrat_objet_contrat}"  />
+						</f:facet>
+
+						<h:outputText value="#{current.objetContratFr}" />
+					</p:column>
+					<p:column sortBy="#{current.dateCreation}">
+						<f:facet name="header">
+							<h:outputText value="#{contratmsgs.contrat_date_creation}"  />
+						</f:facet>
+
+						<h:outputText value="#{current.dateCreation}" > <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT+1"/></h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.llStructureLatin}">
+						<f:facet name="header">
+							<h:outputText value="#{contratmsgs.contrat_service}"  />
+						</f:facet>
+
+						<h:outputText value="#{current.llStructureLatin}" />
+					</p:column>
+                      <p:column  sortBy="#{current.llSituationFr}" >
+						<f:facet name="header">
+							<h:outputText
+								value="#{contratmsgs.contrat_situation}" />
+						</f:facet>
+						
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+					  
+					<p:column sortBy="#{current.dateSituation}">
+						<f:facet name="header">
+							<h:outputText
+								value="Date" />
+						</f:facet>
+						
+						<h:outputText value="#{current.dateSituation}" > <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" timeZone="GMT+1"/></h:outputText>
+					</p:column>
+					
+					<p:column style="width:8%" exportable="false">  
+                <p:commandButton id="readButton"  action="#{contratBean.toDetails}" icon="ui-icon-document" title="#{commonmsgs.button_consulter}">  
+                <f:setPropertyActionListener value="#{current}" target="#{contratBean.refContratDto}" />  
+            </p:commandButton> 
+             <p:commandButton id="modifyButton"  action="#{contratBean.toEditContrat}" icon="ui-icon-pencil" title="#{commonmsgs.button_update}">  
+                <f:setPropertyActionListener value="#{current}" target="#{contratBean.refContratDto}" />
+            </p:commandButton>   
+        </p:column>  
+				</p:dataTable>
+         
+         </h:form>
+</p:dialog>
+</ui:composition>

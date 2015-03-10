@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+		<p:outputPanel id="outputPanel">
+		 
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<p:panel id="titlePage"
+				header="#{emploiDuTempsMsgs.EMPLOI_DU_TEMPS_GERER_EMPLOI_DU_TEMPS}">
+
+				<h:form id="form_search">
+  					<p:growl id="messages" showDetail="true" />
+  					
+					<!-- toolbar 
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+
+						</p:toolbarGroup>
+					</p:toolbar>
+					-->
+					
+					<p:schedule id="schedule" value="#{emploiDuTempsMBean.eventModel}"
+						widgetVar="myschedule"  
+						timeFormat="HH:mm" 
+						columnFormat="dd"
+						axisFormat="HH:mm"
+						aspectRatio="2"
+						locale="fr" 
+						minTime="8:00" 
+                        maxTime="18:00" 
+                        showWeekends="true"
+                        slotMinutes="15"
+                        view="agendaWeek"	
+						>
+
+						<p:ajax event="dateSelect" listener="#{emploiDuTempsMBean.onDateSelect}"
+							update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect"
+							listener="#{emploiDuTempsMBean.onEventSelect}" update="eventDetails"
+							oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove" listener="#{emploiDuTempsMBean.onEventMove}"
+							update="messages" />
+						<p:ajax event="eventResize"
+							listener="#{emploiDuTempsMBean.onEventResize}" update="messages" />
+
+					</p:schedule>
+
+					<p:spacer height="20px"></p:spacer>
+
+				    <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+				        <h:panelGrid id="eventDetails" columns="2">
+				            <h:outputLabel for="title" value="Title:" />
+				            <p:inputText id="title" value="#{emploiDuTempsMBean.event.title}" required="true" />
+				 
+				            <h:outputLabel for="from" value="From:" />
+				            <p:inputMask id="from" value="#{emploiDuTempsMBean.event.startDate}" mask="99/99/9999">
+				                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
+				            </p:inputMask>
+				 
+				            <h:outputLabel for="to" value="To:" />
+				            <p:inputMask id="to" value="#{emploiDuTempsMBean.event.endDate}" mask="99/99/9999">
+				                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
+				            </p:inputMask>
+				 
+				            <h:outputLabel for="allDay" value="All Day:" />
+				            <h:selectBooleanCheckbox id="allDay" value="#{emploiDuTempsMBean.event.allDay}" />
+				 
+				            <p:commandButton type="reset" value="Reset" />
+											<p:commandButton id="addButton" value="Save"
+												actionListener="#{emploiDuTempsMBean.addEvent}"
+												oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+						</h:panelGrid>
+				    </p:dialog>  
+				    
+				</h:form>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<!-- CRUD form -->
+				<h:form id="form_crud">
+
+				</h:form>
+
+			</p:panel>
+		</p:outputPanel>
+		
+		<script type="text/javascript">
+		//https://code.google.com/p/primefaces/wiki/PrimeFacesLocales
+		PrimeFaces.locales ['fr'] = {
+			    closeText: 'Fermer',
+			    prevText: 'Précédent',
+			    nextText: 'Suivant',
+			    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ],
+			    monthNamesShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc' ],
+			    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+			    dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+			    dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+			    weekHeader: 'Semaine',
+			    firstDay: 7,
+			    isRTL: false,
+			    showMonthAfterYear: false,
+			    yearSuffix:'',
+			    timeOnlyTitle: 'Choisir l\'heure',
+			    timeText: 'Heure',
+			    hourText: 'Heures',
+			    minuteText: 'Minutes',
+			    secondText: 'Secondes',
+			    currentText: 'Maintenant',
+			    ampm: false,
+			    month: 'Mois',
+			    week: 'Semaine',
+			    day: 'Jour',
+			    allDayText: 'Toute la journée'
+			};
+
+		PrimeFaces.locales ['ar'] = {
+			    closeText: 'إغلق',
+			    prevText: 'إلى الخلف',
+			    nextText: 'إلى الأمام',
+			    currentText: 'بداية',
+			    monthNames: ['ديسمبر', 'نوفمبر', 'أكتوبر', 'سبتمبر', 'أغسطس', 'يوليو', 'يونيو', 'مايو', 'ابريل', 'مارس', 'فبراير', 'يناير' ],
+			    monthNamesShort: ['ديسمبر', 'نوفمبر', 'أكتوبر', 'سبتمبر', 'أغسطس', 'يوليو', 'يونيو', 'مايو', 'ابريل', 'مارس', 'فبراير', 'يناير' ],
+			    dayNames: ['يوم الأحد‎', 'يوم الإثنين‎', 'يوم الثلاثاء‎', '‏يوم الأَرْبعاء‎', '‏يوم الخَمِيس‎', 'يوم الجُمْعَة‎‎', 'يوم السَّبْت'],
+			    dayNamesShort: ['الأحد‎', 'الإثنين‎', 'الثلاثاء‎', 'الأَرْبعاء‎', 'الخَمِيس‎', 'الجُمْعَة‎‎', 'السَّبْت'],
+			    dayNamesMin: ['الأحد‎', 'الإثنين‎', 'الثلاثاء‎', 'الأَرْبعاء‎', 'الخَمِيس‎', 'الجُمْعَة‎‎', 'السَّبْت'],
+			    weekHeader: 'الأسبوع',
+			    firstDay: 1,
+			    isRTL: false,
+			    showMonthAfterYear: false,
+			    yearSuffix:'' ,
+			    timeOnlyTitle: 'الوقت فقط' ,
+			    timeText: 'الوقت' ,
+			    hourText: 'ساعة',
+			    minuteText: 'دقيقة',
+			    secondText: 'ثانية',
+			    ampm: false,
+			    month: 'الشهر',
+			    week: 'الأسبوع',
+			    day: 'اليوم',
+			    allDayText: 'سا ئراليوم'
+			};
+</script>
+
+	</ui:define>
+</ui:composition>
+</html>

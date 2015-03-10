@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+<ui:define name="title">#{cycleMsgs.level_panel_page_title}</ui:define>
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{cycleMsgs.level_panel_page_title}</ui:define>
+	<ui:define name="centerContent">
+	<h:form id="formCycle">
+	<p:outputPanel id="mainOutputPanel">
+	<h:panelGrid style="margin:10px;width:100%;">
+	<p:row>
+	<p:column>
+					<p:panelGrid id="gridTypeFormationSelection" style="width:100%;margin-bottom:8px;">
+					<p:row>
+					<p:column style="width:160px;">	<h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_type_formation_label}" /></p:column>
+					<p:column>
+					<p:selectOneMenu id="listTypesFormationFilterID" 	value="#{niveauBB.typeFormationLevelCode}">
+										<f:selectItems value="#{niveauBB.listTypesFormation}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+										<p:ajax listener="#{niveauBB.handleTypesFormationFilterChange}" 	event="valueChange" process="@this" update="levelsDataTable listCyclesFilterID levelDetailOutputPanel"
+										onstart="PF('blockUIWidget1').block()" oncomplete="PF('blockUIWidget1').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					<p:row>
+					<p:column><h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_cycles_label}" /></p:column>
+					<p:column>
+					<p:selectOneMenu id="listCyclesFilterID" 	value="#{niveauBB.cycleLevelId}" required="true" requiredMessage="#{cycleMsgs.cycle_message_cycles_required}">
+										<f:selectItems value="#{niveauBB.listTypesCycles}" var="c" 	itemLabel="#{c.label}" itemValue="#{c.value}" />
+										<p:ajax listener="#{niveauBB.handleCyclesFilterChange}" 	event="valueChange" process="@this listTypesFormationFilterID" update="levelsDataTable levelDetailOutputPanel listTypesFormationFilterID"
+										onstart="PF('blockUIWidget1').block()" oncomplete="PF('blockUIWidget1').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					</p:panelGrid>
+	</p:column>
+	</p:row>				
+	<p:row>
+	<p:column>
+					<p:dataTable id="levelsDataTable" var="row"
+								value="#{niveauBB.listLevels}"
+								rowKey="#{row.code}"
+								emptyMessage="#{cycleMsgs.level_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								selection="#{niveauBB.selectedLevel}"
+								style="width:100%;margin-bottom:8px;">
+								
+								<p:ajax event="rowSelect" listener="#{niveauBB.onLevelRowSelect}"  	update=":formCycle:levelDetailOutputPanel"
+								onstart="PF('blockUIWidget2').block()" oncomplete="PF('blockUIWidget2').unblock()"/>  
+			    				<f:facet name="header">  #{cycleMsgs.level_data_table_list_header}</f:facet>  
+		    					<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_rang}" style="width:30px" styleClass="center"> 	<h:outputText value="#{row.rang}"/> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_code}" style="width:20px" styleClass="center"><h:outputText value="#{row.code}" styleClass="labelValue"/></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" styleClass="textOnLeft">	<h:outputText value="#{row.libelleLongLt}" styleClass="labelValue"/></p:column>
+						</p:dataTable>
+	</p:column>
+	</p:row>
+	<p:row>
+	<p:column>			
+				<p:outputPanel id="levelDetailOutputPanel" style="width:100%;margin:0px;">
+				<p:panel header="#{niveauBB.selectedDetailLevelTitle}" rendered="#{niveauBB.showLevelDetails}"  style="width:100%;margin-bottom:8px;">
+				<p:tabView id="tvLevelDetails" style="padding:0px">
+				<p:tab title="#{cycleMsgs.cycle_detail_tabview_descriptif}">	
+				<p:scrollPanel mode="native" style="height: 220px; border-color:transparent;">		
+				
+						<p:panelGrid  id="pgLevelDescriptif" rendered="#{not empty niveauBB.selectedLevel}" style="width:100%;">
+			        	<p:row>
+			        	<p:column style="width:130px;"><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_code_label} " /></p:column>
+				        <p:column><p:inputText id="levelCodeID" value="#{niveauBB.selectedLevel.code}" maxlength="5" style="width:100px;" required="true" requiredMessage="#{cycleMsgs.level_message_code_required}"/> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+				        <p:column><h:outputLabel for="rangLevelId" value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_rang_label}" /></p:column>
+        				<p:column><p:spinner id="rangLevelId" value="#{niveauBB.selectedLevel.rang}" min="1" max="10" required="true" requiredMessage="#{cycleMsgs.level_message_rang_required}"/></p:column>
+				      	</p:row>
+				      	
+				      	<p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_fr_label} " /></p:column>
+				        <p:column><p:inputText id="levelLibelleLongFrID" value="#{niveauBB.selectedLevel.libelleLongLt}" maxlength="150" style="width:60%;" required="true" requiredMessage="#{cycleMsgs.level_message_libelle_long_fr_required}"/></p:column> 
+				        </p:row>
+				       
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_ar_label} " /></p:column>
+				        <p:column><p:inputText id="levelLibelleLongArID" value="#{niveauBB.selectedLevel.libelleLongAr}" maxlength="150" dir="rtl" style="width:60%;"/> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_court_fr_label} " /></p:column>
+				        <p:column><p:inputText id="levelLibelleCourtFrID" value="#{niveauBB.selectedLevel.libelleCourtLt}" maxlength="50"/> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_court_ar_label} " /></p:column>
+				        <p:column><p:inputText id="levelLibelleCourtArID" value="#{niveauBB.selectedLevel.libelleCourtAr}" maxlength="50" dir="rtl"/> </p:column>
+				         </p:row>
+		                </p:panelGrid>
+		                </p:scrollPanel>
+                </p:tab>
+                <p:tab title="#{cycleMsgs.cycle_tabview_periodes}">
+				<p:scrollPanel mode="native" style="height: 220px; border-color:transparent;">		
+				<p:dataTable id="periodsDataTable" var="row"
+								value="#{niveauBB.listPeriodsLevel}"
+								rowKey="#{row.code}"
+								emptyMessage="#{cycleMsgs.level_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_rang}" style="width:30px" styleClass="center"> 	<h:outputText value="#{row.rang}" /> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_code}" style="width:20px" styleClass="center"><h:outputText value="#{row.code}" /></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}">	<h:outputText value="#{row.libelleLongLt}" /></p:column>
+
+						</p:dataTable>
+                </p:scrollPanel>
+                </p:tab>
+                </p:tabView>
+			</p:panel>
+			<p:toolbar id="levelToolBar" styleClass="toolBarMesrs" style="width:100%;margin:0;">
+				<p:toolbarGroup>
+						<p:commandButton id="btnAddLevel" 
+							value="#{cycleMsgs.cycle_bouton_ajouter_libelle}" 
+							action="#{niveauBB.addLevel()}"  
+							icon="ui-icon-plusthick"  
+							process="@this listCyclesFilterID" ajax="true" 
+							update=":formCycle:levelDetailOutputPanel" 
+							onstart="PF('blockUIWidget3').block()" oncomplete="PF('blockUIWidget3').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup rendered="#{niveauBB.showBtnRemove}">
+				<p:separator />
+						<p:commandButton id="btnRemoveLevel" 
+							value="#{cycleMsgs.cycle_bouton_supprimer_libelle}" 
+							actionListener="#{niveauBB.removeLevel()}" 
+							icon="ui-icon-trash"     
+							process="@this listCyclesFilterID" ajax="true" 
+							update="@form" 
+							onstart="PF('blockUIWidget3').block()" oncomplete="PF('blockUIWidget3').unblock()">
+							<p:confirm		header="#{cycleMsgs.period_message_remove_confirm_title}"	 message="#{cycleMsgs.level_message_remove_confirm_msg}"	icon="ui-icon-alert" />
+						</p:commandButton>
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="left" rendered="#{niveauBB.showBtnSave}">
+				<p:separator/>
+					<p:commandButton id="btnSaveLevel" 
+							value="#{cycleMsgs.cycle_bouton_enregistrer_libelle}" 
+							actionListener="#{niveauBB.saveLevel()}"  
+							icon="ui-icon-disk"  
+							process="@this formCycle:tvLevelDetails:pgLevelDescriptif" ajax="true" 
+							update="@form" 
+							onstart="PF('blockUIWidget3').block()" oncomplete="PF('blockUIWidget3').unblock()" >
+						</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+	</p:outputPanel>
+	</p:column>
+	</p:row>
+	<p:row>
+	<p:column>
+	<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+	</p:column>
+	</p:row>
+	</h:panelGrid>
+	</p:outputPanel>
+	</h:form>
+				
+	<pe:blockUI target="formCycle:levelsDataTable" widgetVar="blockUIWidget1">
+        					<i class="fa fa-spinner fa-spin"></i>  
+    </pe:blockUI>
+    <pe:blockUI target="formCycle:levelDetailOutputPanel" widgetVar="blockUIWidget2">
+        					<i class="fa fa-spinner fa-spin"></i>  
+    </pe:blockUI>
+    <pe:blockUI target="formCycle:tvLevelDetails:pgLevelDescriptif" widgetVar="blockUIWidget3">
+        					<i class="fa fa-spinner fa-spin"></i>  
+    </pe:blockUI>
+	</ui:define>
+</ui:composition>

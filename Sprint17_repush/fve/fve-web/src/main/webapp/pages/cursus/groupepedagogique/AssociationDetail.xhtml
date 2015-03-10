@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="ofPanel" styleClass="ofPanel">
+	<br/><br/>
+		<p:dataTable id="apTable" var="row"
+			value="#{groupePedagogiqueManagerBean.associatedApDetailList}"
+			emptyMessage="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_seacrh_result_no_result}"
+			style="margin-bottom:8px" rowIndexVar="rowIndex"
+			resizableColumns="true" rowKey="#{row.id}">
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_index}"
+				style="width:20px">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_date_attachement}"
+				styleClass="textOnLeft" style="width:15%">
+				<h:outputText value="#{row.dateAttachement}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ap_code}"
+				style="width:8%">
+				<h:outputText value="#{row.apCode}" />
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ap_type_code}"
+				style="width:8%">
+				<h:outputText value="#{row.refCodeTypeAp}" />
+			</p:column>
+
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ap_mode}"
+				style="width:15%">
+				<h:outputText value="#{row.refCodeModeEnseignement}" />
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ap_seuil}"
+				style="width:10%">
+				<h:outputText value="#{row.apSeuil}" />
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ap_groupe_prevu}"
+				style="width:10%">
+				<h:outputText value="#{row.apGroupesPrevus}" />
+			</p:column>
+
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_mc}"
+				style="width:10%;text-align:left">
+				<h:outputText value="#{row.rattachementMcMcLibelleFr}" />
+			</p:column>
+			<p:column
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_association_data_table_ue}"
+				style="width:15%;text-align:left">
+				<h:outputText value="#{row.rattachementMcUeLibelleFr}" />
+			</p:column>
+
+		</p:dataTable>
+
+	</p:outputPanel>
+</ui:composition>
+

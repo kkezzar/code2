@@ -1,0 +1,519 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="head">
+	 <style type="text/css">
+				
+		.myautocomp .ui-autocomplete-input{
+		  width: 300px !important;
+		}
+	   
+	   
+	   .myautocomp .ui-widget-content {
+   	 		font-weight: normal !important;
+   			width: 425px !important; 
+		}
+	 
+	 	
+	 	 .myautocomp .ui-inputfield {
+   	 		font-weight: normal !important;
+   			width: 425px !important; 
+		}
+	 	
+	 </style>
+	
+	</ui:define>
+
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{documentComponentBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+
+
+	<h:form id="resultDocumentForm">
+
+		<p:dataTable resizableColumns="true" id="documentData"
+			styleClass="docStyle"
+			value="#{documentComponentBean.listRefDocumentDto}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+			<f:param name="idfDoc" value="#{current.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@all" process="@form" />
+			<f:facet name="header">
+				<h:outputText value="#{documentmsgs.document_list_title}    " />
+
+				<p:commandButton id="addVersionButton" immediate="true"
+					icon="ui-icon-plusthick" onclick="PF('dlgAttachDoc').show()"
+					rendered="#{documentCrudBean.createAllow}">
+					<p:ajax resetValues="true" update="@([id$=documentAttachForm])" immediate="true"/>
+
+				</p:commandButton>
+
+			</f:facet>
+
+			<p:column sortBy="#{current.titreDocument}" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_titre}" />
+				</f:facet>
+				<h:outputText value="#{current.titreDocument}" />
+			</p:column>
+
+
+			<p:column sortBy="#{current.objetDocument}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_objet_document}" />
+				</f:facet>
+				<h:outputText value="#{current.objetDocument}">
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.referenceDocument}" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_reference}" />
+				</f:facet>
+				<h:outputText value="#{current.referenceDocument}">
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.natureDocumentLibelleLongFr}" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_nature_document}" />
+				</f:facet>
+				<h:outputText value="#{current.natureDocumentLibelleLongFr}">
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.dateDocument}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_date_document}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDocument}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_url_document}" />
+				</f:facet>
+
+				<p:commandLink id="downfile"
+					value="#{documentmsgs.document_voir_document}" ajax="false"
+					style="font-weight: bold;">
+
+					<p:fileDownload value="#{documentComponentBean.file}" />
+
+					<f:param name="idfDoc" value="#{current.id}" />
+  			</p:commandLink>
+
+			</p:column>
+
+
+			<p:column style="width:10%" rendered="#{documentCrudBean.deleteAllow}" >
+				<f:facet name="header">
+					<h:outputText value="Action" />
+				</f:facet>
+
+
+				<p:commandButton id="downloadButton" icon="ui-icon-arrowthickstop-1-s" 
+					title="#{documentmsgs.document_telecharger_document}" ajax="false">
+
+					<p:fileDownload value="#{documentComponentBean.file}" />
+					<f:param name="idfDoc" value="#{current.id}" />
+				</p:commandButton>
+				
+				<p:commandButton id="updatedocButton" icon="ui-icon-pencil" 
+					title="#{commonmsgs.button_update}" immediate="true" ajax="true"			
+					update="@([id$=documentAttachForm])"			
+					onsuccess ="PF('dlgAttachDoc').show()"
+					actionListener="#{documentComponentBean.open(current)}" >					
+					<f:param name="idfDocAttach" value="#{current.id}" />
+				</p:commandButton>			
+
+				<p:commandButton id="removedocButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}" update="@([id$=documentData])"
+					actionListener="#{documentComponentBean.removeDocument(current)}">
+
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+
+					<f:param name="idfDoc" value="#{current.id}" />
+ 
+				</p:commandButton>
+				
+			</p:column>
+
+
+		</p:dataTable>
+
+	</h:form>
+
+	<!--  <p:confirm header="Confirmation"  message="#{commonmsgs.msg_delete_confirmation}"
+					icon="ui-icon-alert" />	
+					@([id$=documentData])	 
+					
+					styleClass="docStyle" update="@(.docStyle)" -->
+
+
+
+	<p:dialog id="dlgAttachDoc" widgetVar="dlgAttachDoc" resizable="false"
+		modal="true" appendTo="@(body)"  closable="true" width="800" closeOnEscape="true"
+		showHeader="true" header="#{documentmsgs.document_attachement}">
+
+
+
+		<!--  	<p:ajax event="close" update="@([id$=documentData])" /> -->
+
+		<p:messages id="messages" showSummary="true" autoUpdate="true"
+			closable="true" />
+
+
+
+		<!-- 
+				<p:toolbar>
+					<p:toolbarGroup align="left" >
+						<h:outputText value="#{documentmsgs.document_attachement}" />
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<h:form id="formHeader">
+						<p:commandButton actionListener="#{documentComponentBean.close()}"
+							 icon="ui-icon-closethick"  oncomplete="PF('dlgAttachDoc').hide();"
+							 update="@([id$=documentData])"
+							/>
+						</h:form>
+						
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				
+				 -->
+
+
+		<h:form id="documentAttachForm" enctype="multipart/form-data"
+			prependId="false">
+
+			<!-- <p:fieldset legend="#{commonmsgs.common_infos}"> -->
+				<p:outputPanel id="idOutput1">
+
+					<p:panelGrid id="descdocGrid" styleClass="ui-panelgrid-full-width">
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{documentmsgs.document_identifiant}" />
+							</p:column>
+							<p:column colspan="3">
+								<p:inputText id="identifDoc" style="text-align: left"
+									value="#{documentComponentBean.attachDocumentDto.identifiant}"
+									label="#{documentmsgs.document_identifiant}" required="true"
+									disabled="true">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_titre}" for="titreDoc"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:inputText id="titreDoc" style="text-align: left; width:98%"
+									value="#{documentComponentBean.attachDocumentDto.titreDocument}"
+									label="#{documentmsgs.document_titre}" required="true"
+									requiredMessage="#{documentmsgs.document_titre_document_required}">
+								</p:inputText>
+							</p:column>
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_reference}" for="reference"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:inputText id="reference" style="text-align: left;width:98%"
+									value="#{documentComponentBean.attachDocumentDto.referenceDocument}"
+									label="#{documentmsgs.document_reference}" required="true"
+									requiredMessage="#{documentmsgs.document_reference_required}">
+								</p:inputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_date_document}" for="dateDocument"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:calendar navigator="true" 
+									value="#{documentComponentBean.attachDocumentDto.dateDocument}"
+									id="dateDocument" showButtonPanel="true"
+									label="#{documentmsgs.document_date_document} *"
+									required="true"
+									requiredMessage="#{documentmsgs.document_date_document_required}"
+									style="width:100px" pattern="dd/MM/yyyy" maxdate="#{documentComponentBean.currentDate}">									
+									<f:convertDateTime pattern="dd/MM/yyyy" />									 
+								 </p:calendar>
+							</p:column>
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_classement}" for="classement"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="classement" style="text-align: left;width:100%"
+									value="#{documentComponentBean.attachDocumentDto.classementId}"
+									label="#{documentmsgs.document_classement}" required="true"
+									requiredMessage="#{documentmsgs.document_classement_required}">
+									<f:selectItem
+										itemLabel="#{documentmsgs.document_select_classement_document}"
+										itemValue="" />
+									<f:selectItems value="#{comboBckBean.listClassement}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{documentmsgs.document_objet_document}" />
+							</p:column>
+							<p:column style="width:35%">
+								<p:inputTextarea id="objet"
+									style="text-align: left; width:98%"
+									value="#{documentComponentBean.attachDocumentDto.objetDocument}"
+									label="#{documentmsgs.document_objet_document}">
+								</p:inputTextarea>
+							</p:column>
+
+							<p:column style="width:15%">
+								<h:outputText value="#{documentmsgs.document_description}" />
+							</p:column>
+							<p:column style="width:35%">
+								<p:inputTextarea id="descriptionDoc"
+									style="text-align: left; width:98%"
+									value="#{documentComponentBean.attachDocumentDto.description}"
+									label="#{documentmsgs.document_description}">
+								</p:inputTextarea>
+							</p:column>
+						</p:row>
+
+						<p:row>
+
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_type_document}" for="typeDocument"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="typeDocument" style="text-align: left;width:100%"
+									value="#{documentComponentBean.attachDocumentDto.typeDocumentId}"
+									label="#{documentmsgs.document_type_document}" required="true"
+									requiredMessage="#{documentmsgs.document_type_document_required}">
+									<f:selectItem
+										itemLabel="#{documentmsgs.document_select_type_document}"
+										itemValue="" />
+									<f:selectItems value="#{comboBckBean.listTypeDocument}" />
+								</p:selectOneMenu>
+							</p:column>
+
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{documentmsgs.document_lie}" />
+							</p:column>
+							<p:column style="width:35%">
+								<p:autoComplete
+									value="#{documentComponentBean.refParentDocumentDto}"
+									id="selectDocumentLie" style="text-align: left;width:100%"
+									completeMethod="#{documentConverter.completeDocumentLie}"
+									var="documentDto" itemLabel="#{documentDto.titreDocument}"
+									itemValue="#{documentDto.id}" converter="#{documentConverter}"
+									forceSelection="true" label="#{documentmsgs.document_lie}">
+									<p:ajax event="itemSelect"
+										listener="#{documentConverter.handleSelect}"
+										update="doclietitre" immediate="true" />
+									<p:ajax event="itemUnselect"
+										listener="#{documentConverter.handleUnselect}"
+										update="doclietitre" immediate="true" />
+
+								</p:autoComplete>
+
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText value="#{documentmsgs.document_lie_titre}" />
+							</p:column>
+
+							<p:column style="width:35%">
+								<h:outputText id="doclietitre"
+									style="text-align: left; width:98%"
+									value="#{documentComponentBean.refParentDocumentDto.titreDocument} - #{documentComponentBean.refParentDocumentDto.referenceDocument}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_nature_document}" for="natureDocument"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="natureDocument" style="text-align: left;width:100%"
+									value="#{documentComponentBean.attachDocumentDto.natureDocumentId}"
+									label="#{documentmsgs.document_nature_document}"
+									required="true"
+									requiredMessage="#{documentmsgs.document_nature_document_required}">
+									<f:selectItem
+										itemLabel="#{documentmsgs.document_select_nature_document}"
+										itemValue="" />
+									<f:selectItems value="#{comboBckBean.listNatureDocument}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_langue_document}" for="langueDocument"/>
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="langueDocument" style="text-align: left;width:100%"
+									value="#{documentComponentBean.attachDocumentDto.langueId}"
+									label="#{documentmsgs.document_langue_document}"
+									required="true"
+									requiredMessage="#{documentmsgs.document_langue_document_required}">
+									<f:selectItem
+										itemLabel="#{documentmsgs.document_select_langue}"
+										itemValue="" />
+									<f:selectItems value="#{comboBckBean.listLangue}" />
+								</p:selectOneMenu>
+							</p:column>
+
+						</p:row>
+
+						<p:row>
+
+							<p:column style="width:15%">
+								<p:outputLabel value="#{documentmsgs.document_fichier}" for="iduploadDoc"/>
+							</p:column>
+
+							<p:column style="width:35%">
+
+								<p:fileUpload id="iduploadDoc"
+									fileUploadListener="#{documentComponentBean.handleFileUpload}"
+									style="text-align: left" update="urlattachdoc,nomfichier"
+									mode="advanced" multiple="false" auto="true"
+									label="#{documentmsgs.document_select_fichier}" required="true"
+									process="@this"
+									requiredMessage="#{documentmsgs.document_document_upload_required}"
+									cancelLabel="#{documentmsgs.document_fichier_upload_annuler}"
+									uploadLabel="#{documentmsgs.document_charger_fichier}"
+									sizeLimit="#{documentComponentBean.limit_size}"                     
+                      				invalidSizeMessage="#{documentmsgs.document_limite_size_fichier_upload} #{documentComponentBean.limit_size} Octets"    
+                      				allowTypes="#{documentComponentBean.allow_types}" 
+                      				dragDropSupport="true" 
+                      				> 
+
+									<f:param name="idfDocAttach"
+										value="#{documentComponentBean.idfDocAttach}" />
+								</p:fileUpload>
+
+							</p:column>
+
+							<p:column colspan="2">
+								<h:inputHidden id="urlattachdoc"
+									value="#{documentComponentBean.attachDocumentDto.url}" />
+									
+									<h:inputHidden id="idfattachdoc"									
+									value="#{documentComponentBean.idfDocAttach}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+
+								<p:commandLink id="downfile"
+									value="#{documentmsgs.document_telecharger_document}" ajax="false"
+									disabled="#{documentComponentBean.attachDocumentDto.url==null}"
+									style="font-weight: bold;">
+
+									<p:fileDownload value="#{documentComponentBean.fileAttache}" />
+
+									<f:param name="idfDocAttach"
+										value="#{documentComponentBean.idfDocAttach}" />
+								</p:commandLink>
+
+							</p:column>
+							
+							<p:column colspan="3">
+								<h:outputText id="nomfichier"								
+									value="#{documentComponentBean.attachDocumentDto.url}" />
+							</p:column>
+
+						</p:row>
+
+						<p:row >
+							<p:column>
+								<h:outputText value="#{documentmsgs.document_mots_cles}" />
+							</p:column>
+							<p:column colspan="2" >
+								<p:autoComplete
+									value="#{documentComponentBean.nomenclatureDtoList}"
+									id="selectmotscles" forceSelection="true"
+									completeMethod="#{motCleConverter.completeMotCle}"
+									var="motCleDto" multiple="true"
+									itemLabel="#{motCleDto.libelleLongFr}"
+									itemValue="#{motCleDto.id}"
+									converter="#{motCleConverter}"
+									label="#{documentmsgs.document_mots_cles}"
+									styleClass="myautocomp">
+							
+									<f:param name="idfDocAttach"
+										value="#{documentComponentBean.idfDocAttach}" />
+								</p:autoComplete>
+
+							</p:column>
+
+						</p:row>
+
+					</p:panelGrid>
+
+					<br />
+
+					<p:panelGrid id="panelButtonDoc" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<p:commandButton value="#{commonmsgs.button_save}"
+									icon="ui-icon-disk" update="idOutput1,@(.docStyle),idfattachdoc"
+									actionListener="#{documentComponentBean.saveDocument}">
+
+									<f:param name="idfDocAttach"
+										value="#{documentComponentBean.idfDocAttach}" />
+									 
+
+								</p:commandButton>
+
+							</p:column>
+
+							<p:column>
+								<p:commandButton value="#{commonmsgs.button_close}"
+									icon="ui-icon-close" process="@this" ajax="true"
+									immediate="true" onclick="PF('dlgAttachDoc').hide();"
+									update="@(.docStyle)"
+									actionListener="#{documentComponentBean.close}">
+
+									<f:param name="idfDocAttach"
+										value="#{documentComponentBean.idfDocAttach}" />
+
+								</p:commandButton>
+
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:outputPanel>
+			<!-- </p:fieldset>  -->
+
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

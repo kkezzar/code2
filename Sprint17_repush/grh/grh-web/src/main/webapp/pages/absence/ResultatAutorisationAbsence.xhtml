@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{absenceMsgs.enrg_resultat_autorisation_absence_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/absence/DemandeAutorisationSearch.xhtml" >
+					<ui:param name="renderedNouveau"  value="false"/>
+					<ui:param name="nameMBean"  value="#{autorisationAbsenceMBean}"/>
+					<ui:param name="updateAjax"  value=":pnl_detail"/>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{autorisationAbsenceMBean.dossierEmployeDto != null}">
+					<h:form id="form_autorisation_absence_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="demandeChangement" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" >
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{absenceMsgs.label_demande_autorisation}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe} " />
+									</p:column>
+									<p:column style="width:75%">
+											<p:commandLink id="employe"
+												onclick="PF('employeDetailDialog').show()"
+												immediate="true">
+												<h:outputText
+													value="#{autorisationAbsenceMBean.dossierEmployeDto.refIndividuDto.nomLatin} #{autorisationAbsenceMBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+													styleClass="value" />
+											</p:commandLink>
+											</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{absenceMsgs.label_frequence} " />
+									</p:column>
+									<p:column style="width:75%">
+											<p:commandLink id="demande"
+												onclick="PF('demandeDetailDialog').show()"
+												immediate="true">
+												<h:outputText
+													value="#{autorisationAbsenceMBean.autorisationAbsenceDto.nomenclatureDto.libelleLongFr}"
+													styleClass="value" />
+											</p:commandLink>
+											</p:column>
+								</p:row>
+							<p:row>
+								<p:column colspan="4" styleClass="title">
+									<h:outputText value="#{absenceMsgs.label_demande_resultats}" styleClass="value"/>
+								</p:column>
+							</p:row>
+							
+							<p:row>
+								<p:column>
+									<h:outputText value="#{absenceMsgs.label_date_resultat}" styleClass="required"/>
+								</p:column>
+								<p:column>
+									<p:calendar id="dateResultat" 
+										navigator="true" 
+										required="true" 
+										requiredMessage="#{absenceMsgs.msg_date_resultat_required}"
+										value="#{autorisationAbsenceMBean.autorisationAbsenceDto.dateResultat}"/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:selectOneRadio value="#{autorisationAbsenceMBean.autorisationAbsenceDto.acceptee}">
+										<f:selectItem itemLabel="#{absenceMsgs.label_accepte}" itemValue="true"/>
+										<f:selectItem itemLabel="#{absenceMsgs.label_refuse}"  itemValue="false"/>
+										<p:ajax  update=":form_autorisation_absence_edit" process=":form_autorisation_absence_edit"/>
+									</p:selectOneRadio>
+								</p:column>
+							</p:row>
+							<p:row id="motifRow" rendered="#{autorisationAbsenceMBean.autorisationAbsenceDto.acceptee == false}">
+								<p:column >
+									<h:outputLabel value="#{absenceMsgs.label_motif_refus}" styleClass="required"/>
+									
+								</p:column>
+								<p:column >
+									<p:inputTextarea id="motif" style="width:100%;height:50px" value="#{autorisationAbsenceMBean.autorisationAbsenceDto.motifRefus}"/>
+								</p:column>
+							</p:row>
+					</p:panelGrid>
+				<p:toolbar id="demandeChangementToolBar" styleClass="toolBarMesrs" rendered="#{autorisationAbsenceMBean.dossierEmployeDto != null}">
+					<p:toolbarGroup>
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+							id="saveDemandeDemssionBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{autorisationAbsenceMBean.onSaveResultat}">
+							<p:confirm header="Confirmation"
+								message="#{absenceMsgs.msg_save_resultat_confirm}"
+								icon="ui-icon-alert" onstart="PF('page').block()" onsuccess="PF('page').unblock()"/>
+								
+						</p:commandButton>
+						<p:spacer width="10px"></p:spacer>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.bouton_annuler}"
+							immediate="true" process="@this" id="backBtn"
+							icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+							actionListener="#{autorisationAbsenceMBean.onInit()}"/>
+					</p:toolbarGroup>
+					
+			</p:toolbar>
+	</p:panelGrid>
+
+		
+				
+
+	</h:form>
+
+
+
+					
+				
+			</p:outputPanel>
+			<p:dialog position="center" appendTo="@(body)" header="#{absenceMsgs.label_demande}"
+				id="demandeDetailDialog" widgetVar="demandeDetailDialog"
+				modal="true" resizable="false">
+					<ui:include
+						src="/pages/absence/DemandeDetail.xhtml">
+							<ui:param name="dto" value="#{autorisationAbsenceMBean.autorisationAbsenceDto}"/>
+					</ui:include>
+			</p:dialog>
+			<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{autorisationAbsenceMBean.dossierEmployeDto}"/>
+						</ui:include>
+					</p:dialog>
+		</p:outputPanel>
+
+		
+</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

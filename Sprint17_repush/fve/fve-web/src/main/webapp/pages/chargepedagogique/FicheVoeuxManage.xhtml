@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation"
+	xmlns:scol="http://java.sun.com/jsf/composite/components/scolarite"
+>
+<ui:composition template="/templates/fullPageLayout.xhtml">
+<ui:define name="title"></ui:define>
+
+	<ui:define name="pageTitleContent">
+		#{chargeMsgs.fiche_veoux_panel_page_manage_title}
+	</ui:define>
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+<h:panelGrid id="mainGrid" style="width:100%;" >
+<p:row>
+<p:column>
+		<p:panelGrid id="gridCriteriaSelection" style="margin-bottom:5px;width:100%;" >
+		<p:row>
+	    <p:column  style="width:15%;text-align:right;"><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_annee_academique}" /></p:column>
+		<p:column>
+		<p:selectOneMenu id="listAnneesID" 	value="#{ficheVoeuxBB.selectedIdYear}">
+						<f:selectItems value="#{ficheVoeuxBB.listYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}"/>
+						<p:ajax listener="#{ficheVoeuxBB.handleYearChange}" event="valueChange" process="@this listPeriodesID" 
+													update="listPeriodesID outputPanelButtonsFiche cmpOutputPanel"
+													onstart="PF('ajaxProgress1').block()"  oncomplete="PF('ajaxProgress1').unblock()"/>
+		</p:selectOneMenu>
+		</p:column>
+		<p:column  style="width:15%;text-align:right;"><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periodicite}" /></p:column>
+		<p:column>
+		<p:selectOneMenu id="listPeriodiciteID" 	value="#{ficheVoeuxBB.selectedPeriodiciteCode}">
+						<f:selectItems value="#{ficheVoeuxBB.listPeriodicites}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+						<p:ajax listener="#{ficheVoeuxBB.handlePeriodiciteChange}" 	event="valueChange" process="@this listPeriodesID" 
+										update="listPeriodesID outputPanelButtonsFiche cmpOutputPanel" 
+										onstart="PF('ajaxProgress1').block()"  
+            							oncomplete="PF('ajaxProgress1').unblock()"/>
+		</p:selectOneMenu>
+		</p:column>
+		<p:column  style="width:15%;text-align:right;" ><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periode}" /></p:column>
+		<p:column>
+		<p:selectOneMenu id="listPeriodesID" 	value="#{ficheVoeuxBB.selectedPeriodeFicheId}">
+						<f:selectItems value="#{ficheVoeuxBB.listPeriodesParPeriodicite}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+						<p:ajax listener="#{ficheVoeuxBB.handlePeriodeChange}" 	event="valueChange" process="@this  listAnneesID" 
+										update="outputPanelButtonsFiche cmpOutputPanel"	
+										onstart="PF('ajaxProgress1').block()"  
+            							oncomplete="PF('ajaxProgress1').unblock()"/>
+		</p:selectOneMenu>
+		</p:column>
+		</p:row>
+		</p:panelGrid>
+</p:column>
+</p:row>
+<p:row>
+<p:column>
+<p:row>
+<p:column>
+		<p:outputLabel id="outputPanelButtonsFiche" style="width:100%;margin-top:5px;">
+					<p:toolbar id="btnToolBarFiches" rendered="#{ficheVoeuxBB.canCreateFicheVoeux}">
+					<p:toolbarGroup align="left">
+							<p:commandButton id="btnCreateFicheVoeux" 
+									value="#{chargeMsgs.fiche_veoux_bouton_creer_ficher_libelle}" 
+									action="#{ficheVoeuxBB.addFicheVoeux()}"  
+									icon="ui-icon-plusthick"  
+									process="@this  listPeriodesID" 
+									ajax="true" 
+									update="outputPanelButtonsFiche cmpOutputPanel" 
+									disabled="#{not ficheVoeuxBB.canCreateFicheVoeux}">
+									<p:confirm		header="#{chargeMsgs.fiche_veoux_confirm_title}"	 message="#{chargeMsgs.fiche_veoux_message_create_fiche_voeux_confirmation}" 	icon="ui-icon-alert" />
+							</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>
+					</p:outputLabel>
+			</p:column>
+			</p:row>
+<p:row>
+<p:column>
+<p:outputPanel id="cmpOutputPanel"  style="width:100%;">  
+		<h:panelGrid id="gridFicheComponentId" rendered="#{ficheVoeuxBB.hasFicheVoeux}" style="width:100%;">
+		<p:panel id="mainPanel" header="#{chargeMsgs.fiche_veoux_detail_title}">
+					<scol:FicheVoeuxComponent managedBean="#{ficheVoeuxBB}" toEdit="true"></scol:FicheVoeuxComponent>
+		</p:panel>
+		</h:panelGrid>
+</p:outputPanel>
+</p:column>
+</p:row>
+<p:row>
+<p:column>
+<p:messages id="msgComponent" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+</p:column>
+</p:row>
+</p:column>
+</p:row>
+</h:panelGrid>
+<br/>
+</h:form>
+<pe:blockUI target=":mainForm:mainGrid" widgetVar="ajaxProgress1">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+            </style>
+            
+</ui:define>
+</ui:composition>
+</html>

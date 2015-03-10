@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.VoeuEtudiantDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.VoeuEtudiant
+		</class-b>
+
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiant.id</b>
+		</field>
+
+		<field>
+			<a>dossierEtudiantMatricule</a>
+			<b>dossierEtudiant.numeroMatricule</b>
+		</field>
+
+
+		<field>
+			<a>idNouveauDossierInsAdmin</a>
+			<b>nouveauDossierInsAdmin.id</b>
+		</field>
+
+
+		<field>
+			<a>idAncienDossierInsAdmin</a>
+			<b>ancienDossierInsAdmin.id</b>
+		</field>
+		
+		
+		<field>
+			<a>typeReinscriptionId</a>
+			<b>typeReinscription.id</b>
+		</field>
+
+		<field>
+			<a>typeReinscriptionCode</a>
+			<b>typeReinscription.code</b>
+		</field>
+			
+		<field>
+			<a>typeReinscriptionLibelleFr</a>
+			<b>typeReinscription.libelleLongFr</b>
+		</field>
+			
+		<field>
+			<a>typeReinscriptionLibelleAr</a>
+			<b>typeReinscription.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiquePremiereAnnee</a>
+			<b>anneeAcademique.premiereAnnee</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueDeuxiemeAnnee</a>
+			<b>anneeAcademique.deuxiemeAnnee</b>
+		</field>
+		
+		 <field>
+            <a>situationId</a>
+            <b>situationEntite.id</b>
+        </field>
+
+        <field>
+            <a>individuId</a>
+            <b>dossierEtudiant.individu.id</b>
+        </field>
+        
+        <field>
+            <a>individuNin</a>
+            <b>dossierEtudiant.individu.identifiant</b>
+        </field>
+		
+        <field>
+            <a>individuNomArabe</a>
+            <b>dossierEtudiant.individu.nomArabe</b>
+        </field>
+        <field>
+            <a>individuNomLatin</a>
+            <b>dossierEtudiant.individu.nomLatin</b>
+        </field>
+		
+        <field>
+            <a>individuPrenomArabe</a>
+            <b>dossierEtudiant.individu.prenomArabe</b>
+        </field>
+        <field>
+            <a>individuPrenomLatin</a>
+            <b>dossierEtudiant.individu.prenomLatin</b>
+        </field>
+		
+        <field>
+            <a>individuDateNaissance</a>
+            <b>dossierEtudiant.individu.dateNaissance</b>
+        </field>
+
+        <field>
+            <a>individuLieuNaissance</a>
+            <b>dossierEtudiant.individu.lieuNaissance</b>
+        </field>
+          
+        
+        <field>
+            <a>individuNationaliteLibelleLongFr</a>
+            <b>dossierEtudiant.individu.nomenclatureByNationalite.libelleLongFr</b>
+        </field>
+        <field>
+            <a>individuNationaliteLibelleLongAr</a>
+            <b>dossierEtudiant.individu.nomenclatureByNationalite.libelleLongAr</b>
+        </field>
+        
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.VoeuEtudiantChoixDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.VoeuEtudiantChoix
+		</class-b>
+
+		<field>
+			<a>idVoeuEtudiant</a>
+			<b>voeuEtudiant.id</b>
+		</field>
+
+	</mapping>
+
+</mappings>

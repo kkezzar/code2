@@ -1,0 +1,33 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel >  
+      
+      
+      
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+			<h:outputText value="#{lieumsgs.lieu_infos} : " />
+			<h:outputText value="#{lieuBckBean.refLieuDto.identifiant}" style="font-weight: bold;"/>
+		</p:column> 
+		
+		<p:column>
+			<h:outputText value="#{lieuBckBean.refLieuDto.designation}" style="font-weight: bold;"/>			 			
+		</p:column> 
+		
+		<p:column>
+			<h:outputText value="#{lieuBckBean.refLieuDto.designationArabe} " style="font-weight: bold;"/>			 			
+		</p:column> 
+		
+		<p:column>
+			<h:outputText value="#{lieuBckBean.refLieuDto.typelieuLibelleLongFr} " style="font-weight: bold;"/>			 			
+		</p:column>
+		</p:row>
+      </p:panelGrid>          
+    </p:panel>
+    
+</ui:composition>

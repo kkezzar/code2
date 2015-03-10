@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="periodes" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="0" rightMargin="20" topMargin="0" bottomMargin="0" uuid="12968d3c-35ee-4ced-86b3-e8ce19d20342">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 2" uuid="84a4968c-92a4-46b5-8d5d-ae98b248a739">
+		<field name="matricule" class="java.lang.String"/>
+		<field name="nom" class="java.lang.String"/>
+		<field name="prenom" class="java.lang.String"/>
+		<field name="dateNaissance" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset1" uuid="e9ab789d-13de-4c5f-9f3a-2111a45d3a8b"/>
+	<parameter name="SUBREPORT_DIR_PERIODE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="BILAN_DECISION" class="java.lang.String"/>
+	<parameter name="BILAN_CREDIT" class="java.lang.Double"/>
+	<parameter name="BILAN_MOYENNE" class="java.lang.Double"/>
+	<parameter name="BILAN_INDIVIDU_ID" class="java.lang.Integer"/>
+	<parameter name="IS_BILAN_ANNUEL" class="java.lang.Boolean"/>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
+	<field name="periodeLibelleFr" class="java.lang.String"/>
+	<field name="moyenne" class="java.lang.Double"/>
+	<field name="bilanUes" class="java.util.Collection"/>
+	<field name="collection" class="java.util.Collection"/>
+	<field name="individuId" class="java.lang.Integer"/>
+	<field name="creditObtenu" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="78" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="1f6047b1-1dad-4f7a-bb51-033f13848169" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="575" height="76"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR_PERIODE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="BILAN_PERIODE_LIBELLE">
+					<subreportParameterExpression><![CDATA[$F{periodeLibelleFr}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{collection})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_PERIODE}+"crossTab.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="605cab52-f999-414f-b116-937b39b6f02f" x="187" y="4" width="176" height="13"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Crédit obtenus au "+$F{periodeLibelleFr} + ": " + $F{creditObtenu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="605cab52-f999-414f-b116-937b39b6f02f" x="2" y="4" width="176" height="13">
+					<printWhenExpression><![CDATA[$F{individuId}.equals( $P{BILAN_INDIVIDU_ID} )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Moyenne du "+$F{periodeLibelleFr} + ": " + $F{moyenne}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="249">
+			<staticText>
+				<reportElement uuid="e55fa48c-db80-435f-8d24-6d936b0be39a" x="2" y="18" width="120" height="12">
+					<printWhenExpression><![CDATA[!$P{BILAN_DECISION}.equals( null )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Décison du jury de délibération:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e55fa48c-db80-435f-8d24-6d936b0be39a" x="214" y="0" width="105" height="15">
+					<printWhenExpression><![CDATA[$P{IS_BILAN_ANNUEL}.equals( true )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Moyenne générale annuelle :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5447e9f8-f898-4035-a063-f8ab08bcca20" x="125" y="18" width="100" height="12">
+					<printWhenExpression><![CDATA[!$P{BILAN_DECISION}.equals( null )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BILAN_DECISION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e55fa48c-db80-435f-8d24-6d936b0be39a" x="2" y="0" width="120" height="15">
+					<printWhenExpression><![CDATA[$P{IS_BILAN_ANNUEL}.equals( true )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Crédit capitalisés dans l'année:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="31c80ac4-1252-4669-a017-3a1ca48922d5" x="319" y="0" width="100" height="12">
+					<printWhenExpression><![CDATA[$P{IS_BILAN_ANNUEL}.equals( true )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BILAN_MOYENNE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d14c5a3f-cb1d-4133-8279-d1194674bc5a" x="125" y="0" width="72" height="12">
+					<printWhenExpression><![CDATA[$P{IS_BILAN_ANNUEL}.equals( true )]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BILAN_CREDIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e55fa48c-db80-435f-8d24-6d936b0be39a" x="380" y="30" width="112" height="15"/>
+				<textElement>
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Signature, cachet reond, griffe]]></text>
+			</staticText>
+			<break>
+				<reportElement uuid="7556d847-6d6b-4d3e-857d-6764e5753b6a" x="0" y="201" width="100" height="1"/>
+			</break>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{suiviMedicalMgs.pnl_gerer_dossier_medical} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			 <ui:include
+				src="/pages/administrative/dossierEmploye/DossierEmployeSearch.xhtml" >
+				<ui:param name="nameMBean"  value="#{dossierMedicalMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty dossierMedicalMBean.dossierEmployeDto}">
+					<ui:include
+						src="/pages/administrative/dossierEmploye/DossierEmployeHeader.xhtml" >
+						<ui:param name="dossierEmployeDtoParam"  value="#{dossierMedicalMBean.dossierEmployeDto}"></ui:param>
+						<ui:param name="rendredModifPhotoParam"  value="false"></ui:param>
+						</ui:include>
+					<br></br>
+					<p:tabView orientation="left" id="tabViewEdit" style="background:none important">
+						<p:tab
+							title="#{suiviMedicalMgs.antecedents_medicaux_title}">
+							<ui:include src="/pages/suivimedical/DossierMedicalAntecedentEdit.xhtml" >
+							</ui:include>
+						</p:tab>
+						
+						<p:tab
+							title="#{suiviMedicalMgs.allergies_title}">
+								<ui:include src="/pages/suivimedical/DossierMedicalAllergieEdit.xhtml" >
+							</ui:include>
+						</p:tab>
+						<p:tab title="#{suiviMedicalMgs.pathologies_title}" >
+							<ui:include src="/pages/suivimedical/DossierMedicalPathologieEdit.xhtml" >
+							</ui:include>
+						</p:tab>
+						<p:tab title="#{suiviMedicalMgs.vaccins_title}" >
+							<ui:include src="/pages/suivimedical/DossierMedicalVaccinEdit.xhtml" >
+							</ui:include>
+						</p:tab>
+						
+					</p:tabView>
+					<br></br>
+					
+					
+					</p:outputPanel>
+					</p:outputPanel>
+			
+		</p:outputPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

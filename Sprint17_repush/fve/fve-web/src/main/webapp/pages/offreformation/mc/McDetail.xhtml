@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+		<h:form id="form_mcDetail">
+			<p:panel id="pnl_mcDetail"
+				header="#{matiereConstitutiveMsgs.matiere_constitutive_page_title_detail} #{mcBB.mc.libelleFr}">
+
+				<p:fieldset id="fs_actions" style="margin-bottom: 5px;">
+
+					<p:toolbar styleClass="toolBarMesrs">
+						<p:toolbarGroup>
+
+							<p:commandButton value="#{commonmsgs.bouton_update}"
+								action="#{mcBB.updateMc}">
+							</p:commandButton>
+							<p:separator />
+							<p:commandButton value="#{commonmsgs.bouton_retour}"
+								action="#{mcBB.goback}" icon="ui-icon-arrowthick-1-w" />
+						</p:toolbarGroup>
+					</p:toolbar>
+				</p:fieldset>
+
+				<p:tabView orientation="top">
+					<p:tab
+						title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_descriptif}">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_code}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel" value="#{mcBB.mc.code}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_type_mc}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.optionnel?'Optionnelle':'Obligatoire'}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.libelleFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_ar}" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.libelleAr}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.abreviationFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_Ar}" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.abreviationAr}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_description_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.descriptionFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_description_ar}" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.descriptionAr}" />
+								</p:column>
+							</p:row>
+							<p:row>
+
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_mode_evaluation}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.refCodeModeEvaluation}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_langue}" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.refCodeLangue}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_credits}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.credits}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_coefficient}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.coefficient}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_pres}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.volumeHorairePres}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_perso}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.volumeHorairePerso}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_date_creation}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.dateCreation}" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_date_modification}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="outputLabel"
+										value="#{mcBB.mc.dateModification}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+					<p:tab
+						title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_detail}">
+
+						<p:panelGrid cellpadding="5" styleClass="panelColumns">
+							<p:row>
+								<p:column>
+									<p:tree value="#{mcBB.mcDetailTreeView}" var="node"
+										dynamic="true" cache="true" selectionMode="single">
+										<p:treeNode>
+											<p:commandLink value="#{node}"
+												update="@([id$=pngrd_detailMc])"
+												actionListener="#{mcBB.selectNode(node)}">
+											</p:commandLink>
+										</p:treeNode>
+									</p:tree>
+								</p:column>
+								<p:column>
+									<p:panelGrid id="pngrd_detailMc">
+										<f:facet name="header">
+											<p:row>
+												<p:column>
+													<h:outputText binding="#{slectedNode}" value="#{mcBB.node}" />
+												</p:column>
+											</p:row>
+										</f:facet>
+										<p:row>
+											<p:column>
+												<p:editor value="#{mcBB.nodeValue}" width="700" height="400"
+													disabled="true" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+
+					</p:tab>
+
+					<p:tab
+						title="#{matiereConstitutiveMsgs.matiere_constitutive_anglet_List_ap}">
+
+						<p:dataTable resizableColumns="true" id="dt_ap"
+							value="#{mcBB.apList}" var="currentAp"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+							<p:column style="width:5%">
+								<f:facet name="header">
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_code_ap}" />
+								</f:facet>
+								<h:outputText value="#{currentAp.code}" />
+							</p:column>
+							<p:column style="width:35%">
+								<f:facet name="header">
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_type_ap}" />
+								</f:facet>
+
+								<h:outputText value="#{currentAp.ncTypeApCode}" />
+							</p:column>
+
+
+							<p:column style="width:35%">
+								<f:facet name="header">
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_mode_enseignement_ap}" />
+								</f:facet>
+
+								<h:outputText value="#{currentAp.ncModeEnseignementApCode}" />
+							</p:column>
+							<p:column style="width:15%">
+								<f:facet name="header">
+									<h:outputText
+										value="#{matiereConstitutiveMsgs.matiere_constitutive_seuil_ap}" />
+								</f:facet>
+
+								<h:outputText value="#{currentAp.seuil}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:tabView>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

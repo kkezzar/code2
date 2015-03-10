@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_structures}">
+			<h:form id="searchForm"
+			        onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+	
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							icon="ui-icon-document" action="#{structureMgrBean.toNew}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{structureDroitBean.createAllow}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false" dir="#{localeBean.dir}">
+							<p:dataExporter type="xls" target="structureData"
+								fileName="listeDesStructures" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{structureMgrBean.searchInput}"
+							id="searchInput" style="width:200px"
+							rendered="#{structureDroitBean.readAllow}"
+							dir="#{localeBean.dir}" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton update=":searchForm" ajax="true" id="searchButton"
+							dir="#{localeBean.dir}" icon="ui-icon-search"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{structureMgrBean.findGeneric}"
+							rendered="#{structureDroitBean.readAllow}" />
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()"
+							dir="#{localeBean.dir}">
+							<h:outputText value="#{commonmsgs.button_advanced_search}"
+								rendered="#{structureDroitBean.readAllow}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="strucrureData"
+					dir="#{localeBean.dir}"
+					rendered="#{structureMgrBean.listRefStructureDto!=null}"
+					value="#{structureMgrBean.listRefStructureDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<p:ajax event="sort" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"/>
+					<p:ajax event="page" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"/>		
+					<f:facet name="header">
+						<h:outputText value="#{structuremsgs.structure_list_title}"
+							dir="#{localeBean.dir}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{structuremsgs.structure_identite}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+					<p:column sortBy="#{current.llStructureLatin}" width="25%">
+						<f:facet name="header">
+							<h:outputText value="#{structuremsgs.structure_libelle}" />
+						</f:facet>
+						<h:outputText value="#{current.llStructureLatin}" />
+					</p:column>
+					<p:column sortBy="#{current.lcStructureLatin}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{structuremsgs.structure_libelle_court}" />
+						</f:facet>
+						<h:outputText value="#{current.lcStructureLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.typeLibelleLongFr}" width="15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{structuremsgs.structure_type_structure_fr}" />
+						</f:facet>
+						<h:outputText value="#{current.typeLibelleLongFr}">
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.llSituationFr}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{structuremsgs.structure_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateSituation}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{structuremsgs.structure_date}" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateSituation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{structureMgrBean.toDetails(current)}" icon="ui-icon-document"
+							title="#{commonmsgs.button_consulter}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{structureDroitBean.readAllow}">
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{structureMgrBean.toEdit(current)}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{structureDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			dir="#{localeBean.dir}" appendTo="@(body)">
+			<h:form id="formSearch" dir="#{localeBean.dir}">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{structuremsgs.structure_type_structure_fr}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectTypeStructure"
+								value="#{structureMgrBean.searchDto.typeId}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{structuremsgs.structure_type_structure_fr}">
+								<f:selectItem itemLabel="#{structuremsgs.structure_select_Type}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listTypeStructure}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{structuremsgs.structure_identite}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="identifiantSearch" style="text-align: left"
+								value="#{structureMgrBean.searchDto.identifiant}"
+								label="#{structuremsgs.structure_identite}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{structuremsgs.structure_libelle}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtSearch" style="text-align: left"
+								value="#{structureMgrBean.searchDto.llStructureLatin}"
+								label="#{structuremsgs.structure_libelle}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{structuremsgs.structure_libelle_court}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtCourtSearch" style="text-align: left"
+								value="#{structureMgrBean.searchDto.lcStructureLatin}"
+								label="#{structuremsgs.structure_libelle_court}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{structuremsgs.structure_libelle_arabe}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabeSearch" style="text-align: left"
+								value="#{structureMgrBean.searchDto.llStructureArabe}"
+								label="#{structuremsgs.structure_libelle_arabe}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{structuremsgs.structure_libelle_court_ar}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabecourtSearch"
+								style="text-align: left"
+								value="#{structureMgrBean.searchDto.lcStructureArabe}"
+								label="#{structuremsgs.structure_libelle_court_ar}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					actionListener="#{structureMgrBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

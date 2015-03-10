@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+ <!-- INTERFACE COMPOSANT OF EQUIPE -->
+<composite:interface>
+		 
+		<composite:attribute name="ofDto"  type="dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationDto"	shortDescription=" Of Equipe - Object offre de formation"/>
+		<composite:attribute name="toEdit"	 type="java.lang.Boolean"	required="true"  shortDescription=" Of Equipe - Mode edition"/>
+		
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT OF EQUIPE -->          
+<composite:implementation>
+	<p:fieldset id="fsOfTeamIntitule" legend="#{ofEditMsgs.EDIT_OF_PANEL_TAB_EQUIPE_INTITULE_TITLE}" style="margin-top:5px; width:900px;">
+	<h:form id="form1">				
+				
+				<!-- DETAIL EQUIPE OFFRE DE FORMATION (INTITULE) -->	
+				<p:panelGrid  id="ofEquipeIntitulePanelId" style="width:80%;">  
+	
+		            	<f:facet name="header">  
+		        			#{ofEditMsgs.EDIT_OF_LABEL_TAB_EQUIPE_INTITULE_TABLE_HEADER}
+		    			</f:facet>  
+		  				<p:row>
+		            	<p:column><h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_CODE}"/></p:column>
+		            	<p:column>
+		            	<h:outputLabel value="#{ofBB.currentTeam.code}" rendered="#{not cc.attrs.toEdit}" styleClass="labelValue" />
+		            	<h:inputText id="ofEquipeID" value="#{ofBB.currentTeam.code}" rendered="#{cc.attrs.toEdit}" styleClass="labelValue" maxlength="10" required="true"
+		            				requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_CODE}"/></p:column>
+		    				</p:row>	
+		    			<p:row>
+		            	<p:column><h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_LIBELLE_FR}"/></p:column>
+		            	<p:column>
+		            	<h:outputLabel value="#{ofBB.currentTeam.libelleFr}" rendered="#{not cc.attrs.toEdit}"  styleClass="labelValue" />
+		            	<h:inputText id="ofEquipeLibelleFr" value="#{ofBB.currentTeam.libelleFr}" rendered="#{cc.attrs.toEdit}" styleClass="labelValue"  maxlength="255" required="true"
+		            				requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_LABEL}" />
+		    				</p:column>
+		    			</p:row>
+		    			<p:row>
+		            	<p:column><h:outputLabel
+		            	 value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_LIBELLE_FR_COURT}"/></p:column>
+		            	<p:column><h:outputLabel value="#{ofBB.currentTeam.libelleCourtFr}" rendered="#{not cc.attrs.toEdit}"  styleClass="labelValue"/>
+		            	<h:inputText id="ofEquipeLibelleCourtFr" value="#{ofBB.currentTeam.libelleCourtFr}" rendered="#{cc.attrs.toEdit}" styleClass="labelValue" maxlength="150" required="true"
+		            				requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_SHORT_LABEL}" /></p:column>
+		            	</p:row>
+        		</p:panelGrid> 
+        		<br />
+        		
+        		 <p:commandButton  value="#{ofEditMsgs.EDIT_OF_BTN_EQUIPE_MEMBRES_ENREGISTRER}"  	
+		    	        								id="btnSaveTeam" title="#{ofEditMsgs.EDIT_OF_BTN_EQUIPE_MEMBRES_RECHERCHE}"
+														onstart="PF('blockUIWidgetT-eam').block()" oncomplete="PF('blockUIWidgetTeam').unblock()" 
+														update="@([id$=searchMembresPanel])"
+														actionListener="#{ofBB.saveTeam()}" 
+														rendered="#{cc.attrs.toEdit}"  icon="ui-icon-disk">
+												
+														<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+														<f:param name="ofId" value="#{txtIdOf.value}" />
+														<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+														<f:param name="editionMode" value="#{txtEditionMode.value}" />
+			 	</p:commandButton>
+   				 <p:messages id="messagesTeam" showDetail="true" autoUpdate="false" closable="true" />
+	</h:form>	
+    </p:fieldset>
+    <br />  	
+   
+    <!-- RECHERCHE INDIVIDU POUR AJOUT EN TANT QUE MEMBRE EQUIPE-->
+  	<p:outputPanel id="searchMembresPanel">
+   	<p:fieldset id="fsOfSearchMembre" legend="#{ofEditMsgs.EDIT_OF_PANEL_TAB_EQUIPE_MEMBRES_TITLE}"  rendered="#{ofBB.showTeamDetails}" style="margin-top:5px; width:900px;">
+		<h:form id="form2">
+
+			<h:inputHidden id="idEquipeTxtID" 		binding="#{txtEquipeID}" 			  value="#{ofBB.currentTeamId}"/>
+			
+				<!-- LISTE DES MEMBRES EQUIPE OFFRE FORMATION-->
+				<p:dataTable id="ofTeamMembersDataTable" var="row"
+														value="#{ofBB.listOfMembers}"
+														binding="#{ofBB.membersDataTable}"
+														rowIndexVar="rowIndex"
+														emptyMessage="#{ofEditMsgs.EDIT_OF_DATA_TABLE_SEACRH_MEMBRES_LISTE_NO_RESULT}" 
+														paginatorPosition="bottom"
+														rowsPerPageTemplate="5,10,15"
+														paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+														paginator="true" 
+														rows="5" 
+														lazy="true" 
+														styleClass="ofSeacrhMemberDatatableCss">
+														
+														<f:facet name="header">  
+            														#{ofEditMsgs.EDIT_OF_DATA_TABLE_SEACRH_MEMBRES_LISTE_RESULT}
+       						 							</f:facet>  
+       						 							
+       						 							<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+														<f:param name="ofId" value="#{txtIdOf.value}" />
+			        									<f:param name="currentIndividuId" value="#{txtIdIndividu.value}" />
+			        									<f:param name="editionMode" value="#{txtEditionMode.value}" />
+														<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+														
+       						 							<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetListMembers').block()" oncomplete="PF('blockUIWidgetListMembers').unblock()"/>
+														<p:ajax event="sort" update="@all" process="@form" />
+						
+														<p:column	 style="width:10px"  styleClass="center">
+																	<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+				
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_CODE}" style="width:40px"  styleClass="center">
+																	<h:outputText value="#{row.refCodeMembre}" />
+														</p:column>
+											
+														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_FR}"  styleClass="left" style="width:230px">
+																	<h:outputText value="#{row.libelleFr}"  />
+														</p:column>
+											
+														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_AR}" styleClass="right" style="width:230px">
+																	<h:outputText value="#{row.libelleAr}"  />
+														</p:column>
+														
+														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_ROLE}" styleClass="left" >
+																	<h:outputText value="#{ofBB.getNomeclatureByCode('LMD_ROLE_EQUIPE_OF',row.roleMembre).libelleLongFr}"/>
+														</p:column>
+														
+<!-- 														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_GRADE}" styleClass="center" style="width:200px"> -->
+<!-- 																	<h:outputText value="#{row.grade}"  /> -->
+<!-- 														</p:column> -->
+														
+														<p:column  styleClass="center" style="width:120px"  rendered="#{cc.attrs.toEdit}">
+														<p:commandButton 
+																	id="removeMemberButtonID"
+																	update="@([id$=ofTeamMembersDataTable])" ajax="true" process="@this"
+																	value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_BTN_RETIRER}"  
+																	action="#{ofBB.removeMember(row.id)}"
+																	onstart="PF('blockUIWidgetListMembers').block()" 
+ 																	oncomplete="PF('blockUIWidgetListMembers').unblock(); PF('dlgAddMember').hide();" 
+ 																	icon="ui-icon-minusthick">
+																	<p:confirm		header="#{ofmsgs.offre_formation_confirm_dialog_header}"	 message="Voulez-vous vraiement retirer ce membre ?"	icon="ui-icon-alert" />
+																	
+																	<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+																	
+														</p:commandButton>
+														</p:column>
+														
+						</p:dataTable>		
+						<br />
+						<p:toolbar styleClass="toolBarMesrs" style="width:750px;" rendered="#{cc.attrs.toEdit}">
+						
+								<p:toolbarGroup    align="left">
+										<h:outputLabel  value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_MOT_CLE_RECHERCHE}"/> 	<p:separator />
+										<p:inputText id="keyWordsMemberID" binding="#{txtKeyWordsMember}"   value="#{ofBB.keyWordsMember}"   style="width:350px" label="#{ofmsgs.offre_formation_search_field_libelle}"  />
+										<p:separator/>
+								</p:toolbarGroup>
+								
+								<p:toolbarGroup    align="left">
+						
+										<p:commandButton value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_RECHERCHE}"  	id="btnSearchMember" title="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_RECHERCHE}"
+												onstart="PF('blockUIWidgetSearchMember').block()" oncomplete="PF('blockUIWidgetSearchMember').unblock()"
+												icon="ui-icon-search" 	actionListener="#{ofBB.searchMember()}" update="@([id$=ofTeamSearchMemberDataTable])">
+																	<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+										</p:commandButton>
+					
+								</p:toolbarGroup>
+						</p:toolbar>				
+			<br />
+						<p:dataTable id="ofTeamSearchMemberDataTable" var="row"
+														value="#{ofBB.listSearchMembersLazy}"
+														rowIndexVar="rowIndex"
+														emptyMessage="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_SEARCH_NO_RESULT}"
+														paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+														paginator="true" 
+														rows="5" 
+														lazy="true" 
+														paginatorPosition="bottom"
+														rowsPerPageTemplate="5,10,15"
+														selection="#{ofBB.selectedIndividu}"
+														selectionMode="single"
+														rowKey="#{row.identifiant}"
+														styleClass="ofSeacrhMemberDatatableCss" rendered="#{cc.attrs.toEdit}">
+														
+														<f:facet name="header"  styleClass="center">  
+            														#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_SEARCH_TABLE_HEADER}
+       						 							</f:facet>  
+       						 							
+																	<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+			        												<f:param name="currentIndividuId" value="#{txtIdIndividu.value}" />
+			        												<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+															
+														<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetSearchMember').block()" oncomplete="PF('blockUIWidgetSearchMember').unblock()"/>
+														<p:ajax event="sort" update="@all" process="@form" />
+														<p:ajax event="rowSelect" listener="#{ofBB.onRowSelectIndividu}" update="@([id$=form3])"  oncomplete="PF('dlgAddMember').show()"/>
+														
+														<p:column	 styleClass="center" style="width:10px">
+																	<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+				
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_CODE}" styleClass="center" style="width:30px">
+																	<h:outputText value="#{row.identifiant}" />
+														</p:column>
+											
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_CIVILITE}"  styleClass="center" style="width:30px">
+																	<h:outputText value="#{row.civiliteCode}" />
+														</p:column>
+											
+														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_FR}" styleClass="left">
+																	<h:outputText value="#{row.prenomLatin}   #{row.nomLatin}"  />
+														</p:column>
+														
+														<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_AR}" styleClass="right">
+																	<h:outputText value="#{row.nomArabe}  #{row.prenomArabe}"  />
+														</p:column>
+													
+														<p:column styleClass="center" style="width:120px">
+														
+                												<p:commandButton id="showSelectionRolesDlgId" icon="ui-icon-plusthick"
+                													 							value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_AJOUTER_EN_TANTQUE}" 
+                													 							actionListener="#{ofBB.prepareMembre(row.identifiant)}"
+                													 							update="@([id$=form3])"
+                																				oncomplete="PF('dlgAddMember').show()">
+                													
+                															<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																			<f:param name="ofId" value="#{txtIdOf.value}" />
+			        														<f:param name="currentIndividuId" value="#{txtIdIndividu.value}" />
+			        														<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																			<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+                    											</p:commandButton>
+            											</p:column>
+											
+						</p:dataTable>	
+						<br />	
+		</h:form>										
+		</p:fieldset>
+		</p:outputPanel>  	
+		
+	<!-- POPUP DETAIL INDIVIDU-->
+	<p:dialog id="modalDialogIndividu" header="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_HEADER}" widgetVar="dlgAddMember" resizable="false"  	
+						style=" font-size:12px" appendTo="@(body)" modal="true" >  
+	<h:form id="form3">
+	<p:outputPanel  id="detailIndividuPopup">		
+       					 
+       					 <p:panelGrid columns="2" style="width:100%;">  
+            						<f:facet name="header">  
+        										#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_TABLE_INDIVIDU_HEADER}
+    								</f:facet>  
+  
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_CODE}"/>
+            						<h:outputLabel value="#{ofBB.selectedIndividu.identifiant}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_CIVILITE}"/>
+            						<h:outputLabel value="#{ofBB.selectedIndividu.civiliteCode}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_NOM_PRENOM}"/>
+            						<h:outputLabel value="#{ofBB.selectedIndividu.civiliteCode} #{ofBB.selectedIndividu.prenomLatin}   #{ofBB.selectedIndividu.nomLatin}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_DATE_NAISS}"/>
+            						<h:outputLabel  value="#{ofBB.selectedIndividu.dateNaissance.day}/#{ofBB.selectedIndividu.dateNaissance.month}/#{ofBB.selectedIndividu.dateNaissance.year}" styleClass="labelValue">
+            						</h:outputLabel>
+            							
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_NATIONALITE}"/>
+            						<h:outputLabel value="#{ofBB.selectedIndividu.nationaliteLibelleLongFr}" styleClass="labelValue"/>
+            						
+        				</p:panelGrid>  
+  						<br />
+  						
+  						<p:panelGrid id="rolesPanelId" columns="2" style="width:100%;">  
+  						 			<f:facet name="header">  
+        										#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRE_DIALOG_TABLE_ROLE_HEADER}
+    								</f:facet>  
+    								
+    								<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_AJOUT_EQUIPE_DLG_ROLE}"/>
+    								<p:selectOneMenu id="listRolesFrID" value="#{ofBB.selectedRole}">
+    											<f:selectItems value="#{ofBB.listRoles}"  var="r1" itemLabel="#{r1.label}" itemValue="#{r1.value}"/>
+    								</p:selectOneMenu>	
+		
+  						</p:panelGrid>
+  						<br />
+  						
+  						<p:toolbar styleClass="toolBarMesrs">
+						<p:toolbarGroup>
+									<p:commandButton id="btnHideSearchDialogID" value="#{ofmsgs
+									.OFFRE_FORMATION_EQUIPE_AJOUT_EQUIPE_DLG_FERMER_BTN}"  
+																	icon="ui-icon-close"	type="button" onclick="PF('dlgAddMember').hide();" />
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+			        				<p:commandButton id="btnAddMemberId"  
+			        												update="@([id$=ofTeamMembersDataTable]) @([msgOfMembresList])" ajax="true" process="@form"
+			        												value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_BTN_AJOUTER}" 
+			        												action="#{ofBB.addMember()}"
+			        												onstart="PF('blockUIWidgetListMembers').block()" oncomplete="PF('blockUIWidgetListMembers').unblock(); PF('dlgAddMember').hide();"	
+			        												icon="ui-icon-plusthick">
+			        												
+			        												<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+			        												<f:param name="currentIndividuId" value="#{txtIdIndividu.value}" />
+			        												<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+																	
+                				</p:commandButton>
+              			</p:toolbarGroup>
+              			</p:toolbar>
+              			
+              			<h:inputHidden id="idIndividuTxtID" 		binding="#{txtIdIndividu}" 	value="#{ofBB.currentIndividuId}"/>
+              			<br />
+              </p:outputPanel>		
+    </h:form>
+	</p:dialog>
+		 
+	<p:confirmDialog global="true" showEffect="fade">
+
+			<h:panelGrid columns="2" styleClass="buttonPanel" cellspacing="2">
+			<p:row>
+					<p:column styleClass="middle">
+							<p:commandButton 	value="#{ofmsgs.offre_formation_confirm_dialog_cancel_button}" 	type="button" styleClass="ui-confirmdialog-no" 	icon="ui-icon-close" />
+		
+					</p:column>
+					<p:column styleClass="middle">
+							<p:commandButton 	value="#{ofmsgs.offre_formation_confirm_dialog_confirm_button}"  type="button" styleClass="ui-confirmdialog-yes"  	icon="ui-icon-check" />
+					</p:column>
+
+			</p:row>
+			</h:panelGrid>
+
+	</p:confirmDialog>
+	 
+	 <!--  HIDDEN HELPER FIELDS -->
+	<p:outputPanel  id="hiddenDataPanel">
+				<h:inputHidden id="idMemberTxtID" 		binding="#{txtIdMember}" 			  value="#{ofBB.currentMemberId}"/>
+	</p:outputPanel>
+		
+	<!--  AJAX UPDATE INDICATORS -->
+	<pe:blockUI target="@([id$=ofEquipeIntitulePanelId])" widgetVar="blockUIWidgetTeam">
+    		<h:graphicImage library="images" name="ajax-loader1.gif"/>  
+  	</pe:blockUI>
+  		
+	<pe:blockUI target="@([id$=ofTeamSearchMemberDataTable])" widgetVar="blockUIWidgetSearchMember">
+    		<h:graphicImage library="images" name="ajax-loader1.gif"/>  
+  	</pe:blockUI>
+  		
+	<pe:blockUI target="@([id$=ofTeamMembersDataTable])" widgetVar="blockUIWidgetListMembers">
+    		<h:graphicImage library="images" name="ajax-loader1.gif"/>  
+  	</pe:blockUI>
+  		
+</composite:implementation>
+
+</html>

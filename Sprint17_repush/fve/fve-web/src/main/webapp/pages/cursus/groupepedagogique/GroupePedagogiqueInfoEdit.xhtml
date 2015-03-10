@@ -1,0 +1,466 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel styleClass="gpPanel" id="gpPanel">
+		<p:fieldset>
+			<p:panelGrid id="groupe" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%"
+							value="#{groupePedagogiqueMsgs.groupePedagogique_type}"
+							for="type" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="type" style="width:100%"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.ncTypeGroupeId}"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							required="true"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_type_required}"
+							label="#{groupePedagogiqueMsgs.groupePedagogique_type}">
+							<p:ajax update="section" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{groupePedagogiqueManagerBean.typeChanged}" />
+							<f:selectItem
+								itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_type_select}"
+								itemValue="" />
+							<f:selectItems
+								value="#{groupePedagogiqueManagerBean.ncTypeGroupeList}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_section}"
+							for="section" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="section" style="width:100%"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.idSection}"
+							valueChangeListener="#{groupePedagogiqueManagerBean.sectionChanged}"
+							required="false"
+							disabled="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.ncTypeGroupeId == groupePedagogiqueManagerBean.idSectionType}"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_section_required}"
+							label="#{groupePedagogiqueMsgs.groupePedagogique_section}">
+							<p:ajax update="@this" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{groupePedagogiqueManagerBean.sectionChanged}" />
+							<f:selectItem
+								itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_section_select}"
+								itemValue="" />
+							<f:selectItems
+								value="#{groupePedagogiqueManagerBean.sectionList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage}"
+							for="nom" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="nom" style="width:100%"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.nomAffichage}"
+							label="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage}"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							required="true"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage_required}">
+						</p:inputText>
+
+					</p:column>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage_arabe}"
+							for="nomArabe" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="nomArabe" style="text-align: right; width:100%"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.nomAffichageArabe}"
+							label="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage_arabe}"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							required="true"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage_arabe_required}">
+						</p:inputText>
+
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%"
+							value="#{groupePedagogiqueMsgs.groupePedagogique_capacite_min}"
+							for="min" />
+					</p:column>
+					<p:column style="width:35%">
+						<pe:inputNumber binding="#{min}" id="min" required="true"
+							validator="numberValidator" style="width:100%"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_capacite_min_required}"
+							minValue="0" maxValue="1000"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.capaciteMin}">
+
+						</pe:inputNumber>
+					</p:column>
+
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%"
+							value="#{groupePedagogiqueMsgs.groupePedagogique_capacite_max}"
+							for="max" />
+					</p:column>
+					<p:column style="width:35%">
+						<pe:inputNumber binding="#{max}" id="max" required="true"
+							validator="numberValidator" style="width:100%"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_capacite_max_required}"
+							minValue="0" maxValue="1000"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.capaciteMax}">
+							<f:attribute name="min" value="#{min}" />
+						</pe:inputNumber>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_date_creation}"
+							for="dateCreation" />
+					</p:column>
+					<p:column style="width:35%" colspan="3">
+						<p:calendar navigator="true" validator="dateValidator"
+							id="dateCreation" binding="#{_firstDate}" style="width:100%"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.dateCreation}"
+							pattern="dd/MM/yyyy" required="true"
+							valueChangeListener="#{groupePedagogiqueManagerBean.entityGroupeChanged}"
+							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_date_creation_required}">
+
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<!-- 				<p:row id="ue1" -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.ueLibelleFr == null}"> -->
+				<!-- 					<p:column> -->
+
+				<!-- 						<p:outputLabel for="ue" -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_unite_enseignement} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3" style="width:120px"> -->
+				<!-- 						<p:selectOneMenu id="ue" styleClass="selectmenu" style="width:30%" -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.ueId}" -->
+				<!-- 							valueChangeListener="#{groupePedagogiqueManagerBean.entityAssociationChanged}" -->
+				<!-- 							required="false" filter="true" filterMatchMode="startsWith" -->
+				<!-- 							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_unite_enseignement_required}" -->
+				<!-- 							label="#{groupePedagogiqueMsgs.groupePedagogique_unite_enseignement}"> -->
+				<!-- 							<p:ajax listener="#{groupePedagogiqueManagerBean.ueChanged}" -->
+				<!-- 								onstart="PF('globalWidget').block()" -->
+				<!-- 								onsuccess="PF('globalWidget').unblock()" -->
+				<!-- 								update="mc, ap, saveGroupe" /> -->
+				<!-- 							<f:selectItem -->
+				<!-- 								itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_unite_enseignement_select}" -->
+				<!-- 								itemValue="" /> -->
+				<!-- 							<f:selectItems value="#{groupePedagogiqueManagerBean.ueList}" /> -->
+				<!-- 						</p:selectOneMenu> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+
+				<!-- 				<p:row id="ue2" -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.ueLibelleFr != null}"> -->
+				<!-- 					<p:column> -->
+
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_unite_enseignement}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3"> -->
+				<!-- 						<h:outputText value="#{groupePedagogiqueManagerBean.ueLibelleFr}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+
+				<!-- 				<p:row id="mc1" -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.mcLibelleFr == null}"> -->
+				<!-- 					<p:column> -->
+				<!-- 						<p:outputLabel for="mc" -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_matiere_constitutive} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3" style="width:120px"> -->
+				<!-- 						<p:selectOneMenu id="mc" styleClass="selectmenu" style="width:30%" -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.rattachementMcId}" -->
+				<!-- 							valueChangeListener="#{groupePedagogiqueManagerBean.entityAssociationChanged}" -->
+				<!-- 							required="false" filter="true" filterMatchMode="startsWith" -->
+				<!-- 							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_matiere_constitutive_required}" -->
+				<!-- 							label="#{groupePedagogiqueMsgs.groupePedagogique_matiere_constitutive}"> -->
+				<!-- 							<p:ajax listener="#{groupePedagogiqueManagerBean.mcChanged}" -->
+				<!-- 								onstart="PF('globalWidget').block()" update="ap, saveGroupe" -->
+				<!-- 								onsuccess="PF('globalWidget').unblock()" /> -->
+				<!-- 							<f:selectItem -->
+				<!-- 								itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_matiere_constitutive_select}" -->
+				<!-- 								itemValue="" /> -->
+				<!-- 							<f:selectItems value="#{groupePedagogiqueManagerBean.mcList}" /> -->
+
+				<!-- 						</p:selectOneMenu> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+				<!-- 				<p:row id="mc2" -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.mcLibelleFr != null}"> -->
+				<!-- 					<p:column> -->
+
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_matiere_constitutive}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3"> -->
+				<!-- 						<h:outputText value="#{groupePedagogiqueManagerBean.mcLibelleFr}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+
+				<!-- 				<p:row> -->
+				<!-- 					<p:column> -->
+				<!-- 						<p:outputLabel -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique} " -->
+				<!-- 							for="ap" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column style="width:120px;text-align:left" colspan="3"> -->
+				<!-- 						<p:selectOneMenu id="ap" styleClass="selectmenu" style="width:30%" -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.apId}" -->
+				<!-- 							valueChangeListener="#{groupePedagogiqueManagerBean.entityAssociationChanged}" -->
+				<!-- 							required="true" filter="true" filterMatchMode="startsWith" -->
+				<!-- 							requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_required}" -->
+				<!-- 							label="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique}"> -->
+				<!-- 							<f:selectItem -->
+				<!-- 								itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_select}" -->
+				<!-- 								itemValue="" /> -->
+				<!-- 							<f:selectItems value="#{groupePedagogiqueManagerBean.apList}" /> -->
+				<!-- 						</p:selectOneMenu> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+				<!-- 				<p:row -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id != null}"> -->
+				<!-- 					<p:column colspan="3"> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_code}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText styleClass="labelValue" -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.refCodeGroupe}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 				</p:row> -->
+				<!-- 				<p:row -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id != null}"> -->
+				<!-- 					<p:column> -->
+				<!-- 						<p:outputLabel -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_latin}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3"> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupe}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+				<!-- 				</p:row> -->
+				<!-- 				<p:row -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id != null}"> -->
+
+				<!-- 					<p:column> -->
+				<!-- 						<p:outputLabel -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_arabe}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column colspan="3"> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupeArabe}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+
+				<!-- 				</p:row> -->
+				<!-- 				<p:row -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id != null}"> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_latin}" /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupe}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_arabe} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupeArabe}" -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+				<!-- 				</p:row> -->
+
+
+				<!-- 				<p:row -->
+				<!-- 					rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id != null}"> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_seuil} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.apSeuil} " -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_groupe_prevu} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.apGroupesPrevus} " -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+
+
+			</p:panelGrid>
+			<br />
+			<p:toolbar id="planningSearchToolBar" styleClass="toolBarMesrs"
+				style="margin:0;">
+				<p:toolbarGroup align="left">
+					<p:commandButton id="saveGroupe" icon="ui-icon-disk"
+						value="#{commonmsgs.bouton_enregistrer}" process="gpPanel"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{groupePedagogiqueManagerBean.saveGroupe()}"
+						update=":panelGlobal">
+					</p:commandButton>
+					<p:separator />
+					<p:commandButton id="deleteGroupe" icon="ui-icon-trash"
+						value="#{commonmsgs.bouton_supprimer}" process="gpPanel"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						disabled="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id == null}"
+						actionListener="#{groupePedagogiqueManagerBean.deleteGroupe()}"
+						update=":panelGlobal">
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:fieldset>
+	</p:outputPanel>
+	<p:dialog widgetVar="refGroupeInfo"
+		header="#{groupePedagogiqueMsgs.groupePedagogique_info_referentiel}">
+		<h:form>
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueMsgs.groupePedagogique_code}" />
+					</p:column>
+					<p:column>
+						<h:outputText styleClass="labelValue"
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.codeGroupe}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_latin}" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupe}"
+							styleClass="labelValue" />
+					</p:column>
+				</p:row>
+				<p:row>
+
+					<p:column>
+						<p:outputLabel
+							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_arabe}" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupeArabe}"
+							styleClass="labelValue" />
+					</p:column>
+
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_latin}" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupe}"
+							styleClass="labelValue" />
+					</p:column>
+				</p:row>
+				<p:row>
+
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_arabe} " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupeArabe}"
+							styleClass="labelValue" />
+					</p:column>
+				</p:row>
+
+
+				<!-- 				<p:row> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_seuil} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.apSeuil} " -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+				<!-- 				<p:row> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueMsgs.groupePedagogique_atome_pedagogique_groupe_prevu} " /> -->
+				<!-- 					</p:column> -->
+				<!-- 					<p:column> -->
+				<!-- 						<h:outputText -->
+				<!-- 							value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.apGroupesPrevus} " -->
+				<!-- 							styleClass="labelValue" /> -->
+				<!-- 					</p:column> -->
+
+				<!-- 				</p:row> -->
+
+			</p:panelGrid>
+			<br />
+			<p:panel>
+
+				<p:commandButton value="#{commonmsgs.bouton_ok}"
+					onclick="PF('refGroupeInfo').hide()">
+				</p:commandButton>
+
+			</p:panel>
+
+		</h:form>
+	</p:dialog>
+
+</ui:composition>
+

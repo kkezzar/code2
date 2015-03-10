@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+<!-- INTERFACE COMPOSANT -->
+<composite:interface>
+	<composite:attribute name="editMode" required="true" />
+	<composite:attribute name="updateForm" required="true" />
+	<composite:attribute name="beanName" required="true" />
+	<composite:attribute name="groupeListenerName" required="true" />
+	<composite:attribute name="loadGroupe" required="false" default="false" />
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT -->
+<composite:implementation>
+	<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+		<f:facet name="header">
+			<p:row>
+				<p:column colspan="4">
+					<h:outputText value="#{searchMsgs.recherche_header}" />
+				</p:column>
+			</p:row>
+		</f:facet>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{searchMsgs.annee_academique}" for="annee"></p:outputLabel>
+			</p:column>
+			<p:column style="width:35%">
+				<p:selectOneMenu id="annee" filter="true" required="true"
+					filterMatchMode="contains" style="width:100%;text-align:left"
+					requiredMessage="#{searchMsgs.annee_academique_required}"
+					rendered="#{not cc.attrs.editMode}"
+					value="#{searchBean.anneeAcademiqueId}"
+					label="#{searchMsgs.annee_academique}">
+					<p:ajax update="#{cc.attrs.updateForm}"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{searchBean.anneeChanged}" />
+					<f:selectItem itemLabel="#{searchMsgs.annee_academique_select}"
+						itemValue="" />
+					<f:selectItems value="#{searchBean.anneeAcademiqueList}" />
+				</p:selectOneMenu>
+				<h:outputText value="#{sessionBeanFve.codeAnneeAcademique}"
+					styleClass="value" rendered="#{cc.attrs.editMode}" />
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel style="width:100%;text-align:left"
+					value="#{searchMsgs.offre_formation}" for="oof"></p:outputLabel>
+			</p:column>
+			<p:column style="width:35%">
+				<p:selectOneMenu id="oof" required="false"
+					style="width:100%;text-align:left" value="#{searchBean.oofId}"
+					requiredMessage="#{searchMsgs.offre_formation_required}"
+					filter="true" filterMatchMode="contains"
+					label="#{searchMsgs.offre_formation}">
+					<p:ajax update="#{cc.attrs.updateForm}"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{searchBean.ofChanged}" />
+					<f:selectItem itemLabel="#{searchMsgs.offre_formation_select}"
+						itemValue="" />
+					<f:selectItems value="#{searchBean.ofList}" />
+
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{searchMsgs.periode}" for="periode" />
+			</p:column>
+			<p:column style="width:35%">
+				<p:selectOneMenu id="periode" required="true"
+					style="width:100%;text-align:left" value="#{searchBean.periodeId}"
+					filter="true" filterMatchMode="contains"
+					label="#{searchMsgs.periode}"
+					requiredMessage="#{searchMsgs.periode_required}">
+					<p:ajax update="#{cc.attrs.updateForm}"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{searchBean.periodeChanged}" />
+					<f:selectItem itemLabel="#{searchMsgs.periode_select}" itemValue="" />
+					<f:selectItems value="#{searchBean.periodeList}" />
+
+				</p:selectOneMenu>
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel value="#{searchMsgs.groupe_pedagogique}" for="groupe" />
+			</p:column>
+			<p:column style="width:35%">
+				<p:selectOneMenu id="groupe" required="false"
+					style="width:100%;text-align:left"
+					value="#{searchBean.groupePedagogiqueId}" filter="true"
+					filterMatchMode="contains" label="#{searchMsgs.groupe_pedagogique}"
+					requiredMessage="#{searchMsgs.groupe_pedagogique_required}">
+					<p:ajax update="#{cc.attrs.updateForm}"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						listener="#{cc.attrs.beanName[cc.attrs.groupeListenerName]}" />
+					<f:selectItem itemLabel="#{searchMsgs.groupe_pedagogique_select}"
+						itemValue="" />
+					<f:selectItems value="#{searchBean.groupePedagogiqueList}" />
+
+				</p:selectOneMenu>
+			</p:column>
+
+		</p:row>
+
+	</p:panelGrid>
+
+</composite:implementation>
+</html>

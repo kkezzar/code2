@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_plageAdresse}" style="border:0;">
+			<h:form id="searchForm" 
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+			
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{plageAdresseDroitBean.readAllow}"
+							icon="ui-icon-document" action="#{plageSearchBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="plageAdresseData"
+								fileName="listeDesplageadresseAccesss" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{plageSearchBean.searchValue}"
+							id="searchInput" rendered="#{plageAdresseDroitBean.readAllow}"
+							style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton rendered="#{plageAdresseDroitBean.readAllow}" id="searchButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							actionListener="#{plageSearchBean.findGeneric}" />
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="plageadressesData"
+					rendered="#{plageSearchBean.listRefPlageAdresseDto!=null}"
+					value="#{plageSearchBean.listRefPlageAdresseDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{plageadressemsgs.plageadresse_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{plageadressemsgs.plageadresse_identifiant}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+
+					<p:column sortBy="#{current.nom}">
+						<f:facet name="header">
+							<h:outputText value="#{plageadressemsgs.plageadresse_nom}" />
+						</f:facet>
+						<h:outputText value="#{current.nom}" />
+					</p:column>
+
+					<p:column sortBy="#{current.adresseDebut}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{plageadressemsgs.plageadresse_adresse_debut}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.adresseDebut}" />
+					</p:column>
+
+					<p:column sortBy="#{current.adresseFin}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{plageadressemsgs.plageadresse_adresse_fin}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.adresseFin}" />
+					</p:column>
+
+
+
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{plageSearchBean.toDetails}" icon="ui-icon-document"
+							title="#{commonmsgs.button_consulter}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{plageAdresseDroitBean.readAllow}">
+							<f:param name="searchValue"
+								value="#{plageSearchBean.searchValue}" />
+							<f:param name="idadr" value="#{current.id}" />
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{plageSearchBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{plageAdresseDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:param name="searchValue"
+								value="#{plageSearchBean.searchValue}" />
+							<f:param name="idadr" value="#{current.id}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="removeButton" process="@this"
+							actionListener="#{plageSearchBean.toRemove(current)}"
+							rendered="#{plageAdresseDroitBean.deleteAllow}"
+							update="plageadressesData" icon="ui-icon-trash"
+							upadate="plageadressesData" title="#{commonmsgs.button_delete}">
+
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="searchValue"
+								value="#{plageSearchBean.searchValue}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

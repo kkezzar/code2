@@ -1,0 +1,614 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		Consulter les dossiers étudiants
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<h:form id="form_search"
+			onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_search:btnSearch').click(); return false;}">
+			<pe:blockUI target="form_search" widgetVar="dWidget">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+
+			<p:toolbar styleClass="toolBarMesrs">
+				<p:toolbarGroup align="left">
+
+					<p:inputText id="sNom" placeholder="Nom"
+						value="#{dossierEtudiantSearchBean.searchByNom}"></p:inputText>
+					<p:spacer width="5px"></p:spacer>
+
+					<p:inputText id="prenometudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_prenom_etudiant}"
+						value="#{dossierEtudiantSearchBean.searchByPrenom}"></p:inputText>
+					<p:separator />
+
+					<p:inputText id="matriculetudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+						value="#{dossierEtudiantSearchBean.searchByMatricule}"></p:inputText>
+					<p:separator />
+
+					<p:inputText id="ninetudiant"
+						placeholder="#{dossierEtudiantMsgs.dossier_etudiant_nin}"
+						value="#{dossierEtudiantSearchBean.searchByNIN}"></p:inputText>
+					<p:spacer width="5px"></p:spacer>
+
+					<p:commandButton id="btnSearch" icon="ui-icon-search"
+						update="ResultSearchDataTable :form_view"
+						styleClass="ui-button-bleu" process="form_search"
+						onstart="PF('dWidget').block()" onsuccess="PF('dWidget').unblock()"
+						title="Rechercher"
+						actionListener="#{dossierEtudiantSearchBean.searchAction()}"></p:commandButton>
+
+
+
+					<!-- 						<p:separator />
+
+						<p:commandLink id="rechercheAvc" disabled="true">
+								<h:outputText value="Recherche avancée" />
+						</p:commandLink> -->
+
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:dataTable id="ResultSearchDataTable" var="current"
+				resizableColumns="false" lazy="true"
+				value="#{dossierEtudiantSearchBean.dossiersEtudiantsModel}"
+				paginator="true" rowKey="#{current.id}"
+				selectionMode="single" 
+				rows="5" 
+				rowsPerPageTemplate="5,10,50,100"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+				paginatorPosition="bottom" 
+				emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+				<p:ajax event="page" onstart="PF('dWidget').block()"
+					onsuccess="PF('dWidget').unblock()"></p:ajax>
+
+				<p:ajax event="rowSelect" immediate="true"
+					listener="#{dossierEtudiantSearchBean.onRowSelect}" process="@this"
+					onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+					update=":form_view" />
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+					width="10%">
+					<h:outputText value="#{current.numeroMatricule}">
+					</h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_nom_etudiant}"
+					width="22%">
+					<h:outputText value="#{current.individu.nomLatin}" width="15%">
+					</h:outputText>
+				</p:column>
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_prenom_etudiant}"
+					width="20%">
+					<h:outputText value="#{current.individu.prenomLatin}">
+					</h:outputText>
+				</p:column>
+
+				<p:column
+					headerText="#{dossierEtudiantMsgs.dossier_etudiant_date_naissance}"
+					width="15%">
+					<h:outputText value="#{current.individu.dateNaissance}">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="NIN" width="15%">
+					<h:outputText value="">
+						<f:convertDateTime pattern="#{current.nin}" />
+					</h:outputText>
+				</p:column>
+
+			</p:dataTable>
+
+			<pe:blockUI widgetVar="blockUIWidget">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+		</h:form>
+
+		<p:spacer height="20px"></p:spacer>
+
+		<p:outputPanel id="form_view">
+
+			<p:outputPanel rendered="#{dossierEtudiantSearchBean.crud}">
+
+				<div class="row"
+					style="border: 1px solid #E2E2E2; box-shadow: 0px 1px 1px #ECECEC; background-color: #F5F5F5; padding: 10px 0px;">
+					<div class="col-lg-12">
+
+						<!-- 						<p:graphicImage id="nomphotoViewDetail"
+							value="#{empty dossierEtudiantSearchBean.photo ? '/resources/images/boy.png' : dossierEtudiantSearchBean.photo}" 
+							style="padding:0px; text-align:center;margin-left:30px;border: 5px solid #FFF;"
+							alt="#{documentmsgs.document_photo_vide}">
+						</p:graphicImage> -->
+
+						<p:graphicImage value="#{photoEtudiantBB.photo}"
+							style="padding:0px; border: 5px solid #FFF;float:left;margin-right:20px"
+							rendered="#{dossierEtudiantSearchBean.dossierEtudiant.photo != null}"
+							alt="#{documentmsgs.document_photo_vide}" width="160"
+							height="160">
+							<f:param name="url"
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.photo}" />
+						</p:graphicImage>
+
+						<p:graphicImage value="/resources/images/boy.png"
+							style="padding:0px; border: 5px solid #FFF;float:left;margin-right:20px"
+							rendered="#{dossierEtudiantSearchBean.dossierEtudiant.photo eq null}"
+							alt="#{documentmsgs.document_photo_vide}" width="160"
+							height="160">
+						</p:graphicImage>
+
+						<h1 class="pull-right">
+							#{dossierEtudiantMsgs.dossier_etudiant_matricule}: <span class="txt-color-green">#{dossierEtudiantSearchBean.dossierEtudiant.numeroMatricule}</span>
+						</h1>
+						<h1>
+							#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomLatin} <span
+								class="semi-bold">
+								#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomLatin}</span>
+						</h1>
+
+						<h1>
+							#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomArabe} <span
+								style="">#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomArabe}</span>
+						</h1>
+
+						<h4>
+							#{dossierEtudiantMsgs.dossier_etudiant_naissance_ne_le}
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.dateNaissance}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+							#{dossierEtudiantMsgs.dossier_etudiant_naissance_a}
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.lieuNaissance}" />
+						</h4>
+
+						<!-- 						<h4>
+							<strong>Matricule BAC: <span class="txt-color-green">
+									#{dossierEtudiantSearchBean.dossierEtudiant.dossierBachelierMatricule}</span></strong>
+						</h4> -->
+
+						<br />
+						<h4>
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.niveauLibelleLongLt}" />
+						</h4>
+						<h4>
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}" />
+						</h4>
+						<h4>
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}" />
+						</h4>
+						<h4>
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}" />
+						</h4>
+						<h4>
+							<h:outputText
+								value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}" />
+
+						</h4>
+
+					</div>
+				</div>
+
+
+				<br />
+
+				<div class="tabs-left">
+					<ul class="nav nav-tabs tabs-left" id="demo-pill-nav">
+						<li class="active"><a href="#tab-r1" data-toggle="tab">#{dossierEtudiantMsgs.dossier_etudiant_tabView_dossier_title}
+						</a></li>
+						<li><a href="#tab-r2" data-toggle="tab">#{dossierEtudiantMsgs.dossier_etudiant_tabView_etudiant_title}</a>
+						</li>
+						<li><a href="#tab-r3" data-toggle="tab">#{dossierEtudiantMsgs.dossier_etudiant_tabView_titreacces_title}</a></li>
+
+						<li><a href="#tab-r4" data-toggle="tab">Inscriptions</a></li>
+						<li><a href="#tab-r5" data-toggle="tab">Bilans annuels</a></li>
+						<li><a href="#tab-r6" data-toggle="tab">Transferts</a></li>
+						<li><a href="#tab-r7" data-toggle="tab">#{dossierEtudiantMsgs.dossier_etudiant_tabView_besoin_special_title}</a></li>
+						<li><a href="#tab-r8" data-toggle="tab">#{dossierEtudiantMsgs.dossier_etudiant_tabView_situation_sportive_title}</a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-r1">
+							<ui:include
+								src="/pages/cursus/dossier/DossierEtudiantInfoDetail.xhtml" />
+						</div>
+
+						<div class="tab-pane" id="tab-r2">
+							<ui:include src="/pages/cursus/individu/IndividuDetail.xhtml" />
+						</div>
+						<div class="tab-pane" id="tab-r3">
+							<ui:include
+								src="/pages/cursus/dossier/titreacces/TitreAccessDetail.xhtml" />
+						</div>
+
+						<div class="tab-pane" id="tab-r4">
+
+							<p:dataTable var="current"
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.inscriptionAdministrativeDtos}"
+								emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datatable_list_dossier_inscription_no_result}">
+
+								<f:facet name="header">
+									<h:outputText value="#{dossierEtudiantMsgs.dossier_etudiant_datatable_header_dossier_inscription}" />
+								</f:facet>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_annee_academique}">
+									<h:outputText value="#{current.anneeAcademiqueCode}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_etablissement}">
+									<h:outputText value="#{current.llEtablissementLatin}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_numero_inscription}">
+									<h:outputText value="#{current.numeroInscription}">
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_niveau}">
+									<h:outputText value="#{current.niveauCode}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_cycle}">
+									<h:outputText value="#{current.cycleLibelleLongLt}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_offre_formation}">
+									<h:outputText value="#{current.offreFormationLibelleFr}">
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+
+						</div>
+
+
+						<div class="tab-pane" id="tab-r5">
+							<p:dataTable var="current"
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.bilansSessionDtos}"
+								emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datatable_list_bilan_annuel_no_result}">
+
+								<f:facet name="header">
+									<h:outputText value="#{dossierEtudiantMsgs.dossier_etudiant_datatable_header_bilan_annuel}" />
+								</f:facet>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_annee_academique}">
+									<h:outputText value="#{current.anneeAcademiqueCode}"/>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_etablissement}">
+									<h:outputText value="#{current.refEtablissementLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_niveau}">
+									<h:outputText value="#{current.niveauCode}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_cycle}">
+									<h:outputText value="#{current.cycleLibelleLongLt}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_moyenne}">
+									<h:outputText value="#{utilBean.formatNote(current.moyenne)}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_credit_obtenu}">
+									<h:outputText value="#{utilBean.formatNote(current.creditObtenu)}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_mention}">
+									<h:outputText value="#{current.mentionLibelleFr}">
+									</h:outputText>
+								</p:column>
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_decision}">
+									<h:outputText value="#{current.typeDecisionLibelleFr}">
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="tab-pane" id="tab-r6">
+							<p:dataTable var="current"
+								value="#{dossierEtudiantSearchBean.listDossiersTransfertDto}"
+								emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datatable_list_dossier_transfert_no_result}">
+
+								<f:facet name="header">
+									<h:outputText value="#{dossierEtudiantMsgs.dossier_etudiant_datatable_header_dossier_transfert}" />
+								</f:facet>
+
+								<p:column headerText="#{dossierEtudiantMsgs.dossier_etudiant_datatable_annee_academique}">
+									<h:outputText value="#{current.anneeAcademiqueCode}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Date dépôt">
+									<h:outputText value="#{current.dateDepot}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Typê">
+									<h:outputText value="#{current.refLibelleTransfert}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Motif">
+									<h:outputText value="#{current.refCodeMotifLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Domaine origine">
+									<h:outputText value="#{current.domaineOrigineLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Filière origine">
+									<h:outputText value="#{current.filiereOrigineLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Domaine demandée">
+									<h:outputText value="#{current.domaineDemandeLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Filière origine">
+									<h:outputText value="#{current.filiereDemandeeLibelleFr}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Etab origine">
+									<h:outputText value="#{current.refLibelleEtabOrigine}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Etab acceuil">
+									<h:outputText value="#{current.refLibelleAvisEtabAccueil}">
+									</h:outputText>
+								</p:column>
+
+								<p:column headerText="Avis final">
+									<h:outputText value="#{current.refLibelleAvisFinal}">
+									</h:outputText>
+								</p:column>
+
+							</p:dataTable>
+						</div>
+
+						<div class="tab-pane" id="tab-r7">
+							<ui:include
+								src="/pages/cursus/dossier/handicap/HandicapDetail.xhtml" />
+						</div>
+
+						<div class="tab-pane" id="tab-r8">
+							<ui:include
+								src="/pages/cursus/dossier/sportif/SportifDetail.xhtml" />
+						</div>
+
+					</div>
+				</div>
+
+
+
+
+
+				<!-- 		
+
+				<p:tabView orientation="left" id="tabView" widgetVar="tabviewWidget"
+					style="display:none">
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_dossier_title}">
+						<ui:include
+							src="/pages/cursus/dossier/DossierEtudiantInfoDetail.xhtml" />
+					</p:tab>
+
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_etudiant_title}">
+						<ui:include src="/pages/cursus/individu/IndividuDetail.xhtml" />
+					</p:tab>
+
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_titreacces_title}">
+						<ui:include
+							src="/pages/cursus/dossier/titreacces/TitreAccessDetail.xhtml" />
+					</p:tab>
+
+					<p:tab title="Inscriptions">
+
+						<p:dataTable var="current"
+							value="#{dossierEtudiantSearchBean.listDossiersInscriptionAdministrativeDto}"
+							emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datable_list_dossier_etudiant_no_result}">
+
+							<p:column headerText="Année academique">
+								<h:outputText value="#{current.anneeAcademiqueCode}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Numéro d'inscription">
+								<h:outputText value="#{current.numeroInscription}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Cycle">
+								<h:outputText value="#{current.cycleLibelleLongLt}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Niveau">
+								<h:outputText value="#{current.niveauLibelleLongLt}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Offre de formation">
+								<h:outputText value="#{current.offreFormationLibelleFr}">
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Bilans">
+						<p:dataTable var="current"
+							value="#{dossierEtudiantSearchBean.listBilansSessionDto}"
+							emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datable_list_dossier_etudiant_no_result}">
+
+							<p:column headerText="Année academique">
+								<h:outputText value="">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Cycle">
+								<h:outputText value="#{current.cycleLibelleLongLt}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Niveau">
+								<h:outputText value="#{current.niveauLibelleLongLt}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Mention">
+								<h:outputText value="#{current.mentionLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Moy. Général">
+								<h:outputText value="#{current.moyenneGenerale}">
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Transferts">
+						<p:dataTable var="current"
+							value="#{dossierEtudiantSearchBean.listDossiersTransfertDto}"
+							emptyMessage="#{dossierEtudiantMsgs.dossier_etudiant_datable_list_dossier_etudiant_no_result}">
+
+							<p:column headerText="Année academique">
+								<h:outputText value="#{current.anneeAcademiqueCode}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Date dépôt">
+								<h:outputText value="#{current.dateDepot}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Typê">
+								<h:outputText value="#{current.refLibelleTransfert}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Motif">
+								<h:outputText value="#{current.refCodeMotifLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Domaine origine">
+								<h:outputText value="#{current.domaineOrigineLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Filière origine">
+								<h:outputText value="#{current.filiereOrigineLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Domaine demandée">
+								<h:outputText value="#{current.domaineDemandeLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Filière origine">
+								<h:outputText value="#{current.filiereDemandeeLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Etab origine">
+								<h:outputText value="#{current.refLibelleEtabOrigine}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Etab acceuil">
+								<h:outputText value="#{current.refLibelleAvisEtabAccueil}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Avis final">
+								<h:outputText value="#{current.refLibelleAvisFinal}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_besoin_special_title}">
+						<ui:include
+							src="/pages/cursus/dossier/handicap/HandicapDetail.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_situation_sportive_title}">
+						<ui:include
+							src="/pages/cursus/dossier/sportif/SportifDetail.xhtml" />
+					</p:tab>
+
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_document_title}">
+						<ui:include src="/pages/document/DossierEtudiantDocument.xhtml">
+							<c:set var="entity" value="DossierEtudiant" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.id.toString()} "
+								scope="request" />
+							<ui:param name="entity" value="DossierEtudiant" />
+							<ui:param name="identifiant"
+								value="#{dossierEtudiantSearchBean.dossierEtudiant.id.toString()}" />
+							<ui:param name="editionMode" value="false" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+				-->
+
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+ transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{preparationBudgetFonctionnementMsgs.page_title_enregistrer_validation_ca}
+	</ui:define>
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{ficheBesoinsEnregistrerValidCABean.model}"
+					paginator="false" 
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" 
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{ficheBesoinsEnregistrerValidCABean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.budget} / #{gfcMsgs.identite}">
+						<h:outputText value="#{current.identite}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.budget} / #{gfcMsgs.intitule_fr}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.exercice_budgetaire}">
+						<h:outputText
+							value="#{current.projetBudget.exerciceBudgetaire.annee} - #{current.projetBudget.exerciceBudgetaire.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{preparationBudgetFonctionnementMsgs.projet_budget}">
+						<h:outputText
+							value="#{current.projetBudget.identite} - #{current.projetBudget.description}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{ficheBesoinsEnregistrerValidCABean.crud}"
+					id="tabview">
+
+					<p:tab title="Détail des demandes budgétaires">
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Identité du budget" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText styleClass="value"
+											value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.identite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Inititulé du budget" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText styleClass="value"
+											value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.intituleFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Exercice budgétaire" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText styleClass="value"
+											value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.projetBudget.exerciceBudgetaire.annee} - #{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.projetBudget.exerciceBudgetaire.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Projet de budget" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.projetBudget.identite} - #{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.projetBudget.description}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4">
+										<hr />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="Date de validation" />
+									</p:column>
+									<p:column colspan="3">
+										<p:calendar required="true"
+											value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.dateValidation}"
+											pattern="#{applicationBean.datePattern()}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{gfcMsgs.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:column colspan="3">
+											<p:inputTextarea styleClass="input-large"
+												value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.observation}" />
+										</p:column>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud" styleClass="ui-button-save"
+												actionListener="#{ficheBesoinsEnregistrerValidCABean.saveAction()}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												id="validateBtn" update=":form_crud :form_search"
+												disabled="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.dateValidation eq null}"
+												styleClass="ui-button-validate-o"
+												actionListener="#{ficheBesoinsEnregistrerValidCABean.validateAction()}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud" process="@this"
+												actionListener="#{ficheBesoinsEnregistrerValidCABean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="FicheBesoins" scope="request" />
+							<c:set var="identifiant"
+								value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DetailsFicheBesoins" />
+							<ui:param name="identifiant"
+								value="#{ficheBesoinsEnregistrerValidCABean.ficheBesoinsDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

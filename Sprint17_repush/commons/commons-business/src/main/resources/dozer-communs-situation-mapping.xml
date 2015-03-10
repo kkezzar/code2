@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.SituationEntiteDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.SituationEntite</class-b>
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situation.id</b>
+      		</field> 
+     		<field>
+      					<a>idEntite</a>
+	  					<b>entite.id</b>
+      		</field> 
+      		<field>
+      					<a>codeSituation</a>
+	  					<b>situation.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleSituation</a>
+	  					<b>situation.libelleFr</b>
+      		</field> 
+      		<field>
+      					<a>codeEntite</a>
+	  					<b>entite.code</b>
+      		</field> 
+   </mapping>
+   
+   
+     
+      <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.SituationEntiteOccurrenceDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.SituationEntiteOccurrence</class-b>
+      		
+      			<field>
+      					<a>idSituation</a>
+	  					<b>situationEntite.id</b>
+      			</field>
+      			<field>
+      					<a>libelleSituation</a>
+	  					<b>situationEntite.situation.libelleFr</b>
+      			</field>
+      			 <field>
+      					<a>styleCssSituation</a>
+	  					<b>situationEntite.situation.styleCss</b>
+      			</field>
+      			<field>
+      					<a>refCompteId</a>
+	  					<b>refCompte.id</b>
+      			</field> 
+      			<field>
+      					<a>nomUtilisateur</a>
+	  					<b>refCompte.refIndividu.nomLatin</b>
+      			</field> 
+      				<field>
+      					<a>prenomUtilisateur</a>
+	  					<b>refCompte.refIndividu.prenomLatin</b>
+      			</field> 
+     </mapping>
+
+</mappings>

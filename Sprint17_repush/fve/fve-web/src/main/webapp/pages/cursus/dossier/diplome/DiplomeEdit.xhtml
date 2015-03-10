@@ -1,0 +1,427 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+		
+<p:outputPanel styleClass="infoEtudiantStyle">
+
+	<p:fieldset legend="#{diplomeMsgs.diplome_liste_diplomes_obtenus}" id="tablelistediplomesobtenus">
+			
+		<h:form id="resultlistDiplomForm" >
+		 
+			<p:dataTable resizableColumns="true" id="listeDiplomesData"
+			value="#{diplomeBean.listeDiplomesDto}" var="current"
+			paginator="true" paginatorPosition="bottom" 
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+			<f:param name="ligneId" value="#{diplomeBean.ligneId}" />
+			<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+			<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@this" process="@this" />
+
+
+			<f:facet name="header">
+				<h:outputText value="#{diplomeMsgs.diplome_list_diplomes}    " />
+			</f:facet>
+
+			<p:column sortBy="#{current.diplomeLibelleLongFr}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_intitule_fr}" />
+				</f:facet>
+				<h:outputText value="#{current.diplomeLibelleLongFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.diplomeLibelleLongAr}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_intitule_ar}" />
+				</f:facet>
+				<h:outputText value="#{current.diplomeLibelleLongAr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.anneeObtention}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_annee_obtention}" />
+				</f:facet>
+				<h:outputText value="#{current.anneeObtention}">
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.mentionLibelleLongFr}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_mention}" />
+				</f:facet>
+				<h:outputText value="#{current.mentionLibelleLongFr}">
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:5%" >
+				<f:facet name="header">
+					<h:outputText value="#{commonmsgs.data_table_action_title}" />
+				</f:facet>
+				<p:commandButton id="removeDiplomeButton" icon="ui-icon-trash"
+					title="#{commonmsgs.data_table_action_delete}"
+					update="listeDiplomesData,@([id$=lignesreleveDiplData])" 	
+					actionListener="#{diplomeBean.removeDiplome(current)}">
+
+					<p:confirm header="Confirmation"
+						message="#{diplomeMsgs.diplome_confirm_delete_diplome}"
+						icon="ui-icon-alert" />
+
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+					
+					<p:ajax resetValues="true" update="@([id$=diplomeinfosForm])" 	immediate="true" />
+
+				</p:commandButton>
+
+				<p:commandButton id="updateDiplomButton" icon="ui-icon-pencil"
+					title="#{commonmsgs.data_table_action_update}" immediate="true"
+					ajax="true" update="@([id$=diplomeinfosForm]),@([id$=lignesreleveDiplData])" 
+					actionListener="#{diplomeBean.openDiplome(current)}">
+
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{current.idReleveDeNotes}"/> 
+					<f:param name="diplomeId" value="#{current.id}"/> 
+				</p:commandButton>
+			</p:column>
+ 		
+		</p:dataTable>
+
+	 </h:form>
+	
+	</p:fieldset>
+	
+		<br/>
+			
+	<p:fieldset legend="#{diplomeMsgs.diplome_details}" >
+		
+		<h:form id="diplomeinfosForm" >
+			<p:panelGrid>
+				<p:row>
+				  <p:column>
+				   <p:commandButton id="addDiplomeButton" immediate="true"
+					icon="ui-icon-plusthick" 
+					value="#{diplomeMsgs.diplome_ajout_diplome}">
+
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+
+					<p:ajax resetValues="true" update="diplomeinfosForm,lignesreleveDiplData"
+						immediate="true" />
+				   </p:commandButton>
+				</p:column>
+				 </p:row>
+				     <p:row>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_code}*" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left"
+								value="#{diplomeBean.diplomeDto.code}"
+								label="#{diplomeMsgs.diplome_code}" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_code_required}">
+							</p:inputText>
+						</p:column>
+						
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_etablissement_obtention} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{diplomeBean.diplomeDto.etablissement}"
+								label="#{diplomeMsgs.diplome_etablissement_obtention_required} *" 
+								required="true"
+								requiredMessage="#{diplomeMsgs.diplome_etablissement_obtention}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+				   <p:row>
+				    <p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_titre} *" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu style="text-align: left; width:150px"
+								value="#{diplomeBean.diplomeDto.refCodeDiplome}"
+								label="#{diplomeMsgs.diplome_titre}" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_titre_required} *">
+								
+								<f:selectItem itemLabel="#{diplomeMsgs.diplome_select_diplome}"
+										itemValue="" />
+								<f:selectItems value="#{diplomeBean.listeDiplome}" />
+							</p:selectOneMenu>
+						</p:column>
+					  <p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_mention} *" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu style="text-align: left; width:150px"
+								value="#{diplomeBean.diplomeDto.refCodeMention}"
+								label="#{diplomeMsgs.diplome_mention} *" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_mention_required}">
+								
+								<f:selectItem itemLabel="#{diplomeMsgs.diplome_select_mention}"
+										itemValue="" />
+								<f:selectItems value="#{diplomeBean.listeMention}" />
+							</p:selectOneMenu>
+						</p:column>
+				      </p:row>
+					
+					<p:row>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_specialite}" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{diplomeBean.diplomeDto.refCodeSpecialite}"
+								label="#{diplomeMsgs.diplome_specialite}">
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_annee_obtention} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:60px"
+								value="#{diplomeBean.diplomeDto.anneeObtention}" 
+								label="#{diplomeMsgs.diplome_annee_obtention}" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_annee_obtention_required}">
+<!-- 								<f:validateLongRange minimum="1900" maximum="#{diplomeBean.presentYear}" /> -->
+							</p:inputText>
+						</p:column>
+					</p:row>
+					
+					 <p:row>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_equivalence}" />
+						</p:column>
+						<p:column>
+							<p:inputTextarea style="text-align: left; width:250px"
+								value="#{diplomeBean.diplomeDto.equivalence}" 
+								label="#{diplomeMsgs.diplome_equivalence}">
+							</p:inputTextarea>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_observation}" />
+						</p:column>
+						<p:column>
+							<p:inputTextarea style="text-align: left; width:250px"
+								value="#{diplomeBean.diplomeDto.observation}" 
+								label="#{diplomeMsgs.diplome_observation}" >
+							</p:inputTextarea>
+						</p:column>
+					</p:row>
+			</p:panelGrid>			
+				
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}" icon="ui-icon-disk"
+							 actionListener="#{diplomeBean.saveDiplome}" id="saveDiplom" 
+							 update="diplomeinfosForm,@([id$=listeDiplomesData])">
+							
+								<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+								<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+								<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+								<f:param name="ligneId" value="#{diplomeBean.ligneId}" />
+								
+							</p:commandButton>
+							
+						    <p:commandButton value="#{commonmsgs.bouton_retour}"
+								icon="ui-icon-arrowthick-1-w" action="#{dossierEtudiantBean.cancel}" immediate="true">
+								<f:param name="dossierEtudiantId" value="#{dossierEtudiantBean.dossierEtudiantId}" />
+			                </p:commandButton>
+                
+		 
+		  <p:dataTable resizableColumns="true" id="lignesreleveDiplData"
+			value="#{diplomeBean.listeLignesReleveNotes}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="7"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+			
+			<f:param name="releveId" value="#{diplomeBean.releveId}"/>
+			<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+			<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+
+			<p:ajax event="page" update="lignesreleveDiplData" />
+			<p:ajax event="sort" update="lignesreleveDiplData" process="lignesreleveDiplData" />
+
+
+			<f:facet name="header">
+				<h:outputText value="#{diplomeMsgs.diplome_list_notes}    " />
+
+				<p:commandButton id="addLigneDiplomButton" immediate="true"   rendered="#{diplomeBean.diplomeId!=null}"
+					icon="ui-icon-plusthick" onclick="PF('dlgAddLigneDiplome').show()">
+				
+
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+					<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+
+					<p:ajax resetValues="true" update="@([id$=diplAddLigneForm])"
+						immediate="true" />
+
+				</p:commandButton>
+
+			</f:facet>
+
+			<p:column sortBy="#{current.libelleMatiereFr}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_releve_matiere_fr}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleMatiereFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.libelleMatiereAr}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_releve_matiere_ar}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleMatiereAr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.note}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_releve_note}" />
+				</f:facet>
+				<h:outputText value="#{current.note}">
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{current.noteBase}">
+				<f:facet name="header">
+					<h:outputText value="#{diplomeMsgs.diplome_releve_note_base}" />
+				</f:facet>
+				<h:outputText value="#{current.noteBase}">
+				</h:outputText>
+			</p:column>
+
+
+			<p:column style="width:5%" >
+				<f:facet name="header">
+					<h:outputText value="#{commonmsgs.data_table_action_title}" />
+				</f:facet>
+				<p:commandButton id="removeLigneDiplButton" icon="ui-icon-trash"
+					title="#{commonmsgs.data_table_action_delete}"
+					update="lignesreleveDiplData"
+					actionListener="#{diplomeBean.removeLigne(current)}">
+
+					<p:confirm header="Confirmation"
+						message="#{diplomeMsgs.diplome_confirm_delete_ligne_releve}"
+						icon="ui-icon-alert" />
+
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+					<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+
+				</p:commandButton>
+
+				<p:commandButton id="updateLigneDiplomButton" icon="ui-icon-pencil"
+					title="#{commonmsgs.data_table_action_update}" immediate="true"
+					ajax="true" update="@([id$=diplAddLigneForm])"
+					onsuccess="PF('dlgAddLigneDiplome').show()" 
+					actionListener="#{diplomeBean.openLigne(current)}">
+
+					<f:param name="ligneId" value="#{current.id}" />
+					<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+					<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+
+				</p:commandButton>
+			</p:column>
+ 		
+		 </p:dataTable>
+
+	   </h:form>
+	
+	</p:fieldset>
+	
+	<p:dialog id="dlgAddLigneDiplome" widgetVar="dlgAddLigneDiplome" resizable="false"
+		modal="true" appendTo="@(body)" closable="true" showHeader="true"
+		header="#{diplomeMsgs.diplome_ajout_ligne_releve}">
+
+<!-- 		<p:messages id="messagesdlgDipl" showSummary="true" autoUpdate="true" 	closable="true" /> -->
+
+		<h:form id="diplAddLigneForm">
+
+				<p:panelGrid >
+					<p:row>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_releve_matiere_fr} *" />
+						</p:column>
+						<p:column>
+							<p:inputText  style="text-align: left; width:150px"
+								value="#{diplomeBean.ligneReleveDto.libelleMatiereFr}"
+								label="#{diplomeMsgs.diplome_releve_matiere_fr} *" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_releve_matiere_fr_required}">
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_releve_matiere_ar} *" />
+						</p:column>
+						<p:column>
+							<p:inputText  style="text-align: right; width:150px"  dir="rtl"
+								value="#{diplomeBean.ligneReleveDto.libelleMatiereAr}"
+								label="#{diplomeMsgs.diplome_releve_matiere_ar} *" 
+								required="true"
+								requiredMessage="#{diplomeMsgs.diplome_releve_matiere_ar_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_releve_note} *" />
+						</p:column>
+						<p:column>
+							<p:inputText  style="text-align: left; width:50px"
+								value="#{diplomeBean.ligneReleveDto.note}"
+								label="#{diplomeMsgs.diplome_releve_note}" required="true"
+								requiredMessage="#{diplomeMsgs.diplome_releve_note_required}">
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{diplomeMsgs.diplome_releve_note_base} *" />
+						</p:column>
+						<p:column>
+							<p:inputText  style="text-align: left; width:50px"
+								value="#{diplomeBean.ligneReleveDto.noteBase}"
+								label="#{diplomeMsgs.diplome_releve_note_base}" 
+								required="true"
+								requiredMessage="#{diplomeMsgs.diplome_releve_note_base_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+
+				<br />
+
+				<p:panelGrid id="panelButtonligneaddDip">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								icon="ui-icon-disk"
+								update="@([id$=lignesreleveDiplData])" 
+								actionListener="#{diplomeBean.saveLigne}"
+								oncomplete="if(!args.validationFailed) dlgAddLigneDiplome.hide()">
+								
+                                  	<f:param name="ligneId" value="#{diplomeBean.ligneId}" />
+                              		<f:param name="releveId" value="#{diplomeBean.releveId}"/> 
+                              		<f:param name="dossierEtudiantId" value="#{diplomeBean.dossierEtudiantId}"/>
+                              		<f:param name="diplomeId" value="#{diplomeBean.diplomeId}"/> 
+							</p:commandButton>
+
+						</p:column>
+
+					</p:row>
+				</p:panelGrid>
+
+		</h:form>
+	
+	</p:dialog>
+		
+  </p:outputPanel>
+</ui:composition> 	

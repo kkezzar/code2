@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{positionMgs.valider_resultat_chgt_position_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/position/DemandeChangementSearch.xhtml" >
+					<ui:param name="renderedNouveau"  value="false"/>
+					<ui:param name="nameMBean"  value="#{validerChangementPositionMBean}"/>
+					<ui:param name="updateAjax"  value=":pnl_detail"/>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{validerChangementPositionMBean.changementPositionDto.dossierEmployeDto != null}">
+					<h:form id="form_demande_changement_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="demandeChangement" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" >
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{positionMgs.label_demande_changement}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe} " />
+									</p:column>
+									<p:column style="width:75%">
+											<p:commandLink id="employe"
+												onclick="PF('employeDetailDialog').show()"
+												immediate="true">
+												<h:outputText
+													value="#{validerChangementPositionMBean.changementPositionDto.dossierEmployeDto.refIndividuDto.nomLatin} #{validerChangementPositionMBean.changementPositionDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+													styleClass="value" />
+											</p:commandLink>
+											</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{positionMgs.position_courante} " />
+									</p:column>
+									<p:column style="width:75%">
+										<h:outputText value="
+										#{demandeChangementPositionMBean.dossierEmployeDto.positionCouranteDto == null ? 
+										'En activit&eacute;' : 
+										demandeChangementPositionMBean.dossierEmployeDto.positionCouranteDto.nomenclatureByPositionDto.libelleLongFr}" 
+										styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{positionMgs.label_demande} " />
+									</p:column>
+									<p:column style="width:75%">
+											<p:commandLink id="demande"
+												onclick="PF('demandeDetailDialog').show()"
+												immediate="true">
+												<h:outputText
+													value="#{validerChangementPositionMBean.changementPositionDto.nomenclatureByPositionDto.libelleLongFr}"
+													styleClass="value" />
+											</p:commandLink>
+											</p:column>
+								</p:row>
+								<p:row rendered="#{validerChangementPositionMBean.changementPositionDto.nomenclatureByMotifDto != null}">
+									<p:column style="width:25%">
+										<h:outputLabel value="#{positionMgs.label_motif} " />
+									</p:column>
+									<p:column style="width:75%">
+										<h:outputText
+											value="#{validerChangementPositionMBean.changementPositionDto.nomenclatureByMotifDto.libelleLongFr}"
+											styleClass="value" />	
+									</p:column>
+								</p:row>
+								<p:row rendered="#{validerChangementPositionMBean.changementPositionDto.structureDto != null}">
+									<p:column style="width:25%">
+										<h:outputLabel value="#{positionMgs.label_organisme_detachement} " />
+									</p:column>
+									<p:column style="width:75%">
+										<h:outputText
+											value="#{validerChangementPositionMBean.changementPositionDto.structureDto.llStructureLatin}"
+											styleClass="value" />	
+									</p:column>
+								</p:row>
+	
+<!-- 						</p:panelGrid> -->
+<!-- 						<p:panelGrid id="resultatsDemande" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" > -->
+							<p:row>
+								<p:column colspan="4" styleClass="title">
+									<h:outputText value="#{positionMgs.label_demande_resultats}" styleClass="value"/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText value="#{positionMgs.label_date_resultat}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{validerChangementPositionMBean.changementPositionDto.dateResultat}" styleClass="value">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText value="#{positionMgs.label_date_effective}" styleClass="required"/>
+								</p:column>
+								<p:column>
+									<p:calendar id="dateEffective" 
+										navigator="true" 
+										required="true" 
+										requiredMessage="#{positionMgs.msg_date_effective_required}"
+										value="#{validerChangementPositionMBean.changementPositionDto.dateDebut}"/>
+								</p:column>
+							</p:row>
+							
+					</p:panelGrid>
+				<p:toolbar id="demandeChangementToolBar" styleClass="toolBarMesrs" rendered="#{validerChangementPositionMBean.changementPositionDto.dossierEmployeDto != null}">
+					<p:toolbarGroup>
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+							id="saveDemandeDemssionBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{validerChangementPositionMBean.onValidate}">
+							<p:confirm header="Confirmation"
+								message="Etes-vous sur de vouloir valider Le changement effectif ?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:toolbarGroup>
+					
+			</p:toolbar>
+	</p:panelGrid>
+
+		
+				
+
+	</h:form>
+
+
+
+					
+				
+			</p:outputPanel>
+			<p:dialog position="center" appendTo="@(body)" header="#{positionMgs.label_demande}"
+				id="demandeDetailDialog" widgetVar="demandeDetailDialog"
+				modal="true" resizable="false">
+					<ui:include
+						src="/pages/position/DemandeDetail.xhtml">
+							<ui:param name="dto" value="#{validerChangementPositionMBean.changementPositionDto}"/>
+					</ui:include>
+			</p:dialog>
+			<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{validerChangementPositionMBean.changementPositionDto.dossierEmployeDto}"/>
+						</ui:include>
+					</p:dialog>
+		</p:outputPanel>
+
+		
+</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

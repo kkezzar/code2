@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+
+ 	
+	
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>status</from-outcome>
+			<to-view-id>/pages/referentiel/statut.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rubrique</from-outcome>
+			<to-view-id>/pages/referentiel/Rubrique.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<application>
+		
+	
+		<!-- GRH resources bundle -->
+		
+		<resource-bundle>
+			<base-name>locale/grh-resources</base-name>
+			<var>grhmsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale/dossierEmployeMessages</base-name>
+			<var>dossierEmployemsgs</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>locale/rubriqueMessages</base-name>
+			<var>rubriquemsgs</var>
+		</resource-bundle>
+
+		
+		<resource-bundle>
+			<base-name>locale/corpsMessages</base-name>
+			<var>corpsmsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/gradeMessages</base-name>
+			<var>grademsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/categorieMessages</base-name>
+			<var>categoriemsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/posteSuperieurMessages</base-name>
+			<var>postesupmsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/grilleIndiciaireMessages</base-name>
+			<var>grilleindicairemsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/besoinRecrutementMessages</base-name>
+			<var>besoinRecrutementmsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/avancementEchelonMessages</base-name>
+			<var>avancementEchelonmsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/candidatEmployeMessages</base-name>
+			<var>candidatEmployemsgs</var>
+		</resource-bundle>
+      <resource-bundle>
+			<base-name>locale/stageMessages</base-name>
+			<var>stagemsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/finActiviteMessages</base-name>
+			<var>finActiviteMgs</var>
+		</resource-bundle>
+		 <resource-bundle>
+			<base-name>locale/titularisationMessages</base-name>
+			<var>titularisationMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/mutationMessages</base-name>
+			<var>mutationMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/positionMessages</base-name>
+			<var>positionMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/congeEmployeMessages</base-name>
+			<var>congeEmployeMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/absenceMessages</base-name>
+			<var>absenceMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/suiviMedicalMessages</base-name>
+			<var>suiviMedicalMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/competenceMessages</base-name>
+			<var>competenceMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/posteMessages</base-name>
+			<var>posteMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/formationMessages</base-name>
+			<var>formationMgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale/evaluationMessages</base-name>
+			<var>evalEmpMsgs</var>
+		</resource-bundle>
+	</application>
+</faces-config>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{evalEmpMsgs.enrg_contestation_employe_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_employe_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+		
+						<p:inputText placeholder="#{dossierEmployemsgs.dossier_employe_nom}"
+							value="#{contestationEvaluationMBean.employeSearchDto.refIndividuDto.nomLatin}"/>
+						<p:spacer width="5px"></p:spacer>
+		
+						<p:inputText
+							placeholder="#{dossierEmployemsgs.dossier_employe_prenom}"
+							value="#{contestationEvaluationMBean.employeSearchDto.refIndividuDto.prenomLatin}"/>
+						<p:separator />
+		
+						<p:inputText
+							placeholder="#{dossierEmployemsgs.dossier_employe_matricule_employe}"
+							value="#{contestationEvaluationMBean.employeSearchDto.matricule}"/>
+						<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu" process="form_employe_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{contestationEvaluationMBean.onSearchEmploye()}"/>
+		
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+				<p:dataTable var="employe" lazy="true"
+					value="#{contestationEvaluationMBean.employeDtos}"
+					widgetVar="employesTable" rowKey="#{employe.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_employe_no_result}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{contestationEvaluationMBean.onEmployeSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 update=":pnl_detail" />
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:column headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="matricule" 
+						headerText="#{finActiviteMgs.label_matricule}">
+						<h:outputText value="#{employe.matricule}"/>
+					</p:column>
+					<p:column sortBy="refIndividu.nomLatin" 
+						headerText="#{finActiviteMgs.label_employe}">
+						<h:outputText value="#{employe.refIndividuDto.prenomLatin} #{employe.refIndividuDto.nomLatin}" />
+					</p:column>
+					<p:column sortBy="refIndividu.dateNaissance" 
+						headerText="#{dossierEmployemsgs.dossier_employe_date_naissance}">
+						<h:outputText value="#{employe.refIndividuDto.dateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<br></br>
+			
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty contestationEvaluationMBean.employeDto}">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<h:form id="form_evaluation">
+								<p:panelGrid id="evaluationPanel" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{grhmsgs.employe} " />
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:commandLink id="employe"
+												onclick="PF('employeDetailDialog').show()"
+												immediate="true">
+												<h:outputText
+													value="#{contestationEvaluationMBean.employeDto.refIndividuDto.nomLatin} #{contestationEvaluationMBean.employeDto.refIndividuDto.prenomLatin}"
+													styleClass="value" />
+											</p:commandLink>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{evalEmpMsgs.label_date_evaluation} " styleClass="required"/>
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:selectOneMenu id="dateEvaluationSelection" 
+												value="#{contestationEvaluationMBean.evaluationDto.periodeDto.id}">
+												<f:selectItem itemLabel="#{evalEmpMsgs.label_date_evaluation}"/>
+												<f:selectItems value="#{contestationEvaluationMBean.dateEvaluations}"/>
+												<p:ajax onstart="PF('page').block()" 
+													onsuccess="PF('page').unblock()"
+													listener="#{contestationEvaluationMBean.onEvaluationSelected}"
+													process="@this"
+													update=":pnl_Edit"
+												/>
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{evalEmpMsgs.label_date_contestation} " styleClass="required"/>
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:calendar navigator="true" 
+												value="#{contestationEvaluationMBean.evaluationDto.dateContestation}"
+												id="dateContestation" showButtonPanel="true"
+												label="#{evalEmpMsgs.label_date_contestation}" 
+												required="true"
+												requiredMessage="#{evalEmpMsgs.msg_date_contestation_required}"
+												pattern="dd/MM/yyyy"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{evalEmpMsgs.label_objet_contestation}" />
+										</p:column>
+										<p:column>	
+											<p:inputTextarea style="width: 100% ; height: 100px;" value="#{contestationEvaluationMBean.evaluationDto.objetContestation}"/>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<p:panelGrid id="resultatPanel" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" rendered="#{contestationEvaluationMBean.evaluationDto.dateContestation != null}">
+									<p:row>
+										<p:column colspan="4" styleClass="title">
+											<h:outputText value="#{evalEmpMsgs.label_resultat_contestation}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{evalEmpMsgs.label_date_commission}" styleClass="required" />
+										</p:column>
+										<p:column>
+											<p:inputText value="#{contestationEvaluationMBean.evaluationDto.dateCommission}"
+											required="true"
+											requiredMessage="#{evalEmpMsgs.msg_date_commission_required}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</p:inputText>										
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<p:selectOneRadio value="#{contestationEvaluationMBean.evaluationDto.resultat}">
+												<f:selectItem itemLabel="#{finActiviteMgs.label_accepte}" itemValue="true"/>
+												<f:selectItem itemLabel="#{finActiviteMgs.label_refuse}"  itemValue="false"/>
+											</p:selectOneRadio>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{finActiviteMgs.label_motif_refus}" />
+										</p:column>
+										<p:column>
+											<p:inputTextarea style="width: 100% ; height: 100px;" value="#{contestationEvaluationMBean.evaluationDto.motif}"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{evalEmpMsgs.label_note_revisee}" />
+										</p:column>
+										<p:column>
+											<p:inputText value="#{contestationEvaluationMBean.evaluationDto.noteRevise}"/>
+										</p:column>
+									</p:row>
+									
+								</p:panelGrid>
+								<p:toolbar id="contestationToolBar" styleClass="toolBarMesrs" rendered="#{contestationEvaluationMBean.evaluationDto.id != null}">
+									<p:toolbarGroup>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+											id="saveContestationBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+											actionListener="#{contestationEvaluationMBean.onSave}"/>
+									</p:toolbarGroup>
+								</p:toolbar>
+							 </h:form>
+							<p:dialog position="center" appendTo="@(body)" header="Employé"
+							id="employeDetailDialog" widgetVar="employeDetailDialog"
+							modal="true" resizable="false">
+								<ui:include
+									src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+									<ui:param name="dossierEmployeDtoParam"
+										value="#{contestationEvaluationMBean.employeDto}"/>
+								</ui:include>
+							</p:dialog>
+					</p:panelGrid>
+				</p:outputPanel>
+				
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

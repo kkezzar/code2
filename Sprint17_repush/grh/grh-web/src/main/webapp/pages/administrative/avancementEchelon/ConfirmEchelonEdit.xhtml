@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		 #{avancementEchelonmsgs.pnl_enregistrer_title_confirm}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<style>
+.max-duree {
+	background: #F6D8CE !important;
+}
+</style>
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/avancementEchelon/ConfirmEchelonSearch.xhtml">
+				<ui:param name="renderedNouveau" value="true"></ui:param>
+			</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"	rendered="#{not empty avancementEchelonConfirmMBean.propostionAvancementDto}">
+					<h:form id="form_confirm_avancement_echelon_edit">
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="descriptionDossier"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="5" styleClass="title">
+										<h:outputText
+											value="#{avancementEchelonmsgs.pnl_enregistere_title_panel_entity}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{avancementEchelonmsgs.date_proposition}" />
+									</p:column>
+								<p:column>										
+									 <h:outputText  id="dateProposition"  styleClass="value" value="#{avancementEchelonConfirmMBean.propostionAvancementDto.dateProposition}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{avancementEchelonmsgs.intitule}"/>
+									</p:column>
+									<p:column colspan="2">
+										<h:outputText styleClass="value" id="intitule"
+											value="#{avancementEchelonConfirmMBean.propostionAvancementDto.intitule}"
+											style="width:100%">										
+										</h:outputText>
+									</p:column>
+								</p:row>
+                         <p:row >
+				             <p:column> 
+						         <h:outputLabel	value="#{avancementEchelonmsgs.periode_avancement}: " styleClass="value"/>
+					         </p:column>								 
+                              <p:column> 
+						           <h:outputLabel	value="#{avancementEchelonmsgs.annee} " />
+					          </p:column>	 
+				               <p:column>										
+									<h:outputText styleClass="value" id="annee"
+											value="#{avancementEchelonConfirmMBean.propostionAvancementDto.annee}"
+											style="width:100%">										
+										</h:outputText>									
+									</p:column>	
+				               <p:column> 
+						               <h:outputLabel	value="#{avancementEchelonmsgs.mois} " />
+				                </p:column>	
+				                 <p:column>										
+									<h:outputText styleClass="value" id="mois"
+											value="#{avancementEchelonConfirmMBean.propostionAvancementDto.moisDto.libelleCourtFr}"
+											style="width:100%">										
+										</h:outputText>	
+								</p:column>  
+			            	</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel	value="#{avancementEchelonmsgs.duree_minimale} " />
+								</p:column>
+								<p:column colspan="4">
+										<h:outputText id="dureeminechelon"
+											value="#{avancementEchelonConfirmMBean.valeurMinEchelom}&nbsp;#{avancementEchelonmsgs.mois}"	styleClass="value">
+										</h:outputText>
+								</p:column>
+							</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{avancementEchelonmsgs.duree_moyenne} " />
+									</p:column>
+									<p:column colspan="4">
+										<h:outputText id="dureemoyechelon"
+											value="#{avancementEchelonConfirmMBean.valeurMoyEchelom}&nbsp;#{avancementEchelonmsgs.mois}"
+											styleClass="value">
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel	value="#{avancementEchelonmsgs.duree_maximale} " />
+									</p:column>
+									<p:column colspan="4">
+										<h:outputText id="dureemaxechelon"	value="#{avancementEchelonConfirmMBean.valeurMaxEchelom}&nbsp;#{avancementEchelonmsgs.mois}"
+											styleClass="value">
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel	value="#{avancementEchelonmsgs.date_decesion} " styleClass="required"/>
+									</p:column>
+									<p:column colspan="4">
+										<p:calendar id="dateDecision" navigator="true" required="true"	requiredMessage="#{avancementEchelonmsgs.date_decision_required}"
+											value="#{avancementEchelonConfirmMBean.propostionAvancementDto.dateDecision}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:panelGrid id="employeproposeechelonPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column styleClass="title" colspan="4">
+										<h:outputText
+											value="#{avancementEchelonmsgs.employes_proposes_title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable var="employepropose"
+											value="#{avancementEchelonConfirmMBean.listDetailPropostionAvancementDto}"
+											id="employeproposeTable" widgetVar="employeproposeTable"
+											rowKey="#{employepropose.id}"											
+											rowStyleClass="#{avancementEchelonConfirmMBean.valeurMaxEchelom le employepropose.duree ?   'max-duree' : null}"
+											style="margin-top:5px; " resizableColumns="true"
+											paginator="true" rows="5" paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex" selectionMode="single"
+											emptyMessage="#{avancementEchelonmsgs.datable_list_poste_no_result}">																					
+											<p:ajax event="rowSelect"
+												listener="#{avancementEchelonConfirmMBean.onEmployeSelect}"
+												process="@this" update=":pnl_Gerer"
+												oncomplete="PF('employerproposeDialog').show()" />	<f:facet name="header">
+											</f:facet>
+											<p:column headerText="#{avancementEchelonmsgs.numero}"
+												style="width:4%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.matricule}"
+												style="width:13%">
+												<h:outputText
+													value="#{employepropose.dossierEmployeDto.matricule}"
+													style="width:13%">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.employe}"
+												style="width:30%">
+												<h:outputText
+													value="#{employepropose.dossierEmployeDto.refIndividuDto.nomLatin} &nbsp;  #{employepropose.dossierEmployeDto.refIndividuDto.prenomLatin}"
+													style="width:30%">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.corps}"
+												style="width:15%">
+												<h:outputText
+													value="#{employepropose.carriereDto.corpsDto.nomenclatureByIdNomenclatureCorps.libelleLongFr}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.grade}"
+												style="width:15%">
+												<h:outputText
+													value="#{employepropose.carriereDto.gradeDto.nomenclatureDto.libelleLongFr}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.categorie}"
+												style="width:15%">
+												<h:outputText
+													value="#{employepropose.carriereDto.categorieProfessionnelleDto.nomenclatureByCategorieDto.libelleLongFr}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.echelon}"
+												style="width:10%;text-align: center">
+												<h:outputText
+													value="#{employepropose.carriereDto.grilleIndiciaireDto.echlon}"
+													style="width:10%;text-align: center">
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{avancementEchelonmsgs.duree_echelon}"
+												style="width:10%;text-align: center">
+												<h:outputText value="#{employepropose.duree}"
+													style="width:10%;text-align: center">
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{avancementEchelonmsgs.date_effet_propose}"
+												style="width:20%">
+												<h:outputText value="#{employepropose.dateEffetProposee}"
+													style="width:20%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>											
+											<p:column
+												headerText="#{avancementEchelonmsgs.avavancement_echelon}"
+												style="width:15%">
+												<h:outputText
+													value="#{employepropose.grilleIndiciaireDto.echlon}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+ 
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+							<p:toolbar id="propositionechelonInfoToolBar"
+								styleClass="toolBarMesrs">
+								<p:toolbarGroup>
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										styleClass="ui-button-save-o"  id="savepropositionechelonBtn"
+										icon="ui-icon-disk" update=":pnl_Gerer"
+										actionListener="#{avancementEchelonConfirmMBean.onSave}">
+										<p:confirm header="Confirmation"
+											message="#{avancementEchelonmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+									<p:spacer width="10px"></p:spacer>									
+									<p:commandButton value="#{avancementEchelonmsgs.velider}"
+										styleClass="ui-button-valider"
+										id="deletepropositionAvancementBtn" icon="ui-icon-disk"
+										update=":pnl_Gerer"
+										action="#{avancementEchelonConfirmMBean.onValide()}">
+									</p:commandButton>
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.bouton_annuler}"
+										immediate="true" process="@this" id="backBtn"
+										icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+										actionListener="#{avancementEchelonConfirmMBean.init()}">
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+					<h:form id="form_poste_edit">
+                        <p:dialog position="center" appendTo="@(center)"
+						header="#{avancementEchelonmsgs.pnl_confirmer_avancement_employe}"
+						id="employerproposeDialog" widgetVar="employerproposeDialog"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="true"
+						width="850px" height="220px">
+						<p:outputPanel id="pnl-employe" style="width:800px">
+								<p:panelGrid id="confirmationemploye"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.employe} " />
+										</p:column>
+										<p:column colspan="3">											
+										<h:outputText  id="matriculeconfirm" value="#{avancementEchelonConfirmMBean.employeProposeDto.dossierEmployeDto.matricule}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.corps} " />
+										</p:column>
+										<p:column>
+										<h:outputText  id="corpsconfirm"
+												value="#{avancementEchelonConfirmMBean.employeProposeDto.carriereDto.corpsDto.nomenclatureByIdNomenclatureCorps.libelleCourtFr}" styleClass="value"/>
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.grade} " />
+										</p:column>
+										<p:column>
+											<h:outputText  id="gradeconfirm"
+												value="#{avancementEchelonConfirmMBean.employeProposeDto.carriereDto.gradeDto.nomenclatureDto.libelleCourtFr}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.echelon} " />
+										</p:column>
+										<p:column>											
+										<h:outputText  id="echelonconfirm"
+												value="#{avancementEchelonConfirmMBean.employeProposeDto.carriereDto.grilleIndiciaireDto.echlon}" styleClass="value"/>											
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.avavancement_echelon} "   styleClass="required" />
+										</p:column>
+										<p:column>
+											<p:selectOneMenu id="avancement" required="true"
+												requiredMessage="#{avancementEchelonmsgs.avavancement_echelon_required}"
+												value="#{avancementEchelonConfirmMBean.employeProposeDto.grilleIndiciaireDto.id}"
+												label="#{avancementEchelonmsgs.avavancement_echelon}"
+												style="width:70%;">
+												<f:selectItem itemLabel="#{avancementEchelonmsgs.avavancement_echelon}"	itemValue="" />
+												<f:selectItems	value="#{avancementEchelonConfirmMBean.echelons}" />
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel
+												value="#{avancementEchelonmsgs.date_effet_propose} " />
+										</p:column>
+										<p:column>											
+											<h:outputText  id="datePropositionconfirm"  styleClass="value" value="#{avancementEchelonConfirmMBean.employeProposeDto.dateEffetProposee}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>	
+										</p:column>
+										<p:column>
+											<h:outputLabel value="#{avancementEchelonmsgs.confirme} " />
+										</p:column>
+										<p:column>
+											<p:selectBooleanCheckbox value="#{avancementEchelonConfirmMBean.employeProposeDto.confirm}"	style="width:100%" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel	value="#{avancementEchelonmsgs.date_effet_retenue} "/>
+										</p:column>
+										<p:column colspan="3">
+											<p:calendar id="dateretenueconfirm" navigator="true" required="true"
+												requiredMessage="#{avancementEchelonmsgs.date_proposition_required}"
+												value="#{avancementEchelonConfirmMBean.employeProposeDto.dateEffetRetenue}">
+											</p:calendar>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="4">
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save-o" 	id="savePosteRecrutBtn" icon="ui-icon-disk_o"
+										update=":form_confirm_avancement_echelon_edit"	actionListener="#{avancementEchelonConfirmMBean.confirmEmploye()}"
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+										</p:commandButton>
+									</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:outputPanel>
+					</p:dialog>
+							</h:form>
+				</p:outputPanel>
+			</p:outputPanel>
+		</p:outputPanel>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>

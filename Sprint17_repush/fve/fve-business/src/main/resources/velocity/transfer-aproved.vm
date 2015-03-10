@@ -1,0 +1,16 @@
+<html>
+	<body>
+	<pre>
+${civility} ${studentName} ,
+
+Nous avons le plaisir de vous informer que votre demande de transfert vers la fili&egrave;re ${sector} du domaine ${askedDomain}
+en date du ${transferRequestDate} a &eacute;t&eacute; approuv&eacute;e.
+	
+Nous nous tenons &agrave; votre disposition pour toute information compl&eacute;mentaire.
+</pre> 
+<br/>
+<p><em>L'&eacute;quipe FVE.</em></p> 
+
+	
+	</body>
+</html>

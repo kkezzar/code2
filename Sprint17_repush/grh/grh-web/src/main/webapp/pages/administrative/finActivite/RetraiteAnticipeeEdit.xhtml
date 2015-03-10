@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{finActiviteMgs.enrg_dem_retraite_anticip_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/finActivite/DemandeDepartSearch.xhtml" >
+					<ui:param name="renderedNouveau"  value="true"/>
+					<ui:param name="nameMBean"  value="#{retraiteAnticipeeMBean}"/>
+					<ui:param name="updateAjax"  value=":pnl_Gerer"/>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty retraiteAnticipeeMBean.demandeDepartDto}">
+					<h:form id="form_demande_depart_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="demandeDepart" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="2" styleClass="title">
+										<h:outputText value="#{finActiviteMgs.label_demande_depart_anticip}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe} " styleClass="required" />
+									</p:column>
+									<p:column style="width:75%">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											rendered="#{retraiteAnticipeeMBean.dossierEmployeDto != null}"
+											immediate="true">
+											<h:outputText
+												value="#{retraiteAnticipeeMBean.dossierEmployeDto.refIndividuDto.nomLatin} #{retraiteAnticipeeMBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										<p:inputText value="#{retraiteAnticipeeMBean.dossierEmployeDto}"  
+											   required="true" 
+											   requiredMessage="#{mutationMgs.employe_required}" 
+											   rendered="#{retraiteAnticipeeMBean.dossierEmployeDto==null}" 
+											   onclick="PF('dossierEmployeDialogSearch').show()"/>
+										<p:spacer width="10px"/>
+										<p:commandButton id="btnAddEmploye" 
+											rendered="#{retraiteAnticipeeMBean.dossierEmployeDto!=null}"
+											styleClass="ui-button-bleu" title="Ajouter Employé"
+											icon="ui-icon-plusthick" ajax="true" immediate="true"
+											onsuccess="PF('dossierEmployeDialogSearch').show()"/>
+                               
+									</p:column>
+								</p:row>
+								<p:row rendered="#{retraiteAnticipeeMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{finActiviteMgs.label_date_demande}" styleClass="required"/>
+									</p:column>
+									<p:column>
+										<p:calendar id="dateDemande" navigator="true" required="true" requiredMessage="#{finActiviteMgs.msg_date_demande_required}"
+											value="#{retraiteAnticipeeMBean.demandeDepartDto.dateDemande}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{retraiteAnticipeeMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{finActiviteMgs.label_date_demande_depart} " />
+									</p:column>
+									<p:column>
+										<p:calendar id="dateDemandeDepart" navigator="true" value="#{retraiteAnticipeeMBean.demandeDepartDto.dateDepart}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{retraiteAnticipeeMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{finActiviteMgs.label_objet}" styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:inputTextarea id="objet" required="true" requiredMessage="#{finActiviteMgs.msg_objet_required}" style="width:100%;height:50px"
+											value="#{retraiteAnticipeeMBean.demandeDepartDto.objet}">
+										</p:inputTextarea>
+									</p:column>
+								</p:row>
+
+			</p:panelGrid>
+	
+
+
+		
+				<p:toolbar id="demandeDepartToolBar" styleClass="toolBarMesrs" rendered="#{retraiteAnticipeeMBean.dossierEmployeDto != null}">
+					<p:toolbarGroup>
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+							id="saveDemandeDemssionBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{retraiteAnticipeeMBean.onSave}">
+							<p:confirm header="Confirmation"
+								message="#{finActiviteMgs.msg_save_demande_depart_confirm}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:spacer width="10px"></p:spacer>
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" 
+							rendered="#{retraiteAnticipeeMBean.demandeDepartDto.id != null}"
+							id="deleteBesoinrecrutementBtn" icon="ui-icon-trash" update=":pnl_Gerer"
+							actionListener="#{retraiteAnticipeeMBean.onRemove}">
+							<p:confirm header="Confirmation"
+								message="#{finActiviteMgs.msg_delete_demande_depart_confirm}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.bouton_annuler}"
+							immediate="true" process="@this" id="backBtn"
+							icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+							actionListener="#{retraiteAnticipeeMBean.onInit()}"/>
+					</p:toolbarGroup>
+					
+			</p:toolbar>
+		</p:panelGrid>
+	</h:form>
+
+
+
+					
+				
+			</p:outputPanel>
+
+		</p:outputPanel>
+		<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{retraiteAnticipeeMBean.dossierEmployeDto}"/>
+						</ui:include>
+					</p:dialog>
+</p:outputPanel>
+<ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{retraiteAnticipeeMBean}"/>
+			<ui:param name="updateAjax" value=":pnl_Gerer"/>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"/>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"/>
+		</ui:include>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{absenceMsgs.enregistrer_absence_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/absence/AbsenceSearch.xhtml" >
+					<ui:param name="renderedNouveau"  value="true"/>
+					<ui:param name="nameMBean"  value="#{absenceMBean}"/>
+					<ui:param name="updateAjax"  value=":pnl_Gerer"/>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty absenceMBean.absenceDto}">
+					<h:form id="form_autorisation_absence_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="demandeChangement" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" >
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{absenceMsgs.label_absence}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe} " styleClass="required" />
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											rendered="#{absenceMBean.dossierEmployeDto != null}"
+											immediate="true">
+											<h:outputText
+												value="#{absenceMBean.dossierEmployeDto.refIndividuDto.nomLatin} #{absenceMBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										<p:inputText value="#{absenceMBean.dossierEmployeDto}"  
+											   required="true" 
+											   requiredMessage="#{mutationMgs.employe_required}" 
+											   rendered="#{absenceMBean.dossierEmployeDto==null}" 
+											   onclick="PF('dossierEmployeDialogSearch').show()"/>
+										<p:spacer width="10px"/>
+										<p:commandButton id="btnAddEmploye" 
+											rendered="#{absenceMBean.dossierEmployeDto!=null}"
+											styleClass="ui-button-bleu" title="Ajouter Employé"
+											icon="ui-icon-plusthick" ajax="true" immediate="true"
+											onsuccess="PF('dossierEmployeDialogSearch').show()"/>
+                               
+									</p:column>
+								</p:row>
+							
+								<p:row rendered="#{absenceMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_date_debut_absence}" styleClass="required"/>
+									</p:column>
+									<p:column >
+										<p:calendar id="dateDebut" navigator="true" required="true" requiredMessage="#{absenceMsgs.msg_date_debut_absence_required}"
+											value="#{absenceMBean.absenceDto.dateDebut}">
+											<p:ajax event="dateSelect" process="@this" listener="#{absenceMBean.calculJourAbsence}" update="@(.jourOutput)"/>
+										</p:calendar>
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_date_fin_absence}" styleClass="required"/>
+									</p:column>
+									<p:column >
+										<p:calendar id="dateFin" navigator="true" required="true" 
+										requiredMessage="#{absenceMsgs.msg_date_fin_absence_required}"
+										value="#{absenceMBean.absenceDto.dateFin}">
+											<p:ajax event="dateSelect" process="@this" listener="#{absenceMBean.calculJourAbsence}" update="@(.jourOutput)"/>
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{absenceMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_heure_debut}" />
+									</p:column>
+									<p:column>
+										<p:calendar id="heureDebut" 
+											navigator="true" 
+											pattern="HH:mm"
+											timeOnly="true"
+											value="#{absenceMBean.absenceDto.heureDebut}"/>
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_heure_fin}" />
+									</p:column>
+									<p:column>
+										<p:calendar id="heureFin" 
+											navigator="true"
+											pattern="HH:mm"
+											timeOnly="true" 
+											value="#{absenceMBean.absenceDto.heureFin}"/>
+									</p:column>
+								</p:row>
+								<p:row rendered="#{absenceMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_nb_jour_absence}" />
+									</p:column>
+									<p:column>
+										<p:outputLabel styleClass="value jourOutput" id="jourOutput" value="#{absenceMBean.absenceDto.nbreJours}"/>
+									</p:column>
+								</p:row>
+								
+								<p:row rendered="#{absenceMBean.dossierEmployeDto != null}">
+										<p:column>
+											<h:outputLabel value="#{absenceMsgs.label_type_absence}" />
+										</p:column>
+										<p:column colspan="3">
+											<p:selectOneMenu id="typeAbsenceSelection"  
+												value="#{absenceMBean.absenceDto.nomenclatureDto.id}"     
+												label="#{absenceMsgs.label_type_absence}"   style="width: 200px;text-align: center">
+												<f:selectItem itemLabel="--#{absenceMsgs.label_type_absence}--"/>
+												<f:selectItems value="#{absenceMBean.typeAbsences}"/>
+											</p:selectOneMenu>
+										</p:column>
+								</p:row>
+								<p:row rendered="#{absenceMBean.dossierEmployeDto != null}">
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_justifiee}" />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox value="#{absenceMBean.absenceDto.jusitifee}"/>
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{absenceMsgs.label_remuneree}" />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox value="#{absenceMBean.absenceDto.renumeree}"/>
+									</p:column>
+								</p:row>
+			</p:panelGrid>
+
+
+		
+				<p:toolbar id="demandeChangementToolBar" styleClass="toolBarMesrs" rendered="#{absenceMBean.dossierEmployeDto != null}">
+					<p:toolbarGroup>
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+							id="saveAbsenceBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{absenceMBean.onSave}"
+							rendered="#{absenceMBean.dossierEmployeDto.id != null}"/>
+						<p:spacer width="10px"></p:spacer>
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" 
+							rendered="#{absenceMBean.absenceDto.id != null}"
+							id="deleteAbsenceBtn" icon="ui-icon-trash" update=":pnl_Gerer"
+							actionListener="#{absenceMBean.onRemove}" styleClass="ui-button-delete-o"
+							immediate="true">
+							<p:confirm header="Confirmation"
+								message="Etes vous sur de vouloir supprimer l absence"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:spacer width="10px"></p:spacer>
+						<p:commandButton value="Confirmer" 
+							rendered="#{absenceMBean.absenceDto.id != null}"
+							id="confirmAbsenceBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{absenceMBean.onConfirmer}" styleClass="ui-button-confim-o">
+							<p:confirm header="Confirmation"
+								message="Etes vous sur de vouloir confirmer l absence"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.bouton_annuler}"
+							immediate="true" process="@this" id="backBtn"
+							icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+							actionListener="#{absenceMBean.onInit()}"/>
+					</p:toolbarGroup>
+					
+			</p:toolbar>
+		</p:panelGrid>
+	</h:form>
+
+
+
+					
+				
+			</p:outputPanel>
+
+		</p:outputPanel>
+			<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{absenceMBean.dossierEmployeDto}"/>
+						</ui:include>
+					</p:dialog>
+		
+</p:outputPanel>
+		<ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{absenceMBean}"/>
+			<ui:param name="updateAjax" value=":pnl_Gerer"/>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"/>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"/>
+		</ui:include>
+	</ui:define>
+</ui:composition>
+</html>

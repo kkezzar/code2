@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus"
+	xmlns:note="http://java.sun.com/jsf/composite/components/notation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{examenMsgs.examen_panel_gestion_note_eliminatoire_title}
+	</ui:define>
+	<ui:define name="centerContent">
+		<pe:blockUI target="noteForm" widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" closable="true"
+			showSummary="false" life="5000" />
+		<h:form id="noteForm">
+			<note:SearchPlanningExamenComponent
+				planningListenerName="planningChanged"
+				beanName="#{noteEliminatoireBean}" editMode="true"
+				updateForm=":noteForm" />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton id="btnSearch"
+						value="#{commonmsgs.bouton_rechercher}" update="noteForm"
+						style="text-align:left" process="noteForm"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{noteEliminatoireBean.findNoteEliminatoire()}"
+						icon="ui-icon-search">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+			<p:outputPanel rendered="#{noteEliminatoireBean.showDetail}"
+				id="detail">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+							immediate="true">
+							<p:graphicImage name="/images/pdf.png" />
+							<pe:exporter type="pdf" target="noteDataTable"
+								facetBackground="#AAFFBB" datasetPadding="10"
+								fileName="#{noteEliminatoireBean.exportFileName}"
+								orientation="Landscape" encoding="ISO-8859-1" />
+						</h:commandLink>
+						<p:spacer width="20" />
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+							immediate="true">
+							<p:graphicImage name="/images/excel.png" />
+							<pe:exporter type="xlsx" target="noteDataTable"
+								fileName="#{noteEliminatoireBean.exportFileName}" />
+						</h:commandLink>
+					</p:toolbarGroup>
+				
+				</p:toolbar>
+
+				<p:dataTable id="noteDataTable" var="row" styleClass="detailStyle"
+					value="#{noteEliminatoireBean.noteEliminatoireList}"
+					widgetVar="evalDataTable" resizableColumns="true"
+					rowKey="#{row.id}"
+					emptyMessage="#{noteExamenMsgs.note_eliminatoire_data_table_list_result_empty}"
+					rowIndexVar="rowIndex">
+
+					<p:ajax event="sort" update=":noteForm:detail"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						process="@(.groupepedagogiquePanel)" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{noteExamenMsgs.note_eliminatoire_data_table_list_result}" />
+					</f:facet>
+					<p:column
+						headerText="#{noteExamenMsgs.note_eliminatoire_data_table_column_index}"
+						style="width:5%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column width="50%" sortBy="#{row.rattachementMcLibelle}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{noteExamenMsgs.note_eliminatoire_data_table_list_column_mc_libelle}" />
+						</f:facet>
+						<h:outputText value="#{row.rattachementMcLibelle}" />
+					</p:column>
+					<p:column width="15%" sortBy="#{row.rattachementMcCredit}"
+						style="text-align:center">
+						<f:facet name="header">
+							<h:outputText
+								value="#{noteExamenMsgs.note_eliminatoire_data_table_list_column_mc_credit}" />
+						</f:facet>
+						<h:outputText value="#{row.rattachementMcCredit}" />
+					</p:column>
+
+
+
+
+					<p:column width="15%" sortBy="#{row.noteEliminatoire}"
+						style="text-align:center">
+						<f:facet name="header">
+							<h:outputText
+								value="#{noteExamenMsgs.note_eliminatoire_data_table_list_column_note_eliminatoire}" />
+						</f:facet>
+						<h:outputText value="#{row.noteEliminatoire}" />
+					</p:column>
+					<p:column width="15%" sortBy="#{row.noteEliminatoireAjuste}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{noteExamenMsgs.note_eliminatoire_data_table_list_column_note_eliminatoire_ajuste}" />
+						</f:facet>
+						<pe:inputNumber id="note" required="false"
+							style="width:95%;border: none; background: #ffffff;color: black;"
+							requiredMessage="#{noteExamenMsgs.note_eliminatoire_data_table_list_column_note_eliminatoire_ajuste_required}"
+							minValue="0.00" maxValue="20" decimalSeparator="."
+							value="#{row.noteEliminatoireAjuste}">
+						</pe:inputNumber>
+						<h:outputText value="" />
+					</p:column>
+				</p:dataTable>
+
+
+
+				<br />
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+							update="noteForm" style="text-align:left" process="noteForm"
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{noteEliminatoireBean.save()}"
+							icon="ui-icon-disk">
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
+

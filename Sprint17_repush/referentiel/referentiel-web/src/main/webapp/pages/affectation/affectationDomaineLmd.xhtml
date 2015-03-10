@@ -1,0 +1,172 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{affectationMgrBean.domaineLMDCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="affectationDomaineFormId" prependId="false"
+		dir="#{localeBean.dir}">
+		<pe:blockUI target="affectationDomaineData" widgetVar="affDomWidget">
+			<h:graphicImage value="/images/ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:dataTable id="affectationDomaineData" styleClass="affDomOutPanel"
+			paginator="true" paginatorPosition="bottom" dir="#{localeBean.dir}"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectationMgrBean.listRefAffectationDomaineLMDDto}"
+			var="current">
+
+			<f:facet name="header">
+				<h:outputText dir="#{localeBean.dir}"
+					value="#{affectationmsgs.affectation_groupes_domaines}      " />
+				<p:commandButton id="addDomaineButton"
+					actionListener="#{affectationMgrBean.beforeAdd}" process="@this"
+					onstart="PF('affDomWidget').block()"
+					onsuccess="PF('affDomWidget').unblock()" icon="ui-icon-plusthick"
+					oncomplete="PF('dlgAffecterDomaineLMD').show()" />
+			</f:facet>
+			
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.affDomOutPanel)"
+				process="@(.affDomOutPanel)" />
+
+			<p:column sortBy="#{current.identifiantDomaine}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_code_domaine}" />
+				</f:facet>
+				<h:outputText value="#{current.identifiantDomaine}" />
+			</p:column>
+
+
+			<p:column sortBy="#{current.lcDomaine}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_domaine}" />
+				</f:facet>
+				<h:outputText value="#{current.lcDomaine} - #{current.llDomaine}" />
+			</p:column>
+
+			<p:column sortBy="#{current.dateDebut}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_debut}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{current.dateFin}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+				</f:facet>
+				<h:outputText value="#{current.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{affecDomaineLMDCrudBean.deleteAllow}">
+				<p:commandButton id="removeDomaineButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					onstart="PF('affDomWidget').block()"
+					onsuccess="PF('affDomWidget').unblock()"
+					actionListener="#{affectationMgrBean.deleteDomaineLMD(current)}"
+					process="@(.affDomOutPanel)" update="@(.affDomOutPanel)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+					
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+
+	<p:dialog header="#{affectationmsgs.affectation_domaine_title}" closeOnEscape="true" 
+		widgetVar="dlgAffecterDomaineLMD" modal="true" resizable="false" 
+		appendTo="@(body)" width="650" height="130">
+		<h:form id="dlgAffecterDomaineLMDForm">
+			<p:panelGrid id="descriptionDomaineAffecté"
+				styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_domaine} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="selectDomaine"
+							style="text-align: left;width:100%"
+							value="#{affectationMgrBean.refAffectationDto.idDomaine}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_selection_domaine}"
+							required="true"
+							requiredMessage="#{affectationmsgs.affectation_domaine_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_domaine}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefDomaineLMDDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_debut} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" binding="#{domFirstDate}"
+							value="#{affectationMgrBean.refAffectationDto.dateDebut}"
+							id="debutDom" showButtonPanel="true" validator="dateValidator"
+							label="#{affectationmsgs.affectation_date_debut}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_debut_required}"
+							pattern="dd/MM/yyyy" />
+
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" validator="dateValidator"
+							value="#{affectationMgrBean.refAffectationDto.dateFin}"
+							id="finDom" showButtonPanel="true"
+							label="#{affectationmsgs.affectation_date_fin}" required="false"
+							requiredMessage="#{affectationmsgs.affectation_fin_required}"
+							pattern="dd/MM/yyyy">
+							<f:attribute name="firstDate" value="#{domFirstDate}" />
+						</p:calendar>
+
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{affectationMgrBean.addDomaineLMD('dlgAffecterDomaineLMD')}"
+						update="@(.affDomOutPanel)">
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							immediate="true" icon="ui-icon-close"
+							oncomplete="dlgAffecterDomaineLMD.hide()" />
+					</p:column>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+		</h:form>
+	</p:dialog>
+
+
+
+</ui:composition>

@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+
+		<p:panel header="#{commonmsgs.menu_individus}" style="border:0;">
+			<h:form id="searchForm"  
+			         onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchBtn').click(); return false;}">
+
+				<p:blockUI trigger="searchBtn,newIndividu,individuData:readButton"
+					block="searchForm">
+					<h:graphicImage value="/images/ajax-loader1.gif"
+						style="vertical-align: middle;" />
+				</p:blockUI>
+				
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}" immediate="true"
+							id="newIndividu" icon="ui-icon-document"
+							action="#{individuMgrBean.toNew}"
+							rendered="#{individuDroitBean.createAllow}">
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="individuData"
+								fileName="listeDesContrats" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="nameInput" />
+						<p:panelGrid styleClass="noBorder1">
+							<p:row>
+								<p:column>
+									<h:outputText value="#{individumsgs.individu_search_name}" />
+								</p:column>
+								<p:column>
+									<p:inputText value="#{individuSearchBean.searchDto.nomLatin}" id="nameInput"
+										style="width:200px" rendered="#{individuDroitBean.readAllow}"/>
+									<p:watermark for="nameInput"
+										value="#{individumsgs.watermark_find_with_name}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{individumsgs.individu_search_surname}" />
+								</p:column>
+								<p:column>
+									<p:inputText value="#{individuSearchBean.searchDto.prenomLatin}"
+										id="surNameInput"
+										style="width:200px" rendered="#{individuDroitBean.readAllow}"/>
+									<p:watermark for="surNameInput"
+										value="#{individumsgs.watermark_find_with_surname}" />
+								</p:column>
+								<p:column>
+									<p:commandButton update=":searchForm" type="submit"
+										id="searchBtn" icon="ui-icon-search"
+										rendered="#{individuDroitBean.readAllow}"
+										actionListener="#{individuSearchBean.find}">
+									</p:commandButton>
+								</p:column>
+								<p:column>
+									<p:separator />
+									<p:commandLink id="rechercheAvc" immediate="true"
+										onclick="PF('dlgSearch').show()"
+										rendered="#{individuDroitBean.readAllow}">
+										<h:outputText value="#{commonmsgs.button_advanced_search}" />
+									</p:commandLink>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="individuData"
+					rendered="#{individuSearchBean.individuModel!=null}"
+					value="#{individuSearchBean.individuModel}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+					lazy="true">
+
+					<f:facet name="header">
+						<h:outputText value="#{individumsgs.individu_liste_individu}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_identifiant}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+					<p:column sortBy="#{current.nomLatin}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_nom_latin}" />
+						</f:facet>
+
+						<h:outputText value="#{current.nomLatin}" />
+					</p:column>
+					<p:column sortBy="#{current.prenomLatin}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_prenom_latin}" />
+						</f:facet>
+
+						<h:outputText value="#{current.prenomLatin}">
+						</h:outputText>
+					</p:column>
+
+
+					<p:column sortBy="#{current.nomArabe}" width="15%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_nom_arabe}" />
+						</f:facet>
+
+						<h:outputText value="#{current.nomArabe}"
+							style="text-align: right" />
+					</p:column>
+					<p:column sortBy="#{current.prenomArabe}" width="15%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_prenom_arabe}" />
+						</f:facet>
+						<h:outputText value="#{current.prenomArabe}"
+							style="text-align: right">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.dateNaissance}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{individumsgs.individu_date_naissance}" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton" immediate="true"
+							onstart="PF('blockUI').block()"
+							oncomplete="PF('blockUI').unblock()"
+							action="#{individuSearchBean.toDetails(current)}" icon="ui-icon-document"
+							title="#{commonmsgs.button_consulter}"
+							rendered="#{individuDroitBean.createAllow}">
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton" 
+							onstart="PF('blockUI').block()"
+							oncomplete="PF('blockUI').unblock()"
+							action="#{individuSearchBean.toEdit(current)}" icon="ui-icon-pencil"
+							title="#{commonmsgs.button_update}"
+							rendered="#{individuDroitBean.editAllow}">
+						</p:commandButton>
+						<pe:blockUI target=":searchForm" widgetVar="blockUI">
+							<h:graphicImage value="/images/ajax-loader1.gif"
+								style="vertical-align: middle;" />
+						</pe:blockUI>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</p:panel>
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			appendTo="@(body)">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{individumsgs.individu_identifiant}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="identifiantSearch" style="text-align: left"
+								value="#{individuSearchBean.searchDto.identifiant}"
+								label="#{individumsgs.individu_identifiant}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{individumsgs.individu_nom_latin}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="nomLtSearch" style="text-align: left"
+								value="#{individuSearchBean.searchDto.nomLatin}"
+								label="#{individumsgs.individu_nom_latin}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{individumsgs.individu_prenom_latin}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="prenomLtSearch" style="text-align: left"
+								value="#{individuSearchBean.searchDto.prenomLatin}"
+								label="#{individumsgs.individu_prenom_latin}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{individumsgs.individu_nom_arabe}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="nomarabeSearch" style="text-align: left"
+								value="#{individuSearchBean.searchDto.nomArabe}"
+								label="#{individumsgs.individu_nom_arabe}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{individumsgs.individu_prenom_arabe}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="prenomarabeSearch" style="text-align: left"
+								value="#{individuSearchBean.searchDto.prenomArabe}"
+								label="#{individumsgs.individu_prenom_arabe}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					actionListener="#{individuSearchBean.find}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.DossierEmploye
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.DossierEmployeDto
+		</class-b>
+		<field>
+			<a>refIndividu</a>
+			<b>refIndividuDto</b>
+		</field>
+		<field>
+			<a>refEtablissement</a>
+			<b>refEtablissementDto</b>
+		</field>
+		<field>
+			<a>refStructure</a>
+			<b>refStructureDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByTypePermis</a>
+			<b>nomenclatureByTypePermisDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByTypeCompte</a>
+			<b>nomenclatureByTypeCompteDto</b>
+		</field>
+		<field>
+			<a>enfants</a>
+			<b>enfantDtos</b>
+		</field>
+		<field>
+			<a>distinctions</a>
+			<b>distinctionDtos</b>
+		</field>
+		<field>
+			<a>conjoints</a>
+			<b>conjointDtos</b>
+		</field>
+		<field>
+			<a>diplomeEmployes</a>
+			<b>diplomeEmployeDtos</b>
+		</field>
+		<field>
+			<a>stages</a>
+			<b>stageDtos</b>
+		</field>
+		<field>
+			<a>candidatEmploye</a>
+			<b>candidatEmployeDto</b>
+		</field>
+		<field>
+			<a>situationEntite</a>
+			<b>situationEntiteDto</b>
+		</field>
+		<field>
+			<a>finActivites</a>
+			<b>finActiviteDtos</b>
+		</field>
+		<field>
+			<a>carrieres</a>
+			<b>carriereDtos</b>
+		</field>
+		<field>
+			<a>carriereCourante</a>
+			<b>carriereCouranteDto</b>
+		</field>
+		<field>
+			<a>currentPosition</a>
+			<b>positionCouranteDto</b>
+		</field>
+		<field>
+			<a>changementPositions</a>
+			<b>positionDtos</b>
+		</field>
+		<field>
+			<a>connaissances</a>
+			<b>connaissanceDtos</b>
+		</field>
+		<field>
+			<a>habiletes</a>
+			<b>habileteDtos</b>
+		</field>
+		<field>
+			<a>niveauCompetence.id</a>
+			<b>niveauCompetenceDto.id</b>
+		</field>
+		<field>
+			<a>niveauCompetence.libelleLongFr</a>
+			<b>niveauCompetenceDto.libelleLongFrRef</b>
+		</field>
+		<field>
+			<a>niveauQualification.id</a>
+			<b>niveauQualificationDto.id</b>
+		</field>
+		<field>
+			<a>niveauQualification.libelleLongFr</a>
+			<b>niveauQualificationDto.libelleLongFrRef</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.Enfant
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.EnfantDto
+		</class-b>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByLienFiliation</a>
+			<b>nomenclatureByLienFiliationDto</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.Distinction
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.DistinctionDto
+		</class-b>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByDistinction</a>
+			<b>nomenclatureByDistinctionDto</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.Conjoint
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.ConjointDto
+		</class-b>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>refIndividu</a>
+			<b>refIndividuDto</b>
+		</field>
+		
+		<field>
+			<a>nomenclatureByStatut</a>
+			<b>nomenclatureByStatutDto</b>
+		</field>
+		<field>
+			<a>refStructure</a>
+			<b>refStructureDto</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.DiplomeEmploye
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.DiplomeEmployeDto
+		</class-b>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByTypeDiplome</a>
+			<b>nomenclatureByTypeDiplomeDto</b>
+		</field>
+		<field>
+			<a>refEtablissement</a>
+			<b>refEtablissementDto</b>
+		</field>
+	</mapping>
+
+</mappings>
+
+

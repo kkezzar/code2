@@ -1,0 +1,707 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+	 #{inscriptionAdministrativeNouveauCycleMsgs.dossier_inscription_page_title_gestion}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="right">
+
+						<!-- <p:selectOneMenu id="console"
+							value="#{dossierInscriptionNouveauCycleMBean.idSelectedConcours}"
+							style="margin-bottom:-8px">
+							<f:selectItem itemLabel="Choisir un concours" itemValue="" />
+							<f:selectItems
+								value="#{dossierInscriptionNouveauCycleMBean.listeItemsConcours}" />
+							<p:ajax
+								listener="#{dossierInscriptionNouveauCycleMBean.handleConcoursChange}"
+								event="valueChange" update=":form_crud form_search" />
+
+						</p:selectOneMenu>
+						<p:separator /> -->
+
+						<p:inputText id="sNIN" placeholder="NIN" value="#{dossierInscriptionNouveauCycleMBean.sNIN}" />
+						<p:separator />
+						<p:inputText id="sNom" placeholder="Nom" value="#{dossierInscriptionNouveauCycleMBean.sNom}" />
+						<p:spacer height="2px"></p:spacer>
+						<p:inputText id="sPrenom" placeholder="Prénom" value="#{dossierInscriptionNouveauCycleMBean.sPrenom}" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search" update="form_search :form_crud :form_view" styleClass="ui-button-bleu"
+							title="Rechercher" actionListener="#{dossierInscriptionNouveauCycleMBean.searchAction()}" 
+							onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()"></p:commandButton>
+<!-- 						<p:commandButton id="rechercheAvc" value="Recherche avancée"
+							styleClass="ui-button-bleu-o" title="Recherche avancée">
+						</p:commandButton> -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable"
+					value="#{dossierInscriptionNouveauCycleMBean.listeConcoursDto}"
+					var="current" rowKey="#{current.id}" paginator="true"
+					selectionMode="single" lazy="true" 
+					rows="5" 
+					rowsPerPageTemplate="5,10,50,100" 
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+					paginatorPosition="bottom" 
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossierInscriptionNouveauCycleMBean.onRowSelectConcours}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_view" />
+
+					<!-- 					<p:column headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_annee_academique}">
+						<h:outputText value="#{current.libelleAnneeAcademique1}/#{current.libelleAnneeAcademique2}">
+						</h:outputText>
+					</p:column>  -->
+
+					<p:column headerText="Type">
+						<h:outputText value="#{current.typeConcoursCode}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Intitulé">
+						<h:outputText value="#{current.intituleLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Offre de formation">
+						<h:outputText
+							value="#{current.ouvertureOffreFormationDto.ofLibelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date début">
+						<h:outputText value="#{current.dateDebut}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date fin">
+						<h:outputText value="#{current.dateFin}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date pub. des résultats">
+						<h:outputText value="#{current.datePublicationResultats}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+				<p:panelGrid
+					styleClass="ui-panelgrid-full-width ui-panelgrid-form-no-border ui-panelgrid-detail"
+					rendered="#{dossierInscriptionNouveauCycleMBean.view}">
+					<p:row>
+						<p:column colspan="4" styleClass="title">
+							<h:outputText value="Détail du concours" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="Année academique" style="width:250px" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.libelleAnneeAcademique1}/#{dossierInscriptionNouveauCycleMBean.concoursDto.libelleAnneeAcademique2}">
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Type" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.typeConcoursCode}">
+							</h:outputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="Intitulé" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.intituleLatin}">
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Intitulé arabe" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.intituleArabe}">
+							</h:outputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="Offre de formation" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.ouvertureOffreFormationDto.ofLibelleLongFr}">
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Cycle" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.ouvertureOffreFormationDto.cycleLibelleLongLt}">
+							</h:outputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="Date début" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.dateDebut}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Date fin" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.dateFin}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="Date publication de la liste des condidats" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.datePublicationListeCandidats}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Date publication des résultats" />
+						</p:column>
+						<p:column styleClass="value">
+							<h:outputText
+								value="#{dossierInscriptionNouveauCycleMBean.concoursDto.datePublicationResultats}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="title">
+							<h:outputText value="Liste des étudiants admis" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+
+							<p:dataTable id="ResultSearchDataTable"
+								value="#{dossierInscriptionNouveauCycleMBean.listeDossierCondidatDto}"
+								var="current" rowKey="#{current.id}" style="margin-top:5px"
+								resizableColumns="true" selectionMode="single" paginator="true"
+								rows="7" lazy="true" paginatorPosition="bottom"
+								emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+								<p:ajax event="rowSelect" immediate="true"
+									listener="#{dossierInscriptionNouveauCycleMBean.onRowSelect}"
+									process="@this" onstart="PF('page').block()"
+									onsuccess="PF('page').unblock()" update=":form_crud" />
+
+								<p:column style="width:5%">
+									<f:facet name="header">
+										<h:outputText value="NIN" />
+									</f:facet>
+
+									<h:outputText value="#{current.individu.identifiant}" />
+								</p:column>
+
+								<p:column style="width:8%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_nom}" />
+									</f:facet>
+
+									<h:outputText value="#{current.individu.nomLatin}" />
+								</p:column>
+								<p:column style="width:8%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_prenom}" />
+									</f:facet>
+
+									<h:outputText value="#{current.individu.prenomLatin}" />
+								</p:column>
+								<p:column style="width:8%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_date_naissance}" />
+
+									</f:facet>
+
+									<h:outputText value="#{current.individu.dateNaissance}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</p:column>
+
+
+								<p:column style="width:8%">
+									<f:facet name="header">
+										<h:outputText value="Classement" />
+									</f:facet>
+
+									<h:outputText value="#{current.classement}" />
+								</p:column>
+								<p:column style="width:5%">
+									<f:facet name="header">
+										<h:outputText value="Moyenne" />
+									</f:facet>
+
+									<h:outputText value="#{current.moyenneObtenue}" />
+								</p:column>
+								
+								<p:column style="width:5%" styleClass="text-center">
+									<f:facet name="header">
+										<h:outputText value="dossier soumis?"  />
+									</f:facet>
+									<h:outputText rendered="#{current.dossierInscriptionAdministrative ne null}" value="" styleClass="fa fa-check-square-o" />
+								</p:column>
+
+							</p:dataTable>
+
+						</p:column>
+					</p:row>
+
+					<!-- Actions -->
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="4">
+
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									id="cancelBtn" update=":form_view :form_search :form_crud"
+									actionListener="#{dossierInscriptionNouveauCycleMBean.cancelConcoursAction()}">
+								</p:commandButton>
+
+							</p:column>
+						</p:row>
+					</f:facet>
+
+				</p:panelGrid>
+			</p:outputPanel>
+
+			<p:spacer height="10px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{dossierInscriptionNouveauCycleMBean.crud}">
+
+					<!-- Information dossier d'inscription -->
+					<p:tab title="Information d'admission">
+						<!-- CRUD form -->
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="Information étudiant" />
+									</p:column>
+								</p:row>
+
+								<!-- Detail de l'etudiant -->
+								<p:row>
+									<p:column colspan="4">
+										<h:outputText
+											rendered="#{dossierInscriptionNouveauCycleMBean.dossierEtudiantDto eq null}"
+											styleClass="label label-warning"
+											value=" Le dossier d'étudiant n'est pas encore crée" />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nin} " />
+									</p:column>
+									<p:column
+										styleClass="#{dossierInscriptionNouveauCycleMBean.dossierEtudiantDto.nin}">
+										<h:outputText value="" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_matricule} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierEtudiantDto.numeroMatricule}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.nomLatin.toUpperCase()}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.nomArabe.toUpperCase()}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.prenomLatin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom_ar} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.prenomArabe}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_date_naissance} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.dateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Lieu de naissance" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.lieuNaissance}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Nationalité" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.nationaliteLibelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Nationalité arabe" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.individu.nationaliteLibelleLongAr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="détail de l'admission" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Classement" />
+									</p:column>
+
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.classement}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Note" />
+									</p:column>
+
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.moyenneObtenue}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_page_title_detail}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:250px">
+										<h:outputText
+											value="Année academique " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.anneeAcademiqueCode}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_date_creation} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.dateCreation}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_reinscription_type} " />
+									</p:column>
+									<p:column styleClass="value" colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.typeDossierLibelleFr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_cycle} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.cycleLibelleLongLt}">
+
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_niveau}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.niveauLibelleLongLt}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_domaine}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_filiere}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_specialite}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_formation}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+
+										<p:column colspan="2">
+
+											<p:commandButton value="Créer dossier étudiant"
+												title="Créer le dossier étudiant"
+												id="generateDossierEtudiantBtn" 
+												update=":form_crud :form_search"
+												disabled="#{dossierInscriptionNouveauCycleMBean.dossierEtudiantDto != null}"
+												styleClass="ui-button-generate"
+												actionListener="#{dossierInscriptionNouveauCycleMBean.generateDossierEtudiantAction()}">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous confirmer la création du dossier étudiant ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+<!-- 											<p:commandButton value="Créer dossier d'inscription"
+												disabled="#{dossierInscriptionNouveauCycleMBean.dossierEtudiantDto == null and dossierInscriptionNouveauCycleMBean.dossierInscriptionAdministrativeDto == null}"
+												title="Créer le dossier d'inscription"
+												id="generateDossierInscriptionBtn" icon="ui-icon-disk"
+												update=":form_crud :form_search"
+												styleClass="ui-button-generate"
+												actionListener="#{dossierInscriptionNouveauCycleMBean.generateDossierInscriptionAction()}">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous confirmer la validation de la création du dossier d'inscription ?"
+													icon="ui-icon-alert" />
+											</p:commandButton> -->
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton id="sendBtn" value="#{commonmsgs.bouton_soumettre}"
+												title="Soumettre à la validation" 
+												update=":form_view :form_crud"
+												styleClass="ui-button-validate" 
+												disabled="#{not empty dossierInscriptionNouveauCycleMBean.dossierCandidatDto.dossierInscriptionAdministrative}"
+												actionListener="#{dossierInscriptionNouveauCycleMBean.sendToValidationAction()}">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous confirmer la soumission du dossier d\'inscription ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud"
+												actionListener="#{dossierInscriptionNouveauCycleMBean.cancelInscriptionAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les pieces -->
+					<p:tab id="tabPieces" titleStyleClass="ui-tab-pieces" title="#{commonmsgs.tab_pieces}" titletip="#{commonmsgs.tab_pieces_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-folder-o"></i>
+						</f:facet>
+						<h:form>
+							<ui:include
+								src="/pages/cursus/dossier/piece/PieceConstTypeDossierDetail.xhtml">
+						
+								<c:set var="idTypeDossier" value="127800" scope="request" />
+							</ui:include>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" title="#{commonmsgs.tab_documents}" titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+							<c:set var="entity" value="DossierCondidat"
+								scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DossierCondidat" />
+							<ui:param name="identifiant"
+								value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.id.toString()}" />
+							<ui:param name="editionMode" value="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.dossierInscriptionAdministrative eq null}" />
+						</ui:include>
+					</p:tab>
+
+					<!-- historique -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique" title="#{commonmsgs.tab_historique_situations}" titletip="#{commonmsgs.tab_historique_situations_tooltip}" 
+						disabled="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.dossierInscriptionAdministrative eq null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-history"></i>
+						</f:facet>
+						<eh:EntityHistoryComponent
+							list="#{dossierInscriptionNouveauCycleMBean.dossierInscriptionHistory}"
+							idParamName="id"
+							idParamValue="#{dossierInscriptionNouveauCycleMBean.dossierCandidatDto.dossierInscriptionAdministrative.dossierId}">
+						</eh:EntityHistoryComponent>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

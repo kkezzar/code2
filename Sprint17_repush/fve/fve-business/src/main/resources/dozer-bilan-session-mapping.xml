@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.BilanSessionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.BilanSession
+		</class-b>
+		<field>
+			<a>bilanSessionDtos</a>
+			<b>bilanSessions</b>
+		</field>
+		<field>
+			<a>bilanSessionDtoMax</a>
+			<b>bilanSessionMax</b>
+		</field>
+
+		<!-- <field> -->
+		<!-- <a>bilanSessionMaxId</a> -->
+		<!-- <b>bilanSessionMax.id</b> -->
+		<!-- </field> -->
+		<field>
+			<a>bilanParentId</a>
+			<b>bilanSession.id</b>
+		</field>
+
+		<field>
+			<a>situationId</a>
+			<b>situation.id</b>
+		</field>
+
+		<field>
+			<a>deliberationSessionId</a>
+			<b>deliberationSession.id</b>
+		</field>
+		<field>
+			<a>dateDeliberation</a>
+			<b>deliberationSession.dateDeliberation</b>
+		</field>
+
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>dossierInscriptionAdministrative.id</b>
+		</field>
+
+		<field>
+			<a>typeDecisionId</a>
+			<b>typeDecision.id</b>
+		</field>
+		<field>
+			<a>typeDecisionCode</a>
+			<b>typeDecision.code</b>
+		</field>
+		<field>
+			<a>typeDecisionLibelleFr</a>
+			<b>typeDecision.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeDecisionLibelleAr</a>
+			<b>typeDecision.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>mentionId</a>
+			<b>mention.id</b>
+		</field>
+		<field>
+			<a>mentionCode</a>
+			<b>mention.code</b>
+		</field>
+		<field>
+			<a>mentionLibelleFr</a>
+			<b>mention.libelleLongFr</b>
+		</field>
+		<field>
+			<a>mentionLibelleAr</a>
+			<b>mention.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodeId</a>
+			<b>periode.id</b>
+		</field>
+		<field>
+			<a>periodeLibelleFr</a>
+			<b>periode.libelleLongLt</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>periode.niveau.code</b>
+		</field>
+		<field>
+			<a>niveauLibelleLongLt</a>
+			<b>periode.niveau.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>niveauRang</a>
+			<b>periode.niveau.rang</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>periode.niveau.cycle.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>oofId</a>
+			<b>oof.id</b>
+		</field>
+
+
+		<field>
+			<a>individuId</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.id
+			</b>
+		</field>
+		<field>
+			<a>nomArabeEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.nomArabe
+			</b>
+		</field>
+		<field>
+			<a>nomLatinEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.nomLatin
+			</b>
+		</field>
+		<field>
+			<a>prenomArabeEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.prenomArabe
+			</b>
+		</field>
+		<field>
+			<a>prenomLatinEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.prenomLatin
+			</b>
+		</field>
+		<field>
+			<a>dateNaissanceEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.dateNaissance
+			</b>
+		</field>
+		<field>
+			<a>matriculeEtudiant</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule
+			</b>
+		</field>
+		<field>
+			<a>numeroInscriptionEtudiant</a>
+			<b>dossierInscriptionAdministrative.numeroInscription
+			</b>
+		</field>
+		<field>
+			<a>psIntitule</a>
+			<b>deliberationSession.planningSession.intitule</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>deliberationSession.planningSession.anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>deliberationSession.planningSession.anneeAcademique.code</b>
+		</field>
+		<field>
+			<a>refEtablissementId</a>
+			<b>oof.refEtablissement.id</b>
+		</field>
+		<field>
+			<a>refEtablissementCode</a>
+			<b>oof.refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>refEtablissementLibelleFr</a>
+			<b>oof.refEtablissement.llEtablissementLatin</b>
+		</field>
+
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.DeliberationSessionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.DeliberationSession
+		</class-b>
+		<field>
+			<a>planningSessionId</a>
+			<b>planningSession.id</b>
+		</field>
+		<field>
+			<a>psIntitule</a>
+			<b>planningSession.intitule</b>
+		</field>
+		<field>
+			<a>psDateDebut</a>
+			<b>planningSession.dateDebut</b>
+		</field>
+		<field>
+			<a>psDateFin</a>
+			<b>planningSession.dateFin</b>
+		</field>
+		<field>
+			<a>psNumeroSession</a>
+			<b>planningSession.numeroSession</b>
+		</field>
+
+		<field>
+			<a>psRefCodeTypeSession</a>
+			<b>planningSession.ncTypeSession.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>psDateCreation</a>
+			<b>planningSession.dateCreation</b>
+		</field>
+		<field>
+			<a>psDatePublication</a>
+			<b>planningSession.datePublication</b>
+		</field>
+		<field>
+			<a>psDateCloture</a>
+			<b>planningSession.dateCloture</b>
+		</field>
+		<field>
+			<a>psCodeAnneeAcademique</a>
+			<b>planningSession.anneeAcademique.code</b>
+		</field>
+		<field>
+			<a>psPeriodeLibelle</a>
+			<b>planningSession.periode.libelleLongLt</b>
+		</field>
+		<field>
+			<a>psOfLibelleFr</a>
+			<b>planningSession.ouvertureOffreFormation.offreFormation.libelleLongFr
+			</b>
+		</field>
+		<field>
+			<a>psCoefficientNoteEliminatoire</a>
+			<b>planningSession.coefficientNoteEliminatoire</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>planningSession.anneeAcademique.id
+			</b>
+		</field>
+		<field>
+			<a>periodeId</a>
+			<b>planningSession.periode.id</b>
+		</field>
+		<field>
+			<a>periodeLibelleFr</a>
+			<b>planningSession.periode.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>oofId</a>
+			<b>planningSession.ouvertureOffreFormation.id
+			</b>
+		</field>
+		<field>
+			<a>ofId</a>
+			<b>planningSession.ouvertureOffreFormation.offreFormation.id
+			</b>
+		</field>
+		<field>
+			<a>situationId</a>
+			<b>situation.id</b>
+		</field>
+		<field>
+			<a>situationStyleCss</a>
+			<b>situation.situation.styleCss</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.BilanUeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.BilanUe
+		</class-b>
+		<field>
+			<a>bilanMcs</a>
+			<b>bilanMcs</b>
+		</field>
+		<field>
+			<a>bilanSessionId</a>
+			<b>bilanSession.id</b>
+		</field>
+		<field>
+			<a>repartitionUeId</a>
+			<b>repartitionUe.id</b>
+		</field>
+		<field>
+			<a>ueLibelleFr</a>
+			<b>repartitionUe.uniteEnseignement.libelleFr</b>
+		</field>
+		<field>
+			<a>ueCode</a>
+			<b>repartitionUe.uniteEnseignement.code</b>
+		</field>
+		<field>
+			<a>ueType</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.code</b>
+		</field>
+		<field>
+			<a>ueNatureLlFr</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ueNatureLlAr</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ueNatureLcFr</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ueNatureLcAr</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>ueNatureCode</a>
+			<b>repartitionUe.uniteEnseignement.ncNatureUe.code</b>
+		</field>
+		<field>
+			<a>ueNoteObtention</a>
+			<b>repartitionUe.noteObtension</b>
+		</field>
+		<field>
+			<a>ueCredit</a>
+			<b>repartitionUe.uniteEnseignement.credits</b>
+		</field>
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.BilanMcDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.BilanMc
+		</class-b>
+
+		<field>
+			<a>bilanUeId</a>
+			<b>bilanUe.id</b>
+		</field>
+		<field>
+			<a>bilanSessionId</a>
+			<b>bilanUe.bilanSession.id</b>
+		</field>
+
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMc.id</b>
+		</field>
+		<field>
+			<a>mcLibelleFr</a>
+			<b>rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+		<field>
+			<a>mcNoteObtention</a>
+			<b>rattachementMc.noteObtension</b>
+		</field>
+
+	</mapping>
+
+</mappings>

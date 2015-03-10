@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+	  <!--     	GRILLE EVALUATION -->
+        <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.GrilleEvaluationDetailDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.GrilleEvaluationDetail</class-b>
+      		<field>
+      					<a>grilleEvaluationId</a>
+	  					<b>grilleEvaluation.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationCode</a>
+	  					<b>grilleEvaluation.code</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationIntituleFr</a>
+	  					<b>grilleEvaluation.intituleFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>ncChapitreId</a>
+	  					<b>ncChapitre.id</b>
+      		</field>
+      		<field>
+      					<a>ncChapitreCode</a>
+	  					<b>ncChapitre.code</b>
+      		</field>
+      		<field>
+      					<a>ncChapitreIntituleFr</a>
+	  					<b>ncChapitre.libelleLongFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>ncCritereId</a>
+	  					<b>ncCritere.id</b>
+      		</field>
+      		<field>
+      					<a>ncCritereCode</a>
+	  					<b>ncCritere.code</b>
+      		</field>
+      		<field>
+      					<a>ncCritereIntituleFr</a>
+	  					<b>ncCritere.libelleLongFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>ncAppreciationId</a>
+	  					<b>ncAppreciation.id</b>
+      		</field>
+      		<field>
+      					<a>ncAppreciationCode</a>
+	  					<b>ncAppreciation.code</b>
+      		</field>
+      		<field>
+      					<a>ncAppreciationIntituleFr</a>
+	  					<b>ncAppreciation.libelleLongFr</b>
+      		</field>
+      	</mapping>
+      	
+      <!--     	DETAIL GRILLE EVALUATION -->
+      	 <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.EvaluationChercheurDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.EvaluationChercheur</class-b>
+      		<field>
+      					<a>grilleEvaluationId</a>
+	  					<b>grilleEvaluation.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationCode</a>
+	  					<b>grilleEvaluation.code</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationIntituleFr</a>
+	  					<b>grilleEvaluation.intituleFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>refIndividuId</a>
+	  					<b>refIndividu.id</b>
+      		</field>
+      		
+      		<field>
+      					<a>refIndividuIdentifiant</a>
+	  					<b>refIndividu.identifiant</b>
+      		</field>
+      		
+      		<field>
+      					<a>refIndividuNomLatin</a>
+	  					<b>refIndividu.nomLatin</b>
+      		</field>
+      		
+      		<field>
+      					<a>refIndividuPrenomLatin</a>
+	  					<b>refIndividu.prenomLatin</b>
+      		</field>
+      	
+      	</mapping>
+
+	  <!--     	EVALUATION CHERCHEUR -->
+		 <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.EvaluationValeurDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.EvaluationValeur</class-b>
+      		<field>
+      					<a>evaluationChercheurId</a>
+	  					<b>evaluationChercheur.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationId</a>
+	  					<b>grilleEvaluationDetail.grilleEvaluation.id</b>
+      		</field>
+      		
+      		<field>
+      					<a>grilleEvaluationDetailId</a>
+	  					<b>grilleEvaluationDetail.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationDetailNcChapitreId</a>
+	  					<b>grilleEvaluationDetail.ncChapitre.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationDetailNcChapitreIntituleFr</a>
+	  					<b>grilleEvaluationDetail.ncChapitre.libelleLongFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>grilleEvaluationDetailNcCritereId</a>
+	  					<b>grilleEvaluationDetail.ncCritere.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationDetailNcCritereIntituleFr</a>
+	  					<b>grilleEvaluationDetail.ncCritere.libelleLongFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>grilleEvaluationDetailNcAppreciationId</a>
+	  					<b>grilleEvaluationDetail.ncAppreciation.id</b>
+      		</field>
+      		<field>
+      					<a>grilleEvaluationDetailNcAppreciationIntituleFr</a>
+	  					<b>grilleEvaluationDetail.ncAppreciation.libelleLongFr</b>
+      		</field>
+      		
+      		<field>
+      					<a>grilleEvaluationDetailNumero</a>
+	  					<b>grilleEvaluationDetail.numero</b>
+      		</field>
+      		<field>
+      					<a>ncNiveauAppreciationId</a>
+	  					<b>ncNiveauAppreciation.id</b>
+      		</field>
+      		<field>
+      					<a>ncNiveauAppreciationIntituleFr</a>
+	  					<b>ncNiveauAppreciation.libelleLongFr</b>
+      		</field>
+      		
+      	</mapping>
+</mappings>

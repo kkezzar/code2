@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core" >
+
+
+	<p:outputPanel >
+	<center><h3> <h:outputText value="#{assiduiteMsgs.assiduite_nouveau_absence_title}" styleClass="labelValue" /> / <h:outputText value="#{assiduiteBean.absenceMatiereDto.anneeAcademiqueCode}" styleClass="labelValue" /></h3>
+	</center>
+	<pe:blockUI target="AbsenceFormEdit" widgetVar="AbsenceFormBlock">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}" style="white-space: nowrap;" />
+			</h:panelGrid>
+			</pe:blockUI>
+	<h:form id="AbsenceFormEdit">
+
+	<p:fieldset legend="#{assiduiteMsgs.assiduite_etudiant}">
+	
+    <p:panelGrid   >
+     <p:row>
+            <p:column >
+			<h:outputText value="#{assiduiteMsgs.assiduite_nin_etudiant}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{assiduiteBean.absenceMatiereDto.individuNin}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{assiduiteMsgs.assiduite_matricule}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{assiduiteBean.absenceMatiereDto.dossierEtudiantMatricule}" styleClass="labelValue"/>
+			</p:column>
+			<p:column  >	
+			<h:outputText value="#{assiduiteMsgs.assiduite_nom_etudiant}:" />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{assiduiteBean.absenceMatiereDto.individuNomLatin.toUpperCase()}" styleClass="labelValue"/>
+			</p:column>
+	
+			<p:column  >			
+			<h:outputText value="#{assiduiteMsgs.assiduite_prenom_etudiant}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{assiduiteBean.absenceMatiereDto.individuPrenomLatin.substring(0,1).toUpperCase().concat(assiduiteBean.absenceMatiereDto.individuPrenomLatin.substring(1).toLowerCase())}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>		
+	        </p:panelGrid>
+	        
+     </p:fieldset>
+     <br></br>
+     <p:fieldset legend="Absence">
+    
+    <p:panelGrid id="gererAbsence" styleClass="noBorder1">
+                        
+                      <p:row>
+                      <!--                       <p:row > -->
+					 
+<!-- 					  <p:column colspan="3"> -->
+<!-- 					     <p:inputText  style="text-align: left; width:250px" value="#{assiduiteBean.absenceMatiereDto.anneeAcademiqueCode}" label="" > -->
+<!-- 							</p:inputText>					 -->
+<!-- 					  </p:column>  -->
+<!--                      </p:row> -->
+					  <p:column >
+					  	<h:outputText value="#{assiduiteMsgs.assiduite_date_absence} *" />
+					  </p:column>
+					  <p:column colspan="3">
+					     <p:calendar navigator="true"  value="#{assiduiteBean.absenceMatiereDto.dateAbsence}"  
+					  			showButtonPanel="true"
+						        label="#{assiduiteMsgs.assiduite_date_absence} *" 
+						        required="true" 
+						        requiredMessage="#{assiduiteMsgs.assiduite_date_absence_required}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>						
+					  </p:column> 
+					  
+					  <p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_type_absence}" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{assiduiteBean.absenceMatiereDto.refCodeTypeAbsence}"
+								label="#{assiduiteMsgs.assiduite_type_absence}*" 
+								required="true"
+								requiredMessage="#{assiduiteMsgs.assiduite_type_absence_required}">
+								
+								<f:selectItem itemLabel="#{assiduiteMsgs.assiduite_select_type_absence}"
+										itemValue="" />
+								<f:selectItems value="#{assiduiteBean.listeTypeAbsence}" />
+							</p:selectOneMenu>
+						</p:column>
+					 </p:row>
+	      
+				       <p:row>
+						<p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_matiere} *" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{assiduiteBean.absenceMatiereDto.idMc}"
+								label="#{assiduiteMsgs.assiduite_matiere} *" 
+								required="true"
+								requiredMessage="#{assiduiteMsgs.assiduite_matiere_required}">
+								
+								<f:selectItem itemLabel="#{assiduiteMsgs.assiduite_select_matiere}" itemValue="Choisir Matiere" />
+								<f:selectItems value="#{assiduiteBean.listMatiere}" />
+							</p:selectOneMenu>							
+						</p:column>
+			
+						<p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_atome} *" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{assiduiteBean.absenceMatiereDto.idAp}"
+								label="#{assiduiteMsgs.assiduite_atome}*" 
+								required="true"
+								requiredMessage="#{assiduiteMsgs.assiduite_atome_required}">
+								
+								<f:selectItem itemLabel="#{assiduiteMsgs.assiduite_select_atome}" itemValue="" />
+								<f:selectItems value="#{assiduiteBean.listeAtome}" />
+							</p:selectOneMenu>
+
+						</p:column>
+				      </p:row>
+ 
+				        <p:row>
+						<p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_motif}" />
+						</p:column>
+						<p:column colspan="3">
+							<p:inputTextarea  style="text-align: left; width:170px"
+								value="#{assiduiteBean.absenceMatiereDto.motif}"
+								label="#{assiduiteMsgs.assiduite_motif}" 
+								required="true"
+								requiredMessage="#{assiduiteMsgs.assiduite_motif_required}">
+							</p:inputTextarea>
+						</p:column>
+						
+					</p:row>
+					
+				<p:row>
+						<p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_justif}" />
+						</p:column>
+					
+					<p:column width="30%">
+					<p:selectBooleanCheckbox value="#{assiduiteBean.absenceMatiereDto.justf}" 
+					valueChangeListener="#{assiduiteBean.entityChanged}">
+					
+					<p:ajax update="gererAbsence" />
+					</p:selectBooleanCheckbox>
+				    </p:column>
+				</p:row>	
+				
+				
+				 <p:row rendered="#{assiduiteBean.absenceMatiereDto.justf==true}">
+					  <p:column >
+					  	<h:outputText value="#{assiduiteMsgs.assiduite_date_justification} *" />
+					  </p:column>
+					  <p:column colspan="3">
+					     <p:calendar navigator="true"  value="#{assiduiteBean.absenceMatiereDto.dateAbsence}"  
+					  			showButtonPanel="true"
+						        label="#{assiduiteMsgs.assiduite_date_justification} *" 
+						        required="true" 
+						        requiredMessage="#{assiduiteMsgs.assiduite_date_justif_required}" 
+						        pattern="dd/MM/yyyy"  
+						        valueChangeListener="#{assiduiteBean.entityChanged}">	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>						
+					  </p:column> 
+					  
+					  <p:column>
+							<h:outputText value="#{assiduiteMsgs.assiduite_mode_envoi}" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{assiduiteBean.absenceMatiereDto.refCodeModeEnvoi}"
+								label="#{assiduiteMsgs.assiduite_type_absence}*" 
+								valueChangeListener="#{assiduiteBean.entityChanged}">					
+								<f:selectItem itemLabel="#{assiduiteMsgs.assiduite_select_mode_envoi}"
+										itemValue="" />
+								<f:selectItems value="#{assiduiteBean.listeModeEnvoi}" />
+							</p:selectOneMenu>
+						</p:column>
+					 </p:row>
+				
+					
+				
+	</p:panelGrid>
+        <p:row>
+						<p:column>
+						</p:column>
+						<p:column> 
+
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}" id="saveBtn" update="@(.detailContentStyle)" icon="ui-icon-disk"
+				onstart="PF('AbsenceFormBlock').block()" process="AbsenceFormEdit" 	onsuccess="PF('AbsenceFormBlock').unblock()"
+				 actionListener="#{assiduiteBean.saveAbsence()}">
+						<f:param name="dossierInscriptionId" value="#{dossierTransfertBean.dossierInscriptionId}"></f:param>
+						<f:param name="absenceMatiereId" value="#{assiduiteBean.absenceMatiereId}"></f:param>
+						</p:commandButton>
+						
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" icon="ui-icon-cencel" id="delete" 
+						update="@(.detailContentStyle)" 
+				        onstart="PF('AbsenceFormBlock').block()" process="AbsenceFormEdit" 	onsuccess="PF('AbsenceFormBlock').unblock()"
+						actionListener="#{assiduiteBean.delete()}">	
+						<f:param name="dossierInscriptionId" value="#{dossierTransfertBean.dossierInscriptionId}"></f:param>
+						<f:param name="absenceMatiereId" value="#{assiduiteBean.absenceMatiereId}"></f:param>
+						</p:commandButton>
+						
+						<p:commandButton value="#{commonmsgs.bouton_annuler}" icon="ui-icon-cencel" id="annuler" 
+						update="@(.detailContentStyle)" 
+				        onstart="PF('AbsenceFormBlock').block()" process="AbsenceFormEdit" 	onsuccess="PF('AbsenceFormBlock').unblock()"
+						actionListener="#{assiduiteBean.delete()}">	
+						<f:param name="absenceMatiereId" value="#{assiduiteBean.absenceMatiereId}"></f:param>
+						</p:commandButton>
+						</p:column>
+				 </p:row>
+     </p:fieldset>
+         	
+	</h:form>
+</p:outputPanel>
+
+
+</ui:composition>

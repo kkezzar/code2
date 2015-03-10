@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="attestation" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2456764-d4d6-4e51-bf93-e70927d587e5">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="672"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="attestationPhrase" class="java.lang.String"/>
+	<parameter name="adresse" class="java.lang.String"/>
+	<parameter name="contact" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<field name="individuNomArabe" class="java.lang.String"/>
+	<field name="individuPrenomArabe" class="java.lang.String"/>
+	<field name="individuDateNaissance" class="java.util.Date"/>
+	<field name="individuLieuNaissance" class="java.lang.String"/>
+	<field name="anneeAcademiqueCode" class="java.lang.String"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="228" splitType="Stretch">
+			<image>
+				<reportElement x="4" y="3" width="130" height="87" uuid="f1f42168-f861-4f6a-b2af-1bba7ea561da"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="134" y="64" width="290" height="20" uuid="389793f3-1233-48ca-b5fc-5a06fe36814e"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ وزارة التـعليـم العــالي و البــحث العلـــمي]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="4" width="290" height="20" uuid="c93d3b18-0c8f-4208-80c4-2e8c0d6394bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[République Algérienne Démocratique et Populaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="24" width="290" height="20" uuid="1a6017c8-459f-4368-8775-43f35050b4cf"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[الجـمهوريــــة الجــزائريــة الديمــقراطيــة الشــعبية]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="44" width="290" height="20" uuid="cdce2a17-ad7f-4041-9c2f-eb9c34053203"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ministère de l’Enseignement Supérieur et de la Recherche Scientifique]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="90" width="552" height="1" forecolor="#999999" uuid="744cb616-0c50-4819-b76d-b856ae8a4bf8"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<image>
+				<reportElement x="424" y="3" width="131" height="87" uuid="8482cbd1-53cf-40c2-a61a-1d195bd1c170"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="-1" y="0" width="555" height="26" uuid="98af8194-b226-4737-a982-3cb82a86cf3e"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[وصل استلام - Accusé de recéption-]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="299" splitType="Stretch">
+			<staticText>
+				<reportElement x="401" y="43" width="153" height="20" uuid="922c698e-cadd-4495-8e3a-1a09e216480f"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[السيد (ة أنا الممضي أسفله): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="84" width="86" height="20" uuid="d6c5aa6a-856f-4ad8-934e-5bc7b11cddbe"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[المولود (ة) في :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="84" width="35" height="20" uuid="557655bd-484f-44c9-8fd1-03f79376fb32"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[ب :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="164" width="499" height="20" uuid="794d2da8-02d8-42c3-b8df-0210708d3769"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<text><![CDATA[أشهد أنني استلمت نسخة من شهادة النجاح ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="280" width="133" height="15" uuid="07fd1462-8652-4788-a449-fd16828192b8"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[الإمضاء]]></text>
+			</staticText>
+			<textField pattern="yyyy/MM/dd" isBlankWhenNull="true">
+				<reportElement x="292" y="84" width="176" height="20" uuid="60a1d6ee-f58a-4ed8-a166-1975aeba8f2a"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuDateNaissance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="84" width="256" height="20" uuid="813a8c5e-45c6-40bb-a526-1ee2fed1feda"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuLieuNaissance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="69" y="44" width="335" height="20" uuid="d01dbd84-3705-41d1-b40c-211cd1ca67cd"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuNomArabe} +" "+ $F{individuPrenomArabe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="4" width="554" height="20" uuid="a27d3c8f-a025-4c39-8e56-68f56e8723da"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{attestationPhrase}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="28" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="90" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="1" width="552" height="1" forecolor="#999999" uuid="c4ac5766-05a3-48ea-8ab6-67308e940862"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="2" y="35" width="552" height="20" uuid="431b7a72-9e6a-4cd1-a94b-2e572833fdce"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{adresse}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="9" y="55" width="544" height="20" uuid="66c40ca1-51ab-498e-9331-4f793ad76171"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{contact}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement x="-1" y="75" width="165" height="15" uuid="318170f0-cbaa-4462-a86d-69e34eb7669b"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

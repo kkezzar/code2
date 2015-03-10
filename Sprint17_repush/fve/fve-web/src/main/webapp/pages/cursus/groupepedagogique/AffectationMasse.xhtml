@@ -1,0 +1,296 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:head>
+		<style>
+.ui-picklist .ui-picklist-list {
+	height: 200px;
+	width: 200px !important;
+}
+
+.ui-picklist-button-move-up {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-top {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-down {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-bottom {
+	visibility: hidden !important;
+}
+</style>
+	</h:head>
+	<p:outputPanel id="affectationPanel">
+
+		<p:dataTable id="gpDataTableId" var="current"
+			value="#{affectationMasseBean.groupePedagogiqueDtos}"
+			selection="#{affectationMasseBean.selectedGroupePedagogiqueDtos}"
+			rowKey="#{current.id}" style="margin-bottom:0">
+			<f:facet name="header">
+				<h:outputText
+					value="#{groupePedagogiqueMsgs.groupePedagogique_selection_groupe}" />
+			</f:facet>
+			<p:ajax update="gpDataTableId" onstart="PF('globalWidget').block()"
+				onsuccess="PF('globalWidget').unblock()" event="sort" />
+			<p:column selectionMode="multiple"
+				style="width:16px;text-align:center" />
+			<p:column sortBy="#{current.nomAffichage}"
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage}">
+				<h:outputText value="#{current.nomAffichage}" />
+			</p:column>
+			<p:column sortBy="#{current.capaciteMin}"
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_capacite_min}">
+				<h:outputText value="#{current.capaciteMin}" />
+			</p:column>
+			<p:column sortBy="#{current.capaciteMax}"
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_capacite_max}">
+				<h:outputText value="#{current.capaciteMax}" />
+			</p:column>
+			<p:column sortBy="#{current.dateCreation}"
+				headerText="#{groupePedagogiqueMsgs.groupePedagogique_date_creation}">
+				<h:outputText value="#{current.dateCreation}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<f:facet name="footer">
+				<p:outputPanel style="text-align:left">
+					<p:commandButton process="gpDataTableId"
+						update=":groupepedagogiqueForm:affectationDetail"
+						icon="ui-icon-search"
+						value="#{groupePedagogiqueMsgs.groupePedagogique__affectation_masse_afficher}"
+						oncomplete="PF('affectationDialog').show()" />
+				</p:outputPanel>
+			</f:facet>
+		</p:dataTable>
+		<br />
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText
+							value="#{groupePedagogiqueMsgs.groupePedagogique_palier}" />
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column style="width:10%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_palier}"
+						for="palier" />
+				</p:column>
+				<p:column style="width:90%">
+					<pe:inputNumber binding="#{min}" id="palier" required="true"
+						disabled="#{empty affectationMasseBean.dossierInscriptionDtoList}"
+						requiredMessage="#{groupePedagogiqueMsgs.groupePedagogique_palier_required}"
+						minValue="1"
+						maxValue="#{affectationMasseBean.dossierInscriptionDtoList.size()}"
+						value="#{affectationMasseBean.palier}">
+					</pe:inputNumber>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:outputPanel>
+	<br />
+<pe:blockUI target="affectationDataTable" widgetVar="tableWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+	<p:dataTable id="affectationDataTable" var="_etudiant"
+		sortMode="multiple" rowIndexVar="rowIndex"
+		emptyMessage="#{groupePedagogiqueMsgs.groupepedagogique_data_table_inscription_search_result_no_result}"
+		value="#{affectationMasseBean.dossierInscriptionDtoList}">
+		<f:facet name="header">
+			<h:outputText
+				value="#{groupePedagogiqueMsgs.groupepedagogique_etudiant_data_table_list_title}" />
+			<p:spacer width="10" />
+			<p:commandButton icon="ui-icon-arrowthick-2-n-s"
+				value="#{commonmsgs.bouton_trier}"
+				onclick="PF('critereDialog').show()">
+			</p:commandButton>
+		</f:facet>
+		<p:column exportable="false"
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_index}"
+			style="width:5%">
+			<h:outputText value="#{rowIndex+1}" />
+		</p:column>
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_matricule}"
+			sortBy="#{_etudiant.numeroMatricule}">
+			<h:outputText value="#{_etudiant.numeroMatricule}" />
+		</p:column>
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_nom}"
+			sortBy="#{_etudiant.individuNomLatin}">
+			<h:outputText value="#{_etudiant.individuNomLatin}" />
+		</p:column>
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_prenom}"
+			sortBy="#{_etudiant.individuPrenomLatin}">
+			<h:outputText value="#{_etudiant.individuPrenomLatin}" />
+		</p:column>
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_date_naissance}"
+			sortBy="#{_etudiant.individuPrenomLatin}">
+			<h:outputText value="#{_etudiant.individuDateNaissance}">
+				<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+			</h:outputText>
+		</p:column>
+
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_sexe}"
+			sortBy="#{_etudiant.etudiantSexe}">
+			<h:outputText value="#{_etudiant.etudiantSexe}" />
+
+		</p:column>
+		<p:column
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_moyenne_annee_precedente}"
+			sortBy="#{_etudiant.lastMoyenne}">
+			<h:outputText value="#{utilBean.formatNote(_etudiant.lastMoyenne)}" />
+
+		</p:column>
+		<p:column rendered="#{affectationMasseBean.showAffectation}"
+			headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_affectation}"
+			sortBy="#{_etudiant.groupePedagogiqueIntitule}">
+			<h:outputText value="#{_etudiant.groupePedagogiqueIntitule}" />
+
+		</p:column>
+
+	</p:dataTable>
+	<br />
+	<p:toolbar>
+		<p:toolbarGroup align="left">
+			<p:commandButton id="saveGroupe" icon="ui-icon-disk"
+				value="#{commonmsgs.bouton_enregistrer}"
+				process="groupepedagogiqueForm" onstart="PF('globalWidget').block()"
+				onsuccess="PF('globalWidget').unblock()"
+				actionListener="#{affectationMasseBean.affectation()}"
+				update=":panelGlobal">
+			</p:commandButton>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+	<p:dialog
+		header="#{groupePedagogiqueMsgs.groupepedagogique_affectation_masse_composition_groupe}"
+		widgetVar="affectationDialog" modal="true" showEffect="fade"
+		hideEffect="fade" resizable="false" width="800" closeOnEscape="true">
+		<p:outputPanel id="affectationDetail" style="text-align:left;">
+			<p:tabView id="tabViewGroupe">
+				<c:forEach var="_gp"
+					items="#{affectationMasseBean.selectedGroupePedagogiqueDtos}"
+					varStatus="status">
+					<p:tab title="#{_gp.nomAffichage}">
+						<p:dataTable var="_etudiant"
+							emptyMessage="#{groupePedagogiqueMsgs.groupepedagogique_data_table_inscription_search_result_no_result}"
+							value="#{_gp.affectationGroupePedagogiqueDtos}">
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_matricule}"
+								sortBy="#{_etudiant.numeroMatricule}">
+								<h:outputText value="#{_etudiant.numeroMatricule}" />
+							</p:column>
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_nom}"
+								sortBy="#{_etudiant.nomEtudiant}">
+								<h:outputText value="#{_etudiant.nomEtudiant}" />
+							</p:column>
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_prenom}"
+								sortBy="#{_etudiant.prenomEtudiant}">
+								<h:outputText value="#{_etudiant.prenomEtudiant}" />
+							</p:column>
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_date_naissance}"
+								sortBy="#{_etudiant.dateNaissanceEtudiant}">
+								<h:outputText value="#{_etudiant.dateNaissanceEtudiant}">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_sexe}"
+								sortBy="#{_etudiant.etudiantSexe}">
+								<h:outputText value="#{_etudiant.etudiantSexe}" />
+
+							</p:column>
+							<p:column
+								headerText="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_moyenne_annee_precedente}"
+								sortBy="#{_etudiant.lastMoyenne}">
+								<h:outputText
+									value="#{utilBean.formatNote(_etudiant.lastMoyenne)}" />
+
+							</p:column>
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column footerText="" colspan="4" />
+									<p:column footerText="Totals: " style="text-align:right" />
+									<p:column style="text-align:left"
+										footerText="#{_gp.affectationGroupePedagogiqueDtos.size()}" />
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+				</c:forEach>
+			</p:tabView>
+
+		</p:outputPanel>
+	</p:dialog>
+	<p:dialog
+		header="#{groupePedagogiqueMsgs.groupepedagogique_affectation_masse_criteres_tri}"
+		widgetVar="critereDialog" modal="true" 
+		 resizable="false" width="520" closeOnEscape="true"
+		height="300">
+		<p:outputPanel id="critereDetail" style="text-align:left;">
+
+			<p:pickList id="PojoPickList" styleClass="widePickList"
+				style="width:100%" rendered="#{affectationMasseBean.criteres!=null}"
+				value="#{affectationMasseBean.criteres}" var="_critere"
+				itemValue="#{_critere}" itemLabel="#{_critere.critere}"
+				addLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_ajouter_label}"
+				addAllLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_ajouter_tout_label}"
+				removeLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_supprimer_label}"
+				removeAllLabel="#{groupePedagogiqueMsgs.groupePedagogique_pickList_supprimer_tout_label}"
+				showSourceControls="true" showTargetControls="true"
+				showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
+				filterMatchMode="contains" converter="#{orderCritere}">
+
+				<f:facet name="sourceCaption">Disponible</f:facet>
+				<f:facet name="targetCaption">Selectioné</f:facet>
+				<p:column style="width:10%;">
+					<h:outputText value=" " />
+				</p:column>
+				<p:column style="width:90%;">
+					<h:outputText value="#{_critere.critere}" />
+				</p:column>
+			</p:pickList>
+
+
+			<br />
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton icon="ui-icon-check"
+						value="#{commonmsgs.bouton_ok}" process="groupepedagogiqueForm"
+						onclick="PF('critereDialog').hide()"
+						onstart="PF('tableWidget').block()"
+						onsuccess="PF('tableWidget').unblock()"
+						actionListener="#{affectationMasseBean.tri}"
+						update="groupepedagogiqueForm">
+					</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:commandButton icon="ui-icon-closethick"
+						value="#{commonmsgs.bouton_annuler}"
+						onclick="PF('critereDialog').hide()">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:outputPanel>
+	</p:dialog>
+</ui:composition>

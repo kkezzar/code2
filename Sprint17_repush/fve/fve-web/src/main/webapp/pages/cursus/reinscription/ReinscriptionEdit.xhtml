@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{dossierReinscriptionMsgs.dossier_reinscription_page_title_gestion_reinscriptions}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="right">
+						<p:inputText id="sMatricule" placeholder="Matricule" />
+						<p:separator />
+						<p:inputText id="sNom" placeholder="Nom" />
+						<p:spacer height="2px"></p:spacer>
+						<p:inputText id="sPrenom" placeholder="Prénom" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search" update="form_search"
+							title="Rechercher"></p:commandButton>
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-vert-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+				
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable"
+					value="#{dossierReinscriptionMBean.voeuxEtudiantsDtoSearch}"
+					var="voeuxEtudiant" rowKey="#{voeuxEtudiant.id}" paginator="true"
+					paginatorPosition="bottom" selectionMode="single" lazy="true"
+					emptyMessage="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeux_reinscriptions_no_result}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossierReinscriptionMBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+<!-- 					<f:facet name="header">
+						<h:outputText
+							value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeux_liste_reinscriptions_title}" />
+					</f:facet> -->
+
+					<!-- 
+						<p:column headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_annee_academique}">
+							<h:outputText value="#{voeuxEtudiant.anneeAcademiquePremiereAnnee / voeuxEtudiant.anneeAcademiqueDeuxiemeAnnee}">
+							</h:outputText>
+						</p:column> 
+						-->
+
+					<p:column headerText="#{commonmsgs.individu_matricule}">
+						<h:outputText value="#{voeuxEtudiant.dossierEtudiantMatricule}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{commonmsgs.individu_nom}">
+						<h:outputText value="#{voeuxEtudiant.individuNomLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{commonmsgs.individu_prenom}">
+						<h:outputText value="#{voeuxEtudiant.individuPrenomLatin}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_niveau}">
+						<h:outputText value="#{voeuxEtudiant.niveau.libelleLongLt}">
+						</h:outputText>
+					</p:column>
+
+					<p:column
+						headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_cycle}">
+						<h:outputText value="#{voeuxEtudiant.cycle.libelleLongLt}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{dossierReinscriptionMsgs.dossier_reinscription_reinscription_type}">
+						<h:outputText value="#{voeuxEtudiant.typeReinscriptionLibelleFr}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{dossierReinscriptionMBean.crud}">
+					
+					<!-- Information reinscription -->
+					<p:tab
+						title="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeux_information_reinscription}">
+						
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<!-- Detail de l'etudiant -->
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{commonmsgs.label_informations_etudiant}" />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nin}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuNin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_matricule}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.dossierEtudiantMatricule}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuNomLatin.toUpperCase()}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuNomArabe.toUpperCase()}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuPrenomLatin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuPrenomArabe}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_date_naissance}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuDateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_lieu_naissance}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuLieuNaissance}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nationalite}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuNationaliteLibelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nationalite_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.individuNationaliteLibelleLongAr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<!-- Information sur la reinscription -->
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_detail_reinscription}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:250px">
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_annee_academique} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.anneeAcademiqueCode}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_date_creation} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.dateCreation}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_reinscription_type} " />
+									</p:column>
+									<p:column styleClass="value" colspan="3">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.typeReinscriptionLibelleFr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_cycle}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.cycle.libelleLongLt}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_niveau}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.niveau.libelleLongLt}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_liste_voeux}" />
+									</p:column>
+									
+									<p:column colspan="3">
+
+										<p:dataTable id="voeuxChoix" var="voeuEtudiantChoix"
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.voeuxEtudiantsChoixDto}"
+											rowKey="#{voeuEtudiantChoix.id}"
+											emptyMessage="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_choix_no_result}">
+
+											<p:column
+												headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_domaine}"
+												sortBy="#{voeuEtudiantChoix.domaine.llDomaine}">
+												<h:outputText value="#{voeuEtudiantChoix.domaine.llDomaine}" />
+											</p:column>
+
+											<p:column
+												headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_filiere}"
+												sortBy="#{voeuEtudiantChoix.filiere.llFiliere}">
+												<h:outputText value="#{voeuEtudiantChoix.filiere.llFiliere}" />
+											</p:column>
+
+											<p:column
+												headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_specialite}"
+												sortBy="#{voeuEtudiantChoix.specialite.llSpecialite}">
+												<h:outputText
+													value="#{voeuEtudiantChoix.specialite.llSpecialite}" />
+											</p:column>
+
+											<p:column
+												headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_formation}"
+												sortBy="#{voeuEtudiantChoix.ouvertureOffreFormation.ofLibelleLongFr}">
+												<h:outputText
+													value="#{voeuEtudiantChoix.ouvertureOffreFormation.offreFormationlibelle}" />
+											</p:column>
+
+											<p:column
+												headerText="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_priorite}"
+												sortBy="#{voeuEtudiantChoix.priorite}">
+												<h:outputText value="#{voeuEtudiantChoix.priorite}" />
+											</p:column>
+
+										</p:dataTable>
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_choix_retenu_apres_validation}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_domaine}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.domaine.llDomaine}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_filiere}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.filiere.llFiliere}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_specialite}" />
+									</p:column>
+									<p:column styleClass="value" >
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.specialite.llSpecialite}" />
+									</p:column>
+	
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_formation}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.ouvertureOffreFormation.ofLibelleLongFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{commonmsgs.label_observations}" />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_observation_equipe_pedagogique}" />
+									</p:column>
+									<p:column styleClass="value" colspan="3">
+										<h:outputText
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.observationEquipePedagogique}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea style="width:50%"
+											value="#{dossierReinscriptionMBean.voeuEtudiantDto.observationReinscription}">
+
+										</p:inputTextarea>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":form_crud valideBtn"
+												icon="ui-icon-disk" styleClass="ui-button-save"
+												actionListener="#{dossierReinscriptionMBean.saveFicheVoeuxAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+<!-- 											<p:commandButton value="#{commonmsgs.bouton_generer_dossier}"
+												title="#{commonmsgs.title_generer_dossier_inscription_administrative}"
+												id="generateDossierBtn" icon="ui-icon-disk"
+												styleClass="ui-button-generate"
+												disabled="#{dossierReinscriptionMBean.voeuEtudiantDto.idNouveauDossierInsAdmin ne null}"
+												update=":form_crud :form_search"
+												actionListener="#{dossierReinscriptionMBean.generateDossierInscriptionAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer> -->
+
+											<p:commandButton value="#{commonmsgs.bouton_soumettre}" title="#{commonmsgs.title_soumettre_a_la_validation}"
+												id="valideBtn" 
+												styleClass="ui-button-validate"
+												update=":form_crud :form_search"
+												actionListener="#{dossierReinscriptionMBean.sendToValidationAction()}">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous confirmer la soummission du dossier de réinscription à la validation ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" 
+												update=":form_crud :form_search"
+												actionListener="#{dossierReinscriptionMBean.cancelFicheVoeuxAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+	
+					<!-- Situation derniere inscription -->
+					<p:tab 
+						title="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_situation_derniere_inscription}">
+						<p:panelGrid styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_annee_academique} " />
+								</p:column>
+								
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.anneeAcademiqueCode}">
+
+									</h:outputText>
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_etablissement} " />
+								</p:column>
+								
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.llEtablissementLatin}" />
+								</p:column>
+			
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_cycle}" />
+								</p:column>
+
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.cycleLibelleLongLt}" />
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_niveau}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.niveauLibelleLongLt}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_domaine}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.refLibelleDomaine}" />
+
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_filiere}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.refLibelleFiliere}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_specialite}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.refLibelleSpecialite}">
+
+									</h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_formation}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{dossierReinscriptionMBean.ancienDossierInscriptionAdministrativeDto.offreFormationLibelleFr}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column styleClass="title" colspan="4">
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_decision}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_decision_jury}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText
+										value="#{dossierReinscriptionMBean.bilanSessionAnnuelDto.typeDecisionLibelleFr}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_moyenne_admission}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText
+										value="#{dossierReinscriptionMBean.bilanSessionAnnuelDto.moyenne}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:tab>
+					
+					<!-- les pieces -->
+					<p:tab id="tabPieces" titleStyleClass="ui-tab-pieces" title="#{commonmsgs.tab_pieces}" titletip="#{commonmsgs.tab_pieces_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-folder-o"></i>
+						</f:facet>
+						<h:form>
+							<ui:include
+								src="/pages/cursus/dossier/piece/PieceConstDetail.xhtml">
+								<c:set var="dossierId"
+									value="#{dossierReinscriptionMBean.dossierInscriptionAdministrativeDto.id}"
+									scope="request" />
+								<c:set var="codeTypeDossier"
+									value="#{dossierReinscriptionMBean.dossierInscriptionAdministrativeDto.typeDossier}"
+									scope="request" />
+							</ui:include>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" title="#{commonmsgs.tab_documents}" titletip="#{commonmsgs.tab_documents_tooltip}" 
+						disabled="#{dossierReinscriptionMBean.voeuEtudiantDto.id == null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+							<c:set var="entity" value="VoeuEtudiant" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierReinscriptionMBean.voeuEtudiantDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="VoeuEtudiant" />
+							<ui:param name="identifiant"
+								value="#{dossierReinscriptionMBean.voeuEtudiantDto.id.toString()}" />
+							<ui:param name="editionMode" value="#{true}" />
+						</ui:include>
+					</p:tab>
+
+					<!-- historique  -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique" title="#{commonmsgs.tab_historique_situations}" titletip="#{commonmsgs.tab_historique_situations_tooltip}" 
+						disabled="#{dossierReinscriptionMBean.voeuEtudiantDto.id == null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-history"></i>
+						</f:facet>
+						<eh:EntityHistoryComponent
+							list="#{dossierReinscriptionMBean.ficheVoeuxHistory}"
+							idParamName="id"
+							idParamValue="#{dossierReinscriptionMBean.voeuEtudiantDto.id}">
+						</eh:EntityHistoryComponent>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

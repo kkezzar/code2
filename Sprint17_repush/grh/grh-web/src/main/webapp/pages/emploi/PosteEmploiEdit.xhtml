@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{posteMsgs.enrg_poste_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_poste_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}" process="@this"  
+									action="#{posteEmploiMBean.onNew}" styleClass="ui-buttpn-bleu"
+									update=":pnl_Gerer" 
+									onstart="PF('page').block()" 
+									onsuccess="PF('page').unblock()"/>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "/>
+						<p:spacer width="10px"></p:spacer>
+							<p:inputText id="keyWordsID" value="#{posteEmploiMBean.searchKeyWords}"    
+								placeholder="#{commonmsgs.search_watermark_text_key_words}"
+										 label="#{commonmsgs.search_label_mots_cles}" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_poste_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{posteEmploiMBean.onSearch}"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+				<p:dataTable var="poste" lazy="true"
+					value="#{posteEmploiMBean.posteEmploiDtos}"
+					widgetVar="postesTable" rowKey="#{poste.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{posteMsgs.poste_datable_list_no_result}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{posteEmploiMBean.onRowSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 update=":pnl_detail" />
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:column headerText="#{posteMsgs.poste_numero}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="code" 
+						headerText="#{posteMsgs.label_code}">
+						<h:outputText value="#{poste.code}"/>
+					</p:column>
+					<p:column sortBy="objet" 
+						headerText="#{posteMsgs.label_objet}">
+						<h:outputText value="#{poste.objet}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<br></br>
+			
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty posteEmploiMBean.posteEmploiDto}">
+					<h:form id="form_poste_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="posteCompetence" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{posteMsgs.label_poste_emploi}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_code}" styleClass="required"/>
+									</p:column>
+									<p:column>
+										<h:inputText value="#{posteEmploiMBean.posteEmploiDto.code}" 
+											required="true"
+											requiredMessage="#{posteMsgs.msg_code_required}"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_objet}" styleClass="required"/>
+									</p:column>
+									<p:column>
+										<h:inputText value="#{posteEmploiMBean.posteEmploiDto.objet}" 
+											required="true"
+											requiredMessage="#{posteMsgs.msg_objet_required}"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{posteMsgs.label_date_creation}" styleClass="required" />
+									</p:column>
+									<p:column style="width:75%" >
+										<p:calendar id="dateCreation" 
+											navigator="true" 
+											required="true" 
+											requiredMessage="#{posteMsgs.msg_date_creation_required}"
+											value="#{posteEmploiMBean.posteEmploiDto.dateCreation}"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{posteMsgs.label_resultat_attendus_poste}" />
+									</p:column>
+									<p:column>
+										<h:inputText value="#{posteEmploiMBean.posteEmploiDto.resultat}"/> 
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{posteMsgs.label_niveau_qualification}" styleClass="required" />
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:selectOneMenu id="selectNiveauQualification"
+											value="#{posteEmploiMBean.posteEmploiDto.niveauQualificationDto.id}"
+											required="true"
+											requiredMessage="#{posteMsgs.msg_niveau_qualification_required}">
+											<f:selectItem itemLabel="#{posteMsgs.label_niveau_qualification}"/>
+											<f:selectItems value="#{posteEmploiMBean.niveauQualificationList}"/>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{posteMsgs.label_niveau_competence}" styleClass="required"/>
+									</p:column>
+									<p:column style="width:75%" colspan="3">
+										<p:selectOneMenu id="selectNiveauCompetence"
+											value="#{posteEmploiMBean.posteEmploiDto.niveauCompetenceDto.id}"
+											required="true"
+											requiredMessage="#{posteMsgs.msg_niveau_competence_required}">
+											<f:selectItem itemLabel="#{posteMsgs.label_niveau_competence}"/>
+											<f:selectItems value="#{posteEmploiMBean.niveauCompetenceList}"/>
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+						</p:panelGrid>
+						<p:toolbar id="posteCompetenceToolBar" styleClass="toolBarMesrs" rendered="#{posteEmploiMBean.posteEmploiDto != null}">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+									id="savePosteEmploiBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+									actionListener="#{posteEmploiMBean.onSave}"
+									rendered="#{posteEmploiMBean.posteEmploiDto != null}"/>
+							</p:toolbarGroup>
+						</p:toolbar>
+						<p:panelGrid id="connaissancesGrid" columns="1" cellspacing="0" 
+						styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border connaissancesGrid"
+						rendered="#{posteEmploiMBean.posteEmploiDto.id != null}">
+							<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column styleClass="title">
+										<h:outputText value="#{posteMsgs.label_poste_connaissance_requises}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable id="connaissanceDataTable"
+											value="#{posteEmploiMBean.posteEmploiDto.connaissanceDtos}"
+											var="connaissance"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{posteMsgs.msg_poste_connaissance_empty}">
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+													<p:commandButton id="btnAddConnaissance" styleClass="ui-button-bleu" 
+															title="ajouter connaisssance" icon="ui-icon-plusthick"  
+															process="@this" 
+															ajax="true"
+															immediate="true" 
+															update="@(.connaissanceDialog)"
+															action="#{posteEmploiMBean.onNewConnaissance()}"
+															oncomplete="PF('connaissanceDialog').show()">
+													</p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{posteMsgs.poste_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_type_connaissance}" >
+												<h:outputText value="#{connaissance.typeConnaissanceDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_connaissance}" >
+												<h:outputText value="#{connaissance.description}" />
+											</p:column>
+											<p:column style="width:80px;">	
+											    <p:commandButton id="btnRemoveConnaisance"  
+													action="#{posteEmploiMBean.onRemoveConnaissance()}" 
+													icon="ui-icon-trash" 
+													ajax="true" 
+													update="connaissanceDataTable"   
+													process="@this"
+													immediate="true">
+													<p:confirm header="Confirmation" 
+														message="#{posteMsgs.msg_delete_connaissance_confirmation}" 	
+														icon="ui-icon-alert" />
+													<f:setPropertyActionListener 
+														target="#{posteEmploiMBean.connaissanceSelectedIndex}" value="#{rowIndex}" />		 
+										       </p:commandButton>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:panelGrid id="habileteGrid" columns="1" cellspacing="0" 
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border habileteGrid"
+							rendered="#{posteEmploiMBean.posteEmploiDto.id != null}">
+							<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column styleClass="title">
+										<h:outputText value="#{posteMsgs.label_poste_habliete}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable id="habileteDataTable"
+											value="#{posteEmploiMBean.posteEmploiDto.habileteDtos}"
+											var="habilete"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{posteMsgs.msg_poste_habilete_empty}">
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+													<p:commandButton id="btnAddHabilete" styleClass="ui-button-bleu" 
+															title="ajouter habilete" icon="ui-icon-plusthick"  
+															process="@this" 
+															ajax="true"
+															immediate="true" 
+															update="@(.habileteDialog)"
+															action="#{posteEmploiMBean.onNewHabilete()}"
+															oncomplete="PF('habileteDialog').show()">
+													</p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{posteMsgs.poste_numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_type_habilete}" >
+												<h:outputText value="#{habilete.typeHabileteDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_niveau_habilete}" >
+												<h:outputText value="#{habilete.niveauHabileteDto.libelleLongFr}" />
+											</p:column>
+											<p:column headerText="#{posteMsgs.label_habilitation}" >
+												<h:outputText value="#{habilete.description}" />
+											</p:column>
+											<p:column style="width:80px;">	
+											    <p:commandButton id="btnRemoveConnaisance"  
+													action="#{posteEmploiMBean.onRemoveHabilete()}" 
+													icon="ui-icon-trash" 
+													ajax="true" 
+													update="habileteDataTable"   
+													process="@this"
+													immediate="true">
+													<p:confirm header="Confirmation" 
+														message="#{posteMsgs.msg_delete_habilete_confirmation}" 	
+														icon="ui-icon-alert" />
+													<f:setPropertyActionListener 
+														target="#{posteEmploiMBean.habileteSelectedIndex}" value="#{rowIndex}" />		 
+										       </p:commandButton>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						
+
+		
+						
+				</p:panelGrid>
+			</h:form>
+				</p:outputPanel>
+			</p:outputPanel>
+			
+			
+			<p:dialog position="center" appendTo="@(body)" header="#{posteMsgs.label_connaissance}"
+						id="connaissanceDialog" widgetVar="connaissanceDialog"
+						styleClass="connaissanceDialog"
+						modal="true" showEffect="fade"
+						hideEffect="fade" resizable="true">
+						<p:outputPanel>
+							<h:form id="connaissanceForm">
+								<p:panelGrid columns="1" cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:row>
+											<p:column colspan="2" styleClass="title">
+												<h:outputText value="#{posteMsgs.enrg_connaissance_dialog_title}" styleClass="value"/>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="width: 250px;">
+												<h:outputText value="#{posteMsgs.label_type_connaissance}" styleClass="required"/>
+											</p:column>
+											<p:column>
+												<p:selectOneMenu id="selectionTypeConnaissance" 
+													required="true"
+													requiredMessage="#{posteMsgs.msg_type_connaissance_required}"
+													value="#{posteEmploiMBean.connaissanceDto.typeConnaissanceDto.id}">
+													<f:selectItem itemLabel="#{posteMsgs.label_type_connaissance}"/>
+													<f:selectItems value="#{posteEmploiMBean.typeConnaissanceList}"/>
+												</p:selectOneMenu>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputText value="#{posteMsgs.label_connaissance}" styleClass="required"/>
+											</p:column>
+											<p:column>
+												<h:inputText value="#{posteEmploiMBean.connaissanceDto.description}" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+									<p:toolbar id="posteConnaissanceToolBar" styleClass="toolBarMesrs" >
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+												id="saveConnaissanceBtn" icon="ui-icon-disk" 
+												update="@(.connaissancesGrid)"
+												action="#{posteEmploiMBean.onSaveConnaissance()}"
+												onstart="PF('page').block()" 
+												onsuccess="PF('page').unblock()" 
+												oncomplete="if (!args.validationFailed) {connaissanceDialog.hide()} "/>
+											<p:spacer width="10px"/>
+										</p:toolbarGroup>
+									</p:toolbar>
+								</p:panelGrid>
+							</h:form>
+						</p:outputPanel>
+			</p:dialog>
+			<p:dialog position="center" appendTo="@(body)" header="#{posteMsgs.label_habilete}"
+							id="habileteDialog" widgetVar="habileteDialog"
+							styleClass="habileteDialog"
+							modal="true" showEffect="fade"
+							hideEffect="fade" resizable="true">
+							<p:outputPanel >
+								<h:form id="habileteForm">
+									<p:panelGrid columns="1" cellspacing="0"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:panelGrid id="decisionPnlGrid"
+											styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+											<p:row>
+												<p:column colspan="2" styleClass="title">
+													<h:outputText value="#{posteMsgs.enrg_habilete_dialog_title}" styleClass="value"/>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column style="width: 250px;">
+													<h:outputText value="#{posteMsgs.label_type_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<p:selectOneMenu id="selectionTypeHabilete" 
+														required="true"
+														requiredMessage="#{posteMsgs.msg_type_habilete_required}"
+														value="#{posteEmploiMBean.habileteDto.typeHabileteDto.id}">
+														<f:selectItem itemLabel="#{posteMsgs.label_type_habilete}"/>
+														<f:selectItems value="#{posteEmploiMBean.typeHabileteList}"/>
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column>
+													<h:outputText value="#{posteMsgs.label_niveau_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<p:selectOneMenu id="selectionNiveauHabilete" 
+														required="true"
+														requiredMessage="#{posteMsgs.msg_niveau_habilete_required}"
+														value="#{posteEmploiMBean.habileteDto.niveauHabileteDto.id}">
+														<f:selectItem itemLabel="#{posteMsgs.label_niveau_habilete}"/>
+														<f:selectItems value="#{posteEmploiMBean.niveauHabileteList}"/>
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column>
+													<h:outputText value="#{posteMsgs.label_habilete}" styleClass="required"/>
+												</p:column>
+												<p:column>
+													<h:inputText value="#{posteEmploiMBean.habileteDto.description}" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+										<p:toolbar id="posteHabileteToolBar" styleClass="toolBarMesrs" >
+											<p:toolbarGroup>
+												<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+													id="saveHabileteBtn" icon="ui-icon-disk" 
+													update="@(.habileteGrid)"
+													action="#{posteEmploiMBean.onSaveHabilete()}"
+													onstart="PF('page').block()" 
+													onsuccess="PF('page').unblock()" 
+													oncomplete="if (!args.validationFailed) {habileteDialog.hide()}"/>
+											<p:spacer width="10px"/>
+											</p:toolbarGroup>
+										</p:toolbar>
+									</p:panelGrid>
+								</h:form>
+							</p:outputPanel>
+				</p:dialog>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

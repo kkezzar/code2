@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="243" pageHeight="153" orientation="Landscape" columnWidth="243" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e21835b8-ab6f-4536-8c26-cc124048b20e">
+	<property name="ireport.zoom" value="3.3000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.background.image" value="C:\Users\komrani\Pictures\carte_empty.png"/>
+	<property name="ireport.background.image.properties" value="true,false,0.75,0,0,0,0,0,0"/>
+	<parameter name="PHOTO_ETUDIANT" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<field name="individuNomLatin" class="java.lang.String"/>
+	<field name="numeroMatricule" class="java.lang.String"/>
+	<field name="individuPrenomLatin" class="java.lang.String"/>
+	<field name="individuDateNaissance" class="java.util.Date"/>
+	<field name="individuLieuNaissance" class="java.lang.String"/>
+	<field name="refLibelleFiliere" class="java.lang.String"/>
+	<field name="refLibelleSpecialite" class="java.lang.String"/>
+	<field name="llEtablissementLatin" class="java.lang.String"/>
+	<field name="refLibelleDomaine" class="java.lang.String"/>
+	<field name="anneeAcademiqueCode" class="java.lang.String"/>
+	<field name="niveauLibelleLongLt" class="java.lang.String"/>
+	<field name="individuibelleWilayaNaissance" class="java.lang.String"/>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="0692e0aa-7fa9-47fd-bc92-14adf848a320" x="0" y="0" width="243" height="1" forecolor="#333333" backcolor="#333333"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="1a461715-b36c-4a0f-b833-8fb20caf74fe" x="4" y="3" width="186" height="14"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{llEtablissementLatin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="3dc4cfa9-11f7-499d-9333-411f9b69dd17" x="0" y="107" width="243" height="4" forecolor="#CCCCCC" backcolor="#CCCCCC"/>
+			</rectangle>
+			<rectangle radius="5">
+				<reportElement uuid="72b82594-4d88-43ad-b4f6-c267d94dba40" x="-11" y="-1" width="124" height="17" forecolor="#FFFF99" backcolor="#FFFFCC"/>
+			</rectangle>
+			<rectangle radius="3">
+				<reportElement uuid="15a34bd9-b4e5-4575-9b66-35a80aea1685" x="174" y="16" width="62" height="62"/>
+				<graphicElement>
+					<pen lineStyle="Dotted" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="273b8d78-cff7-4c24-a14f-6016d3012a6b" x="4" y="19" width="161" height="20"/>
+				<textElement>
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuNomLatin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dc10f62d-d318-4f9d-8366-206f890c1221" x="4" y="30" width="161" height="20" forecolor="#000000"/>
+				<textElement>
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuPrenomLatin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="15ed8c0b-88a1-41a8-a507-84cbf22c5d45" x="3" y="83" width="160" height="15"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refLibelleFiliere} != null ? $F{refLibelleFiliere} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40021d47-cf09-4cdb-9d06-06d6fbd9d4a4" x="3" y="94" width="162" height="16"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refLibelleSpecialite} != null ? $F{refLibelleSpecialite} : ""]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="751fe85e-07c2-4b29-9fc8-6d28eaa88cc2" x="4" y="42" width="73" height="16" forecolor="#666666"/>
+				<textElement>
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuDateNaissance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="585a3cb1-7dc6-45d7-8d18-ed83ccf4f0ce" x="1" y="0" width="112" height="17" forecolor="#990000"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroMatricule}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7d640711-b3d2-4bd9-96c9-50f57e77bebf" x="3" y="71" width="162" height="14"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refLibelleDomaine} != null ? $F{refLibelleDomaine} : ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d3b1276b-b12b-4acb-b39c-82290044393a" x="77" y="42" width="6" height="15" forecolor="#666666"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[à]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement uuid="b820b53b-1a0b-4f01-bb6d-c98a26066ef2" x="175" y="17" width="60" height="60"/>
+				<imageExpression><![CDATA[$P{PHOTO_ETUDIANT}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="e6d2c5b9-3ffc-4d61-baa3-dadf477d3eb6" x="88" y="112" width="51" height="13"/>
+				<textElement>
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anneeAcademiqueCode}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="082c4038-c7d7-4bc7-b80a-43cd3c74556d" x="128" y="-16" width="57" height="26"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="5e0725b5-8b46-4cce-a953-0a1616c78e76" x="186" y="-16" width="50" height="26"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="cb6c38a1-db98-4191-9d37-75640e91c280" x="4" y="111" width="87" height="14" forecolor="#666666"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Année académique :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3c5cc2d0-038c-4890-ac40-3f5e8e68c995" x="3" y="59" width="160" height="14" forecolor="#660000"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{niveauLibelleLongLt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f53534f5-e1cf-4264-b778-30df57107c98" x="91" y="42" width="89" height="15" forecolor="#666666"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuibelleWilayaNaissance} != null ? $F{individuibelleWilayaNaissance} : ""]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="fa1537e5-a956-4246-bc34-62982f91afe5" x="141" y="113" width="102" height="12"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="EAN128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{numeroMatricule}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,89 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_emploi_info_detail">
+		<p:fieldset legend="Emploi du temps" toggleable="true" style="width:1100px"
+			rendered="#{not empty emploiBean.emploiDto and emploiBean.emploiDto.id!=0}">
+			<p:panelGrid columns="1" cellspacing="0">
+			<p:panelGrid columns="2">
+
+				
+						<p:outputLabel
+							value="#{emploiMsgs.emploi_annee_academique} "></p:outputLabel>
+
+					
+						<h:outputText value="#{emploiBean.emploiDto.anneeAcademiqueCode}" />
+					
+						<p:outputLabel
+							value="#{emploiMsgs.emploi_periode} "></p:outputLabel>
+					
+						<h:outputText value="#{emploiBean.emploiDto.periodeLibelleLongFr}" />
+				
+				<p:outputLabel value="#{emploiMsgs.emploi_offre_formation} "></p:outputLabel>
+                  <h:outputText value="#{emploiBean.emploiDto.offreFormationLibelleFr}" />
+					<p:outputLabel value="#{emploiMsgs.emploi_niveau} "></p:outputLabel>
+					<h:outputText value="#{emploiBean.emploiDto.niveauLibelleLongLt}" />
+					<p:outputLabel value="#{emploiMsgs.emploi_situation} "></p:outputLabel>
+					<h:outputText
+											value="#{emploiBean.emploiDto.estVerrouille? 'Verouillé' : 'Ouvert'} " />
+					<p:outputLabel value="#{emploiMsgs.emploi_date_verrouillage} " rendered="#{emploiBean.emploiDto.estVerrouille}"></p:outputLabel>
+					<h:outputText value="#{emploiBean.emploiDto.dateVerrouillage}"
+											rendered="#{emploiBean.emploiDto.estVerrouille}">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"  timeZone="GMT+1"/>
+										</h:outputText>
+			</p:panelGrid>
+			
+          <p:toolbar id="emploiInfoToolBar"
+			styleClass="toolBarMesrs" >
+			<p:toolbarGroup>
+			<p:commandButton value="#{commonmsgs.bouton_verrouiller}" rendered="#{not emploiBean.emploiDto.estVerrouille}"
+							id="fenceBtn" icon="ui-icon-locked"							
+							onstart="PF('emploiFormBlock').block()"
+							oncomplete="PF('emploiFormBlock').unblock()"
+							update=":pnl_emploi_Edit"
+							actionListener="#{emploiBean.fenceEmploi}">							
+                         <p:confirm		header="Confirmation"	 message="#{emploiMsgs.emploi_fence_confirm_msg}"	icon="ui-icon-alert" />
+						</p:commandButton>	
+						<p:spacer width="5px"></p:spacer>
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" rendered="#{not emploiBean.emploiDto.estVerrouille}"
+							id="deleteBtn" icon="ui-icon-minus"							
+							onstart="PF('emploiFormBlock').block()"
+							oncomplete="PF('emploiFormBlock').unblock()"
+							update=":pnl_emploi_Edit"
+							actionListener="#{emploiBean.deleteEmploi()}">							
+                         <p:confirm		header="Confirmation"	 message="#{emploiMsgs.emploi_delete_confirm_msg}"	icon="ui-icon-alert" />
+						</p:commandButton>	
+			</p:toolbarGroup>
+        
+
+
+			<p:toolbarGroup align="right">
+ <p:commandButton value="#{commonmsgs.bouton_annuler}" immediate="true"
+							id="backBtn" icon="ui-icon-arrowreturn-1-w"							
+							onstart="PF('emploiFormBlock').block()"
+							oncomplete="PF('emploiFormBlock').unblock()"
+							update=":pnl_emploi_Edit"
+							actionListener="#{emploiBean.annuler}">
+							</p:commandButton>
+			</p:toolbarGroup> 
+ 		</p:toolbar> 
+		</p:panelGrid>
+		</p:fieldset>
+		
+
+	</h:form>
+
+
+
+
+
+</ui:composition>
+

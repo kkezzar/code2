@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="pageTitleContent">
+		#{corpsmsgs.page_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel" >
+<h:panelGrid style="width: 100%;">
+<p:row>
+<p:column>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton 
+							action="#{corpsMBean.onNew}" 
+							styleClass="ui-buttop-bleu"
+							value="#{commonmsgs.bouton_nouveau}"
+							update=":form_view_corps"
+							onstart="PF('page').block()" 
+							oncomplete="PF('page').unblock()"/>							
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<h:outputLabel for="keyWordsID" value="#{commonmsgs.search_label_mots_cles}" style="font-size:11px" /> 	
+						<p:separator />
+							<p:inputText id="keyWordsID" value="#{corpsMBean.searchKeyWords}"   
+										 label="#{commonmsgs.search_label_mots_cles}" />
+						<p:watermark for="keyWordsID" value="Saisissez un mot clé" />  
+						<p:separator />
+						<p:commandButton   	
+										id="btnSearch" 
+										update="@([id$=resultSearchDataTable])"
+										ajax="true" icon="ui-icon-search"
+										process="@this keyWordsID"
+										styleClass="ui-button-bleu"
+										action="#{corpsMBean.onSearch()}" 
+										onstart="PF('page').block()" 
+										oncomplete="PF('page').unblock()"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+				
+</h:form>
+</p:column>
+</p:row>
+				<p:spacer height="20px"></p:spacer>
+<p:row>
+<p:column>
+				<p:dataTable id="resultSearchDataTable"
+					value="#{corpsMBean.corpsDtos}" var="corps" paginator="true"
+					rowKey="#{corps.id}" rowIndexVar="rowIndex"
+					paginatorPosition="bottom" selectionMode="single" lazy="false"
+					rows="10"
+					emptyMessage="#{grhmsgs.statuts_no_result}">
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{corpsMBean.onCorpsDtoSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_view_corps" />
+					<f:facet name="header">
+						<h:outputText value="#{corpsmsgs.corps_list}" />
+					</f:facet>
+					<p:column headerText="N°">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_statut}">
+						<h:outputText value="#{corps.statut.numero}   #{corps.statut.annee}"/>
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_corps}">
+						<h:outputText value="#{corps.nomenclatureByIdNomenclatureCorps.libelleLongFr}"/>
+					</p:column>
+					<p:column headerText="#{grhmsgs.grh_filiere}">
+						<h:outputText value="#{corps.nomenclatureByIdNomenclatureFiliere.libelleLongFr}"/>
+					</p:column>
+				</p:dataTable>
+				</p:column>
+</p:row>
+			<p:spacer height="20px"></p:spacer>
+
+<p:row>
+<p:column>
+			<h:form id="form_view_corps" >
+				<p:panel rendered="#{corpsMBean.corpsDto!=null}" header="#{corpsmsgs.add_corps}">
+							<p:panelGrid columns="4" styleClass="ui-panelgrid-full-width">
+								<h:outputLabel value="#{grhmsgs.grh_statut}" styleClass="required"/>
+								<p:selectOneMenu id="statut"
+									label="#{grhmsgs.grh_statut}"
+									value="#{corpsMBean.corpsDto.statut.id}"
+									styleClass="labelValue"
+									required="true"
+									requiredMessage="#{corpsmsgs.statut_required}">
+									<f:selectItem itemLabel="--Statut--"/>
+									<f:selectItems value="#{corpsMBean.status}" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="#{grhmsgs.grh_corps}" styleClass="required" />
+								<p:selectOneMenu id="corps"
+									label="#{grhmsgs.grh_corps}"
+									value="#{corpsMBean.corpsDto.nomenclatureByIdNomenclatureCorps.id}"
+									styleClass="labelValue"
+									required="true"
+									requiredMessage="#{corpsmsgs.corps_required}">
+									<f:selectItem itemLabel="--Corps--"/>
+									<f:selectItems value="#{corpsMBean.corps}" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="#{grhmsgs.grh_filiere}" styleClass="required"/>
+								<p:selectOneMenu id="filiere"
+									label="#{grhmsgs.grh_filiere}"
+									value="#{corpsMBean.corpsDto.nomenclatureByIdNomenclatureFiliere.id}"
+									styleClass="labelValue"	
+									required="true"
+									requiredMessage="#{corpsmsgs.filiere_required}">
+									<f:selectItem itemLabel="--Filiere--"/>
+									<f:selectItems value="#{corpsMBean.filieres}" />
+								</p:selectOneMenu>
+								
+								
+							</p:panelGrid>
+					
+				<p:toolbar id="corpsToolBar" styleClass="toolBarMesrs"
+						style="width:100%;margin:0;">
+
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								id="saveBtn" icon="ui-icon-disk"
+								onstart="PF('page').block()" 
+								oncomplete="PF('page').unblock()"
+								action="#{corpsMBean.onSave()}"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_corps])">
+							</p:commandButton>
+							<span class="ui-separator">
+								<span class="ui-icon ui-icon-grip-dotted-vertical" />
+							</span>
+							<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+								id="deleteBtn" icon="ui-icon-disk"
+								styleClass="ui-button-delete-o"
+								onstart="PF('page').block()" 
+								oncomplete="PF('page').unblock()"
+								action="#{corpsMBean.onDelete()}"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_corps])"
+								rendered="#{corpsMBean.corpsDto.id != null}">
+							</p:commandButton>
+							
+							
+						</p:toolbarGroup>
+
+					</p:toolbar>
+				</p:panel>
+
+			</h:form>
+			</p:column>
+			</p:row>
+</h:panelGrid>
+
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

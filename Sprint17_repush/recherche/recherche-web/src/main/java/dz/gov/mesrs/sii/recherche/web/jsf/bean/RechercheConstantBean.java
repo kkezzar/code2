@@ -1,0 +1,209 @@
+package dz.gov.mesrs.sii.recherche.web.jsf.bean;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
+import dz.gov.mesrs.sii.commons.business.util.UtilConstants;
+
+/**
+ * 
+ * @author Salem
+ * @version V1.0
+ * @date 27-10-2014
+ * @description Managed bean pour les constantes
+ * 
+ */
+@ManagedBean(name = "rechercheConstantBean")
+@SessionScoped
+public class RechercheConstantBean {
+
+
+	// Nomenclature Constants
+	public final static String RCH_RECHERCHE_DOMAINE_CODE = "DMN00004";
+
+	// Messages .properties file name Constants
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_FILE_NAME = "rchStructureMsgs";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_FILE_NAME = "rchCircuitMsgs";
+	public final static String RECHERCHE_PROGRAMMES_RESSOURCE_MESSAGE_FILE_NAME = "rchProgrammeMsgs";
+	public final static String RECHERCHE_DEMANDE_BUDGET_RESSOURCE_MESSAGE_FILE_NAME = "rchBudgetMsgs";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_RESSOURCE_MESSAGE_FILE_NAME = "rchEvalChrMsgs";
+	public final static String RECHERCHE_DEMANDE_BUDGET_START_YEAR= "2010";
+	// Messages .properties key values Constants
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_STRUCTURE_EXISTING_STRUCTURE = "structure_recherche_dialog_ajouter_structure_existing_structure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_STRUCTURE_SUCCESS = "structure_recherche_dialog_ajouter_structure_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_STRUCTURE_FAILURE = "structure_recherche_dialog_ajouter_structure_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_STRUCTURE_SUCCESS = "structure_recherche_dialog_remove_structure_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_STRUCTURE_FAILURE = "structure_recherche_dialog_remove_structure_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_GROUPE_EXISTING_STRUCTURE = "structure_recherche_dialog_ajouter_groupe_existing_groupe";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_GROUPE_SUCCESS = "structure_recherche_dialog_ajouter_groupe_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_GROUPE_FAILURE = "structure_recherche_dialog_ajouter_groupe_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_GROUPE_SUCCESS = "structure_recherche_dialog_remove_groupe_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_GROUPE_FAILURE = "structure_recherche_dialog_remove_groupe_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_THEMES_GROUPES_LISTE_DEFAULT = "structure_recherche_datatable_list_groupes_list_default";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_THEMES_DIALOG_DATE_CONTROL = "structure_recherche_dialog_theme_date_control";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_THEME_SUCCESS = "structure_recherche_dialog_ajouter_theme_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_THEME_FAILURE = "structure_recherche_dialog_ajouter_theme_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_UPDATE_THEME_SUCCESS = "structure_recherche_dialog_modifier_theme_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_UPDATE_THEME_FAILURE = "structure_recherche_dialog_modifier_theme_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_THEME_SUCCESS = "structure_recherche_dialog_delete_theme_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_THEME_FAILURE = "structure_recherche_dialog_delete_theme_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_THEME_EXISTING_CONTROL = "structure_recherche_dialog_ajouter_theme_existing_control";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_PARTNER_EXISTING_CONTROL = "structure_recherche_dialog_add_partner_existing_control";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_PARTNER_FAILURE = "structure_recherche_dialog_add_partner_failure";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_ADD_PARTNER_SUCCESS = "structure_recherche_dialog_add_partner_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_PARTNER_SUCCESS = "structure_recherche_dialog_delete_partner_success";
+	public final static String RECHERCHE_STRUCTURE_RESSOURCE_MESSAGE_KEY_REMOVE_PARTNER_FAILURE = "structure_recherche_dialog_delete_partner_failure";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_PROCESS_EXISTING_CODE = "programmes_circuits_msg_add_processus_dialog_existing_code";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_PROCESS_EXISTING_LABEL_FR = "programmes_circuits_msg_add_processus_dialog_existing_libelle_fr";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_PROCESS_EXISTING_LABEL_AR = "programmes_circuits_msg_add_processus_dialog_existing_libelle_ar";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_PROCESS_SUCCESS = "programmes_circuits_msg_add_processus_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_UPDATE_PROCESS_SUCCESS = "programmes_circuits_msg_update_processus_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_REMOVE_PROCESS_SUCCESS = "programmes_circuits_msg_remove_processus_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_REMOVE_STEP_SUCCESS = "programmes_circuits_msg_remove_step_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_STEP_EXISTING_LABEL_FR = "programmes_circuits_msg_add_step_dialog_existing_libelle_fr";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_STEP_EXISTING_GROUPE_ROLE= "programmes_circuits_msg_add_step_dialog_existing_groupe_role";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_ADD_STEP_SUCCESS = "programmes_circuits_msg_add_step_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_KEY_UPDATE_STEP_SUCCESS = "programmes_circuits_msg_update_step_dialog_success";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_EDIT = "programmes_circuits_detail_circuit_panel_title_edit";
+	public final static String RECHERCHE_CIRCUIT_VALIDATION_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_ADD = "programmes_circuits_detail_circuit_panel_title_add";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_EDIT = "programmes_recherche_detail_program_panel_title_edit";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_ADD = "programmes_recherche_detail_program_panel_title_add";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_PANEL_DETAILS_AXE_TITLE_EDIT = "programmes_recherche_detail_axe_program_panel_title_edit";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_PANEL_DETAILS_AXE_TITLE_ADD = "programmes_recherche_detail_axe_program_panel_title_add";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_SAVE_PROGRAM_SUCCESS = "programmes_recherche_msg_save_program_success";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_REMOVE_AXE_SUCCESS = "programmes_recherche_msg_remove_axe_success";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_SAVE_PROGRAM_NO_CHANGES = "programmes_recherche_msg_save_axe_no_changes";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_SAVE_AXE_SUCCESS = "programmes_recherche_msg_save_axe_success";
+	public final static String RECHERCHE_PROGRAMME_RESSOURCE_MESSAGE_SAVE_AXE_EXISTING_CONTROL = "programmes_recherche_msg_save_axe_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_EDIT = "research_program_save_demand_details_panel_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_PANEL_DETAILS_TITLE_ADD = "research_program_save_demand_details_panel_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_ACTIVITY_DIALOG_EDIT = "research_program_save_demand_details_activities_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_ACTIVITY_DIALOG_ADD = "research_program_save_demand_details_activities_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_DEMAND_SUCCESS = "research_program_save_demand_msg_save_demand_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_ACTIVITY_SUCCESS = "research_program_save_demand_msg_save_activity_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_DEMAND_NO_CHANGES = "research_program_save_demand_msg_save_demand_no_changes";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_ACTIVITY_EXISTING_CONTROL = "research_program_save_demand_msg_save_activity_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_REMOVE_ACTIVITY_SUCCESS = "research_program_save_demand_msg_remove_activity_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_EQUIPMENT_DIALOG_EDIT = "research_program_save_demand_details_equipements_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_EQUIPMENT_DIALOG_ADD = "research_program_save_demand_details_equipements_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_EQUIPMENT_EXISTING_CONTROL = "research_program_save_demand_msg_add_equipment_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_EQUIPMENT_SUCCESS = "research_program_save_demand_msg_save_equipment_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_REMOVE_EQUIPMENT_SUCCESS = "research_program_save_demand_msg_remove_equipment_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_CREDIT_DIALOG_EDIT = "research_program_save_demand_details_credits_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_CREDIT_DIALOG_ADD = "research_program_save_demand_details_credits_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_CREDIT_SUCCESS = "research_program_save_demand_msg_save_credit_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_REMOVE_CREDIT_SUCCESS = "research_program_save_demand_msg_remove_credit_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_CREDIT_EXISTING_CONTROL= "research_program_save_demand_msg_add_credit_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_OPERATION_DIALOG_EDIT = "research_program_save_demand_details_operations_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_OPERATION_DIALOG_ADD = "research_program_save_demand_details_operations_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_OPERATION_EXISTING_CONTROL = "research_program_save_demand_msg_add_operation_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_OPERATION_SUCCESS = "research_program_save_demand_msg_save_operation_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_REMOVE_OPERATION_SUCCESS = "research_program_save_demand_msg_remove_operation_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_RESULT_DIALOG_EDIT = "research_program_save_demand_details_results_title_edit";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_RESULT_DIALOG_ADD = "research_program_save_demand_details_results_title_add";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_DETAILS_RESULT_EXISTING_CONTROL = "research_program_save_demand_msg_add_result_existing_control";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SAVE_RESULT_SUCCESS = "research_program_save_demand_msg_save_result_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_REMOVE_RESULT_SUCCESS = "research_program_save_demand_msg_remove_result_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_SUBMIT_DEMAND_SUCCESS = "research_program_save_demand_msg_submit_demand_success";
+	public final static String RECHERCHE_DEAMANDE_BUDGET_RESSOURCE_MESSAGE_VALIDATE_DEMAND_SUCCESS = "research_program_validate_demand_msg_success";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_DETAILS_EDIT = "rechercher_evaluation_dialog_edit_grid_title";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_DETAILS_ADD = "rechercher_evaluation_dialog_add_grid_title";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_DIALOG_DETAILS_ADD = "rechercher_evaluation_dialog_add_grid_detail_title";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_DIALOG_DETAILS_EDIT = "rechercher_evaluation_dialog_edit_grid_detail_title";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_SUCCESS = "rechercher_evaluation_grille_save_msg_success";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_NO_CHANGES = "rechercher_evaluation_grille_save_msg_no_changes";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_DETAIL_SUCCESS = "rechercher_evaluation_grille_detail_save_msg_success";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_DETAIL_EXISTING_CONTROL = "rechercher_evaluation_grille_detail_save_msg_exisitng_control";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_SELECT_CRITERIA_DEFAULT_SELECTION = "rechercher_evaluation_add_grid_dialog_selec_onemenu_criteria_default_label_selection";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_SAVE_GRID_SELECT_CRITERIA_NO_SELECTION = "rechercher_evaluation_add_grid_dialog_selec_onemenu_criteria_default_label_no_item";
+	public final static String RECHERCHE_GRILLE_EVALUATION_RESSOURCE_MESSAGE_REMOVE_GRID_DETAIL_SUCCESS = "rechercher_evaluation_grille_remove_detail_success";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_RESSOURCE_MESSAGE_DETAILS_ADD= "rechercher_evaluation_evaluation_chercheur_add_detail_title";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_RESSOURCE_MESSAGE_DETAILS_EDIT= "rechercher_evaluation_evaluation_chercheur_edit_detail_title";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_RESSOURCE_MESSAGE_SAVE_EVALUATION_SUCCESS = "rechercher_evaluation_evaluation_save_msg_success";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_VALUE_RESSOURCE_MESSAGE_DETAILS_ADD= "rechercher_evaluation_evaluation_chercheur_value_add_detail_title";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_VALUE_RESSOURCE_MESSAGE_DETAILS_EDIT= "rechercher_evaluation_evaluation_chercheur_value_edit_detail_title";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_VALUE_RESSOURCE_MESSAGE_SAVE_SUCCESS = "rechercher_evaluation_evaluation_value_save_msg_success";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_VALUE_RESSOURCE_MESSAGE_SAVE_EXISTING_CONTROL = "rechercher_evaluation_evaluation_value_save_msg_exisitng_control";
+	public final static String RECHERCHE_EVALUATION_CHERCHEUR_VALUE_RESSOURCE_MESSAGE_REMOVE_VALUE_SUCCESS = "rechercher_evaluation_evaluation_value_remove_detail_success";
+	
+	//GESTION PROJET
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_FILE_NAME = "rchProjetsMsgs";
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_KEY_PROJET_DIALOG_DATE_CONTROL = "structure_recherche_dialog_projet_date_control";
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_KEY_PROJET_DIALOG_CODE_CONTROL = "structure_recherche_dialog_projet_code_control";
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_KEY_PROJET_DATE_EVALUATION_CODE_CONTROL ="structure_recherche_dialog_projet_date_evaluation_control";
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_KEY_PROJET_DATE_FIN_PERIODE_DIALOG_CODE_CONTROL ="structure_recherche_dialog_projet_date_fin_periode_control";
+	public final static String RECHERCHE_PROJET_RESSOURCE_MESSAGE_KEY_PROJET_DATE_CLOTURE_DIALOG_CODE_CONTROL ="structure_recherche_dialog_projet_date_cloture_control";
+	
+	public String getSituationCreeeCode() {
+		return UtilConstants.SITUATION_CREEE_CODE;
+	}
+
+	public String getSituationValideeCode() {
+		return UtilConstants.SITUATION_VALIDEE_CODE;
+	}
+
+	public String getSituationEnregistreeCode() {
+		return UtilConstants.SITUATION_ENREGISTREE_CODE;
+	}
+
+	public String getSituationEnregistreeAvantValidationCode() {
+		return UtilConstants.SITUATION_ENREGISTREE_AVANT_VALIDATION_CODE;
+	}
+
+	public String getSituationGenereeAutoCode() {
+		return UtilConstants.SITUATION_GENEREE_AUTO_CODE;
+	}
+
+	public String getSituationTraiteeCode() {
+		return UtilConstants.SITUATION_TRAITEE_CODE;
+	}
+
+	public String getSituationSoumiseValidationCode() {
+		return UtilConstants.SITUATION_SOUMISE_VALIDATION_CODE;
+	}
+
+	public String getSituationAReformulerCode() {
+		return UtilConstants.SITUATION_A_REFORMULER_CODE;
+	}
+
+	public String getSituationPublieeCode() {
+		return UtilConstants.SITUATION_PUBLIEE_CODE;
+	}
+
+	public String getSituationClotureeCode() {
+		return UtilConstants.SITUATION_CLOTUREE_CODE;
+	}
+
+	public String getSituationRejeteeCode() {
+		return UtilConstants.SITUATION_REJETEE_CODE;
+	}
+
+	public String getDemandeSituationValideeCode() {
+		return UtilConstants.DEMANDE_SITUATION_VALIDEE_CODE;
+	}
+
+	public String getDemandeSituationInvalideeCode() {
+		return UtilConstants.DEMANDE_SITUATION_INVALIDEE_CODE;
+	}
+
+	public String getDemandeSituationCreeeCode() {
+		return UtilConstants.DEMANDE_SITUATION_CREEE_CODE;
+	}
+
+	public String getDemandeSituationSoumiseValidationCode() {
+		return UtilConstants.DEMANDE_SITUATION_SOUMISE_VALIDATION_CODE;
+	}
+
+	public String getDemandeSituationHabiliteeCode() {
+		return UtilConstants.DEMANDE_SITUATION_HABILITEE_CODE;
+	}
+
+	public String getDemandeSituationRejeteeCode() {
+		return UtilConstants.DEMANDE_SITUATION_REJETEE_CODE;
+	}
+
+	public String getDemandeSituationAReformulerCode() {
+		return UtilConstants.DEMANDE_SITUATION_A_REFORMULER_CODE;
+	}
+
+}

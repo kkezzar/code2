@@ -1,0 +1,208 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel styleClass="ueInfo" id="ueInfo">
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="code" style="width:100%"
+						value="#{uniteEnseignementMsgs.unite_enseignement_code}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="code" value="#{ueBB.ue.code}" required="true"
+						style="width:100%"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_code_required}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel style="width:100%"
+						value="#{uniteEnseignementMsgs.unite_enseignement_nature_ue}"
+						for="nature" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectOneMenu id="nature" value="#{ueBB.ue.ncNatureUeId}"
+						style="width:100%" required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_nature_ue_required}">
+						<f:selectItem
+							itemLabel="#{uniteEnseignementMsgs.unite_enseignement_combobox_select_type_ue}"
+							itemValue="" />
+						<f:selectItems value="#{ueBB.natureUEList}" />
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="libelleFr"
+						value="#{uniteEnseignementMsgs.unite_enseignement_libelle_fr}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="libelleFr" value="#{ueBB.ue.libelleFr}"
+						required="true" style="width:100%"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_libelle_fr_required}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel for="libelleAr"
+						value="#{uniteEnseignementMsgs.unite_enseignement_libelle_ar}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="libelleAr" value="#{ueBB.ue.libelleAr}"
+						required="true" style="width:100%"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_libelle_ar_required}"
+						size="50" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="abreviationFr"
+						value="#{uniteEnseignementMsgs.unite_enseignement_abreviation_fr}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="abreviationFr" value="#{ueBB.ue.abreviationFr}"
+						required="true" style="width:100%"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_abreviation_fr_required}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel for="abreviationAr"
+						value="#{uniteEnseignementMsgs.unite_enseignement_abreviation_ar}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="abreviationAr" value="#{ueBB.ue.abreviationAr}"
+						required="true" style="width:100%"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_abreviation_ar_required}" />
+
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="caractereUe"
+						value="#{uniteEnseignementMsgs.unite_enseignement_caractere}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectOneMenu id="caractereUe" style="width:100%"
+						value="#{ueBB.ue.ncCaractereUeId}" required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_caractere_ue_required}">
+						<f:selectItem
+							itemLabel="#{uniteEnseignementMsgs.unite_enseignement_combobox_select_caractere_ue}"
+							itemValue="" />
+						<f:selectItems value="#{ueBB.caractereUEList}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel for="appreciationUe"
+						value="#{uniteEnseignementMsgs.unite_enseignement_appreciation}" />
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:selectOneMenu id="appreciationUe" style="width:100%"
+						value="#{ueBB.ue.ncAppreciationUeId}">
+						<f:selectItem
+							itemLabel="#{uniteEnseignementMsgs.unite_enseignement_combobox_select_appreciation_ue}"
+							itemValue="" />
+						<f:selectItems value="#{ueBB.appreciationUEList}" />
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="credits"
+						value="#{uniteEnseignementMsgs.unite_enseignement_credit}" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="credits" value="#{ueBB.ue.credits}"
+						required="true" style="width:100%" minValue="0.0" maxValue="30"
+						decimalSeparator="."
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_credit_required}" />
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_libre}" />
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:selectBooleanCheckbox value="#{ueBB.ue.libre}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="volumeHorairePres"
+						value="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_pres}" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="volumeHorairePres" style="width:100%"
+						value="#{ueBB.ue.volumeHorairePres}" required="true"
+						decimalSeparator="."
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_pres_required}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel for="volumeHorairePerso"
+						value="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_perso}" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="volumeHorairePerso" style="width:100%"
+						value="#{ueBB.ue.volumeHorairePerso}" equired="true"
+						decimalSeparator="."
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_perso_required}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel for="volumeHoraireHebdo"
+						value="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_hebdo}" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="volumeHoraireHebdo" style="width:100%"
+						value="#{ueBB.ue.volumeHoraireHebdo}" required="true"
+						decimalSeparator="."
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_hebdo_required}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_date_creation}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{ueBB.ue.dateCreation}" styleClass="value"
+						style="width:100%">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_date_modification}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{ueBB.ue.dateModification}"
+						styleClass="value" style="width:100%">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<br />
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<p:commandButton id="cmdbtn_enregistrer" process="ueInfo"
+					value="#{commonmsgs.bouton_enregistrer}"
+					onstart="PF('tabUIWidget').block()"
+					onsuccess="PF('tabUIWidget').unblock()"
+					actionListener="#{ueBB.saveUe}" icon="ui-icon-disk"
+					update="tbvw_ueDetail">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</p:outputPanel>
+
+</ui:composition>
+

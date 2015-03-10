@@ -1,0 +1,264 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:form id="evalForm">
+		<pe:blockUI target="evalForm" widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<p:growl id="msgs" showDetail="true" autoUpdate="true"
+			showSummary="false" closable="true" life="5000" />
+		<ui:include
+			src="/pages/cursus/controlecontinu/ControleContinuValidateSearch.xhtml" />
+		<br />
+		<p:panel rendered="#{validateControleContinuBean.showTable}"
+			id="detail">
+			<p:fieldset id="fsSearchResult"
+				legend="#{evalControleContinuMsgs.eval_controle_continu_data_grid_result_recherche}"
+				styleClass="mesrsFieldset">
+				<p:dataGrid var="row"
+					style="width:200px;overflow-x:hidden;font-size:small"
+					value="#{validateControleContinuBean.moyenneCCList}" columns="2"
+					layout="grid" rows="8" paginator="true" id="datagrid"
+					emptyMessage="#{evalControleContinuMsgs.eval_controle_continu_data_grid_empty_result}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+					rowsPerPageTemplate="6,8,10,12,16">
+					<p:ajax event="page" onstart="PF('globalWidget').block()"
+						oncomplete="PF('globalWidget').unblock()">
+					</p:ajax>
+					<p:panel
+						header="#{row.affGroupePedagogique.nomEtudiant} #{row.affGroupePedagogique.prenomEtudiant} "
+						style="text-align:center;width:250;font-size:9pt">
+						<p:panelGrid columns="2" cellspacing="0">
+							<p:column>
+								<p:graphicImage value="#{photoEtudiantBB.photo}"
+									rendered="#{row.affGroupePedagogique.urlPhoto!=null}"
+									alt="#{documentmsgs.document_photo_vide}" width="100"
+									height="150">
+									<f:param name="url"
+										value="#{row.affGroupePedagogique.urlPhoto}" />
+								</p:graphicImage>
+								<p:graphicImage value="/resources/images/boy.png"
+									rendered="#{row.affGroupePedagogique.urlPhoto==null}"
+									alt="#{documentmsgs.document_photo_vide}" width="150"
+									height="200">
+								</p:graphicImage>
+							</p:column>
+							<p:column style="width:200px">
+								<p:panelGrid style="text-align:left;width:100%;">
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{evalControleContinuMsgs.eval_controle_continu_data_grid_matricule_etudiant}" />
+										</p:column>
+										<p:column>
+											<h:outputText styleClass="value"
+												value="#{row.affGroupePedagogique.numeroMatricule}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{evalControleContinuMsgs.eval_controle_continu_data_grid_date_naissance_etudiant}" />
+										</p:column>
+										<p:column>
+											<h:outputText styleClass="value"
+												value="#{row.affGroupePedagogique.dateNaissanceEtudiant}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+
+											<p:dataTable id="apDataTable" var="ap"
+												emptyMessage="#{evalControleContinuMsgs.eval_controle_continu_note_data_table_seacrh_result_no_result}"
+												styleClass="detailStyle" value="#{row.noteApList}"
+												resizableColumns="true">
+												<p:column sortBy="#{ap.moyenneAp.apCode}">
+													<f:facet name="header">
+														<h:outputText
+															value="#{evalControleContinuMsgs.eval_controle_continu_data_grid_ap}" />
+													</f:facet>
+													<h:outputText value="#{ap.moyenneAp.apCode}" />
+												</p:column>
+												<p:column sortBy="#{ap.moyenneAp.formatMoyenneAp}">
+													<f:facet name="header">
+														<h:outputText
+															value="#{evalControleContinuMsgs.eval_controle_continu_data_grid_moyenne}" />
+													</f:facet>
+													<h:outputText value="#{ap.moyenneAp.formatMoyenneAp}" />
+												</p:column>
+												<p:column sortBy="#{ap.moyenneAp.formatCoefficient}">
+													<f:facet name="header">
+														<h:outputText
+															value="#{evalControleContinuMsgs.eval_controle_continu_data_grid_coefficient}" />
+													</f:facet>
+													<h:outputText value="#{ap.moyenneAp.formatCoefficient}" />
+												</p:column>
+												<p:columnGroup type="footer">
+													<p:row>
+														<p:column colspan="3"
+															style="text-align:right;font-weight: bold"
+															styleClass="value"
+															footerText="Moyenne: #{row.formatMoyenneMc}">
+
+														</p:column>
+
+													</p:row>
+												</p:columnGroup>
+											</p:dataTable>
+
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<p:commandLink update=":evalForm:noteDetail"
+												oncomplete="PF('detailNote').show()" title="Voir le Détail"
+												styleClass="ui-icon ui-icon-search"
+												style="float:left;margin-right:10px">
+
+												<f:setPropertyActionListener
+													value="#{row.affGroupePedagogique.nomEtudiant} #{row.affGroupePedagogique.prenomEtudiant}"
+													target="#{validateControleContinuBean.nomPrenomEtudiant}" />
+												<f:setPropertyActionListener value="#{row.noteApList}"
+													target="#{validateControleContinuBean.selectedNotes}" />
+											</p:commandLink>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+
+				</p:dataGrid>
+			</p:fieldset>
+			<br />
+
+
+			<p:toolbar id="actionPanel"
+				rendered="#{validateControleContinuBean.editMode}">
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_validate}"
+						disabled="#{validateControleContinuBean.validated}"
+						update="evalForm" rendered="#{sessionDroitBean.createAllow}"
+						id="saveBtn" icon="ui-icon-disk"
+						onstart="PF('globalWidget').block()" process="evalForm"
+						oncomplete="PF('globalWidget').unblock()"
+						actionListener="#{validateControleContinuBean.validateEval()}">
+						<p:confirm header="Confirmation"
+							message="#{evalControleContinuMsgs.eval_controle_continu_validation_confirmation_message}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right"
+					rendered="#{groupePedagogiqueManagerBean.editMode}">
+					<!-- 					<p:commandButton id="btnAdd" value="#{commonmsgs.bouton_nouveau}" -->
+					<!-- 						process="panelSearch" update="evalForm" style="text-align:left" -->
+					<!-- 						onstart="PF('globalWidget').block()" -->
+					<!-- 						onsuccess="PF('globalWidget').unblock()" -->
+					<!-- 						actionListener="#{controleContinuBean.newEval}" -->
+					<!-- 						icon="ui-icon-plusthick"> -->
+					<!-- 					</p:commandButton> -->
+					<!-- 					<p:separator /> -->
+					<p:commandButton value="#{commonmsgs.bouton_invalidate}"
+						disabled="#{!validateControleContinuBean.validated}"
+						update="evalForm" rendered="#{sessionDroitBean.createAllow}"
+						id="delBtn" icon="ui-icon-trash"
+						onstart="PF('globalWidget').block()" process="@this"
+						oncomplete="PF('globalWidget').unblock()"
+						actionListener="#{validateControleContinuBean.invalidateEval()}">
+						<p:confirm header="Confirmation"
+							message="#{evalControleContinuMsgs.eval_controle_continu_annuler_validation_confirmation_message}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+		</p:panel>
+
+		<p:dialog width="600" showEffect="blind" hideEffect="explode"
+			header="#{evalControleContinuMsgs.eval_controle_continu_dialog_title}"
+			widgetVar="detailNote" modal="true" resizable="false">
+			<p:outputPanel id="noteDetail" style="text-align:center;">
+				<h:outputText
+					value="#{validateControleContinuBean.nomPrenomEtudiant}"
+					styleClass="value" />
+				<br></br>
+				<p:dataTable id="detailNoteDataTable" var="_note"
+					styleClass="detailStyle"
+					value="#{validateControleContinuBean.selectedNotes}"
+					resizableColumns="true">
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_grid_ap}"
+								width="10%" />
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_date_evaluation}"
+								width="20%" />
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_absent}"
+								width="20%" />
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_note}"
+								width="10%" />
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_coefficient}"
+								width="20%" />
+							<p:column
+								headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_comptablise}"
+								width="10%" />
+						</p:row>
+					</p:columnGroup>
+
+					<p:subTable var="detailAp" value="#{_note.noteAp}">
+						<p:column sortBy="#{detailAp.apCode}">
+							<h:outputText value="#{detailAp.apCode}" />
+						</p:column>
+
+						<p:column sortBy="#{detailAp.dateEvaluation}">
+							<h:outputText value="#{detailAp.dateEvaluation}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column sortBy="#{detailAp.absent}">
+							<h:outputText value="#{detailAp.absent?'Oui':'Non'}" />
+						</p:column>
+						<p:column sortBy="#{detailAp.formatNote}">
+							<h:outputText value="#{detailAp.formatNote}" />
+
+						</p:column>
+						<p:column sortBy="#{detailAp.formatCoefficient}">
+							<h:outputText value="#{detailAp.formatCoefficient}" />
+						</p:column>
+
+						<p:column sortBy="#{detailAp.comptablise}">
+							<h:outputText value="#{detailAp.comptablise?'Oui':'Non'}" />
+						</p:column>
+						<p:columnGroup type="footer">
+							<p:row>
+								<p:column footerText="#{_note.moyenneAp.apCode}" />
+								<p:column footerText="" colspan="2" />
+								<p:column footerText="#{_note.moyenneAp.formatMoyenneAp}"
+									style="text-align:center" />
+								<p:column footerText="#{_note.moyenneAp.formatCoefficient}"
+									style="text-align:center" />
+								<p:column footerText="" />
+							</p:row>
+						</p:columnGroup>
+					</p:subTable>
+
+				</p:dataTable>
+
+			</p:outputPanel>
+		</p:dialog>
+	</h:form>
+
+</ui:composition>
+

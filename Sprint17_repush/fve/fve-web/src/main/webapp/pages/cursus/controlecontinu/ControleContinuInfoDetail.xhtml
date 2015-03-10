@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panelGrid id="panelEdit" styleClass="ui-panelgrid-full-width">
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_ue}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.rattachementMcUeLibelle}" />
+			</p:column>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_mc}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.rattachementMcLibelle}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_ap}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.apCode}" />
+			</p:column>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_groupe}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.gpNomAffichage}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_date_evaluation}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.dateEvaluation}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_coefficient}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.coefficient}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_type_evaluation}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.ncTypeEvalLlAr}" />
+
+			</p:column>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_comptablise}"></p:outputLabel>
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.comptablise?'Oui':'Non'}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_objectif}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" style="width:35%"
+					value="#{controleContinuBean.evalControleContinuDto.objectif}" />
+			</p:column>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_competence}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText styleClass="value"
+					value="#{controleContinuBean.evalControleContinuDto.competence}" />
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{evalControleContinuMsgs.eval_controle_continu_situation}" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText styleClass="value"
+					value="#{controleContinuBean.evalControleContinuDto.situationLibelle}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+</ui:composition>
+

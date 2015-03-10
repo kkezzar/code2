@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		Gérer les admissions aux concours
+	</ui:define>
+
+	<ui:define name="centerContent">
+		<p:panel id="mainContent">
+			<pe:blockUI target="mainContent" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<h:form id="admissionForm" styleClass="admissionForm">
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+					showSummary="false" closable="true" life="5000" />
+
+				<p:fieldset legend="Recherche" toggleable="true">
+					<p:panelGrid id="panelSearch">
+						<p:row>
+							<p:column>
+								<h:outputText value="Année académique : " />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="selectionAnneeAcademique"
+									value="#{admissionConcoursMBean.currentAnneeAcademiqueId}"
+									required="true"
+									requiredMessage="L'année académique est obligatoire">
+									<f:selectItem itemLabel="--Année académique--" />
+									<f:selectItems
+										value="#{admissionConcoursMBean.anneeAcademiques}" />
+									<p:ajax update="admissionForm"
+										listener="#{admissionConcoursMBean.onAnneeAcademiqueSelected()}"
+										onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column>
+								<h:outputText value="Concours : " />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="selectionConcours"
+									value="#{admissionConcoursMBean.currentConcoursId}"
+									required="true" requiredMessage="Le concours est obligatoire">
+									<f:selectItem itemLabel="--Concours--" />
+									<f:selectItems value="#{admissionConcoursMBean.concours}" />
+									<p:ajax update="admissionForm"
+										listener="#{admissionConcoursMBean.onConcoursSelected()}"
+										onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					
+					<br />
+					<p:panel id="candidatDataTable" styleClass="candidatDataTable"
+						rendered="#{admissionConcoursMBean.displayCandidatDataTable}">
+						<p:dataTable
+							rendered="#{admissionConcoursMBean.displayCandidatDataTable}"
+							value="#{admissionConcoursMBean.candidatDtos}" var="candidat"
+							rowIndexVar="rowId" rowKey="#{candidat.id}" paginator="true"
+							paginatorPosition="bottom"
+							emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="20"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+							currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+							selectionMode="single" lazy="true">
+							<f:facet name="header">Les admissions du concours <h:outputText
+									value="#{admissionConcoursMBean.concoursDto.identifiant}" />
+									, publié le <h:outputText value="#{admissionConcoursMBean.concoursDto.datePublicationConcours}">
+									<f:convertDateTime pattern="MM/dd/yyyy" />
+									</h:outputText>
+							</f:facet>
+							<p:ajax event="rowSelect" immediate="true"
+								listener="#{admissionConcoursMBean.onCandidatSelected}"
+								process="@this" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								update="@(.admissionForm)" />
+							<p:column style="width:30px;" headerText="N°">
+								<h:outputText value="#{rowId+1}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Prénom"
+								sortBy="#{candidat.individu.prenomLatin}">
+								<h:outputText value="#{candidat.individu.prenomLatin}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Nom"
+								sortBy="#{candidat.individu.nomLatin}">
+								<h:outputText value="#{candidat.individu.nomLatin}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Date de naissance"
+								sortBy="#{candidat.individu.dateNaissance}">
+								<h:outputText value="#{candidat.individu.dateNaissance}">
+									<f:convertDateTime pattern="MM/dd/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:100px;" headerText="Moyenne"
+								sortBy="#{candidat.moyenneObtenue}">
+								<h:outputText value="#{candidat.moyenneObtenue}" />
+							</p:column>
+							<p:column style="width:100px;" headerText="Classement"
+								sortBy="#{candidat.classement}">
+								<h:outputText value="#{candidat.classement}" />
+							</p:column>
+							<p:column style="width:10px;" headerText="Admis" sortBy="#{candidat.admis}">
+								<h:outputText value="#{candidat.admis == true ? 'Oui':'Non'}" />
+							</p:column>
+							<p:column style="width:10px;" headerText="Désistement" sortBy="#{candidat.desistement}">
+								<h:outputText value="#{candidat.desistement == true ? 'Oui':'Non'}" />
+							</p:column>
+							<p:column style="width:10px;" headerText="Liste complémentaire" sortBy="#{candidat.listeComplementaire}">
+								<h:outputText value="#{candidat.listeComplementaire == true ? 'Oui':'Non'}" />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+					<br />
+					<p:panelGrid id="concoursPublicationPanel" styleClass="concoursPublicationPanel" rendered="#{admissionConcoursMBean.displayCandidatDataTable}" >
+						<p:row>
+							<p:column colspan="2">
+								<h:outputText value="#{admissionConcoursMBean.nombreAdmis} admis sur #{admissionConcoursMBean.nombreAdmissibles} admissibles" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column >
+								<h:outputText value="Date de publication de liste des admis * " />
+							</p:column>
+							<p:column >
+								<p:calendar id="datePublication"
+									value="#{admissionConcoursMBean.concoursDto.datePublicationResultats}"
+									style="width:100%;text-align:left" navigator="true"
+									pattern="dd/MM/yyyy" mindate="1/1/1800"
+									maxdate="#{localeBean.currentDate}"
+									required="true"
+									requiredMessage="La date de publication des résultats est obligatoire"
+									process="admissionForm"
+									update="admissionForm"/>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{admissionConcoursMBean.concoursDto.datePublicationResultats != null}">
+							<p:column >
+								<h:outputText value="Date de publication de liste complémentaire" />
+							</p:column>
+							<p:column >
+								<p:calendar id="datePublicationListeComplementaire"
+									style="width:100%;text-align:left" navigator="true"
+									pattern="dd/MM/yyyy" mindate="1/1/1800"
+									maxdate="#{localeBean.currentDate}" 
+									value="#{admissionConcoursMBean.concoursDto.datePublicationListeComplementaire}"/>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+									rendered="#{sessionDroitBean.createAllow}" id="saveConcours"
+									icon="ui-icon-disk" onstart="PF('globalWidget').block()"
+									oncomplete="PF('globalWidget').unblock()"
+									actionListener="#{admissionConcoursMBean.onSaveConcours}"
+									update="admissionForm" process="admissionForm" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					<p:panel id="candidatAdmissionPanel"
+						styleClass="candidatAdmissionPanel"
+						rendered="#{admissionConcoursMBean.displayCandidatAdmissionPanel}">
+						<p:row>
+							<p:column>
+								<p:tabView activeIndex="#{admissionConcoursMBean.candidatTabViewActiveIndex}">
+									<p:tab title="Admission">
+										<p:panelGrid id="candiatDetailPanel" styleClass="candiatDetailPanel" style="width:50%;margin-bottom:2px;" columns="4">
+											<f:facet name="header">Détails du candidat</f:facet>
+											<h:outputLabel value="Nom" />
+											<h:outputLabel value="#{admissionConcoursMBean.candidatDto.individu.nomLatin}" style="text-align:right; color:#336699;" />
+											<h:outputLabel value="Prénom"/>
+											<h:outputLabel value="#{admissionConcoursMBean.candidatDto.individu.prenomLatin}" style="text-align:right; color:#336699;"/>
+											<h:outputLabel value="Moyenne" />
+											<h:outputLabel value="#{admissionConcoursMBean.candidatDto.moyenneObtenue}" style="text-align:right; color:#336699;" />
+											<h:outputLabel value="Classement"/>
+											<h:outputLabel value="#{admissionConcoursMBean.candidatDto.classement}" style="text-align:right; color:#336699;"/>
+										</p:panelGrid>
+										<br/>
+										<p:panelGrid>
+											<p:row>
+												<p:column style="width:200px">
+													<h:outputLabel value="Etablissement d'admission" />
+												</p:column>
+												<p:column style="width:200px">
+													<p:selectOneMenu id="selectEtablissementAdmission" 
+														value="${admissionConcoursMBean.selectedEtablissementId}"
+														required="true"
+														requiredMessage="L'établissement d'admission est obligatoire">
+														<f:selectItem itemLabel="--Etablissement--"/>
+														<f:selectItems value="#{admissionConcoursMBean.etablissementAdmssions}"/>
+														<p:ajax update="@(.admissionForm)" 
+															listener="#{admissionConcoursMBean.onEtablissementSelected()}"
+															onstart="PF('globalWidget').block()"
+															onsuccess="PF('globalWidget').unblock()"  />
+													</p:selectOneMenu>
+												</p:column>
+											</p:row>
+											<p:row rendered="#{admissionConcoursMBean.concoursDto.datePublicationResultats!=null}">
+												<p:column style="width:200px">
+													<h:outputLabel value="Liste complémentaire" />
+												</p:column>
+												<p:column style="width:10px">
+													<p:selectBooleanCheckbox
+														value="${admissionConcoursMBean.candidatDto.listeComplementaire}" />
+												</p:column>
+											</p:row>
+											<p:row rendered="#{admissionConcoursMBean.selectedEtablissementId != null}">
+												<p:column colspan="2">
+													<h:outputText value="Nombre d'admis : #{admissionConcoursMBean.candidatDto.etablissementAdmissionDto.nombreAdmis} 
+													sur #{admissionConcoursMBean.candidatDto.etablissementAdmissionDto.nombreAdmettre} admissibles" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+									</p:tab>
+									<p:tab title="Désistement" disabled="#{admissionConcoursMBean.concoursDto.datePublicationResultats==null}">
+										<p:panelGrid>
+											<p:row>
+												<p:column style="width:200px">
+													<h:outputLabel value="Date désistement" />
+												</p:column>
+												<p:column style="width:200px">
+													<p:calendar id="dateDesistement"
+														style="width:100%;text-align:left" navigator="true"
+														value="#{admissionConcoursMBean.candidatDto.dateDesistement}"
+														pattern="dd/MM/yyyy" mindate="1/1/1800"
+														maxdate="#{localeBean.currentDate}" />
+												</p:column>
+												<p:column style="width:200px">
+													<h:outputLabel value="Motif désistement" />
+												</p:column>
+												<p:column style="width:200px">
+													<p:inputTextarea id="motifDesistement"
+														value="${admissionConcoursMBean.candidatDto.motifDesistement}" />
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+									</p:tab>
+								</p:tabView>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<br />
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+									rendered="#{sessionDroitBean.createAllow}" id="saveResultat"
+									icon="ui-icon-disk" onstart="PF('globalWidget').block()"
+									oncomplete="PF('globalWidget').unblock()"
+									actionListener="#{admissionConcoursMBean.onSave}"
+									update="admissionForm" process="admissionForm" />
+							</p:column>
+						</p:row>
+					</p:panel>
+				</p:fieldset>
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

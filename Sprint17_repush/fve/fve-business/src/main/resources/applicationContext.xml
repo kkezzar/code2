@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	 xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/util 
+      	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+
+	<context:annotation-config />
+	<context:component-scan base-package="dz.gov.mesrs.sii" annotation-config="true" />
+
+<!-- 	<context:property-placeholder location="file:${fve.properties.dir}/database.properties,
+																					file:${referentiel.properties.dir}/ws.properties,
+																					file:${referentiel.properties.dir}/ldap.properties,
+																					file:${referentiel.properties.dir}/document.properties,
+																					file:${referentiel.properties.dir}/util.properties,
+																					classpath:mail.properties,
+																					classpath:application.properties"/> -->
+																					
+																					
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>file:${progres.properties.dir}/database.properties</value>
+				<value>file:${progres.properties.dir}/ws.properties</value>
+				<value>file:${progres.properties.dir}/ldap.properties</value>
+				<value>file:${progres.properties.dir}/document.properties</value>
+				<value>file:${progres.properties.dir}/cas.properties</value>
+				<value>file:${progres.properties.dir}/util.properties</value>
+				<value>file:${progres.properties.dir}/mail.properties</value>
+				
+				<value>file:${fve.properties.dir}/cas.properties</value>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- TODO remove in common project-->
+	<import resource="notification-context.xml"/>
+	<import resource="classpath*:applicationContext-data.xml" />																				
+
+	<bean id="mapper" class="org.dozer.DozerBeanMapper" >
+	<property name="mappingFiles">
+			<list>
+				
+				<!-- 
+				@author: M.MESSAOUDI
+				Integration des fichiers de maping du referentiel dans la FVE/ solution provisoir 
+				pour appliquer le mapping entre les entites du referentiel en attandant la creatiion
+				du projet fwk commun
+				-->
+				
+				<!-- referentiel:start -->
+				<value>dozer-contrat-mapping.xml</value>
+				<value>dozer-partenaire-mapping.xml</value>
+				<value>dozer-individu-mapping.xml</value>
+				<value>dozer-affectation.mapping.xml</value>
+				<value>dozer-coordonnee-mapping.xml</value>
+				<value>dozer-nomenclature-mapping.xml</value>
+				<value>dozer-situation-mapping.xml</value>
+				<value>dozer-structure-mapping.xml</value>
+				<value>dozer-groupe-mapping.xml</value>
+				<value>dozer-lieu-mapping.xml</value>
+				<value>dozer-evenement-mapping.xml</value>
+				<value>dozer-tache-mapping.xml</value>
+				<value>dozer-habilitation-mapping.xml</value>
+				<value>dozer-occupationlieu-mapping.xml</value>
+				<value>dozer-compte-mapping.xml</value>
+				<value>dozer-permission-mapping.xml</value>
+				<value>dozer-document-mapping.xml</value>
+				<value>dozer-version-document-mapping.xml</value>
+				<value>dozer-parametrage-mapping.xml</value>
+				<value>dozer-mot-cle-mapping.xml</value>
+				<value>dozer-etat-equipement-mapping.xml</value>
+				<value>dozer-reservation-mapping.xml</value>
+				<value>dozer-equipement-mapping.xml</value>
+				<value>dozer-etablissement-mapping.xml</value>
+				<value>dozer-plage-adresse-mapping.xml</value>
+				<value>dozer-domainelmd-mapping.xml</value> 
+				<value>dozer-filierelmd-mapping.xml</value> 
+				<value>dozer-specialitelmd-mapping.xml</value> 
+				<value>dozer-affectdomlmdetab-mapping.xml</value>   
+				<value>dozer-parametre-etab-mapping.xml</value>
+				<value>dozer-affect-document.mapping.xml</value> 
+				<value>dozer-type-piece-constitutive-mapping.xml</value>
+				<value>dozer-affectfilierelmdetab-mapping.xml</value>  
+				<!-- referentiel:end -->
+			
+				<!-- commons:start -->
+				<value>dozer-communs-situation-mapping.xml</value>
+				<!-- commons:end -->
+				
+				<!-- fve:start -->
+				<value>dozer-ue-mapping.xml</value>
+				<value>dozer-ap-mapping.xml</value>
+				<value>dozer-demande-mapping.xml</value>
+				<value>dozer-of-mapping.xml</value>
+				<!-- <value>dozer-situation-mapping.xml</value> exite deja dans la partie Referentiel -->
+				<value>dozer-tache-action-mapping.xml</value>
+				<!-- <value>dozer-role-mapping.xml</value> <value>dozer-etape-mapping.xml</value> -->
+<!-- 				<value>dozer-etape-role-mapping.xml</value> -->
+				<value>dozer-ouverture-of-mapping.xml</value>
+				<value>dozer-piece-constitutive-mapping.xml</value>
+				<value>dozer-titre-acces.xml</value>
+				<value>dozer-diplome.xml</value>
+				<value>dozer-formation.xml</value>
+				<value>dozer-conge-academique.xml</value>
+				<value>dozer-dossier-etudiant-mapping.xml</value>
+				<value>dozer-situation-sportive-mapping.xml</value>
+				<value>dozer-bac-mapping.xml</value>
+				<value>dozer-releve-notes.xml</value>
+				<value>dozer-ligne-releve-notes.xml</value>
+				<value>dozer-situation-handicap-mapping.xml</value>
+				<value>dozer-parcours-individualise.xml</value>
+				<value>dozer-dossier-inscription-administratif-mapping.xml</value>
+				<value>dozer-dossier-transfert-mapping.xml</value>
+				<value>dozer-assiduite-mapping.xml</value>
+				<value>dozer-exclusion-mapping.xml</value>
+				<value>dozer-rattachement-mc-mapping.xml</value>
+				<value>dozer-repartition-ue-mapping.xml</value>
+				<value>dozer-reintegration-mapping.xml</value>
+				<value>dozer-cycle-mapping.xml</value>
+				<value>dozer-access-wilaya-mapping.xml</value>
+				<value>dozer-capacite-etab-mapping.xml</value>
+				<value>dozer-planning-session-mapping.xml</value>
+				<value>dozer-affectation-lieu-structure-mapping.xml</value>
+				<value>dozer-reinscription-mapping.xml</value>
+				 <value>dozer-peridoe-param-mapping.xml</value>
+<!-- 			<value>dozer-nomenclature-mapping.xml</value> exite deja dans la partie Referentiel -->
+<!-- 			<value>dozer-etablissement-mapping.xml</value> exite deja dans la partie Referentiel -->
+<!-- 			<value>dozer-domainelmd-mapping.xml</value>  exite deja dans la partie Referentiel -->
+<!-- 			<value>dozer-filierelmd-mapping.xml</value>  exite deja dans la partie Referentiel -->
+<!--  			<value>dozer-specialitelmd-mapping.xml</value>  exite deja dans la partie Referentiel -->
+<!-- 			<value>dozer-affectdomlmdetab-mapping.xml</value> exite deja dans la partie Referentiel --> 
+<!-- 			<value>dozer-structure-mapping.xml</value> exite deja dans la partie Referentiel -->
+<!-- 			<value>dozer-lieu-mapping.xml</value> exite deja dans la partie Referentiel -->
+				<value>dozer-groupe-pedagogique-mapping.xml</value>   
+				<value>dozer-charge-pedagogique-mapping.xml</value>  
+<!--            <value>dozer-affectation.mapping.xml</value>  exite deja dans la partie Referentiel -->
+				<value>dozer-diplome-fin-etude-mapping.xml</value>
+				<value>dozer-diplome-fin-etude-delivrance-mapping.xml</value>
+				<value>dozer-eval-controle-continu-mapping.xml</value>
+				<value>dozer-bilan-controle-continu-mapping.xml</value>
+				<value>dozer-bilan-session-mapping.xml</value>
+				<value>dozer-mention-mapping.xml</value>  
+				<value> dozer-attestation-fin-etude.xml</value>
+				<value> dozer-attestation-fin-etude-delivrance.xml</value> 
+				<value>dozer-emploi-mapping.xml</value>  
+				<value>dozer-preinscription-mapping.xml</value>
+				<value>dozer-concours-mapping.xml</value>
+				<value>dozer-coefficient-examen-mapping.xml</value>
+				<value>dozer-note-eliminatoire-mapping.xml</value>
+				<!-- fve:end -->
+			</list>
+		</property>
+	</bean>
+	
+
+
+
+
+</beans>

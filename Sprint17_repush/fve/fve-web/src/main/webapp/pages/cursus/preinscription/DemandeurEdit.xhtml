@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+			<p:panelGrid id="panelEditDemandeur" styleClass="panelEditDemandeur">
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Civlité" for="civilite"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="civilite" 
+							required="true"
+							requiredMessage="La civilité est obligatoire"
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							value="#{preinscriptionSearchMBean.dto.individuDto.civiliteId}"
+							style="width:100%;text-align:left"
+							label="civilité">
+							<f:selectItem
+								itemLabel="--Civilité--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.civilites}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.civiliteLibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Nationalité" for="nationalite"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="nationalite" 
+							required="true"
+							requiredMessage="La nationalité est obligatoire"
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							value="#{preinscriptionSearchMBean.dto.individuDto.nationaliteId}"
+							style="width:100%;text-align:left"
+							label="nationalité">
+							<f:selectItem
+								itemLabel="--Nationalité--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.nationalites}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.nationaliteLibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Nom" for="nom"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="nom" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="Le nom latin est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.individuDto.nomLatin}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.nomLatin}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Nom Arabe" for="nomArabe"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="nomArabe" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="Le nom arabe est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.individuDto.nomArabe}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText  style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.nomArabe}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Prénom" for="prenom"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="prenom" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="Le prénom latin est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.individuDto.prenomLatin}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.prenomLatin}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Prénom Arabe" for="prenomArabe"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="prenomArabe" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="Le prénom arabe est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.individuDto.prenomArabe}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.individuDto.prenomArabe}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Adresse" for="adresse"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="adresse" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="L'adresse est obligatoire"
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.libelleAdresseLatin}" />
+						<h:outputText style="width:100%;text-align:left" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.libelleAdresseLatin}" />
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Code postal" for="cp"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="cp" style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.boitePostale}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}" >
+						</p:inputText>
+						<h:outputText  style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.boitePostale}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Pays" for="pays"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="pays" required="true"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.paysId}"
+							style="width:100%;text-align:left"
+							label="pays" rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Pays--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.pays}" />
+						</p:selectOneMenu>
+						<h:outputText  style="width:100%;text-align:left"
+							rendered="#{!preinscriptionSearchMBean.editionMode}"
+							value="#{preinscriptionSearchMBean.dto.adresseDto.paysLibelleLongFr}" />
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Date de naissance" for="dateNaissance"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:calendar id="dateNaissance" style="width:100%;text-align:left"
+							navigator="true"
+							required="true"
+							requiredMessage="La date de naissance est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.individuDto.dateNaissance}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							pattern="dd/MM/yyyy"
+							mindate="1/1/1800" maxdate="#{localeBean.currentDate}"/>
+						<h:outputText  style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.individuDto.dateNaissance}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Email" for="email" />
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="email" style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.adresseElectroniqueDto.nomAdresse}"
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							validatorMessage="Le champ email doit correspondre à un email">
+						  <f:validateRegex
+							pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						</p:inputText>
+						<h:outputText  style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.adresseElectroniqueDto.nomAdresse}"
+							rendered="#{!preinscriptionSearchMBean.editionMode}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+</ui:composition>
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+
+
+		<mapping map-null="false">
+	<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefDomaineLMDDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefDomaineLMD</class-b>
+	<field>
+			<a>niveauRecrutementId</a>
+			<b>niveauRecrutement.id</b>
+		</field>
+		<field>
+			<a>niveauRecrutementLibelleLongFr</a>
+			<b>niveauRecrutement.libelleLongFr</b>
+		</field>
+		<field>
+			<a>niveauRecrutementLibelleLongAr</a>
+			<b>niveauRecrutement.libelleLongAr</b>
+		</field>
+		<field>
+			<a>niveauRecrutementLibelleCourtFr</a>
+			<b>niveauRecrutement.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>niveauRecrutementLibelleCourtAr</a>
+			<b>niveauRecrutement.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>niveauRecrutementCode</a>
+			<b>niveauRecrutement.code</b>
+		</field>
+		</mapping>
+		
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefDomaineLMDDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+
+
+
+
+</mappings>

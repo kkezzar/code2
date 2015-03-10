@@ -1,0 +1,193 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="leftPan" dir="#{localeBean.dir}">
+		<!--  
+		<p:panelMenu>
+
+			<p:submenu label="#{commonmsgs.MDL00001}" 
+				rendered="#{menuBean.mapModuleRendered['MDL00001']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT0001}" 
+					url="#{menuBean.mapFctUrl['FCT0001']}"
+					rendered="#{menuBean.mapFctRendered['FCT0001']}"
+					style="color:#008DCC;" icon="ui-icon-person">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00002}"
+					url="#{menuBean.mapFctUrl['FCT00002']}"
+					rendered="#{menuBean.mapFctRendered['FCT00002']}"
+					style="color:#008DCC;" icon="ui-icon-contact">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00003}"
+					url="#{menuBean.mapFctUrl['FCT00003']}"
+					rendered="#{menuBean.mapFctRendered['FCT00003']}"
+					style="color:#008DCC;" icon="ui-icon-bullet">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00002}"
+				rendered="#{menuBean.mapModuleRendered['MDL00002']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT00005}"
+					url="#{menuBean.mapFctUrl['FCT00005']}"
+					rendered="#{menuBean.mapFctRendered['FCT00005']}"
+					style="color:#008DCC;" icon="ui-icon-document">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00006}"
+					url="#{menuBean.mapFctUrl['FCT00006']}"
+					rendered="#{menuBean.mapFctRendered['FCT00006']}"
+					style="color:#008DCC;" icon="ui-icon-note">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00003}"
+				rendered="#{menuBean.mapModuleRendered['MDL00003']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT00007}"
+					url="#{menuBean.mapFctUrl['FCT00007']}"
+					rendered="#{menuBean.mapFctRendered['FCT00007']}"
+					style="color:#008DCC;" icon="ui-icon-image">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT_0001}"
+					url="#{menuBean.mapFctUrl['FCT_0001']}"
+					rendered="#{menuBean.mapFctRendered['FCT_0001']}"
+					style="color:#008DCC;" icon="ui-icon-folder-open">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00004}"
+				rendered="#{menuBean.mapModuleRendered['MDL00004']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT_GST_EVN}"
+					url="#{menuBean.mapFctUrl['FCT_GST_EVN']}"
+					rendered="#{menuBean.mapFctRendered['FCT_GST_EVN']}"
+					style="color:#008DCC;" icon="ui-icon-alert">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00005}"
+				rendered="#{menuBean.mapModuleRendered['MDL00005']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT000977}"
+					url="#{menuBean.mapFctUrl['FCT000977']}"
+					rendered="#{menuBean.mapFctRendered['FCT000977']}"
+					style="color:#008DCC;" icon="ui-icon-document">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00006}"
+				rendered="#{menuBean.mapModuleRendered['MDL00006']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT0000800}"
+					url="#{menuBean.mapFctUrl['FCT0000800']}"
+					rendered="#{menuBean.mapFctRendered['FCT0000800']}"
+					style="color:#008DCC;" icon="ui-icon-image">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT0000900}"
+					url="#{menuBean.mapFctUrl['FCT0000900']}"
+					rendered="#{menuBean.mapFctRendered['FCT0000900']}"
+					style="color:#008DCC;" icon="ui-icon-battery-2">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00007}"
+				rendered="#{menuBean.mapModuleRendered['MDL00007']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT00011}"
+					url="#{menuBean.mapFctUrl['FCT00011']}"
+					rendered="#{menuBean.mapFctRendered['FCT00011']}"
+					style="color:#008DCC;" icon="ui-icon-tag">
+				</p:menuitem>
+
+				<p:menuitem value="#{commonmsgs.FCT_0002}"
+					url="#{menuBean.mapFctUrl['FCT_0002']}"
+					rendered="#{menuBean.mapFctRendered['FCT_0002']}"
+					style="color:#008DCC;" icon="ui-icon-flag">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00065}"
+					url="#{menuBean.mapFctUrl['FCT00065']}"
+					rendered="#{menuBean.mapFctRendered['FCT00065']}"
+					style="color:#008DCC;" icon="ui-icon-disk">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT_0003}"
+					url="#{menuBean.mapFctUrl['FCT_0003']}"
+					rendered="#{menuBean.mapFctRendered['FCT_0003']}"
+					style="color:#008DCC;" icon="ui-icon-calendar">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT_00098}"
+					url="#{menuBean.mapFctUrl['FCT_00098']}"
+					rendered="#{menuBean.mapFctRendered['FCT_00098']}"
+					style="color:#008DCC;" icon="ui-icon-locked">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00020}"
+					url="#{menuBean.mapFctUrl['FCT00020']}"
+					rendered="#{menuBean.mapFctRendered['FCT00020']}"
+					style="color:#008DCC;" icon="ui-icon-person">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00008}"
+					url="#{menuBean.mapFctUrl['FCT00008']}"
+					rendered="#{menuBean.mapFctRendered['FCT00008']}"
+					style="color:#008DCC;" icon="ui-icon-radio-on">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT00009}"
+					url="#{menuBean.mapFctUrl['FCT00009']}"
+					rendered="#{menuBean.mapFctRendered['FCT00009']}"
+					style="color:#008DCC;" icon="ui-icon-radio-off">
+				</p:menuitem>
+				
+				<p:menuitem value="#{commonmsgs.FCT00010}"
+					url="#{menuBean.mapFctUrl['FCT00010']}"
+					rendered="#{menuBean.mapFctRendered['FCT00010']}"
+					style="color:#008DCC;" icon="ui-icon-bullet">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.idffct0001}"
+					url="#{menuBean.mapFctUrl['idffct0001']}"
+					rendered="#{menuBean.mapFctRendered['idffct0001']}"
+					style="color:#008DCC;" icon="ui-icon-clock">
+				</p:menuitem>
+			</p:submenu>
+			<p:submenu label="#{commonmsgs.MDL00008}"
+				rendered="#{menuBean.mapModuleRendered['MDL00008']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.FCT_8001}"
+					url="#{menuBean.mapFctUrl['FCT_8001']}"
+					rendered="#{menuBean.mapFctRendered['FCT_8001']}"
+					style="color:#008DCC;" icon="ui-icon-gear">
+				</p:menuitem>
+				<p:menuitem value="#{commonmsgs.FCT_8002}"
+					url="#{menuBean.mapFctUrl['FCT_8002']}"
+					rendered="#{menuBean.mapFctRendered['FCT_8002']}"
+					style="color:#008DCC;" icon="ui-icon-wrench">
+				</p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{commonmsgs.MDL00009}"
+				rendered="#{menuBean.mapModuleRendered['MDL00009']}"
+				style="color:#008DCC;">
+				<p:menuitem value="#{commonmsgs.fctetab001}"
+					url="#{menuBean.mapFctUrl['fctetab001']}"
+					rendered="#{menuBean.mapFctRendered['fctetab001']}"
+					style="color:#008DCC;" icon="ui-icon-arrow-4">
+				</p:menuitem>
+			</p:submenu>
+
+
+		</p:panelMenu>
+-->
+		<p:panelMenu>
+			<c:forEach var="submenu" items="#{menuBean.listSubMenu}"
+				varStatus="status">
+				<p:submenu label="#{submenu.label}" style="color:#008DCC;">
+					<c:forEach var="item" items="#{submenu.elements}"
+						varStatus="status_">
+						<p:menuitem value="#{item.value}" url="#{item.url}"
+							style="color:#008DCC;" icon="#{item.icon}">
+
+						</p:menuitem>
+					</c:forEach>
+				</p:submenu>
+			</c:forEach>
+		</p:panelMenu>
+
+	</h:form>
+
+
+</ui:composition>

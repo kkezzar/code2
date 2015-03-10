@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{finActiviteMgs.enrg_admis_retraite_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<!-- debut -->
+			<h:form id="form_admis_depart_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+								<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+								<p:spacer width="10px"></p:spacer>
+									<p:inputText id="keyWordsID" value="#{admissionRetraiteMBean.searchKeyWords}"    placeholder="#{commonmsgs.search_watermark_text_key_words}"
+												 label="#{commonmsgs.search_label_mots_cles}" />
+								 
+								<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_admis_depart_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{admissionRetraiteMBean.onSearchAdmisRetraite}"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+				<p:dataTable var="admission" lazy="true"
+					value="#{admissionRetraiteMBean.admissionRetraiteModel}"
+					widgetVar="admissionTable" rowKey="#{admission.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{finActiviteMgs.msg_admission_depart_no_result}">
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:column headerText="#{finActiviteMgs.label_numero}"
+						style="width:3%;">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{admission.employe.matricule}" style="width:9%"
+						headerText="#{finActiviteMgs.label_matricule}">
+						<h:outputText value="#{admission.employe.matricule}"/>
+					</p:column>
+					<p:column sortBy="individu.nomLatin" 
+						headerText="#{finActiviteMgs.label_employe}">
+						<h:outputText value="#{admission.employe.refIndividuDto.prenomLatin} #{admission.employe.refIndividuDto.nomLatin}" />
+					</p:column>
+					<p:column sortBy="#{admission.dateDepart}" 
+						headerText="#{finActiviteMgs.label_date_depart_prevue}">
+						<h:outputText value="#{admission.dateDepart}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="individu.dateNaissance" 
+						headerText="#{finActiviteMgs.label_date_naissance}">
+						<h:outputText value="#{admission.employe.refIndividuDto.dateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<br></br>
+			<p:outputPanel id="pnl_admissibles">
+					<h:form id="form_admissible_depart_search">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="admissibleDepartSearch" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{finActiviteMgs.label_list_admis_retraite}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4">
+										<p:toolbar styleClass="toolBarMesrs">
+											<p:toolbarGroup align="left"/>
+											<p:toolbarGroup align="right">
+												<p:calendar id="dateDebutPeriode" navigator="true" required="true" requiredMessage="#{finActiviteMgs.msg_date_debut_periode_required}"
+													placeholder="#{finActiviteMgs.label_debut_periode}*"
+													value="#{admissionRetraiteMBean.dateDebutPeriode}"/>
+												<p:spacer width="5px"/>
+												<p:calendar id="dateFinPeriode" navigator="true" required="true" requiredMessage="#{finActiviteMgs.msg_date_fin_periode_required}"
+													placeholder="#{finActiviteMgs.label_fin_periode} *"
+													value="#{admissionRetraiteMBean.dateFinPeriode}"/>
+												<p:spacer width="5px"/>
+												<p:commandButton icon="ui-icon-search" 
+													styleClass="ui-button-bleu" process="form_admissible_depart_search"
+													onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+													title="Rechercher"
+													actionListener="#{admissionRetraiteMBean.onSearchEmployeAdmissible()}"
+													update="@(.panelAdmettre)"/>
+
+											</p:toolbarGroup>
+										</p:toolbar>										
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+					</h:form>
+					<h:form id="form_admission_depart">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border panelAdmettre"    >
+							<p:panelGrid id="admissionDepart" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" rendered="#{admissionRetraiteMBean.renderAdmissionSelectionTable}">
+								<p:row>
+									<p:column colspan="4">
+										<p:dataTable var="employe" lazy="true"
+											value="#{admissionRetraiteMBean.dossierEmployeModel}"
+											widgetVar="admissibleTable" rowKey="#{employe.id}"
+											style="margin-top:5px;width:100%" resizableColumns="true"
+											paginator="true" rows="5" paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{finActiviteMgs.msg_admissible_depart_no_result}"
+											selection="#{admissionRetraiteMBean.selectedEmployes}"
+											>
+											<p:ajax event="rowSelectCheckbox" listener="#{admissionRetraiteMBean.onRowSelect}" />
+        									<p:ajax event="rowUnselectCheckbox" listener="#{admissionRetraiteMBean.onRowUnselect}" />			
+        									<p:ajax event="rowSelect" listener="#{admissionRetraiteMBean.onRowSelect}" />
+        									<p:ajax event="rowUnselect" listener="#{admissionRetraiteMBean.onRowUnselect}" />
+											<f:facet name="header">
+								
+											</f:facet>
+											<p:column headerText="#{finActiviteMgs.label_numero}"
+												style="width:3%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column sortBy="#{employe.matricule}" style="width:9%"
+												headerText="#{finActiviteMgs.label_matricule}">
+												<h:outputText value="#{employe.matricule}"/>
+											</p:column>
+											<p:column sortBy="#{employe.refIndividu.nomLatin}"  
+												headerText="#{finActiviteMgs.label_employe}">
+												<h:outputText value="#{employe.refIndividuDto.prenomLatin} #{employe.refIndividuDto.nomLatin}" />
+											</p:column>
+											<p:column style="width:50%"
+												headerText="#{finActiviteMgs.label_date_depart_prevue}">
+												<h:outputText value="#{admissionRetraiteMBean.calculAgeDepart(employe)}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column sortBy="#{employe.refIndividu.dateNaissance}" 
+												headerText="#{finActiviteMgs.label_date_naissance}">
+												<h:outputText value="#{employe.refIndividuDto.dateNaissance}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column selectionMode="multiple" style="width:3%;text-align:center"/>
+										</p:dataTable>							
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4">
+										<p:toolbar id="demandeDemissionToolBar" styleClass="toolBarMesrs">
+											<p:toolbarGroup>
+												<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+													id="saveAdmissibleBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+													actionListener="#{admissionRetraiteMBean.onSaveAdmissibles}">
+													<p:confirm header="Confirmation"
+														message="#{finActiviteMgs.msg_save_admission_retraite_confirm}"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+											</p:toolbarGroup>
+										</p:toolbar>							
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+					</h:form>
+
+
+					
+
+		</p:outputPanel>
+</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,550 @@
+@CHARSET "UTF-8";
+
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 13px !important;
+	width: 100% !important;
+	overflow: visible !important;
+	position: center;
+	margin: 300px;
+}
+
+h4 {
+	font-family: Arial, "Arial CE", "Lucida Grande CE", lucida,
+		"Helvetica CE", sans-serif;
+	font-size: 36px;
+	font-weight: bold;
+	margin: 0px;
+	padding-left: 120px;
+	color: #006DCC;
+}
+
+.ui-datatable .ui-datatable-header,.ui-datatable .ui-datatable-footer {
+	text-align: left !important;
+}
+
+.ui-menu.ui-widget .ui-menuitem-link .ui-menuitem-text {
+	font-weight: bold !important;
+}
+
+.ui-menu.ui-widget .ui-submenu-link .ui-submenu-text {
+	font-color: blue !important;
+}
+
+.ui-accordion .ui-accordion-header.ui-state-default a {
+	text-align: center !important;
+}
+
+.selected-menu-style-background .ui-menuitem {
+	background: green !important;
+}
+
+.ui-chkbox {
+	vertical-align: text-bottom;
+}
+
+.labelColumn {
+	width: 200px !important;
+	overflow: visible;
+	vertical-align: text-top;
+}
+
+.labelColumn2 {
+	width: 157px !important;
+	overflow: visible;
+}
+
+.labelColumn8 {
+	width: 148px !important;
+	overflow: visible;
+	text-align: left;
+}
+
+.labelColumn10 {
+	width: 500px !important;
+	overflow: visible;
+}
+
+.labelColumn9 {
+	width: 140px !important;
+	overflow: visible;
+}
+
+.labelColumn3 {
+	width: 170px !important;
+	overflow: visible;
+	text-align: left !important;
+	vertical-align: text-top !important;
+}
+
+.labelColumn7 {
+	width: 170px !important;
+	overflow: visible;
+	text-align: left !important;
+}
+
+.labelColumn22 {
+	width: 150px !important;
+}
+
+.labelColumn23 {
+	width: 250px !important;
+}
+
+.labelColumn24 {
+	width: 10px !important;
+}
+
+/* couleur des ligne du tableau */
+.colorStyleAccept {
+	background-color: #03C03C !important;
+}
+
+.colorStyleReserved {
+	background-color: #FFFFFF !important;
+}
+
+.colorStyleRejected {
+	background-color: red !important;
+}
+
+.labelColumn4 {
+	width: 100px !important;
+	overflow: visible;
+}
+
+.labelColumn5 {
+	width: 115px !important;
+	overflow: visible;
+}
+
+.labelColumn6 {
+	width: 165px !important;
+	overflow: visible;
+}
+
+.textColumn {
+	width: 200px !important;
+	overflow: visible;
+}
+
+.textColumn1 {
+	text-align: right;
+}
+
+.textColumn1 {
+	width: 460px !important;
+	overflow: visible;
+}
+
+.otherColumn {
+	width: 200px !important;
+	overflow: visible;
+}
+
+.required-star-right {
+	color: red;
+	float: right;
+}
+
+/* .ui-menuitem-text {
+	overflow: auto!important;
+} */
+.ui-menu .ui-menu-parent .ui-menu-child {
+	width: auto !important;
+}
+
+.active.ui-priority-primary {
+	background-color: rgb(0, 109, 204) !important;
+}
+
+.disabled.ui-priority-primary {
+	background-color: rgb(0, 109, 204)) !important;
+}
+
+[disabled].ui-priority-primary {
+	background-color: rgb(0, 109, 204) !important;
+}
+
+.ui-widget {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 11px !important;
+}
+
+.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+
+.ui-panelmenu .ui-panelmenu-header a {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 11px !important;
+}
+
+/*Color des champs erroné*/
+.ui-inputfield.ui-state-error,.ui-widget-header .ui-inputfield.ui-state-error,.ui-widget-content .ui-inputfield.ui-state-error
+	{
+	border: 1px solid #B94A48 !important;
+}
+
+/* Titre des panels */
+.ui-panel .ui-panel-title {
+	margin: 0.1em 16px 0.2em 0px !important;
+	font-size: 14px !important;
+	color: #006DCC;
+}
+
+/* Spinner */
+.ui-spinner {
+	width: 20px !important;
+}
+
+.ui-spinner-input {
+	width: 33px !important;
+	text-align: right !important;
+}
+
+/* pagination de dataTable  */
+.ui-paginator-top {
+	border-bottom-color: currentColor !important;
+	border-bottom-width: 0px !important;
+	border-bottom-style: none !important;
+	display: none !important;
+}
+
+/* DataTable*/
+.ui-datatable .ui-sortable-column,.ui-datatable .ui-state-default {
+	color: #0081C2 !important;
+}
+
+.ui-datatable thead th,.ui-datatable tbody td,.ui-datatable tfoot td {
+	border-style: solid;
+	border-width: 1px;
+	overflow: hidden;
+	padding: 4px 10px;
+	white-space: normal !important;
+}
+
+/* Calendar  */
+.ui-widget .ui-widget .ui-datepicker {
+	font-size: 10px !important;
+}
+
+/* Menu gauche*/
+.ui-accordion .ui-accordion-header.ui-state-default a {
+	color: #0092DC !important;
+}
+
+/*Sous menue du Menu gauche*/
+.ui-accordion .ui-accordion-content {
+	padding: 2px !important;
+}
+
+/* fieldset */
+.ui-fieldset {
+	border-color: #006DCC !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-size: 13px !important;
+	text-align: left !important;
+}
+
+.ui-fieldset .ui-fieldset-legend {
+	background-color: #006DCC !important;
+	background-image: none !important;
+	color: #ffffff !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-weight: bold !important;
+	font-size: 11px !important;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25) !important;
+}
+
+.footer {
+	color: #8C8C8C !important;
+	margin-left: 25% !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-weight: normal !important;
+	font-size: 11px !important;
+}
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.labelColumnInput {
+	width: 300px !important;
+	overflow: visible;
+	text-align: left !important;
+	vertical-align: middle !important;
+}
+
+.labelColumnText {
+	overflow: visible;
+	text-align: left !important;
+	vertical-align: top !important;
+	width: 250px !important;
+}
+
+.labelColumnInputCol2 {
+	width: 185px !important;
+	overflow: visible;
+	text-align: left !important;
+	vertical-align: middle !important;
+}
+
+.labelColumnTextCol2 {
+	overflow: visible;
+	text-align: left !important;
+	vertical-align: middle !important;
+	width: 170px !important;
+}
+
+.ui-widget-content .ui-inputfield {
+	font-weight: normal;
+	/* width: 125px; */
+}
+
+.rapport-ui-widget-content .ui-inputfield {
+	font-weight: normal;
+	width: 97px !important;
+}
+
+.disable-ui-widget-content .ui-inputfield {
+	font-weight: normal;
+	width: 150px !important;
+}
+
+.button-calander-ui-widget-content .ui-inputfield {
+	font-weight: normal;
+	width: 97px !important;
+}
+
+.noBorder tr,.noBorder td {
+	border: none !important;
+	padding: 2px 10px;
+}
+
+.noBorder1 tr,.noBorder1 td {
+	border: none !important;
+	padding: 2px 10px;
+	text-align: left;
+}
+
+.noBorder1 tr  td paddingRadio tr,.noBorder1 tr td paddingRadio td {
+	border: none !important;
+	padding: 0px 0px !important;
+	padding-right: 4px !important;
+}
+
+.paddingRadio tr,.paddingRadio td {
+	border: none !important;
+	padding: 0px 0px !important;
+	padding-right: 4px !important;
+}
+
+.note {
+	color: gray;
+	font-style: italic;
+}
+
+.expandable-Table .ui-datatable-data td,.expandable-Table .ui-datatable-data-empty td
+	{
+	margin: 0;
+	overflow: hidden;
+	padding: 0px 0px;
+}
+
+.hide-column-names table thead tr {
+	display: none;
+}
+
+.expandable-Table .ui-datatable-data td {
+	border: none !important;
+}
+
+.hide-column-names table thead tr {
+	display: none;
+}
+
+.togglerCol,.codeCol {
+	padding: 2px 2px !important;
+	text-align: center;
+}
+
+.togglerCol {
+	width: 15px;
+	min-width: 15px;
+	max-width: 15px;
+}
+
+.codeCol {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+
+#dialogLoading.ui-dialog .ui-dialog-titlebar {
+	background-color: window;
+}
+
+#dialogLoading.ui-dialog .ui-dialog-title {
+	font-size: 17px;
+}
+
+.ui-state-disabled,.ui-widget-content .ui-state-disabled {
+	opacity: 0.6 !important;
+}
+
+.ui-selectonemenu label.ui-selectonemenu-label {
+	width: 100% !important;
+}
+
+.divPanelAccueil {
+	height: 450px;
+	overflow: auto;
+}
+
+.fileinput-button {
+	overflow: visible !important;
+}
+
+.fileupload-buttonbar .ui-button input {
+	top: -150px !important;
+	border-width: 0px 0px 0px 0px !important;
+	z-index: 0 !important;
+	height: 0px !important;
+}
+
+.fileupload-buttonbar {
+	background: transparent none !important;
+	border: none !important;
+	top: -150px !important;
+}
+
+.fileupload-content {
+	display: none !important;
+}
+
+.ui-wizard-step-title {
+	float: left;
+	font-size: 12px;
+	margin: 0 3px 0 0;
+	padding: 0.4em;
+}
+
+.centrage {
+	text-align: center;
+}
+
+.ui-layout-container {
+	margin: auto;
+}
+
+.ui-layout-unit-header-title {
+	color: #006DCC;
+}
+
+.ui-messages-info,.ui-message-info {
+	border-color: 1px solid #d4d4d4;
+	color: #617f10;
+}
+
+.wideList  .ui-orderlist-list {
+	width: 600px;
+	height: 200px;
+}
+
+.smallList  .ui-orderlist-list {
+	width: 600px;
+	height: 100px;
+}
+
+/** fileUpload component */
+
+/* .ui-fileupload {
+	width:100%;
+	min-height: 50px;
+	border: 3px dashed #BBBBBB;
+	line-height:50px; 
+	text-align: center;
+	v
+}
+.ui-fileupload-content {
+	border:0px;
+}
+	 */
+
+/* Firstly Hide the unnecessary components */
+.ui-fileupload .start {
+	display: none;
+}
+
+.ui-fileupload .cancel {
+	display: none;
+}
+
+.ui-fileupload .progress {
+	display: none; /*- if you wanted to hide the progress bar as well*/
+}
+
+.ui-fileupload {
+	border: none;
+}
+
+.ui-progressbar { /* made progress bar smaller to fit on same line */
+	width: 80px !important;
+	height: 5px !important;
+	display: none;
+}
+
+.fileupload-buttonbar .fileinput-button .ui-icon-plusthick {
+	/* remove icon from browse button */
+	display: none !important;
+}
+
+.fileupload-buttonbar .fileinput-button  .ui-button-text {
+	/* removed icon from browse button so shifting text left*/
+	padding-left: 1em !important;
+}
+
+.ui-fileupload .fileupload-buttonbar {
+	border: none !important;
+	background: transparent;
+	background-color: transparent;
+	float: left; /* Keep button on left */
+}
+
+.fileupload-content {
+	border: none !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	background: transparent !important;
+	background-color: transparent !important;
+	float: right; /* and content on right */
+}
+
+/** css for panel */
+.ui-panelgrid-gray,.ui-panelgrid-gray tbody td {
+	background-color: #f9f9fa !important;
+}
+
+.ui-document-autocomplete input {
+	width: 98%;
+}
+
+.ui-panelgrid-full-width {
+	width: 100% !important
+}
+
+.ui-panelgrid-form-no-border {
+	border: 0; 
+	width: 100% !important;
+}
+
+.value,.valeur {
+	font-weight: 700;
+	color: #369
+}

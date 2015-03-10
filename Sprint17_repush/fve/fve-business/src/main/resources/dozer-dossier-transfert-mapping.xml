@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+   <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DossierTransfert</class-b>
+		
+        <field>
+            <a>dateCreation</a>
+            <b>dossier.dateCreation</b>
+        </field>
+        <field>
+            <a>typeDossier</a>
+            <b>dossier.typeDossier</b>
+        </field>
+        <field>
+            <a>ouvertureOfId</a>
+            <b>ouvertureOffreFormation.id</b>
+        </field>
+        <field>
+            <a>dossierInscriptionId</a>
+            <b>dossierInscriptionAdministrative.id</b>
+        </field>
+        
+        <field>
+            <a>anneeAcademiqueId</a>
+            <b>anneeAcademique.id</b>
+        </field>
+        <field>
+            <a>anneeAcademiqueCode</a>
+            <b>anneeAcademique.code</b>
+        </field>
+        <field>
+            <a>anneeAcademiquePremiereAnnee</a>
+            <b>anneeAcademique.premiereAnnee</b>
+        </field>
+        <field>
+            <a>anneeAcademiqueDeuxiemeAnnee</a>
+            <b>anneeAcademique.deuxiemeAnnee</b>
+        </field>
+        <field>
+            <a>individuNin</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.individu.identifiant</b>
+        </field>
+        
+        <field>
+            <a>dossierEtudiantMatricule</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule</b>
+        </field>
+        
+        
+        <field>
+            <a>dossierEtudiantId</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.id</b>
+        </field>
+
+        <field>
+            <a>ouvertureOfOrigineId</a>
+            <b>dossierInscriptionAdministrative.ouvertureOffreFormation.id</b>
+        </field>
+         <field>
+            <a>bacMatricule</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.dossierBachelier.matricule</b>
+        </field>
+        <field>
+            <a>bacId</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.dossierBachelier.id</b>
+        </field>
+        <field>
+            <a>bacRefCodeSerie</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.dossierBachelier.refCodeSerieBac</b>
+        </field>
+        <field>
+            <a>bacLibelleSerie</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.dossierBachelier.libelleSerieBac</b>
+        </field>
+        
+        <field>
+            <a>moyenneBac</a>
+            <b>dossierInscriptionAdministrative.dossierEtudiant.dossierBachelier.moyenneBac</b>
+        </field>	
+        <field>
+            <a>situationId</a>
+            <b>dossier.situationEntite.id</b>
+        </field>
+
+        <field>
+            <a>codeSituation</a>
+            <b>dossier.situationEntite.situation.code</b>
+        </field>
+        
+        <field>
+			<a>situationId</a>
+			<b>dossier.situationEntite.situation.id</b>
+		</field>
+		<field>
+			<a>codeSituation</a>
+			<b>dossier.situationEntite.situation.code</b>
+		</field>
+		<field>
+			<a>situationLibelleFr</a>
+			<b>dossier.situationEntite.situation.libelleFr</b>
+		</field>
+			<field>
+			<a>situationLibelleAr</a>
+			<b>dossier.situationEntite.situation.libelleAr</b>
+		</field>
+    </mapping>
+	
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.AnneeAcademiqueDto</class-b>
+
+        <field>
+            <a>anneeAcademiqueId</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>anneeAcademiquePremiereAnnee</a>
+            <b>premiereAnnee</b>
+        </field>
+        <field>
+            <a>anneeAcademiqueDeuxiemeAnnee</a>
+            <b>deuxiemeAnnee</b>
+        </field>
+        <field>
+            <a>anneeAcademiqueCode</a>
+            <b>code</b>
+        </field>
+    </mapping>
+    
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto</class-b>
+
+        <field>
+            <a>dossierInscriptionId</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>dossierEtudiantId</a>
+            <b>dossierId</b>
+        </field>
+        <field>
+            <a>ouvertureOfOrigineId</a>
+            <b>ouvertureOffreFormationId</b>
+        </field>
+		
+    </mapping>
+    
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierEtudiantDto</class-b>
+
+        <field>
+            <a>dossierEtudiantMatricule</a>
+            <b>numeroMatricule</b>
+        </field>
+        <field>
+            <a>dossierEtudiantId</a>
+            <b>id</b>
+        </field>
+		
+		
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.referentiel.business.model.dto.RefIndividuDto</class-b>
+
+        <field>
+            <a>individuId</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>individuNin</a>
+            <b>identifiant</b>
+        </field>
+		
+        <field>
+            <a>individuNomArabe</a>
+            <b>nomArabe</b>
+        </field>
+        <field>
+            <a>individuNomLatin</a>
+            <b>nomLatin</b>
+        </field>
+		
+        <field>
+            <a>individuPrenomArabe</a>
+            <b>prenomArabe</b>
+        </field>
+        <field>
+            <a>individuPrenomLatin</a>
+            <b>prenomLatin</b>
+        </field>
+		
+        <field>
+            <a>individuDateNaissance</a>
+            <b>dateNaissance</b>
+        </field>
+        <field>
+            <a>individuNationaliteLibelleLongFr</a>
+            <b>nationaliteLibelleLongFr</b>
+        </field>
+        <field>
+            <a>individuNationaliteLibelleLongAr</a>
+            <b>nationaliteLibelleLongAr</b>
+        </field>
+        <field>
+        	<a>individuCivility</a>
+        	<b>civiliteLibelleLongFr</b>
+        </field>
+		
+    </mapping>
+   
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.fve.business.model.dto.bac.DossierBachelierDto</class-b>
+
+        <field>
+            <a>bacMatricule</a>
+            <b>matricule</b>
+        </field>
+        <field>
+            <a>bacId</a>
+            <b>id</b>
+        </field>
+        <field>
+            <a>bacRefCodeSerie</a>
+            <b>refCodeSerieBac</b>
+        </field>
+        <field>
+            <a>bacLibelleSerie</a>
+            <b>libelleSerieBac</b>
+        </field>
+        
+        <field>
+            <a>moyenneBac</a>
+            <b>moyenneBac</b>
+        </field>	
+    </mapping>
+   	
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierTransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Dossier</class-b>
+        <field>
+            <a>situationId</a>
+            <b>situationEntite.id</b>
+        </field>
+    </mapping>
+
+    <mapping map-null="false">
+        <class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.TransfertDto</class-a>
+        <class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Transfert</class-b>
+    </mapping>
+	
+</mappings>

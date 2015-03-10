@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DemandePreinscription
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DemandePreinscriptionDto
+		</class-b>
+		<field>
+			<a>id</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>dateCreation</a>
+			<b>date</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].id</a>
+			<b>coordonneesId</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].typeCoordonnee</a>
+			<b>typeCoordonnee</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresse</a>
+			<b>adresseDto</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresse.nomenclatureByTypeAdresse.id</a>
+			<b>nomenclatureByTypeAdresseId</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresse.id</a>
+			<b>adresseDto.id</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresse.nomenclatureByPays.id</a>
+			<b>adresseDto.paysId</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresseElectronique</a>
+			<b>adresseElectroniqueDto</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresseElectronique.nomenclatureByTypeAdresseElectronique.id</a>
+			<b>nomenclatureByTypeAdresseElectroniqueId</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresseElectronique.nomenclatureByNatureAdresseElectronique.id</a>
+			<b>nomenclatureByNatureAdresseElectroniqueId</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresseElectronique.id</a>
+			<b>adresseElectroniqueDto.id</b>
+		</field>
+		<field>
+			<a>refIndividu.nomenclatureByCivilite.id</a>
+			<b>individuDto.civiliteId</b>
+		</field>
+		<field>
+			<a>refIndividu.nomenclatureByNationalite.id</a>
+			<b>individuDto.nationaliteId</b>
+		</field>
+		<field>
+			<a>titreAcces</a>
+			<b>titreAccesDto</b>
+		</field>
+		<field>
+			<a>refIndividu</a>
+			<b>individuDto</b>
+		</field>
+		<field>
+			<a>decision</a>
+			<b>decisionDto</b>
+		</field>
+		<field>
+			<a>statut</a>
+			<b>statut</b>
+		</field>
+		<field>
+			<a>anneeAcademique.id</a>
+			<b>anneeAcademiqueId</b>
+		</field>
+		<field>
+			<a>cycle.id</a>
+			<b>cycleId</b>
+		</field>
+		<field>
+			<a>filiereLmd.id</a>
+			<b>filiereId</b>
+		</field>
+		<field>
+			<a>specialiteLmd.id</a>
+			<b>specialiteId</b>
+		</field>
+		<field>
+			<a>niveau.id</a>
+			<b>niveauId</b>
+		</field>
+		<field>
+			<a>etablissement.id</a>
+			<b>etablissementId</b>
+		</field>
+		<field>
+			<a>domaineLMD.llDomaine</a>
+			<b>libelleDomaine</b>
+		</field>
+		<field>
+			<a>domaineLMD.id</a>
+			<b>domaineId</b>
+		</field>
+		<field>
+			<a>etablissement.llEtablissementLatin</a>
+			<b>libelleEtablissement</b>
+		</field>
+		<field>
+			<a>etablissement.identifiant</a>
+			<b>codeEtablissement</b>
+		</field>
+		<field>
+			<a>filiereLmd.llFiliere</a>
+			<b>libelleFiliere</b>
+		</field>
+		<field>
+			<a>specialiteLmd.llSpecialite</a>
+			<b>libelleSpecialite</b>
+		</field>
+		<field>
+			<a>niveau.libelleLongLt</a>
+			<b>libelleNiveau</b>
+		</field>
+		<field>
+			<a>cycle.libelleLongLt</a>
+			<b>libelleCycle</b>
+		</field>
+		<field>
+			<a>anneeAcademique.premiereAnnee</a>
+			<b>libelleAnneeAcademique1</b>
+		</field>
+		<field>
+			<a>anneeAcademique.deuxiemeAnnee</a>
+			<b>libelleAnneeAcademique2</b>
+		</field>
+		<field>
+			<a>refIndividu.nomLatin</a>
+			<b>individuDto.nomLatin</b>
+		</field>
+		<field>
+			<a>refIndividu.prenomLatin</a>
+			<b>individuDto.prenomLatin</b>
+		</field>
+		<field>
+			<a>refIndividu.nomArabe</a>
+			<b>individuDto.nomArabe</b>
+		</field>
+		<field>
+			<a>refIndividu.prenomArabe</a>
+			<b>individuDto.prenomArabe</b>
+		</field>
+		<field>
+			<a>generee</a>
+			<b>generee</b>
+		</field>
+		<field>
+			<a>situationEntite.situation.code</a>
+			<b>situationCode</b>
+		</field>
+		<field>
+			<a>situationEntite.situation.code</a>
+			<b>situationCode</b>
+		</field>
+		<field>
+			<a>refIndividu.nomenclatureByCivilite.libelleLongFr</a>
+			<b>individuDto.civiliteLibelleLongFr</b>
+		</field>
+		<field>
+			<a>refIndividu.nomenclatureByCivilite.libelleLongFr</a>
+			<b>individuDto.civiliteLibelleLongFr</b>
+		</field>
+		<field>
+			<a>refIndividu.nomenclatureByNationalite.libelleLongFr</a>
+			<b>individuDto.nationaliteLibelleLongFr</b>
+		</field>
+		<field>
+			<a>refIndividu.refCoordonnees[0].refAdresse.nomenclatureByPays.libelleLongFr</a>
+			<b>adresseDto.paysLibelleLongFr</b>
+		</field>
+		<field>
+			<a>titreAcces.pays.id</a>
+			<b>titreAccesDto.paysId</b>
+		</field>
+		<field>
+			<a>titreAcces.pays.libelleLongFr</a>
+			<b>titreAccesDto.libellePaysObtentionLongFr</b>
+		</field>
+<!-- 		<field> -->
+<!-- 			<a>titreAcces</a> -->
+<!-- 			<b>typeTitreLibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>mentionLibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>langueEtrangere1LibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>langueEtrangere2LibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>specilaliteLibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>libellePaysObtentionLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>libelleDecision</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>civiliteLibelleLongFr</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a></a> -->
+<!-- 			<b>nationaliteLibelleLongFr</b> -->
+<!-- 		</field> -->
+		
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DecisionDemandePreinscription
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DecisionDemandePreinscriptionDto
+		</class-b>
+		<field>
+			<a>id</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>acceptee</a>
+			<b>acceptee</b>
+		</field>
+		<field>
+			<a>date</a>
+			<b>date</b>
+		</field>
+		<field>
+			<a>avis</a>
+			<b>avis</b>
+		</field>
+		<field>
+			<a>motif</a>
+			<b>motif</b>
+		</field>
+		<field>
+			<a>observation</a>
+			<b>observation</b>
+		</field>
+		<field>
+			<a>reference</a>
+			<b>reference</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.SearchPreinscriptionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DemandePreinscription
+		</class-b>
+		<field>
+			<a>nomDemandeur</a>
+			<b>refIndividu.nomLatin</b>
+		</field>
+		<field>
+			<a>prenomDemandeur</a>
+			<b>refIndividu.prenomLatin</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>nationaliteId</a>
+			<b>refIndividu.nomenclatureByNationalite.id</b>
+		</field>
+		<field>
+			<a>etablissementId</a>
+			<b>etablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.SearchPreinscriptionResultDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DemandePreinscription
+		</class-b>
+		<field>
+			<a>demandeId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>individuId</a>
+			<b>refIndividu.identifiant</b>
+		</field>
+		<field>
+			<a>titreAccesId</a>
+			<b>titreAcces.id</b>
+		</field>
+		<field>
+			<a>libelleNationalite</a>
+			<b>refIndividu.nomenclatureByNationalite.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>nomDemandeur</a>
+			<b>refIndividu.nomLatin</b>
+		</field>
+		<field>
+			<a>prenomDemandeur</a>
+			<b>refIndividu.prenomLatin</b>
+		</field>
+		<field>
+			<a>etablissement</a>
+			<b>etablissement.lcEtablissementLatin</b>
+		</field>
+		<field>
+			<a>libelleDomaine</a>
+			<b>domaineLMD.llDomaine</b>
+		</field>
+		<field>
+			<a>libelleNiveau</a>
+			<b>niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>libelleFiliere</a>
+			<b>filiereLmd.llFiliere</b>
+		</field>
+		<field>
+			<a>libelleSpecialite</a>
+			<b>specialiteLmd.llSpecialite</b>
+		</field>
+		<field>
+			<a>generee</a>
+			<b>generee</b>
+		</field>
+
+	</mapping>
+
+</mappings>

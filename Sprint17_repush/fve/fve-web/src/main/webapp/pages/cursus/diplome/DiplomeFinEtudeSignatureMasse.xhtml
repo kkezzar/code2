@@ -1,0 +1,754 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{diplomeFinEtudeMsgs.diplome_panel_title_signature_etab}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<h:head>
+			<style>
+.ui-picklist .ui-picklist-list {
+	height: 250px;
+	width: 500px !important;
+}
+
+.ui-picklist-button-move-up {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-top {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-down {
+	visibility: hidden !important;
+}
+
+.ui-picklist-button-move-bottom {
+	visibility: hidden !important;
+}
+</style>
+		</h:head>
+
+		<p:growl id="msgs" showDetail="true" autoUpdate="true"
+			showSummary="false" closable="true" life="5000" />
+		<pe:blockUI target="form_diplomefinetude" widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<h:form id="form_diplomefinetude">
+			<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%;text-align:left"
+							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}" for="annee"></p:outputLabel>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="annee" filter="true"
+							style="width:100%;text-align:left" filterMatchMode="contains"
+							required="true"
+							value="#{diplomeFinEtudeGererBean.anneeAcademiqueId}"
+							label="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}">
+							<p:ajax update="panelSearch" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{diplomeFinEtudeGererBean.anneeChanged}" />
+							<f:selectItem
+								itemLabel="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}"
+								itemValue="" />
+							<f:selectItems
+								value="#{diplomeFinEtudeGererBean.anneeAcademiqueList}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%;text-align:left"
+							value="#{searchMsgs.offre_formation}" for="oof"></p:outputLabel>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="oof" required="true"
+							style="width:100%;text-align:left"
+							value="#{diplomeFinEtudeGererBean.oofId}" filter="true"
+							filterMatchMode="contains"
+							label="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation}">
+							<p:ajax update="form_diplomefinetude"
+								onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{diplomeFinEtudeGererBean.etudiantsOfChanged}" />
+							<f:selectItem
+								itemLabel="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation}"
+								itemValue="" />
+							<f:selectItems
+								value="#{diplomeFinEtudeGererBean.offreFormationList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+<!-- 				<p:row> -->
+<!-- 					<p:column style="width:15%"> -->
+<!-- 						<p:outputLabel style="width:100%;text-align:left" -->
+<!-- 							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_etudiant}" for="etudiant"></p:outputLabel> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column style="width:35%"> -->
+<!-- 						<p:selectOneMenu id="etudiant" filter="true" -->
+<!-- 							style="width:100%;text-align:left" filterMatchMode="contains" -->
+<!-- 							required="false" -->
+<!-- 							value="#{diplomeFinEtudeGererBean.searchDto.anneeAcademiqueId}" -->
+<!-- 							label="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}"> -->
+<!-- 							<p:ajax update="panelSearch" onstart="PF('globalWidget').block()" -->
+<!-- 								onsuccess="PF('globalWidget').unblock()" -->
+<!-- 								listener="#{diplomeFinEtudeGererBean.anneeChanged}" /> -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems -->
+<!-- 								value="#{diplomeFinEtudeGererBean.anneeAcademiqueList}" /> -->
+<!-- 						</p:selectOneMenu> -->
+<!-- 					</p:column> -->
+<!-- 					</p:row> -->
+
+			</p:panelGrid>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton id="btnSearch" value="Rechercher"
+						update="form_diplomefinetude" icon="ui-icon-search"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{diplomeFinEtudeGererBean.findDiplomeSignature}">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+
+			<p:outputPanel id="detail"
+				rendered="#{diplomeFinEtudeGererBean.showDetail}">
+				<p:pickList id="PojoPickList"
+					rendered="#{diplomeFinEtudeGererBean.etudiants!=null}"
+					value="#{diplomeFinEtudeGererBean.etudiants}" var="_etudiant"
+					itemValue="#{_etudiant}" itemLabel="#{_etudiant.nomPrenom}"
+					addLabel="#{commonmsgs.pickList_ajouter_label}"
+					addAllLabel="#{commonmsgs.pickList_ajouter_tout_label}"
+					removeLabel="#{commonmsgs.pickList_supprimer_label}"
+					removeAllLabel="#{commonmsgs.pickList_supprimer_tout_label}"
+					showSourceControls="true" showTargetControls="true"
+					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
+					filterMatchMode="contains" converter="etudiant">
+
+					<f:facet name="sourceCaption">#{commonmsgs.pickList_source_caption}</f:facet>
+					<f:facet name="targetCaption">#{commonmsgs.pickList_target_caption}</f:facet>
+					<p:ajax event="transfer" update="PojoPickList" />
+
+
+					<!-- 					<p:column style="width:25%"> -->
+
+					<!-- 						<p:graphicImage value="#{photoEtudiantBB.photo}" -->
+					<!-- 							rendered="#{_etudiant.photoName!=null}" -->
+					<!-- 							alt="#{documentmsgs.document_photo_vide}" width="40" height="40"> -->
+					<!-- 							<f:param name="url" value="#{_etudiant.photoName}" /> -->
+					<!-- 						</p:graphicImage> -->
+					<!-- 						<p:graphicImage value="/resources/images/boy.png" -->
+					<!-- 							rendered="#{_etudiant.photoName==null}" -->
+					<!-- 							alt="#{documentmsgs.document_photo_vide}" width="40" height="40"> -->
+					<!-- 						</p:graphicImage> -->
+					<!-- 					</p:column> -->
+					<p:column style="width:100%">
+						<p:spacer width="10" />
+						<h:outputText value="#{_etudiant.nomPrenom}" />
+					</p:column>
+				</p:pickList>
+				<br />
+				<p:tabView orientation="top" id="tabView" widgetVar="tabviewWidget">
+
+					<p:tab title="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature}">
+						<p:outputPanel id="signaturePanel">
+							<p:dataTable id="dtTbl_sign"
+								value="#{diplomeFinEtudeGererBean.signatureDiplomeFinEtudeDtos}"
+								var="row" rowKey="#{row.ncSignatureDiplomeId}"
+								resizableColumns="true"
+								selection="#{diplomeFinEtudeGererBean.selectedSignatureDiplomeFinEtudeDtos}"
+								emptyMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_datable_list_signature_no_result}">
+								<p:ajax event="sort" onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()" />
+
+								<f:facet name="header">
+								</f:facet>
+								<p:column selectionMode="multiple"
+									style="width:40px;text-align:center" />
+								<p:column sortBy="#{row.ncSignatureDiplomeLibelleLongFr}"
+									width="15%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_fin_etude_signataire}" />
+									</f:facet>
+
+									<h:outputText value="#{row.ncSignatureDiplomeLibelleLongFr}"
+										style="width:100%" />
+								</p:column>
+
+								<p:column sortBy="#{row.dateSignature}" width="15%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_date_signature}" />
+									</f:facet>
+									<p:calendar navigator="true" widgetVar="calwidget"
+										value="#{row.dateSignature}" pattern="dd/MM/yyyy"
+										required="false"
+										requiredMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_date_signature_required}" />
+								</p:column>
+								<p:column sortBy="#{row.reference}" width="20%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_reference}" />
+									</f:facet>
+									<p:inputText value="#{row.reference}" required="false"
+										style="width:100%"
+										requiredMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_reference_required}">
+									</p:inputText>
+
+								</p:column>
+								<p:column sortBy="#{row.signataire}" width="20%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_par}" />
+									</f:facet>
+									<p:inputText value="#{row.signataire}" required="false"
+										style="width:100%"
+										requiredMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_par_required}">
+									</p:inputText>
+
+								</p:column>
+
+								<p:column sortBy="#{row.observation}" width="30%">
+									<f:facet name="header">
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_observation}" />
+
+									</f:facet>
+
+									<p:inputText value="#{row.observation}" style="width:100%">
+									</p:inputText>
+								</p:column>
+							</p:dataTable>
+							<br />
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										id="saveBtnDiplome" update=":form_diplomefinetude"
+										icon="ui-icon-disk" onstart="PF('globalWidget').block()"
+										onsuccess="PF('globalWidget').unblock()"
+										process=":form_diplomefinetude:tabView:signaturePanel"
+										actionListener="#{diplomeFinEtudeGererBean.saveGroupedSignature()}">
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<!-- 						<p:fieldset -->
+							<!-- 							legend="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_faculte}" -->
+							<!-- 							rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}"> -->
+							<!-- 							<p:panelGrid id="gererASignatureEtab" styleClass="noBorder1"> -->
+							<!-- 								<p:row> -->
+							<!-- 									<p:column> -->
+							<!-- 										<h:outputText -->
+							<!-- 											value="#{diplomeFinEtudeMsgs.diplome_signature_ministere_ok}" /> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column width="30%"> -->
+							<!-- 										<p:selectBooleanCheckbox -->
+							<!-- 											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab}" -->
+							<!-- 											valueChangeListener="#{diplomeFinEtudeGererBean.entityChanged}"> -->
+							<!-- 											<p:ajax update="gererASignatureEtab" /> -->
+							<!-- 										</p:selectBooleanCheckbox> -->
+							<!-- 									</p:column> -->
+							<!-- 								</p:row> -->
+
+							<!-- 								<p:row -->
+							<!-- 									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab==true}"> -->
+							<!-- 									<p:column> -->
+							<!-- 										<h:outputText -->
+							<!-- 											value="#{diplomeFinEtudeMsgs.diplome_date_signature_etablissement}  " /> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<p:calendar navigator="true" -->
+							<!-- 											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.dateSignatureEtablissement}" -->
+							<!-- 											showButtonPanel="true" -->
+							<!-- 											label="#{diplomeFinEtudeMsgs.diplome_date_signature_etablissement} *" -->
+							<!-- 											required="true" -->
+							<!-- 											requiredMessage="#{diplomeFinEtudeMsgs.diplome_date_signature_ministere_recired}" -->
+							<!-- 											pattern="dd/MM/yyyy"> -->
+							<!-- 											<f:convertDateTime pattern="dd/MM/yyyy" /> -->
+							<!-- 										</p:calendar> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<h:outputText -->
+							<!-- 											value="#{diplomeFinEtudeMsgs.diplome_ref_etablissement}  " /> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<p:inputText style="text-align: left; width:170px" -->
+							<!-- 											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.refEtab}" -->
+							<!-- 											label="#{diplomeFinEtudeMsgs.diplome_autorite}"> -->
+							<!-- 										</p:inputText> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<h:outputText -->
+							<!-- 											value="#{diplomeFinEtudeMsgs.diplome_autorite}  " /> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<p:inputText style="text-align: left; width:170px" -->
+							<!-- 											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.autoriteEtablissement}" -->
+							<!-- 											label="#{diplomeFinEtudeMsgs.diplome_autorite}"> -->
+							<!-- 										</p:inputText> -->
+							<!-- 									</p:column> -->
+							<!-- 								</p:row> -->
+
+							<!-- 								<p:row -->
+							<!-- 									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab==true}"> -->
+							<!-- 									<p:column> -->
+							<!-- 										<h:outputText -->
+							<!-- 											value="#{diplomeFinEtudeMsgs.diplome_observation_ministere}  " /> -->
+							<!-- 									</p:column> -->
+							<!-- 									<p:column> -->
+							<!-- 										<p:inputTextarea style="text-align: left; width:170px" -->
+							<!-- 											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.observationEtab}" -->
+							<!-- 											label="#{diplomeFinEtudeMsgs.diplome_autorite}"> -->
+							<!-- 										</p:inputTextarea> -->
+							<!-- 									</p:column> -->
+							<!-- 								</p:row> -->
+
+
+							<!-- 								<p:row> -->
+							<!-- 									<p:column> -->
+							<!-- 										<p:commandButton value="#{commonmsgs.bouton_enregistrer}" -->
+							<!-- 											id="saveBtnDiplome" update="@(.detailContentStyle)" -->
+							<!-- 											icon="ui-icon-disk" -->
+							<!-- 											actionListener="#{diplomeFinEtudeGererBean.saveDiplome()}"> -->
+							<!-- 										</p:commandButton> -->
+							<!-- 									</p:column> -->
+							<!-- 								</p:row> -->
+
+							<!-- 							</p:panelGrid> -->
+							<!-- 						</p:fieldset> -->
+						</p:outputPanel>
+					</p:tab>
+
+
+					<p:tab title="#{diplomeFinEtudeMsgs.diplome_fin_etude_documents}">
+						<ui:include src="/pages/document/DiplomeFinEtudeDocument.xhtml">
+							<c:set var="entity" value="DiplomeFinEtude" scope="request" />
+							<c:set var="identifiant"
+								value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.id.toString()} "
+								scope="request" />
+							<ui:param name="entity" value="DiplomeFinEtudeSignatureEtab" />
+							<ui:param name="identifiant"
+								value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+			</p:outputPanel>
+			<!-- 			<p:dataTable id="dtTbl_diplome" styleClass="globalPanelStyle" -->
+			<!-- 				value="#{diplomeFinEtudeGererBean.diplomeFinEtudeList}" -->
+			<!-- 				var="currentDiplome" rowKey="#{currentDiplome.id}" -->
+			<!-- 				resizableColumns="true" selectionMode="single" paginator="true" -->
+			<!-- 				rows="5" lazy="true" paginatorPosition="bottom" -->
+			<!-- 				columnClasses="none,none,none,right,left,none, none, none,none,none,none" -->
+			<!-- 				emptyMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_datable_list_diplome_fin_etude_no_result}"> -->
+
+			<!-- 				<p:ajax event="rowSelect" -->
+			<!-- 					listener="#{diplomeFinEtudeGererBean.onRowSelect}" -->
+			<!-- 					update=":form_diplome_fin_etude_consult" -->
+			<!-- 					onstart="PF('page').block()" onsuccess="PF('page').unblock()" /> -->
+			<!-- 				<f:facet name="header"> -->
+			<!-- 					<h:outputText -->
+			<!-- 						value="#{diplomeFinEtudeMsgs.diplome_fin_etude_resultat_recherche}" /> -->
+			<!-- 				</f:facet> -->
+
+			<!-- 				<p:column> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<h:outputText -->
+			<!-- 							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_matricule}" /> -->
+			<!-- 					</f:facet> -->
+
+			<!-- 					<h:outputText value="#{currentDiplome.numeroMatricule}" /> -->
+			<!-- 				</p:column> -->
+
+			<!-- 				<p:column> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<h:outputText value="#{diplomeFinEtudeMsgs.diplome_fin_etude_nom}" /> -->
+			<!-- 					</f:facet> -->
+
+			<!-- 					<h:outputText value="#{currentDiplome.etudiantNomLatin} " /> -->
+			<!-- 				</p:column> -->
+			<!-- 				<p:column> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<h:outputText -->
+			<!-- 							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_prenom}" /> -->
+			<!-- 					</f:facet> -->
+
+			<!-- 					<h:outputText value="#{currentDiplome.etudiantPrenomLatin} " /> -->
+			<!-- 				</p:column> -->
+
+
+
+			<!-- 				<p:column> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<h:outputText -->
+			<!-- 							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_mention}" /> -->
+			<!-- 					</f:facet> -->
+
+			<!-- 					<h:outputText value="#{currentDiplome.mentionLibelleFr} " /> -->
+			<!-- 				</p:column> -->
+
+			<!-- 				<p:column> -->
+			<!-- 					<f:facet name="header"> -->
+			<!-- 						<h:outputText -->
+			<!-- 							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_datable_etudiant_date_obtention}" /> -->
+
+			<!-- 					</f:facet> -->
+
+			<!-- 					<h:outputText value="#{currentDiplome.dateObtention}"> -->
+			<!-- 						<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+			<!-- 					</h:outputText> -->
+			<!-- 				</p:column> -->
+
+			<!-- 			</p:dataTable> -->
+		</h:form>
+		<br></br>
+		<h:form id="form_diplome_fin_etude_consult">
+			<p:outputPanel id="detailDiplomePanelId"
+				rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}">
+
+
+				<p:fieldset
+					legend="#{diplomeFinEtudeMsgs.diplome_fin_etude_infos_etudiant}"
+					rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}">
+
+					<p:panelGrid
+						styleClass="ui-panelgrid-full-width ui-panelgrid-detail">
+						<p:row>
+							<p:column style="text-align: left;width:100px">
+								<p:graphicImage value="#{photoEtudiantBB.photo}"
+									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.photo!=null}"
+									alt="#{documentmsgs.document_photo_vide}" width="120"
+									height="170">
+									<f:param name="url"
+										value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.photo}" />
+								</p:graphicImage>
+								<p:graphicImage value="/resources/images/boy.png"
+									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.photo==null}"
+									alt="#{documentmsgs.document_photo_vide}" width="150"
+									height="200">
+								</p:graphicImage>
+							</p:column>
+							<p:column style="text-align: left;width:1000px">
+								<p:panelGrid
+									styleClass="ui-panelgrid-full-width ui-panelgrid-detail">
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_matricule}  " />
+										</p:column>
+										<p:column styleClass="value">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.numeroMatricule}"
+												styleClass="labelValue" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_nin}  " />
+										</p:column>
+										<p:column styleClass="value">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.nin}"
+												styleClass="labelValue" />
+										</p:column>
+									</p:row>
+
+
+									<p:row>
+										<p:column style="text-align: left;width:200px">
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_nom}" />
+										</p:column>
+										<p:column styleClass="value"
+											style="text-align: left;width:800px">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantNomLatin.toUpperCase()} #{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantPrenomLatin.substring(0,1).toUpperCase().concat(diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantPrenomLatin.substring(1).toLowerCase())}"
+												styleClass="labelValue" />
+										</p:column>
+									</p:row>
+
+
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_nom_ar}  " />
+										</p:column>
+
+										<p:column styleClass="value">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantNomArabe} #{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantPrenomArabe}"
+												styleClass="labelValue" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_date_naissance}  " />
+										</p:column>
+										<p:column styleClass="value">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantDateNaissance}"
+												styleClass="labelValue">
+												<f:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{diplomeFinEtudeMsgs.diplome_fin_etude_lieu_naissance}  " />
+										</p:column>
+										<p:column styleClass="value">
+											<h:outputText
+												value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.etudiantLieuNaissance}"
+												styleClass="labelValue">
+												<f:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+
+								</p:panelGrid>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+				</p:fieldset>
+				<p:growl id="msgs" showDetail="true" autoUpdate="true"
+					closable="true" life="5000" />
+
+
+				<p:fieldset
+					legend="#{diplomeFinEtudeMsgs.diplome_fin_etude_infos_diplome}"
+					rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}">
+
+					<p:panelGrid
+						styleClass="ui-panelgrid-full-width ui-panelgrid-detail">
+
+						<p:row>
+							<p:column>
+								<h:outputText value="#{diplomeFinEtudeMsgs.diplome_cycle}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.cycleLibelleLongLt}"
+									styleClass="labelValue" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_code}  " />
+							</p:column>
+							<!-- 								<p:column styleClass="value"> -->
+							<!-- 									<h:outputText -->
+							<!-- 										value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.refCodeDiplome}" -->
+							<!-- 										styleClass="labelValue" /> -->
+							<!-- 								</p:column>	 -->
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.offreFormationLibelleFr}"
+									styleClass="labelValue" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation_ar}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.offreFormationLibelleAr}"
+									styleClass="labelValue" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_domaine}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.refLibelleDomaine}"
+									styleClass="labelValue" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_domaine_ar}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.refLibelleDomaineArabe}"
+									styleClass="labelValue" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_datable_etudiant_date_obtention}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.dateObtention}"
+									styleClass="labelValue">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{diplomeFinEtudeMsgs.diplome_fin_etude_mention}  " />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.mentionLibelleFr}"
+									styleClass="labelValue" />
+							</p:column>
+						</p:row>
+
+
+
+					</p:panelGrid>
+				</p:fieldset>
+
+				<p:tabView orientation="top" style="height:750px;" id="tabView"
+					widgetVar="tabviewWidget">
+
+					<p:tab title="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature}"
+						styleClass="globalPanelStyle">
+
+
+						<p:fieldset
+							legend="#{diplomeFinEtudeMsgs.diplome_fin_etude_signature_faculte}"
+							rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}">
+							<p:panelGrid id="gererASignatureEtab" styleClass="noBorder1">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_signature_ministere_ok}" />
+									</p:column>
+									<p:column width="30%">
+										<p:selectBooleanCheckbox
+											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab}"
+											valueChangeListener="#{diplomeFinEtudeGererBean.entityChanged}">
+											<p:ajax update="gererASignatureEtab" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:row>
+
+								<p:row
+									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab==true}">
+									<p:column>
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_date_signature_etablissement}  " />
+									</p:column>
+									<p:column>
+										<p:calendar navigator="true"
+											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.dateSignatureEtablissement}"
+											showButtonPanel="true"
+											label="#{diplomeFinEtudeMsgs.diplome_date_signature_etablissement} *"
+											required="true"
+											requiredMessage="#{diplomeFinEtudeMsgs.diplome_date_signature_ministere_recired}"
+											pattern="dd/MM/yyyy">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_ref_etablissement}  " />
+									</p:column>
+									<p:column>
+										<p:inputText style="text-align: left; width:170px"
+											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.refEtab}"
+											label="#{diplomeFinEtudeMsgs.diplome_autorite}">
+										</p:inputText>
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_autorite}  " />
+									</p:column>
+									<p:column>
+										<p:inputText style="text-align: left; width:170px"
+											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.autoriteEtablissement}"
+											label="#{diplomeFinEtudeMsgs.diplome_autorite}">
+										</p:inputText>
+									</p:column>
+								</p:row>
+
+								<p:row
+									rendered="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.estValideEtab==true}">
+									<p:column>
+										<h:outputText
+											value="#{diplomeFinEtudeMsgs.diplome_observation_ministere}  " />
+									</p:column>
+									<p:column>
+										<p:inputTextarea style="text-align: left; width:170px"
+											value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.observationEtab}"
+											label="#{diplomeFinEtudeMsgs.diplome_autorite}">
+										</p:inputTextarea>
+									</p:column>
+								</p:row>
+
+
+								<p:row>
+									<p:column>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											id="saveBtnDiplome" update="@(.detailContentStyle)"
+											icon="ui-icon-disk"
+											actionListener="#{diplomeFinEtudeGererBean.saveDiplome()}">
+										</p:commandButton>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+						</p:fieldset>
+
+					</p:tab>
+
+
+					<p:tab title="#{diplomeFinEtudeMsgs.diplome_fin_etude_documents}"
+						rendered="#{not empty diplomeFinEtudeGererBean.diplomeFinEtudeDto}"
+						styleClass="globalPanelStyle">
+						<ui:include src="/pages/document/DiplomeFinEtudeDocument.xhtml">
+							<c:set var="entity" value="DiplomeFinEtude" scope="request" />
+							<c:set var="identifiant"
+								value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.id.toString()} "
+								scope="request" />
+							<ui:param name="entity" value="DiplomeFinEtudeSignatureEtab" />
+							<ui:param name="identifiant"
+								value="#{diplomeFinEtudeGererBean.diplomeFinEtudeDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+
+			</p:outputPanel>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>
+</html>

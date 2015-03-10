@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="examens" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2456764-d4d6-4e51-bf93-e70927d587e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="5b0dc833-5770-4706-b4d4-73b162603fb5">
+		<field name="mcLibelleFr" class="java.lang.String"/>
+		<field name="refTypeExamenLibelle" class="java.lang.String"/>
+		<field name="dateExamen" class="java.util.Date"/>
+		<field name="heureDebut" class="java.util.Date"/>
+		<field name="heureFin" class="java.util.Date"/>
+		<field name="salleExamenDtos" class="java.util.Collection"/>
+		<field name="responsableExamenDtosGrouped" class="java.util.Collection"/>
+	</subDataset>
+	<subDataset name="dataset2" uuid="e31aa8be-003f-4d31-9243-8bbe672c46dd">
+		<field name="refLieuLibelle" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataset1" uuid="ca482f92-88af-49af-9cfb-cfe20e678807">
+		<field name="nomPrenom" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\smakerri\\Desktop\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="libellePeriode" class="java.lang.String"/>
+	<field name="offreFormationLibelleFr" class="java.lang.String"/>
+	<field name="niveauLibelleLongLt" class="java.lang.String"/>
+	<field name="examenSessionDtos" class="java.util.Collection"/>
+	<field name="anneeAcademiqueCode" class="java.lang.String"/>
+	<field name="intitule" class="java.lang.String"/>
+	<field name="dateDebut" class="java.util.Date"/>
+	<field name="dateFin" class="java.util.Date"/>
+	<field name="ncTypeSessionLibelleFr" class="java.lang.String"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<variable name="PERIODE_NIVEAU" class="java.lang.String">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="DATE_DEBUT_DATE_FIN" class="java.lang.String">
+		<variableExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{dateDebut})+"-"+new SimpleDateFormat("dd/MM/yyyy").format($F{dateFin})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="109" splitType="Stretch">
+			<image>
+				<reportElement uuid="f1f42168-f861-4f6a-b2af-1bba7ea561da" x="4" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="8482cbd1-53cf-40c2-a61a-1d195bd1c170" x="684" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="922c698e-cadd-4495-8e3a-1a09e216480f" x="272" y="14" width="249" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Planning des examens]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="58556dc5-5345-4a6b-af62-78f3442604e7" x="115" y="71" width="318" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{offreFormationLibelleFr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="48fe2908-5776-44e8-bac7-9615ca086736" x="4" y="71" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anneeAcademiqueCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa88a598-8e3d-4e73-946e-504beffaefef" x="4" y="87" width="165" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{libellePeriode}+" - "+$F{niveauLibelleLongLt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="040d924d-f370-4b40-9dc2-56d7e0e27bdd" x="310" y="87" width="161" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{dateDebut})+" - "+new SimpleDateFormat("dd/MM/yyyy").format($F{dateFin})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="040d924d-f370-4b40-9dc2-56d7e0e27bdd" x="169" y="87" width="141" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{intitule}+"("+$F{ncTypeSessionLibelleFr}+")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<elementGroup/>
+			<componentElement>
+				<reportElement uuid="a0f9cc3c-7e4f-4265-989f-5a3f8798726c" key="table 4" style="table 4" x="1" y="0" width="801" height="125"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="dd9dfe7b-148d-4701-8917-af3217b37b00">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{examenSessionDtos})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="316" uuid="4a1f255f-2c6b-4710-b036-dba36991ec87">
+						<jr:columnHeader style="table 4_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="87c74709-0d7e-45e5-b2a5-8a945847a02e" x="6" y="2" width="90" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Matière]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="0ce8914a-cf10-4a4a-83e2-98927cdfa739" x="6" y="0" width="309" height="20">
+									<printWhenExpression><![CDATA[!$F{mcLibelleFr}.equals( null )]]></printWhenExpression>
+								</reportElement>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{mcLibelleFr}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="86" uuid="4514b2ef-24f2-48fa-89f1-ce2d3663b80e">
+						<jr:columnHeader style="table 4_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6cc1eb31-fa88-4744-aeab-ea556f5f05ab" x="6" y="2" width="77" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Date]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="20" rowSpan="1">
+							<textField pattern="dd/MM/yyyy">
+								<reportElement uuid="12a1f47e-2257-4fbc-890f-e29036229628" x="6" y="0" width="77" height="20">
+									<printWhenExpression><![CDATA[!$F{dateExamen}.equals( null )]]></printWhenExpression>
+								</reportElement>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{dateExamen}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="97" uuid="2f203a1e-f99e-4a8e-a468-d43499de850f">
+						<jr:columnHeader style="table 4_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2dbdb3df-81ae-4850-93bd-8c5966a518bb" x="6" y="2" width="90" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Horaire]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="f7b9487a-8e57-4a1d-919a-c084ea0f500a" x="6" y="0" width="90" height="20">
+									<printWhenExpression><![CDATA[!$F{heureDebut}.equals( null )]]></printWhenExpression>
+								</reportElement>
+								<textElement/>
+								<textFieldExpression><![CDATA[new SimpleDateFormat("HH:mm").format($F{heureDebut})+"-"+new SimpleDateFormat("HH:mm").format($F{heureFin})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="9d84d3ed-fdaf-42e8-92ee-16c930c2cd80">
+						<jr:columnHeader style="table 4_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2dbdb3df-81ae-4850-93bd-8c5966a518bb" x="6" y="2" width="74" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Salle(s)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="20" rowSpan="1">
+							<componentElement>
+								<reportElement uuid="c94b56e9-4392-474c-a550-8cbcb25fe587" x="0" y="0" width="90" height="20"/>
+								<jr:list printOrder="Vertical">
+									<datasetRun subDataset="dataset2" uuid="471b92db-4fbb-4366-ad74-a6a92bfab46d">
+										<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{salleExamenDtos})]]></dataSourceExpression>
+									</datasetRun>
+									<jr:listContents height="20" width="90">
+										<textField pattern="">
+											<reportElement uuid="12a1f47e-2257-4fbc-890f-e29036229628" x="6" y="0" width="84" height="20">
+												<printWhenExpression><![CDATA[!$F{refLieuLibelle}.equals( null )]]></printWhenExpression>
+											</reportElement>
+											<textElement>
+												<font size="10"/>
+											</textElement>
+											<textFieldExpression><![CDATA[$F{refLieuLibelle}]]></textFieldExpression>
+										</textField>
+									</jr:listContents>
+								</jr:list>
+							</componentElement>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="208" uuid="e4fb42f3-5ca9-40dc-aecd-e22984557dbb">
+						<jr:columnHeader style="table 4_CH" height="21" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2dbdb3df-81ae-4850-93bd-8c5966a518bb" x="6" y="2" width="90" height="16"/>
+								<textElement>
+									<font fontName="DejaVu Sans" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Responsable(s)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="20" rowSpan="1">
+							<componentElement>
+								<reportElement uuid="2adc9548-448c-40aa-ab07-ea746eaff372" x="0" y="0" width="208" height="20"/>
+								<jr:list printOrder="Vertical">
+									<datasetRun subDataset="dataset1" uuid="69610a99-b3af-41c6-8354-858eb7d1cb6c">
+										<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{responsableExamenDtosGrouped})]]></dataSourceExpression>
+									</datasetRun>
+									<jr:listContents height="20" width="208">
+										<textField pattern="">
+											<reportElement uuid="12a1f47e-2257-4fbc-890f-e29036229628" x="6" y="0" width="202" height="20">
+												<printWhenExpression><![CDATA[!$F{nomPrenom}.equals( null )]]></printWhenExpression>
+											</reportElement>
+											<textElement>
+												<font size="10" isBold="false"/>
+											</textElement>
+											<textFieldExpression><![CDATA[$F{nomPrenom}]]></textFieldExpression>
+										</textField>
+									</jr:listContents>
+								</jr:list>
+							</componentElement>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="12" splitType="Stretch">
+			<break>
+				<reportElement uuid="1033c307-1913-42f2-b75f-fcfea733c234" x="0" y="6" width="100" height="1"/>
+			</break>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement uuid="c4ac5766-05a3-48ea-8ab6-67308e940862" x="1" y="1" width="800" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement uuid="318170f0-cbaa-4462-a86d-69e34eb7669b" x="4" y="2" width="165" height="12"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2ddcf5cb-4626-4323-87a1-edadfd7c1800" x="714" y="2" width="43" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" sur"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="aab7cd8d-3024-496f-bd92-f6e9528694c0" x="757" y="2" width="40" height="12"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

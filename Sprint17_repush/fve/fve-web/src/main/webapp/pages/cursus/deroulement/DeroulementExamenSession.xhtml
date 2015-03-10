@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+	<h:form id="form_deroulement_examenList">
+		<p:dataTable id="dtTbl_examens" editable="true"
+			value="#{planningSessionSaveBean.examensSessionList}"
+			var="currentExamen" style="margin-top:5px; width:1050px"
+			resizableColumns="true" paginator="true" rowIndexVar="rowIndex"
+			rows="5" lazy="true" paginatorPosition="bottom"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+			emptyMessage="#{examenMsgs.examen_datable_list_examnes_no_result}">
+			
+			<f:facet name="header">
+				<h:outputText
+					value="#{examenMsgs.examen_les_examens_planif_session}" />
+			</f:facet>
+			<p:ajax event="rowEdit" listener="#{examenSessionBean.onRowEdit}"
+				update="dtTbl_examens" onstart="PF('planningSessionFormBlock').block()"
+				onsuccess="PF('planningSessionFormBlock').unblock()"></p:ajax>
+			<p:ajax event="rowEditCancel"
+				listener="#{examenSessionBean.onRowCancel}" update="" />
+			<p:column headerText="#{examenMsgs.examen_numero}" style="width:2%">
+				<h:outputText value="#{rowIndex+1}" styleClass="labelValue" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_matiere}" />
+				</f:facet>
+
+				<h:outputText value="#{currentExamen.mcLibelleFr} "
+					styleClass="labelValue" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_type}" />
+				</f:facet>
+
+				<h:outputText value="#{currentExamen.refTypeExamenLibelle} "
+					styleClass="labelValue" />
+			</p:column>
+          <p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_nbre_inscrits}" />
+				</f:facet>
+
+				<h:outputText value="#{currentExamen.nbInscrits} "
+					styleClass="labelValue" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_date_examen_reelle}" />
+				</f:facet>
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{currentExamen.dateExamenReelle}"
+							styleClass="labelValue">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true" widgetVar="calwidget"
+							readonlyInput="true" styleClass="labelValue"
+							value="#{currentExamen.dateExamenReelle}" required="true"
+							requiredMessage="#{examenMsgs.examen_date_examen_reelle_required}"
+							id="dateExamenReelle"
+							label="#{examenMsgs.examen_date_examen_reelle}"
+							pattern="dd/MM/yyyy" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_heure_debut_reelle}" />
+				</f:facet>
+				<p:cellEditor>
+
+					<f:facet name="output">
+						<h:outputText value="#{currentExamen.heureDebutReelle}"
+							styleClass="labelValue">
+							<f:convertDateTime type="date" pattern="HH:mm" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true" widgetVar="calwidget"
+							styleClass="labelValue" value="#{currentExamen.heureDebutReelle}"
+							required="true"
+							requiredMessage="#{examenMsgs.examen_heure_debut_reelle_required}"
+							id="heureDebutReelle"
+							label="#{examenMsgs.examen_heure_debut_reelle}" pattern="HH:mm"
+							timeOnly="true" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_heure_fin_reelle}" />
+
+				</f:facet>
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{currentExamen.heureFinReelle}"
+							styleClass="labelValue">
+							<f:convertDateTime type="date" pattern="HH:mm" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true" widgetVar="calwidget"
+							styleClass="labelValue" value="#{currentExamen.heureFinReelle}"
+							required="true"
+							requiredMessage="#{examenMsgs.examen_heure_fin_reelle_required}"
+							id="heureFinReelle" label="#{examenMsgs.examen_heure_fin_reelle}"
+							pattern="HH:mm" timeOnly="true" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_nbre_copie_remise}" />
+
+				</f:facet>
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{currentExamen.nbCopieRemises}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{currentExamen.nbCopieRemises}"
+							style="width:100%" label="#{examenMsgs.examen_nbre_copie_remise}" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_incidents}" />
+
+				</f:facet>
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{currentExamen.incident}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{currentExamen.incident}" style="width:100%"
+							label="#{examenMsgs.examen_incidents}" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+
+			<p:column width="5%">
+				<p:rowEditor rendered="true" />
+			</p:column>
+
+		</p:dataTable>
+
+
+	</h:form>
+	<br />
+
+
+
+
+
+
+</ui:composition>
+

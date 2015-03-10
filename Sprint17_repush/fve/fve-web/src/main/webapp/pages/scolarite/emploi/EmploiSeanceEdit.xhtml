@@ -1,0 +1,392 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_emploi_seance_edit">
+
+
+		<p:fieldset legend="Les séances" toggleable="true"
+			style="width:1100px"
+			rendered="#{not empty emploiBean.emploiDto and emploiBean.emploiDto.id!=0}">
+<!-- 			<p:toolbar id="emploiSenaceToolBar" styleClass="toolBarMesrs" -->
+<!-- 				style="width:100%;margin:0;"> -->
+<!-- 				<p:toolbarGroup> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 				<p:toolbarGroup align="right"> -->
+<!-- 					<p:commandLink id="pdf" ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/pdf.png" /> -->
+
+<!-- 						<pe:exporter type="pdf" target="dtTbl_seances" -->
+<!-- 							skipComponents="org.primefaces.component.spacer.Spacer" -->
+<!-- 							fileName="EmploiDuTemps" fontName="Courier New" cellFontSize="10" -->
+<!-- 							orientation="Landscape" encoding="ISO-8859-1" /> -->
+
+<!-- 					</p:commandLink> -->
+
+<!-- 					<p:spacer width="20" /> -->
+
+<!-- 					<p:commandLink id="xls" ajax="false"> -->
+<!-- 						<p:graphicImage value="/resources/images/excel.png" /> -->
+
+<!-- 						<pe:exporter type="xlsx" target="dtTbl_seances" -->
+<!-- 							fileName="EmploiDuTemps" /> -->
+
+<!-- 					</p:commandLink> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 			</p:toolbar> -->
+			<p:dataTable id="dtTbl_seances"
+				value="#{emploiBean.seanceEmploiByPlageHoraireDtos}" var="seance">
+				<p:column headerText=""
+					style="background: none repeat scroll 0% 0% #E6E6E6;text-align:center;">
+					<h:outputLabel value="#{seance.plageHoraireDto.heureDebut}"
+						style="display: block;">
+						<f:convertDateTime type="date" pattern="HH:mm" />
+					</h:outputLabel>
+
+
+					<h:outputLabel value="-" style="display: block;"></h:outputLabel>
+
+					<h:outputLabel value="#{seance.plageHoraireDto.heureFin}"
+						style="display: block;">
+						<f:convertDateTime type="date" pattern="HH:mm" />
+					</h:outputLabel>
+
+				</p:column>
+
+				<p:column headerText="#{emploiMsgs.emploi_dimanche}" style="text-align:center">
+					<table >
+						<ui:repeat var="groupe" value="#{seance.seanceEmploiDtos['DIM']}"
+							varStatus="status">
+
+							<tr>
+								<td style="border: 0px"
+									><p:commandLink 
+										update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id!=0 and seance.affectations['DIM']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText value="#{groupe.groupePedagogiqueNom}" />
+										<h:outputText value="#{groupe.refLieuDesignation}"
+											style="display: block;" />
+										<h:outputText
+											value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+											style="display: block;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink> <p:commandLink update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id==0 and seance.affectations['DIM']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText styleClass="ui-icon ui-icon-plus"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink></td>
+
+							</tr>
+
+						</ui:repeat>
+					</table>
+
+					
+				</p:column>
+
+				<p:column headerText="#{emploiMsgs.emploi_lundi}" style="text-align:center">
+
+					<table style="border: 0px">
+						<ui:repeat var="groupe" value="#{seance.seanceEmploiDtos['LUN']}"
+							varStatus="status">
+
+							<tr style="border: 0px">
+								<td style="border: 0px;"><p:commandLink 
+										update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id!=0 and seance.affectations['LUN']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText value="#{groupe.groupePedagogiqueNom}" />
+										<h:outputText value="#{groupe.refLieuDesignation}"
+											style="display: block;" />
+										<h:outputText
+											value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+											style="display: block;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink> <p:commandLink update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id==0 and seance.affectations['LUN']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText styleClass="ui-icon ui-icon-plus"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink></td>
+
+							</tr>
+
+						</ui:repeat>
+					</table>
+					
+				</p:column>
+
+				<p:column headerText="#{emploiMsgs.emploi_mardi}" style="text-align:center">
+				<table style="border: 0px">
+						<ui:repeat var="groupe" value="#{seance.seanceEmploiDtos['MAR']}"
+							varStatus="status">
+
+							<tr style="border: 0px">
+								<td style="border: 0px;"><p:commandLink 
+										update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id!=0 and seance.affectations['MAR']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText value="#{groupe.groupePedagogiqueNom}" />
+										<h:outputText value="#{groupe.refLieuDesignation}"
+											style="display: block;" />
+										<h:outputText
+											value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+											style="display: block;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink> <p:commandLink update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id==0 and seance.affectations['MAR'] }"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText styleClass="ui-icon ui-icon-plus"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink></td>
+
+							</tr>
+
+						</ui:repeat>
+					</table>
+					
+				</p:column>
+				<p:column headerText="#{emploiMsgs.emploi_mercredi}" style="text-align:center">
+				<table style="border: 0px">
+						<ui:repeat var="groupe" value="#{seance.seanceEmploiDtos['MER']}"
+							varStatus="status">
+
+							<tr style="border: 0px">
+								<td style="border: 0px;"><p:commandLink 
+										update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id!=0 and seance.affectations['MER']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText value="#{groupe.groupePedagogiqueNom}" />
+										<h:outputText value="#{groupe.refLieuDesignation}"
+											style="display: block;" />
+										<h:outputText
+											value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+											style="display: block;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink> <p:commandLink update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id==0 and seance.affectations['MER']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText styleClass="ui-icon ui-icon-plus"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink></td>
+
+							</tr>
+
+						</ui:repeat>
+					</table>
+					
+				</p:column>
+				<p:column headerText="#{emploiMsgs.emploi_jeudi}" style="text-align:center">
+				<table style="border: 0px">
+						<ui:repeat var="groupe" value="#{seance.seanceEmploiDtos['JEU']}"
+							varStatus="status">
+
+							<tr style="border: 0px">
+								<td style="border: 0px;"><p:commandLink 
+										update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id!=0 and seance.affectations['JEU']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText value="#{groupe.groupePedagogiqueNom}" />
+										<h:outputText value="#{groupe.refLieuDesignation}"
+											style="display: block;" />
+										<h:outputText
+											value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+											style="display: block;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink> <p:commandLink update=":seanceDetail"
+										rendered="#{not emploiBean.emploiDto.estVerrouille and groupe.id==0 and seance.affectations['JEU']}"
+										immediate="true" action="#{emploiBean.editSeance()}"
+										onsuccess="PF('seanceDialog').show()"
+										title="Programmer une séance">
+										<h:outputText styleClass="ui-icon ui-icon-plus"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{groupe}"
+											target="#{emploiBean.seanceEmploiDto}" />
+									</p:commandLink></td>
+
+							</tr>
+
+						</ui:repeat>
+					</table>
+					
+				</p:column>
+				
+			</p:dataTable>
+
+		</p:fieldset>
+	</h:form>
+	<p:dialog
+		header="#{emploiMsgs.emploi_pnl_programmer_seance_title}"
+		widgetVar="seanceDialog" modal="true" showEffect="fade"
+		hideEffect="fade" resizable="true" width="800px" height="220px">
+		<p:outputPanel id="seanceDetail">
+			<h:form>
+				<p:panelGrid columns="1" cellspacing="0">
+					<p:panelGrid>
+						<p:row>
+							<p:column style="width:200px">
+								<h:outputLabel
+									value="#{emploiMsgs.emploi_jour}/#{emploiMsgs.emploi_plage_horaire}" />
+							</p:column>
+							<p:column style="width:600px">
+								<p:columnGroup>
+									<h:outputText
+										value="#{emploiBean.seanceEmploiDto.jourLibelleFr} "
+										styleClass="value" />
+									<h:outputText
+										value="#{emploiBean.seanceEmploiDto.plageHoraireHeureDebut}"
+										styleClass="value">
+										<f:convertDateTime type="date" pattern="HH:mm" />
+									</h:outputText>
+									<h:outputText value=" - "></h:outputText>
+									<h:outputText
+										value="#{emploiBean.seanceEmploiDto.plageHoraireHeureFin}"
+										styleClass="value">
+										<f:convertDateTime type="date" pattern="HH:mm" />
+									</h:outputText>
+								</p:columnGroup>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel
+									value="#{emploiMsgs.emploi_mc}/#{emploiMsgs.emploi_groupe} * "></p:outputLabel>
+
+							</p:column>
+							<p:column style="width:600px">
+								<p:selectOneMenu id="mc" required="true" style="width:550px;"
+									styleClass="value"
+									value="#{emploiBean.seanceEmploiDto.rattachementMcId}"
+									filter="true" filterMatchMode="contains"
+									label="#{emploiMsgs.emploi_mc}">
+									<p:ajax update="groupe" listener="#{emploiBean.mcChanged}" />
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_mc_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiBean.matieres}" />
+
+								</p:selectOneMenu>
+
+
+
+
+
+								<p:selectOneMenu id="groupe" required="true" style="width:550px"
+									styleClass="value"
+									value="#{emploiBean.seanceEmploiDto.associationGroupePedagogiqueId}"
+									filter="true" filterMatchMode="contains"
+									label="#{emploiMsgs.emploi_groupe}">
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_groupe_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiBean.groupes}" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel value="#{emploiMsgs.emploi_lieu} * "></p:outputLabel>
+
+							</p:column>
+							<p:column style="width:600px">
+								<p:selectOneMenu id="lieu" required="true" style="width:550px;"
+									styleClass="value"
+									value="#{emploiBean.seanceEmploiDto.affectationLieuStructureId}"
+									filter="true" filterMatchMode="contains"
+									label="#{emploiMsgs.emploi_lieu}">
+
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_lieu_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiBean.affectationLieuStructures}" />
+
+								</p:selectOneMenu>
+
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:toolbar id="seanceInfoToolBar" styleClass="toolBarMesrs"
+						style="width:700px;margin:0;">
+						<p:toolbarGroup>
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								id="saveBtn2" icon="ui-icon-disk"
+								onstart="PF('emploiFormBlock').block()"
+								oncomplete="PF('emploiFormBlock').unblock()"
+								update=":form_emploi_seance_edit"
+								actionListener="#{emploiBean.saveSeance}">
+
+								<p:confirm header="Confirmation"
+									message="#{emploiMsgs.emploi_save_confirm_msg}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+							
+							<p:spacer width="5px"></p:spacer>
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" rendered="#{not emploiBean.emploiDto.estVerrouille and emploiBean.seanceEmploiDto.id!=0}"
+							id="deleteBtn2" icon="ui-icon-minus"							
+							onstart="PF('emploiFormBlock').block()"
+							oncomplete="PF('emploiFormBlock').unblock()"
+							onsuccess="seanceDialog.hide()"
+							update=":form_emploi_seance_edit"
+							actionListener="#{emploiBean.deleteSeance}">							
+                         <p:confirm		header="Confirmation"	 message="#{emploiMsgs.emploi_delete_seance_confirm_msg}"	icon="ui-icon-alert" />
+						</p:commandButton>	
+							
+						</p:toolbarGroup>
+
+
+
+						<p:toolbarGroup align="right">
+                     
+						</p:toolbarGroup>
+					</p:toolbar>
+				</p:panelGrid>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+
+
+
+
+
+
+</ui:composition>
+

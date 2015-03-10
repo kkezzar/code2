@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{affectDocumentBean.groupeCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="affectationGroupesFormId" prependId="false" dir="#{localeBean.dir}">
+
+		<p:dataTable id="affectationGroupesData" styleClass="affGrpOutPanel"
+			paginator="true" paginatorPosition="bottom" dir="#{localeBean.dir}"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectDocumentBean.listRefAffectDocumentGroupeDto}"
+			var="current">
+
+			<f:facet name="header">
+				<h:outputText dir="#{localeBean.dir}"
+					value="#{affectationmsgs.affectation_groupes_affectes}      " />
+				<p:commandButton id="addGroupeButton" 
+					actionListener="#{affectDocumentBean.beforeAdd}" ajax="true"
+					icon="ui-icon-plusthick"
+					oncomplete="PF('dlgAffecterGroupe').show()"
+					rendered="#{affectDocGroupeCrudBean.createAllow}" />
+			</f:facet>
+			
+			<f:param name="idfEntity" value="#{affectDocumentBean.idfEntity}"/>
+			 
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.affGrpOutPanel)"
+				process="@(.affGrpOutPanel)" />
+				
+			<p:column sortBy="#{current.identifiantGroupe}"> 
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_identifiant}" />
+				</f:facet>
+				<h:outputText value="#{current.identifiantGroupe}" />
+			</p:column>
+			
+			<p:column sortBy="#{current.llGroupe}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_groupe}" />
+				</f:facet>
+				<h:outputText value="#{current.llGroupe}" />
+			</p:column>
+			<p:column sortBy="#{current.roleLibelleLongFr}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_role}" />
+				</f:facet>
+				<h:outputText value="#{current.roleLibelleLongFr}" />
+			</p:column>
+			
+			<p:column sortBy="#{current.observation}">
+				<f:facet name="header">
+					<h:outputText value="#{documentmsgs.document_observation}" />
+				</f:facet>
+				<h:outputText
+					value="#{current.observation}" />
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{affectDocGroupeCrudBean.deleteAllow}">
+				<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					actionListener="#{affectDocumentBean.deleteAffectation(current)}"
+					process="@(.affGrpOutPanel)" update="@(.affGrpOutPanel)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+					<f:param name="idfEntity" value="#{affectDocumentBean.idfEntity}"/>
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+	<p:dialog header="#{affectationmsgs.affectation_groupe_title}" 
+		widgetVar="dlgAffecterGroupe" modal="true" resizable="false"
+		appendTo="@(body)" width="700">
+		<p:messages id="messagesgrp" showSummary="true" autoUpdate="true"
+			closable="true" />
+		
+		
+		<h:form id="dlgAffecterGroupeForm" prependId="false">
+			<p:panelGrid id="description" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_groupe} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="selectGroupe"
+							value="#{affectDocumentBean.refAffectDocumentDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{affectationmsgs.affectation_selection_groupe}"
+							required="true"
+							requiredMessage="#{affectationmsgs.affectation_groupe_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column>
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_role} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="selectionGrpRole"
+							value="#{affectDocumentBean.refAffectDocumentDto.roleId}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{affectationmsgs.affectation_role}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_role_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+					<p:row>
+
+					<p:column>
+						<h:outputText value="#{documentmsgs.document_affectation_date_debut}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{affectDocumentBean.refAffectDocumentDto.dateDebut}"
+							showButtonPanel="true"
+							label="#{affectationmsgs.affectation_date_debut}" required="false"
+							requiredMessage="#{documentmsgs.document_affectation_debut_required}"
+							pattern="dd/MM/yyyy" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{documentmsgs.document_affectation_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{affectDocumentBean.refAffectDocumentDto.dateFin}"
+							showButtonPanel="true"
+							label="#{documentmsgs.document_affectation_date_fin}" required="false"
+							requiredMessage="#{documentmsgs.document_affectation_fin_required}"
+							pattern="dd/MM/yyyy" />
+					</p:column>
+				</p:row>
+				<p:row>	
+					<p:column>
+						<h:outputText value="#{documentmsgs.document_observation}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:inputTextarea navigator="true" 
+							value="#{affectDocumentBean.refAffectDocumentDto.observation}" 
+							style="text-align: left; width:200px;"
+							label="#{documentmsgs.document_observation}" required="false" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<br></br>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{affectDocumentBean.addAffectation}"
+							update="@(.affGrpOutPanel)" oncomplete="dlgAffecterGroupe.hide()">
+							
+							<f:param name="idfEntity" value="#{affectDocumentBean.idfEntity}"/>
+							 
+						</p:commandButton>
+						
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}" immediate="true"
+							icon="ui-icon-close" oncomplete="dlgAffecterGroupe.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

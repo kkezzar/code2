@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.PieceConstitutiveDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.PieceConstitutive
+		</class-b>
+
+		<field>
+			<a>idDossier</a>
+			<b>dossier.id</b>
+		</field>
+
+		<field>
+			<a>refTypeDossier</a>
+			<b>dossier.typeDossier</b>
+		</field>
+
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossier.dossierEtudiant.numeroMatricule</b>
+		</field>
+		<field>
+			<a>refIndividu</a>
+			<b>dossier.dossierEtudiant.individu.identifiant</b>
+		</field>
+
+		<field>
+			<a>ncTypePieceCode</a>
+			<b>refTypePieceConstitutive.ncTypePiece.code</b>
+		</field>
+		<field>
+			<a>ncTypePieceId</a>
+			<b>refTypePieceConstitutive.ncTypePiece.id</b>
+		</field>
+		<field>
+			<a>ncTypePieceLibelleLongFr</a>
+			<b>refTypePieceConstitutive.ncTypePiece.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncTypePieceLibelleLongAr</a>
+			<b>refTypePieceConstitutive.ncTypePiece.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncTypePieceLibelleCourtFr</a>
+			<b>refTypePieceConstitutive.ncTypePiece.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncTypePieceLibelleCourtAr</a>
+			<b>refTypePieceConstitutive.ncTypePiece.libelleCourtAr</b>
+		</field>
+
+		<field>
+			<a>refTypePieceId</a>
+			<b>refTypePieceConstitutive.id</b>
+		</field>
+		
+		<field>
+			<a>refTypePieceOgligatoire</a>
+			<b>refTypePieceConstitutive.obligatoire</b>
+		</field>
+		<field>
+			<a>refTypePieceRang</a>
+			<b>refTypePieceConstitutive.rang</b>
+		</field>
+
+		<field>
+			<a>refTypePieceAFournir</a>
+			<b>refTypePieceConstitutive.aFournir</b>
+
+		</field>
+		<field>
+			<a>refTypePieceNombre</a>
+			<b>refTypePieceConstitutive.nombre</b>
+		</field>
+
+
+			<field>
+			<a>ncTypeDossierCode</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.code</b>
+		</field>
+		<field>
+			<a>ncTypeDossierId</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.id</b>
+		</field>
+		<field>
+			<a>ncTypeDossierLibelleLongFr</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncTypeDossierLibelleLongAr</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncTypeDossierLibelleCourtFr</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncTypeDossierLibelleCourtAr</a>
+			<b>refTypePieceConstitutive.ncTypeDossier.libelleCourtAr</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefTypePieceConstitutiveDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.PieceConstitutiveDto
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field-exclude>
+			<a>idTypeDossier</a>
+			<b>idTypeDossier</b>
+		</field-exclude>
+	</mapping>
+
+</mappings>

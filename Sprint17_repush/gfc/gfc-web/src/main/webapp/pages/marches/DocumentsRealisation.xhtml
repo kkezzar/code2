@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{marchesMsgs.page_title_consulter_documents_realisation}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{documentsRealisationMarcheBean.model}"
+					rowIndexVar="rowIndex" paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{documentsRealisationMarcheBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.date}">
+						<h:outputText value="#{current.dateDocument}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.typeDocument.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{marchesMsgs.marche}">
+						<h:outputText value="#{current.marche.intituleFr}">
+
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Montant HT">
+						<h:outputText value="#{current.montantHt}" styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant TVA">
+						<h:outputText value="#{current.montantTva}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column headerText="Montant TTC">
+						<h:outputText value="#{current.montantTtc}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Situation">
+						<h:outputText value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+
+				<p:tabView rendered="#{documentsRealisationMarcheBean.view}"
+					id="tabview">
+
+					<p:tab title="#{marchesMsgs.detail_document_realisation}">
+						<h:form id="form">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Date document" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.dateDocument}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Type document" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.typeDocument.libelleLongFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{marchesMsgs.marche}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value" 
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.intituleFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+
+									<p:column>
+										<h:outputText value="Montant HT" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantHt}">
+											<f:convertNumber type="currency" currencySymbol="" />
+										</h:outputText> DA
+									</p:column>
+
+
+									<p:column>
+										<h:outputText value="Montant TVA" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantTva}">
+											<f:convertNumber type="currency" currencySymbol="" />
+										</h:outputText> DA
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Montant TTC" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.montantTtc}">
+											<f:convertNumber type="currency" currencySymbol="" />
+										</h:outputText> DA
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												styleClass="pull-right" id="cancelBtn" update=":form_view"
+												immediate="true" process="@this"
+												actionListener="#{documentsRealisationMarcheBean.cancelAction()}">
+											</p:commandButton>
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<p:tab title="Les préstations réalisées"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.prestation ne true}">
+						<p:dataTable id="datatable_prestations" var="current"
+							resizableColumns="false" rowIndexVar="rowIndex"
+							value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.detailRealisationPrestations}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Préstation">
+								<h:outputText value="#{current.prestationMarche.description}" />
+							</p:column>
+
+							<p:column headerText="Type préstation">
+								<h:outputText
+									value="#{current.prestationMarche.type.libelleLongFr}" />
+							</p:column>
+
+
+							<p:column headerText="Quantité">
+								<h:outputText value="#{current.prestationMarche.quantite}" />
+							</p:column>
+
+							<p:column headerText="#{gfcMsgs.montant} TTC">
+								<h:outputText value="#{current.prestationMarche.montantTtc}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Qté réalisée">
+								<h:outputText value="#{current.quantite}" />
+							</p:column>
+
+							<p:column headerText="Mont. Réalisé">
+								<h:outputText value="#{current.montantRealise}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="6" style="text-align:right"
+										footerText="Total" />
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText value="" styleClass="pull-right">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Les équipements livrés"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.equipement ne true}">
+						<p:dataTable id="datatable_equipements" var="current"
+							resizableColumns="false" rowIndexVar="rowIndex"
+							value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.detailRealisationEquipements}"
+							paginator="true"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Equipement">
+								<h:outputText
+									value="#{current.equipementMarche.equipement.code} / #{current.equipementMarche.equipement.designation}" />
+							</p:column>
+
+							<p:column headerText="Quantité">
+								<h:outputText value="#{current.equipementMarche.quantite}" />
+							</p:column>
+
+
+							<p:column headerText="#{gfcMsgs.montant} TTC">
+								<h:outputText value="#{current.equipementMarche.montantTtc}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Qté Réalisée">
+								<h:outputText value="#{current.quantite}" />
+							</p:column>
+
+
+							<p:column headerText="#{gfcMsgs.montant} Réalisé">
+								<h:outputText value="#{current.montantRealise}"
+									styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="5" style="text-align:right"
+										footerText="Total" />
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText value="" styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Les produits livrés"
+						disabled="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.id eq null or documentsRealisationMarcheBean.documentRealisationMarcheDto.marche.produit ne true}"></p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="DocumentRealisation" scope="request" />
+							<c:set var="identifiant"
+								value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.getId().toString()}"
+								scope="request" />
+							<ui:param name="entity" value="ExerciceBudgetaire" />
+							<ui:param name="identifiant"
+								value="#{documentsRealisationMarcheBean.documentRealisationMarcheDto.getId().toString()}" />
+							<ui:param name="editionMode" value="false" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

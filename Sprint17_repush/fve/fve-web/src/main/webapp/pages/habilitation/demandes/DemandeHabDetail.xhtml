@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"	
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of" >
+	
+	
+    <p:accordionPanel multiple="false" activeIndex="1">  
+    <p:tab title="#{demandeHabilitationMsgs.demande_habilitation_infos_of_title}"> 	
+		<of:OfComponent 		ofDto="#{ofBB.ofDto}" 	ofI18nDtoFr="#{ofBB.ofDtoI18ns['fr']}"  ofI18nDtoAr="#{ofBB.ofDtoI18ns['ar']}" toEdit="false"	/> 
+     </p:tab>  
+    <p:tab title="#{demandeHabilitationMsgs.demande_habilitation_infos_demande_title}">  
+   <p:panel>
+    <p:panelGrid  columns="2" style="width:815px"
+						columnClasses="oneCol, twoCol">
+
+						<f:facet name="header">  
+        							#{demandeHabilitationMsgs.demande_habilitation_infos_demande_title}
+    						</f:facet>
+				
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_code}" />
+					
+						<h:outputText id="codeDemande" value="#{demandeHabBean.demandeDto.code}"   styleClass="labelValue" />
+					
+				
+				
+						<h:outputText
+							value="#{demandeHabilitationMsgs.demande_habilitation_objet_fr} " />
+					
+						<h:outputText id="objetFr" value="#{demandeHabBean.mapDemandeI18n['fr'].objet}" required="true" requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_objet_fr_required}" styleClass="labelValue" />
+					
+						<h:outputText
+							value="#{demandeHabilitationMsgs.demande_habilitation_objet_ar} " />
+					
+						<h:outputText id="objetAr" value="#{demandeHabBean.mapDemandeI18n['ar'].objet}" required="true" requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_objet_ar_required}" styleClass="labelValue" dir="rtl" />
+					
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_observations}" />
+					
+						<h:outputText id="observationsDmde" value="#{demandeHabBean.mapDemandeI18n['fr'].observations}"   styleClass="labelValue" />
+					
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_situation_demande}" />
+						<!--  <h:outputText value="#{demandeHabBean.getSituationById(demandeHabBean.demandeDto.idSituation).libelleLongFr}" /> -->
+					
+						<h:outputText id="situationDemande" value="#{demandeHabBean.mapDemandeI18n['fr'].libelleSituation}"   styleClass="labelValue" />
+					
+				</p:panelGrid>
+				
+				
+         <!-- DEMANDE - FOOTER  -->
+	    <p:panelGrid id="demandeFooterPanelID" style="margin-top:5px; width:815px">
+	    
+		<p:row>
+		<p:column styleClass="left">
+				<h:outputLabel
+					value="#{demandeHabilitationMsgs.demande_habilitation_date_creation}" />
+				<h:outputLabel value="#{demandeHabBean.demandeDto.dateCreation}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+			<p:column styleClass="right">
+				<h:outputLabel
+					value="#{demandeHabilitationMsgs.demande_habilitation_date_demande}" />
+				<h:outputLabel value="#{demandeHabBean.demandeDto.dateDemande}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+
+			
+		</p:row>
+
+	</p:panelGrid>
+    </p:panel>
+    </p:tab>     
+</p:accordionPanel>
+			
+		
+	
+</ui:composition>

@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel id="ofPanel" styleClass="ofPanel">
+		<p:panelGrid styleClass="rowStyle" id="apList" columns="1">
+			<f:facet name="header">
+				<h:outputText
+					value="#{groupePedagogiqueMsgs.groupePedagogique_selection_ap}" />
+			</f:facet>
+			<p:outputPanel>
+				<p:selectBooleanCheckbox
+					rendered="#{groupePedagogiqueManagerBean.apSectionList != null}"
+					itemLabel="#{groupePedagogiqueMsgs.groupePedagogique_ap_check_all}"
+					value="#{groupePedagogiqueManagerBean.checkAll}">
+					<p:ajax update="apList" onstart="PF('tabviewWidget').block()"
+						oncomplete="PF('tabviewWidget').unblock()"
+						listener="#{groupePedagogiqueManagerBean.apCheckAll}" />
+				</p:selectBooleanCheckbox>
+			</p:outputPanel>
+			<p:selectManyCheckbox layout="grid" columns="3"
+				value="#{groupePedagogiqueManagerBean.selectedAp}">
+				<f:selectItems value="#{groupePedagogiqueManagerBean.apSectionList}"
+					var="apSection" itemLabel="#{apSection}" itemValue="#{apSection}" />
+			</p:selectManyCheckbox>
+
+		</p:panelGrid>
+
+		<br />
+
+		<p:toolbar>
+			<p:toolbarGroup align="left">
+				<p:commandButton id="saveOf" icon="ui-icon-disk"
+					value="#{commonmsgs.bouton_enregistrer}"
+					onstart="PF('tabviewWidget').block()" process="ofPanel"
+					onsuccess="PF('tabviewWidget').unblock()"
+					actionListener="#{groupePedagogiqueManagerBean.saveAssociation()}"
+					update="ofPanel,affectationPanel,gpPanel">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+	</p:outputPanel>
+</ui:composition>
+

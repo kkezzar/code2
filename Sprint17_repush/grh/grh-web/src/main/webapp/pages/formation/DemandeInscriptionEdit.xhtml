@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{formationMgs.pnl_enregistrer_demande_inscription} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<ui:include src="/pages/formation/SessionFormationSearch.xhtml">
+				<ui:param name="nameMBean" value="#{demandeInscriptionFormationEditMBean}"></ui:param>
+				<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+				<ui:param name="renderedNew" value="false"></ui:param>
+			</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty demandeInscriptionFormationEditMBean.sessionFormationDto}">
+               <p:tabView id="tabview">
+                <p:tab title="#{formationMgs.session_formation_title}">  
+				
+						<ui:include
+										src="/pages/formation/SessionFormationDetail.xhtml">
+										<ui:param name="sessionFormationDtoParam"
+											value="#{demandeInscriptionFormationEditMBean.sessionFormationDto}"></ui:param>
+									</ui:include>
+						<br></br>
+						</p:tab>
+	                  <p:tab 
+						title="#{formationMgs.demandes_inscriptions_title}"
+						>
+						
+					
+  
+	<h:form id="form_demande_inscription_edit">
+	<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{formationMgs.demandes_inscription_dans_session_title}" />
+				</p:column>
+
+			</p:row>
+			</p:panelGrid>
+			<p:dataTable var="inscription" value="#{demandeInscriptionFormationEditMBean.listeInscriptions}" id="inscriptionsTable"
+						widgetVar="inscriptionsTable" rowKey="#{inscription.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.inscription_datable_no_result}"
+						rowStyleClass="#{inscription.resultat != null and inscription.resultat == 'true' ? null : 'ui-messages-error'}" > 
+					
+                      <p:ajax event="rowSelect" immediate="true" 
+						listener="#{demandeInscriptionFormationEditMBean.onDemandeInscriptionSelect}" 
+						process="@this" onstart="PF('page').block()" oncomplete="PF('demandeInscriptionDialog').show()"
+						onsuccess="PF('page').unblock()" update=":tabview:pnl_demande_inscription" />
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddDemandeInscription" styleClass="ui-button-bleu" title="Ajouter demande d'inscription" icon="ui-icon-plusthick"  
+										ajax="true"
+										actionListener="#{demandeInscriptionFormationEditMBean.onAddDemandeInscription}"
+										immediate="true" update=":tabview:pnl_demande_inscription"
+										oncomplete="PF('demandeInscriptionDialog').show()"
+										>
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" styleClass="value" />
+						</p:column>
+
+						<p:column
+							headerText="#{formationMgs.employe}">
+							<h:outputText value="#{inscription.dossierEmployeDto.refIndividuDto.nomLatin} #{inscription.dossierEmployeDto.refIndividuDto.prenomLatin}" styleClass="value" />
+						</p:column>
+						
+						<p:column
+							headerText="#{formationMgs.etablissement}">
+							<h:outputText value="#{inscription.dossierEmployeDto.refEtablissementDto.llEtablissementLatin}" styleClass="value" />
+						</p:column>
+						<p:column
+							headerText="#{formationMgs.date_demande}">
+							<h:outputText value="#{inscription.dateDemande}" styleClass="value" ><f:convertDateTime type="date" pattern="dd/MM/yyyy"/></h:outputText>
+						</p:column>
+						<p:column  
+				headerText="#{formationMgs.acceptee}">
+				<h:outputText value="#{inscription.resultat != null and inscription.resultat == 'true' ? formationMgs.oui : formationMgs.non}"/>
+			</p:column>
+					</p:dataTable>
+				
+
+			
+			
+		
+						<p:toolbar id="InscriptionSessionFormationToolBar" styleClass="toolBarMesrs">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+									styleClass="ui-button-save" id="savesBtn" icon="ui-icon-disk"
+									update=":pnl_Gerer"
+									actionListener="#{demandeInscriptionFormationEditMBean.onSave}">
+                                           <p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{formationMgs.save_confirm_msg}"
+												icon="ui-icon-alert" />
+
+								</p:commandButton>
+
+
+
+
+
+
+							</p:toolbarGroup>
+
+
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									immediate="true" process="@this" id="backBtn"
+									icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+									actionListener="#{demandeInscriptionFormationEditMBean.initDetail}">
+
+
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:form>
+					
+                      <ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{demandeInscriptionFormationEditMBean}"></ui:param>
+			<ui:param name="updateAjax" value=":tabview:pnl_demande_inscription"></ui:param>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"></ui:param>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"></ui:param>
+
+		</ui:include>   
+<p:dialog position="center" appendTo="@(body)" header="Employé" style="font-size:11px"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<p:outputPanel id="pnl_employeDetail">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto}"></ui:param>
+						</ui:include>
+						</p:outputPanel>
+					</p:dialog>
+		       <p:dialog position="center" appendTo="@(body)" header="Enregistrer demande d'incription" style="font-size:11px"
+						id="demandeInscriptionDialog" widgetVar="demandeInscriptionDialog"
+						modal="true" resizable="false">
+						<p:outputPanel id="pnl_demande_inscription">
+						<h:form id="form_demande_inscription">
+
+
+					
+							<p:panelGrid id="demande_mutation_editPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+								<p:row>
+									<p:column colspan="2" styleClass="title">
+										<h:outputText value="Enregistrer demande d'incription" styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{formationMgs.employe} "
+											styleClass="required" />
+									</p:column>
+									<p:column >
+										<p:commandLink id="employe"
+											 update=":tabview:pnl_employeDetail" oncomplete="PF('employeDetailDialog').show()"
+											rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto!=null}"
+											immediate="true">
+											<h:outputText
+												value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto.refIndividuDto.nomLatin} #{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										   <p:inputText value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto}"  required="true" requiredMessage="#{formationMgs.employe_required}" rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto==null}" onclick="PF('dossierEmployeDialogSearch').show()"/>
+										<p:spacer width="10px"></p:spacer>
+										<p:commandButton id="btnAddEmploye" rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dossierEmployeDto!=null}"
+											styleClass="ui-button-bleu" title="Ajouter Employé"
+											icon="ui-icon-plusthick" ajax="true" immediate="true"
+											onsuccess="PF('dossierEmployeDialogSearch').show()"></p:commandButton>
+                               
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{formationMgs.date_demande} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:calendar id="dateDemande" navigator="true" required="true"
+											requiredMessage="#{formationMgs.date_demande_required}"
+											value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.dateDemande}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+								
+								<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.resultat_demande}" 
+										styleClass="required" />
+								</p:column>
+								<p:column >
+								<p:selectOneRadio value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.resultat}" required="true" requiredMessage="#{formationMgs.resultat_demande_required}" styleClass="value" >
+											
+											<f:selectItem itemLabel="#{formationMgs.acceptee}"
+											itemValue="true" />
+											<f:selectItem itemLabel="#{formationMgs.rejetee}"
+											itemValue="false" />
+											<p:ajax
+											event="valueChange" process="@this" update="rowMotif"
+											 />
+										</p:selectOneRadio>
+								
+								</p:column>
+								</p:row>
+								<p:row id="rowMotif">
+								<p:column >
+									<h:outputLabel value="#{formationMgs.motif_rejet}"
+										styleClass="required" rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.resultat==false}" />
+								</p:column>
+								<p:column >
+								<p:inputText
+										value="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.motif}"
+										required="true"
+										requiredMessage="#{formationMgs.motif_rejet_required}"
+										styleClass="input-xlarge-px" rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.resultat==false}"></p:inputText>
+										</p:column>
+								</p:row>
+								<f:facet name="footer">
+										<p:row>
+											<p:column colspan="2">
+												<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+													id="saveBtn"
+													update=":tabview:form_demande_inscription_edit:inscriptionsTable"
+													styleClass="ui-button-save"
+													action="#{demandeInscriptionFormationEditMBean.onSaveDemandeInscription}" onstart="PF('page').block()" onsuccess="PF('page').unblock()" >
+												</p:commandButton>
+
+												<p:spacer width="5px"></p:spacer>
+
+												<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+													id="delBtn"
+													update=":tabview:form_demande_inscription_edit:inscriptionsTable"
+													rendered="#{demandeInscriptionFormationEditMBean.inscriptionSessionFormationDto.id ne null}"
+													styleClass="ui-button-delete-o"
+													actionListener="#{demandeInscriptionFormationEditMBean.onRemoveDemandeInscription()}"
+													onstart="PF('page').block()" onsuccess="PF('page').unblock()" oncomplete="PF('demandeInscriptionDialog').hide()">
+													<p:confirm header="#{commonmsgs.dlg_confirmation}"
+														message="#{commonmsgs.msg_delete_confirmation}"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+
+												<p:spacer width="10px"></p:spacer>
+
+												<p:commandButton value="#{commonmsgs.bouton_fermer}"
+													id="cancelBtn"
+					
+													immediate="true"
+													oncomplete="PF('demandeInscriptionDialog').hide()"
+													>
+												</p:commandButton>
+											</p:column>
+										</p:row>
+									</f:facet>
+								</p:panelGrid>
+								</h:form>
+								</p:outputPanel>
+					</p:dialog>
+		
+
+		
+		</p:tab>
+		<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" disabled="#{demandeInscriptionFormationEditMBean.sessionFormationDto.id==null}"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="SessionFormation" scope="request" />
+							<c:set var="identifiant"
+								value="#{demandeInscriptionFormationEditMBean.sessionFormationDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="SessionFormation" />
+							<ui:param name="identifiant"
+								value="#{demandeInscriptionFormationEditMBean.sessionFormationDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+					</p:tabView>
+					
+		
+				
+				</p:outputPanel>
+			</p:outputPanel>
+
+		</p:outputPanel>
+		
+
+
+<pe:blockUI widgetVar="blockUISessionFormation" target="pnl_Gerer">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+
+	</ui:define>
+</ui:composition>
+</html>

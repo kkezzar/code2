@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_consulter_programmes_nationaux}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:inputText value="#{pr}"></p:inputText>
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{programmesNationauxBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{programmesNationauxBean.model}" paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{programmesNationauxBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.code_programme}">
+						<h:outputText value="#{current.code}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.programme_nationnal}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.type_programme}">
+						<h:outputText value="#{current.type.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.annee_debut}">
+						<h:outputText value="#{current.anneeDebut}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.annee_fin}">
+						<h:outputText value="#{current.anneeFin}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Situation">
+						<h:outputText value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+
+				<p:tabView rendered="#{programmesNationauxBean.crud}">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_programme_nationnal}">
+
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.code_programme}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.code}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.type_programme}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.type.libelleLongFr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.intitule_programme_fr}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.intituleFr}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.intitule_programme_ar}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.intituleAr}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.annee_debut}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.anneeDebut}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.annee_fin}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.anneeFin}" />
+									</p:column>
+								</p:row>
+
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{programmesNationauxBean.programmeNationalDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_view" process="@this"
+												immediate="true"
+												actionListener="#{programmesNationauxBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- historique  -->
+					<p:tab id="tabHistorique" titleStyleClass="ui-tab-historique"
+						title="#{commonmsgs.tab_historique_situations}"
+						titletip="#{commonmsgs.tab_historique_situations_tooltip}"
+						disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-history"></i>
+						</f:facet>
+						<eh:EntityHistoryComponent
+							list="#{programmesNationauxBean.programmesNationauxHistory}"
+							idParamName="id"
+							idParamValue="#{programmesNationauxBean.programmeNationalDto.id}"></eh:EntityHistoryComponent>
+					</p:tab>
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

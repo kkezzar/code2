@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.BesoinFormation
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.BesoinFormationDto
+		</class-b>
+
+	<field>
+			<a>situationEntite</a>
+			<b>situationEntiteDto</b>
+		</field>
+		<field>
+			<a>nomenclature</a>
+			<b>nomenclatureDto</b>
+		</field>
+		<field>
+			<a>refEtablissement</a>
+			<b>refEtablissementDto</b>
+		</field>
+		<field>
+			<a>refGroupe</a>
+			<b>refGroupeDto</b>
+		</field>
+		<field>
+			<a>refStructure</a>
+			<b>refStructureDto</b>
+		</field>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+
+        <field>
+			<a>detailBesoinFormations</a>
+			<b>detailBesoinFormationDtos</b>
+		</field>
+
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.DetailBesoinFormation
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.DetailBesoinFormationDto
+		</class-b>
+		 <field>
+			<a>grade</a>
+			<b>gradeDto</b>
+		</field>
+	 <field>
+			<a>formationCatalogue</a>
+			<b>formationCatalogueDto</b>
+		</field>
+	 <field>
+			<a>besoinFormation</a>
+			<b>besoinFormationDto</b>
+		</field> 
+	 <field>
+			<a>corps</a>
+			<b>corpsDto</b>
+		</field> 
+	</mapping>
+
+
+
+
+</mappings>

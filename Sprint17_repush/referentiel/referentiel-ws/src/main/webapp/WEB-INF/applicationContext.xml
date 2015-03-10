@@ -1,0 +1,63 @@
+<?xml    version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
+				xmlns:context="http://www.springframework.org/schema/context"
+				xmlns:wsa="http://cxf.apache.org/ws/addressing" xmlns:jaxws="http://cxf.apache.org/jaxws"
+				xmlns:http="http://cxf.apache.org/transports/http/configuration"
+				xmlns:util="http://www.springframework.org/schema/util"
+				xsi:schemaLocation="http://cxf.apache.org/core
+														 http://cxf.apache.org/schemas/core.xsd
+														http://cxf.apache.org/transports/http/configuration
+														http://cxf.apache.org/schemas/configuration/http-conf.xsd
+														http://www.springframework.org/schema/beans
+														http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+														http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+														http://www.springframework.org/schema/context
+														http://www.springframework.org/schema/context/spring-context.xsd
+														http://www.springframework.org/schema/util
+														 http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+				<import resource="classpath:META-INF/cxf/cxf.xml"/>
+				<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+				<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+				
+				<context:annotation-config />
+				
+				<context:component-scan base-package="dz.gov.mesrs.sii.referentiel"  annotation-config="true" />
+
+				<jaxws:endpoint address="/nomenclatureWS" implementor="#nomenclatureWSImpl" id="endpoint-NomenclatureWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/ppmWS" implementor="#ppmWSImpl" id="endpoint-PpmWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/coordonneeWS" implementor="#coordonneeWSImpl" id="endpoint-CoordonneeWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/documentWS" implementor="#documentWSImpl" id="endpoint-DocumentWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/historiqueWS" implementor="#historiqueWSImpl" id="endpoint-HistoriqueWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/permissionWS" implementor="#permissionWSImpl" id="endpoint-PermissionWS"> </jaxws:endpoint>
+				<jaxws:endpoint address="/authentificationWS" implementor="#authentificationWSImpl" id="endpoint-AuthentificationWS">
+				
+				 <jaxws:properties>
+                           <entry key="javax.xml.stream.XMLOutputFactory"            value-ref="xmlOutputFactory" />
+                     </jaxws:properties> 
+				 </jaxws:endpoint>
+				 
+				 <jaxws:endpoint address="/parametreEtabWS" implementor="#parametreEtabWSImpl" id="endpoint-parametreEtabWS"> </jaxws:endpoint>
+
+<bean id="invalidCharHandler"   class="com.ctc.wstx.api.InvalidCharHandler$ReplacingHandler">
+         <constructor-arg value=" "/>
+   </bean>
+
+   <bean id="xmlOutputFactory" class="com.ctc.wstx.stax.WstxOutputFactory" />
+
+   <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject">
+            <ref local="xmlOutputFactory" />
+        </property>
+        <property name="targetMethod">
+            <value>setProperty</value>
+        </property>
+        <property name="arguments">
+            <list>
+                 <util:constant static-field="com.ctc.wstx.api.WstxOutputProperties.P_OUTPUT_INVALID_CHAR_HANDLER"/>
+                 <ref bean="invalidCharHandler" />
+            </list>
+        </property>
+    </bean>
+				
+</beans>

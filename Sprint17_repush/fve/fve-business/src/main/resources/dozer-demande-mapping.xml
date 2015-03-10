@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">      
+     <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Demande</class-b>
+   
+      <field>
+      <a>typeDemandeId</a>
+	  <b>typeDemande.id</b>
+      </field> 
+      
+     <field>
+      <a>offreFormationId</a>
+	  <b>offreFormation.id</b>
+      </field>
+       <field>
+      <a>idSituation</a>
+	  <b>situationEntite.id</b>
+      </field>  
+     
+    
+   </mapping>
+   <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeI18nDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.DemandeI18n</class-b>
+      <field>
+      <a>demandeId</a>
+	  <b>demande.id</b>
+      </field>
+      <field>
+      <a>observations</a>
+	  <b>observation</b>
+      </field>  
+      <field>
+      <a>code</a>
+	  <b>demande.code</b>
+      </field>  
+      
+   </mapping>
+   
+    <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeI18nDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Demande</class-b>
+      <field>
+      <a>demandeId</a>
+	  <b>id</b>
+      </field> 
+      <field>
+      <a>typeDemandeId</a>
+	  <b>typeDemande.id</b>
+      </field> 
+     <field>
+      <a>offreFormationId</a>
+	  <b>offreFormation.id</b>
+      </field> 
+       <field>
+      <a>idSituation</a>
+	  <b>situationEntite.id</b>
+      </field>
+
+   </mapping>
+       <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeI18nDto</class-a>
+      <class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationDto</class-b>
+
+      <field>
+      <a>ofId</a>
+	  <b>id</b>
+      </field> 
+       <field>
+      <a>ofCode</a>
+	  <b>code</b>
+      </field> 
+       <field>
+      <a>ofRefCodeDomaine</a>
+	  <b>refCodeDomaine</b>
+      </field> 
+       <field>
+      <a>ofRefCodeFiliere</a>
+	  <b>refCodeFiliere</b>
+      </field> 
+       <field>
+      <a>ofRefCodeSpecialite</a>
+	  <b>refCodeSpecialite</b>
+      </field> 
+       <field>
+      <a>ofRefCodeCycle</a>
+	  <b>refCodeCycle</b>
+      </field> 
+       <field>
+      <a>ofRefCodeTypeFormation</a>
+	  <b>codeTypeFormation</b>
+      </field>
+      <field>
+      <a>ofRefCodeVocation</a>
+	  <b>codeVocation</b>
+      </field> 
+      <field>
+      <a>ofRefCodeEtablissement</a>
+	  <b>codeEtablissement</b>
+      </field>  
+      </mapping>
+      <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeI18nDto</class-a>
+      <class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationI18nDto</class-b>
+
+      <field>
+      <a>ofLibelle</a>
+	  <b>libelle</b>
+      </field> 
+       <field>
+      <a>ofLibelleCourt</a>
+	  <b>libelleCourt</b>
+      </field> 
+       <field>
+      <a>ofSpecialisation</a>
+	  <b>specialisation</b>
+      </field> 
+       <field>
+      <a>ofDescription</a>
+	  <b>description</b>
+      </field> 
+       <field>
+      <a>ofLibelleDomaine</a>
+	  <b>libelleDomaine</b>
+      </field> 
+       <field>
+      <a>ofLibelleFiliere</a>
+	  <b>libelleFiliere</b>
+      </field> 
+       <field>
+      <a>ofLibelleSpecialite</a>
+	  <b>libelleSpecialite</b>
+      </field>
+      <field>
+      <a>ofLibelleCycle</a>
+	  <b>libelleCycle</b>
+      </field> 
+      <field>
+      <a>ofLibelleVocation</a>
+	  <b>libelleVocation</b>
+      </field> 
+       <field>
+      <a>ofLibelleTypeFormation</a>
+	  <b>libelleTypeFormation</b>
+      </field> 
+       <field>
+      <a>ofLibelleSituation</a>
+	  <b>libelleSituation</b>
+      </field>  
+      </mapping>
+     
+</mappings>

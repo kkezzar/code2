@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+ 	<mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.EntiteDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Entite</class-b>
+      		<field>
+      					<a>domaineId</a>
+	  					<b>refDomaine.id</b>
+      		</field> 
+      		<field>
+      					<a>domaineCode</a>
+	  					<b>refDomaine.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>domaineLibelleFr</a>
+	  					<b>refDomaine.nom</b>
+      		</field> 
+      </mapping>
+      <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.ActionEntiteDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.ActionEntite</class-b>
+      		<field>
+      					<a>actionId</a>
+	  					<b>action.id</b>
+      		</field> 
+      		<field>
+      					<a>actionCode</a>
+	  					<b>action.code</b>
+      		</field> 
+      		<field>
+      					<a>actionLibelleFr</a>
+	  					<b>action.libelleFr</b>
+      		</field> 
+      		<field>
+      					<a>entiteId</a>
+	  					<b>entite.id</b>
+      		</field> 
+      		<field>
+      					<a>entiteCode</a>
+	  					<b>entite.code</b>
+      		</field> 
+      		<field>
+      					<a>entiteLibelleFr</a>
+	  					<b>entite.libelle</b>
+      		</field> 
+      </mapping>
+      
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.ProcessusDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Processus</class-b>
+      		<field>
+      					<a>entiteId</a>
+	  					<b>entite.id</b>
+      		</field> 
+      		<field>
+      					<a>entiteCode</a>
+	  					<b>entite.code</b>
+      		</field> 
+      		<field>
+      					<a>entiteLibelleFr</a>
+	  					<b>entite.libelle</b>
+      		</field> 
+   </mapping>
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.commons.business.model.dto.bpm.EtapeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.bpm.Etape</class-b>
+      		<field>
+      					<a>processusId</a>
+	  					<b>processus.id</b>
+      		</field> 
+      		<field>
+      					<a>processusCode</a>
+	  					<b>processus.code</b>
+      		</field> 
+      		<field>
+      					<a>processusLibelleFr</a>
+	  					<b>processus.libelleFr</b>
+      		</field> 
+      		<field>
+      					<a>processusEntiteId</a>
+	  					<b>processus.entite.id</b>
+      		</field> 
+      		<field>
+      					<a>processusEntiteCode</a>
+	  					<b>processus.entite.code</b>
+      		</field> 
+      		<field>
+      					<a>processusEntiteLibelle</a>
+	  					<b>processus.entite.libelle</b>
+      		</field> 
+      		<field>
+      					<a>groupeId</a>
+	  					<b>refGroupe.id</b>
+      		</field> 
+      		<field>
+      					<a>groupeCode</a>
+	  					<b>refGroupe.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>groupeLibelleFr</a>
+	  					<b>refGroupe.llGroupe</b>
+      		</field> 
+
+      		<field>
+      					<a>roleId</a>
+	  					<b>roleGroupe.id</b>
+      		</field> 
+      		<field>
+      					<a>roleCode</a>
+	  					<b>roleGroupe.code</b>
+      		</field> 
+      		<field>
+      					<a>roleLibelleFr</a>
+	  					<b>roleGroupe.libelleLongFr</b>
+      		</field> 
+
+      		<field>
+      					<a>etapePrecedenteId</a>
+	  					<b>etapePrecedente.id</b>
+      		</field> 
+      		<field>
+      					<a>etapePrecedenteCode</a>
+	  					<b>etapePrecedente.code</b>
+      		</field> 
+      		<field>
+      					<a>etapePrecedenteLibelleFr</a>
+	  					<b>etapePrecedente.libelleFr</b>
+      		</field> 
+      		
+      		<field>
+      					<a>etapeSuivanteId</a>
+	  					<b>etapeSuivante.id</b>
+      		</field> 
+      		<field>
+      					<a>etapeSuivanteCode</a>
+	  					<b>etapeSuivante.code</b>
+      		</field> 
+      		<field>
+      					<a>etapeSuivanteLibelleFr</a>
+	  					<b>etapeSuivante.libelleFr</b>
+      		</field> 
+
+
+      		<field>
+      					<a>actionId</a>
+	  					<b>actionEntite.id</b>
+      		</field> 
+      		<field>
+      					<a>actionCode</a>
+	  					<b>actionEntite.action.code</b>
+      		</field> 
+      		<field>
+      					<a>actionLibelleFr</a>
+	  					<b>actionEntite.action.libelleFr</b>
+      		</field> 
+      		
+      		<field>
+      					<a>situationEntiteId</a>
+	  					<b>situationEntite.id</b>
+      		</field> 
+      		<field>
+      					<a>situationId</a>
+	  					<b>situationEntite.situation.id</b>
+      		</field> 
+      		<field>
+      					<a>situationCode</a>
+	  					<b>situationEntite.situation.code</b>
+      		</field> 
+      		<field>
+      					<a>situationLibelleFr</a>
+	  					<b>situationEntite.situation.libelleFr</b>
+      		</field> 
+      		
+   </mapping>
+  
+</mappings>

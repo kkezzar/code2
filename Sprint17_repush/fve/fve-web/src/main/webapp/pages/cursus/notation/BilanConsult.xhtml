@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel rendered="#{bilanConsulBean.showDetail}" id="detail">
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+					immediate="true">
+					<p:graphicImage name="/images/pdf.png" />
+					<pe:exporter type="pdf" target="bilanDataTable"
+						facetBackground="#AAFFBB" datasetPadding="10"
+						fileName="#{bilanConsulBean.fileNamePeriode}"
+						orientation="Landscape" encoding="ISO-8859-1" />
+				</h:commandLink>
+				<p:spacer width="20" />
+				<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+					immediate="true">
+					<p:graphicImage name="/images/excel.png" />
+					<pe:exporter type="xlsx" target="bilanDataTable"
+						fileName="#{bilanConsulBean.fileNamePeriode}" />
+				</h:commandLink>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+				<h:outputText
+					value="#{noteExamenMsgs.note_examen_data_table_search_all}" />
+				<p:inputText id="globalFilter"
+					onkeyup="PF('bilanDataTable').filter()" style="width:150px"
+					placeholder="#{noteExamenMsgs.note_examen_data_table_search_key}" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		<p:dataTable id="bilanDataTable" var="row" styleClass="detailStyle"
+			value="#{bilanConsulBean.bilanList}" widgetVar="evalDataTable"
+			resizableColumns="true" rowKey="#{row.dossierEtudiantId}"
+			emptyMessage="#{bilanMsgs.bilan_data_table_seacrh_result_no_result}"
+			rowIndexVar="rowIndex">
+			<p:ajax event="sort" onstart="PF('globalWidget').block()"
+				onsuccess="PF('globalWidget').unblock()" />
+			<f:facet name="header">
+				<h:outputText
+					value="#{bilanMsgs.bilan_data_table_bilan_periode_title}" />
+			</f:facet>
+			<p:column headerText="#{bilanMsgs.bilan_data_table_column_index}"
+				style="width:5%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column width="10%" sortBy="#{row.numeroInscriptionEtudiant}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{bilanMsgs.bilan_data_table_list_column_numero_inscription}" />
+				</f:facet>
+				<h:outputText value="#{row.numeroInscriptionEtudiant}" />
+			</p:column>
+			<p:column width="25%" sortBy="#{row.nomLatinEtudiant}">
+				<f:facet name="header">
+					<h:outputText value="#{bilanMsgs.bilan_data_table_list_column_nom}" />
+				</f:facet>
+				<h:outputText value="#{row.nomLatinEtudiant}" />
+			</p:column>
+			<p:column width="25%" sortBy="#{row.prenomLatinEtudiant}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{bilanMsgs.bilan_data_table_list_column_prenom}" />
+				</f:facet>
+				<h:outputText value="#{row.prenomLatinEtudiant}" />
+			</p:column>
+			<p:column width="10%" sortBy="#{row.dateNaissanceEtudiant}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{bilanMsgs.bilan_data_table_list_column_date_naissance}" />
+				</f:facet>
+				<h:outputText value="#{row.dateNaissanceEtudiant}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:columns var="entry" value="#{bilanConsulBean.deliberationList}"
+				style="text-align:center"
+				rendered="#{bilanConsulBean.deliberationList.size() > 1}"
+				width="10%" columnIndexVar="i">
+				<f:facet name="header">
+					<h:outputText value="#{entry.psIntitule}"
+						rendered="#{searchBean.periodeId != null}" />
+					<h:outputText value="#{entry.periodeLibelleFr}"
+						rendered="#{searchBean.niveauId != null}" />
+				</f:facet>
+				<h:outputText value="#{row.bilanSessionDtos[i].moyenne}"
+					style="text-align:center">
+					<f:convertNumber maxFractionDigits="2" maxIntegerDigits="2"
+						minFractionDigits="2" minIntegerDigits="2" />
+				</h:outputText>
+			</p:columns>
+
+			<p:column width="5%" sortBy="#{row.moyenne}"
+				style="text-align:center">
+				<f:facet name="header">
+					<h:outputText
+						value="#{bilanMsgs.bilan_data_table_list_column_moyenne_generale}" />
+				</f:facet>
+				<h:outputText value="#{row.moyenne}">
+					<f:convertNumber pattern="00.00" maxFractionDigits="2"
+						maxIntegerDigits="2" minFractionDigits="2" minIntegerDigits="2" />
+				</h:outputText>
+			</p:column>
+			<p:column width="10%" sortBy="#{row.mentionLibelle}"
+				style="text-align:center">
+				<f:facet name="header">
+					<h:outputText
+						value="#{bilanMsgs.bilan_data_table_list_column_mention}" />
+				</f:facet>
+				<h:outputText value="#{row.mentionLibelle}" />
+			</p:column>
+		</p:dataTable>
+		<br />
+		<p:toolbar id="actionPanel">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.bouton_imprime}" ajax="false"
+					update=":bilanForm" immediate="true"
+					actionListener="#{bilanConsulBean.imprimerBilanPeriode}"
+					rendered="#{sessionDroitBean.createAllow}" id="delBtn"
+					icon="ui-icon-print" process="@this">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+
+
+	</p:panel>
+</ui:composition>
+

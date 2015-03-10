@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{mutationMgs.pnl_enregistrer_decision_mutation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_demande_mutation_search">
+
+
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+							process="@this" action="#{decisionMutationMBean.onNew}"
+							styleClass="ui-buttpn-bleu" update=":pnl_detail">
+
+						</p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+						<p:spacer width="10px"></p:spacer>
+						<p:inputText id="keyWordsID"
+							value="#{decisionMutationMBean.searchKeyWords}"
+							placeholder="#{commonmsgs.search_watermark_text_key_words}"
+							label="#{commonmsgs.search_label_mots_cles}" />
+
+						<p:separator />
+
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_demande_mutation_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{decisionMutationMBean.onSearch}"></p:commandButton>
+						<!--  </p:panelGrid> -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+
+
+				<p:dataTable var="mutation" lazy="true"
+					value="#{decisionMutationMBean.mutationModel}"
+					widgetVar="mutationsTable" rowKey="#{mutation.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{decisionMutationMBean.onMutationSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":pnl_detail" />
+
+					<f:facet name="header">
+
+					</f:facet>
+					<p:column headerText="#{mutationMgs.numero}" style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column
+						sortBy="refIndividu.nomLatin"
+						headerText="#{mutationMgs.employe}">
+						<h:outputText
+							value="#{mutation.dossierEmployeDto.refIndividuDto.nomLatin} #{mutation.dossierEmployeDto.refIndividuDto.prenomLatin}" />
+					</p:column>
+					<p:column sortBy="#{mutation.dateDemande}"
+						headerText="#{mutationMgs.date_demande}">
+						<h:outputText value="#{mutation.dateDemande}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{mutation.objet}"
+						headerText="#{mutationMgs.objet}">
+						<h:outputText value="#{mutation.objet}" />
+					</p:column>
+					<p:column sortBy="#{mutation.etabDemandeDto.llEtablissementLatin}"
+						headerText="#{mutationMgs.etablissement_accueil}">
+						<h:outputText
+							value="#{mutation.etabDemandeDto.llEtablissementLatin}" />
+					</p:column>
+
+					<p:column sortBy="#{mutation.dateEffet}"
+						headerText="#{mutationMgs.date_effet}">
+						<h:outputText value="#{mutation.dateEffet}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+
+			<!-- Fin search -->
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty decisionMutationMBean.mutationDto}">
+					<p:tabView id="tabView">
+						<p:tab title="#{mutationMgs.pnl_enregistrer_decision_mutation} ">
+							<h:form id="form_decision_mutation_edit">
+
+
+								<p:panelGrid columns="1" cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:panelGrid id="demande_mutation_editPnl"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+										<p:row>
+											<p:column colspan="2" styleClass="title">
+												<h:outputText value="#{mutationMgs.decision_mutation_title}"
+													styleClass="value" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column style="width:25%">
+												<h:outputLabel value="#{mutationMgs.employe} "
+													styleClass="required" />
+											</p:column>
+											<p:column style="width:75%">
+												<p:commandLink id="employe"
+													onclick="PF('employeDetailDialog').show()"
+													rendered="#{decisionMutationMBean.mutationDto.dossierEmployeDto!=null}"
+													immediate="true">
+													<h:outputText
+														value="#{decisionMutationMBean.mutationDto.dossierEmployeDto.refIndividuDto.nomLatin} #{decisionMutationMBean.mutationDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+														styleClass="value" />
+												</p:commandLink>
+												<p:inputText
+													value="#{decisionMutationMBean.mutationDto.dossierEmployeDto}"
+													required="true"
+													requiredMessage="#{mutationMgs.employe_required}"
+													rendered="#{decisionMutationMBean.mutationDto.dossierEmployeDto==null}"
+													onclick="PF('dossierEmployeDialogSearch').show()" />
+												<p:spacer width="10px"></p:spacer>
+												<p:commandButton id="btnAddEmploye"
+													rendered="#{decisionMutationMBean.mutationDto.dossierEmployeDto!=null}"
+													styleClass="ui-button-bleu" title="Ajouter Employé"
+													icon="ui-icon-plusthick" ajax="true" immediate="true"
+													onsuccess="PF('dossierEmployeDialogSearch').show()"></p:commandButton>
+
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.date_decision} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:calendar id="date_decision" navigator="true"
+													required="true"
+													requiredMessage="#{mutationMgs.date_decision_required}"
+													value="#{decisionMutationMBean.mutationDto.dateDecision}">
+												</p:calendar>
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.etablissement_origine} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<h:outputText
+													value="#{decisionMutationMBean.mutationDto.etabOrigineDto.llEtablissementLatin}"
+													styleClass="value" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.etablissement_accueil} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:selectOneMenu id="etabDemande" required="true"
+													requiredMessage="#{mutationMgs.etablissement_accueil_required}"
+													styleClass="input-xlarge-px"
+													value="#{decisionMutationMBean.mutationDto.etabDemandeDto.id}"
+													label="#{mutationMgs.etablissement_demande}">
+													<f:selectItem
+														itemLabel="#{mutationMgs.etablissement_accueil_select}"
+														itemValue="" />
+													<f:selectItems
+														value="#{decisionMutationMBean.listeEtabDemandes}" />
+
+												</p:selectOneMenu>
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.objet} " styleClass="required" />
+											</p:column>
+
+											<p:column>
+												<p:inputTextarea id="objet" styleClass="input-xlarge-px" required="true" requiredMessage="#{mutationMgs.objet_required}"
+													value="#{decisionMutationMBean.mutationDto.objet}">
+												</p:inputTextarea>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.necessite_service} " styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:selectOneRadio  id="necessiteService" styleClass="value"
+													value="#{decisionMutationMBean.mutationDto.necessiteService}"
+													required="true"
+													requiredMessage="#{mutationMgs.necessite_service_required}">
+													<f:selectItem itemLabel="#{mutationMgs.necessite_service}"
+														itemValue="true" ></f:selectItem>
+												</p:selectOneRadio>
+												
+											</p:column>
+										</p:row>
+										
+
+										
+										<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{mutationMgs.date_accord_etab_origine} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:calendar id="dateAccordEtabOrigine" navigator="true"
+													required="true"
+													requiredMessage="#{mutationMgs.date_accord_etab_origine_required}"
+													value="#{decisionMutationMBean.mutationDto.dateAccordEtabOrigine}">
+												</p:calendar>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{mutationMgs.date_accord_etab_accueil} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:calendar id="dateAccordEtabAccueil" navigator="true"
+													required="true"
+													requiredMessage="#{mutationMgs.date_accord_etab_accueil_required}"
+													value="#{decisionMutationMBean.mutationDto.dateAccordEtabAccueil}">
+												</p:calendar>
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{mutationMgs.date_effet} "
+													styleClass="required" />
+											</p:column>
+											<p:column>
+												<p:calendar id="dateEffet" navigator="true" required="true"
+													requiredMessage="#{mutationMgs.date_effet_required}"
+													value="#{decisionMutationMBean.mutationDto.dateEffet}">
+												</p:calendar>
+											</p:column>
+										</p:row>
+
+
+
+									</p:panelGrid>
+
+									<p:toolbar id="mutationToolBar" styleClass="toolBarMesrs">
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												styleClass="ui-button-save" id="saveMutationBtn"
+												icon="ui-icon-disk" update=":pnl_Gerer"
+												actionListener="#{decisionMutationMBean.onSave}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()">
+
+
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+											<p:commandButton value="#{commonmsgs.bouton_envoyer}"
+												disabled="#{empty decisionMutationMBean.mutationDto.id}"
+												id="sendMutationBtn" icon="ui-icon-extlink"
+												update=":pnl_Gerer"
+												actionListener="#{decisionMutationMBean.onSend()}">
+
+
+											</p:commandButton>
+											<p:spacer width="10px"></p:spacer>
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												disabled="#{empty decisionMutationMBean.mutationDto.id}"
+												id="deleteMutationBtn" icon="ui-icon-trash"
+												update=":pnl_Gerer"
+												actionListener="#{decisionMutationMBean.onRemove}">
+
+												<p:confirm header="Confirmation"
+													message="#{besoinRecrutementmsgs.delete_confirm_msg}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+
+
+										<p:toolbarGroup align="right">
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												immediate="true" process="@this" id="backBtn"
+												icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+												actionListener="#{decisionMutationMBean.init()}">
+
+
+											</p:commandButton>
+										</p:toolbarGroup>
+									</p:toolbar>
+								</p:panelGrid>
+							</h:form>
+						</p:tab>
+						<p:tab title="#{commonmsgs.tab_historique}"
+							disabled="#{decisionMutationMBean.mutationDto.id == null}">
+							<eh:EntityHistoryComponent
+								list="#{decisionMutationMBean.mutationHistory}" idParamName="id"
+								idParamValue="#{decisionMutationMBean.mutationDto.id}">
+							</eh:EntityHistoryComponent>
+						</p:tab>
+					</p:tabView>
+
+					<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{decisionMutationMBean.mutationDto.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+
+
+
+
+
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Fin detail -->
+		</p:outputPanel>
+		<ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{decisionMutationMBean}"></ui:param>
+			<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"></ui:param>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"></ui:param>
+
+		</ui:include>
+	</ui:define>
+</ui:composition>
+</html>

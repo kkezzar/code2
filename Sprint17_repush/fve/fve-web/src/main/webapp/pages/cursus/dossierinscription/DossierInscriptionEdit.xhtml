@@ -1,0 +1,698 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+		<p:outputPanel id="diaPanel" styleClass="diaPanel">
+			<pe:blockUI target="diaPanel" widgetVar="allWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="3000" />
+
+			<h:form id="form_dossierInscriptionList" style="font-size: 11px;">
+				<pe:blockUI target="form_dossierInscriptionList" widgetVar="iWidget">
+					<i class="fa fa-spinner fa-spin" />
+				</pe:blockUI>
+				<p:panel
+					header="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_page_title_gestion}">
+					<p:fieldset id="fldst_search">
+						<p:toolbar styleClass="toolBarMesrs">
+							<p:toolbarGroup align="left">
+
+								<h:outputText
+									value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_matricule_bac}" />
+								<p:separator />
+								<p:inputText id="it_numeroInscriptiuonSearch"
+									binding="#{matricule}" size="30" />
+
+								<p:watermark for="it_numeroInscriptiuonSearch"
+									value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_matricule_bac}" />
+
+								<p:separator />
+								<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+									process="@(.diaPanel)"
+									update=":form_dossierInscriptionDetail,@(.diaPanel)"
+									icon="ui-icon-search"
+									action="#{dossierInscriptionBB.searchWithMatriculeBac(matricule.value)}"
+									onstart="PF('allWidget').block()"
+									oncomplete="PF('allWidget').unblock()">
+								</p:commandButton>
+								<p:separator />
+
+								<p:commandLink id="btn_rechercheAvc" value="Recherche avancée"
+									onclick="PF('advancedSearchPanel').show();" />
+							</p:toolbarGroup>
+						</p:toolbar>
+					</p:fieldset>
+				</p:panel>
+
+
+
+				<p:dataTable id="dtTbl_dossierInscription" styleClass="diaStyle"
+					value="#{dossierInscriptionBB.dossierInscriptionList}"
+					var="currentInscription" rowKey="#{currentInscription.id}"
+					style="margin-top:5px" resizableColumns="true"
+					selectionMode="single" paginator="true" rows="5" 
+					paginatorPosition="bottom"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+					<f:param name="matricule" value="#{dossierInscriptionBB.matricule}" />
+					<f:param name="dossierInscriptionId"
+						value="#{currentInscription.id}" />
+					<f:param name="codeTypeDossier"
+						value="#{dossierInscriptionBB.codeTypeDossier}" />
+					<f:param name="dossierId" value="#{currentInscription.id}" />
+					<p:ajax event="page" update="dtTbl_dossierInscription"
+						onstart="PF('allWidget').block()"
+						onsuccess="PF('allWidget').unblock()"></p:ajax>
+					<p:ajax event="rowSelect"
+						listener="#{dossierInscriptionBB.onRowSelect}" process="@this"
+						update=":form_dossierInscriptionDetail, @(.diaStyle)"
+						onstart="PF('allWidget').block()"
+						onsuccess="PF('allWidget').unblock()" />
+
+					<f:facet name="header">
+						<h:outputText
+							value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_list_inscription}" />
+					</f:facet>
+
+					<!-- 					<p:column style="width:10%"> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<h:outputText -->
+					<!-- 								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_numero_inscription}" /> -->
+					<!-- 						</f:facet> -->
+
+					<!-- 						<h:outputText value="#{currentInscription.numeroInscription}" /> -->
+					<!-- 					</p:column> -->
+
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_numero_matricule}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.numeroMatricule}" />
+					</p:column>
+
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuNomLatin}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_prenom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuPrenomLatin}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_date_naissance}" />
+
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuDateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_annee_academique}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.anneeAcademiqueCode}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_domaine}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleDomaine}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_filiere}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleFiliere}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_specialite}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleSpecialite}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_niveau}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.refCodeNiveau}" />
+					</p:column>
+					<p:column style="width:5%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.situationLibelleFr}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<h:form id="form_dossierInscriptionDetail" style="font-size: 11px;">
+				<pe:blockUI target="form_dossierInscriptionDetail"
+					widgetVar="sWidget">
+					<i class="fa fa-spinner fa-spin" />
+				</pe:blockUI>
+				<p:panel id="otptpnl_diaDetail"
+					header="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_page_title_detail} #{dossierInscriptionBB.dossierInscription.matriculeBac} | #{dossierInscriptionBB.individuDto.nomLatin} #{dossierInscriptionBB.individuDto.prenomLatin}"
+					rendered="#{dossierInscriptionBB.dossierInscriptionId != null}"
+					style="margin-top:8px">
+					<p:panelGrid styleClass="ui-panelgrid-full-width">
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{individuMsgs.individu_nom_latin}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuNomLatin}"
+									styleClass="value" />
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText value="#{individuMsgs.individu_nom_arabe}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuNomArabe}"
+									styleClass="value" />
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText value="#{individuMsgs.individu_date_naissance}" />
+							</p:column>
+							<p:column style="width315%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuDateNaissance}"
+									styleClass="value">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{individuMsgs.individu_prenom_latin}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuPrenomLatin}"
+									styleClass="value" />
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText value="#{individuMsgs.individu_prenom_arabe}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuPrenomArabe}"
+									styleClass="value" />
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText value="Lieu de naissance" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{dossierInscriptionBB.dossierInscription.individuLieuNaissance}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+
+					<p:tabView id="tbvw_dossierInscriptionDetail" styleClass="diaStyle"
+						style="margin-top:10px">
+
+						<p:tab
+							title="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_anglet_inscription}">
+
+							<p:panelGrid style="margin-top:5px">
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_annee_academique}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.anneeAcademiqueCode}"
+											styleClass="value" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_numero_inscription}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.numeroInscription}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_type_inscription}" />
+									</p:column>
+									<p:column colspan="3" style="width:400px">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleTypeInscription}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_domaine}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleDomaine}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_filiere}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleFiliere}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_specialite}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleSpecialite}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:outputLabel for="ofSearch"
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation}" />
+									</p:column>
+									<p:column colspan="3"
+										rendered="#{!dossierInscriptionBB.showOofList}">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.offreFormationLibelleFr}"
+											styleClass="value" />
+										<h:inputHidden
+											value="#{dossierInscriptionBB.dossierInscription.ouvertureOffreFormationId}" />
+
+									</p:column>
+
+									<p:column style="width:200px"
+										rendered="#{dossierInscriptionBB.showOofList}">
+										<p:selectOneMenu id="ofSearch" styleClass="value"
+											style="whidth:100%;text-align:left"
+											value="#{dossierInscriptionBB.dossierInscription.ouvertureOffreFormationId}"
+											required="true" filter="true" filterMatchMode="startsWith"
+											valueChangeListener="#{dossierInscriptionBB.offreChanged}"
+											requiredMessage="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation_required}"
+											label="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation}">
+											<f:selectItem
+												itemLabel="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation_select}"
+												itemValue="" />
+											<f:selectItems
+												value="#{dossierInscriptionBB.offreFormationItemList}" />
+
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_cycle}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleCycle}"
+											styleClass="value" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_niveau}" />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.refLibelleNiveau}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_etat_inscription}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.situationLibelleFr}"
+											styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_date_creation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.dateCreation}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_date_inscription}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText
+											value="#{dossierInscriptionBB.dossierInscription.dateInscription}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+
+
+						</p:tab>
+
+
+						<p:tab id="tb_pieces"
+							title="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_anglet_piece}"
+							disabled="#{dossierInscriptionBB.dossierInscription.id==0}">
+							<ui:include
+								src="/pages/cursus/dossier/piece/PieceConstEdit.xhtml">
+							</ui:include>
+						</p:tab>
+
+					</p:tabView>
+					<br />
+					<br />
+					<p:panelGrid styleClass="diaStyle">
+						<p:row>
+							<p:column>
+								<p:commandButton value="#{commonmsgs.bouton_valider}"
+									process=":form_dossierInscriptionDetail"
+									update="@(.diaStyle), @(.piecePanel)"
+									onstart="PF('sWidget').block()"
+									onsuccess="PF('sWidget').unblock()"
+									disabled="#{dossierInscriptionBB.disableValidation}"
+									actionListener="#{dossierInscriptionBB.saveDossierInscription}">
+									<p:confirm header="Confirmation"
+										message="Vous ne pouvez pas modifier l\'inscription, une fois validée, Voulez-vous continuer?"
+										icon="ui-icon-alert" />
+									<f:param name="matricule"
+										value="#{dossierInscriptionBB.matricule}" />
+									<f:param name="dossierInscriptionId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="dossierId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="codeTypeDossier"
+										value="#{dossierInscriptionBB.codeTypeDossier}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton
+									value="#{dossierInscriptionAdministrativeMsgs.bouton_generer_compte}"
+									process="@this" ajax="false"
+									actionListener="#{dossierInscriptionBB.generateCompte}">
+									<f:param name="matricule"
+										value="#{dossierInscriptionBB.matricule}" />
+									<f:param name="dossierInscriptionId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="dossierId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="codeTypeDossier"
+										value="#{dossierInscriptionBB.codeTypeDossier}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<!-- 						<p:spacer width="10"></p:spacer> -->
+
+								<p:commandButton
+									value="#{dossierInscriptionAdministrativeMsgs.imprimer_attestation}"
+									ajax="false"
+									actionListener="#{dossierInscriptionBB.printAttestation}"
+									update=":form_dossierInscriptionList">
+
+									<f:param name="matricule"
+										value="#{dossierInscriptionBB.matricule}" />
+									<f:param name="dossierInscriptionId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="codeTypeDossier"
+										value="#{dossierInscriptionBB.codeTypeDossier}" />
+									<f:param name="dossierId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton
+									value="#{dossierInscriptionAdministrativeMsgs.imprimer_engagement}"
+									ajax="false"
+									actionListener="#{dossierInscriptionBB.printLettreEngagement}">
+
+									<f:param name="matricule"
+										value="#{dossierInscriptionBB.matricule}" />
+									<f:param name="dossierInscriptionId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="codeTypeDossier"
+										value="#{dossierInscriptionBB.codeTypeDossier}" />
+									<f:param name="dossierId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton
+									value="#{dossierInscriptionAdministrativeMsgs.imprimer_badge}"
+									ajax="false"
+									actionListener="#{dossierInscriptionBB.printBadge}">
+
+									<f:param name="matricule"
+										value="#{dossierInscriptionBB.matricule}" />
+									<f:param name="dossierInscriptionId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+									<f:param name="codeTypeDossier"
+										value="#{dossierInscriptionBB.codeTypeDossier}" />
+									<f:param name="dossierId"
+										value="#{dossierInscriptionBB.dossierInscriptionId}" />
+								</p:commandButton>
+
+							</p:column>
+							<!-- 							<p:column> -->
+							<!-- 								<p:commandButton value="#{commonmsgs.bouton_non_valider}" -->
+							<!-- 									process=":form_dossierInscriptionDetail" -->
+							<!-- 									update="@(.diaStyle), @(.piecePanel)" -->
+							<!-- 									onstart="PF('sWidget').block()" -->
+							<!-- 									onsuccess="PF('sWidget').unblock()" -->
+							<!-- 									disabled="#{!dossierInscriptionBB.disableValidation}" -->
+							<!-- 									actionListener="#{dossierInscriptionBB.saveAnnulationValidation}"> -->
+							<!-- 									<f:param name="matricule" -->
+							<!-- 										value="#{dossierInscriptionBB.matricule}" /> -->
+							<!-- 									<f:param name="dossierInscriptionId" -->
+							<!-- 										value="#{dossierInscriptionBB.dossierInscriptionId}" /> -->
+							<!-- 									<f:param name="dossierId" -->
+							<!-- 										value="#{dossierInscriptionBB.dossierInscriptionId}" /> -->
+							<!-- 									<f:param name="codeTypeDossier" -->
+							<!-- 										value="#{dossierInscriptionBB.codeTypeDossier}" /> -->
+							<!-- 								</p:commandButton> -->
+							<!-- 							</p:column> -->
+
+							<p:column>
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									icon="ui-icon-arrowthick-1-w"
+									action="#{dossierInscriptionBB.cancel}" immediate="true">
+									<f:param name="dossierEtudiantId"
+										value="#{dossierEtudiantBean.dossierEtudiantId}" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+
+				</p:panel>
+
+			</h:form>
+
+			<br />
+
+			<p:panel visible="#{dossierInscriptionBB.dossierInscriptionId!=null}"
+				styleClass="diaStyle" style="height:400px">
+				<p:tabView id="tbvw_doc_dia">
+					<p:tab
+						title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_document_title}">
+						<ui:include
+							src="/pages/document/DossierInscriptionAdministrativeDocument.xhtml">
+							<c:set var="entity" value="DossierInscriptionAdministrative"
+								scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierInscriptionBB.dossierInscriptionId}"
+								scope="request" />
+							<ui:param name="entity" value="DossierInscriptionAdministrative" />
+							<ui:param name="identifiant"
+								value="#{dossierInscriptionBB.dossierInscriptionId}" />
+							<ui:param name="editionMode" value="true" />
+
+							<ui:param name="matricule"
+								value="#{dossierInscriptionBB.matricule}" />
+							<ui:param name="dossierInscriptionId"
+								value="#{dossierInscriptionBB.dossierInscriptionId}" />
+							<ui:param name="codeTypeDossier"
+								value="#{dossierInscriptionBB.codeTypeDossier}" />
+							<ui:param name="dossierId"
+								value="#{dossierInscriptionBB.dossierInscriptionId}" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+			</p:panel>
+
+
+		</p:outputPanel>
+
+		<p:dialog dynamic="true" widgetVar="advancedSearchPanel"
+			appendTo="@(body)" modal="true" width="700"
+			header="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_dialog_title}">
+
+			<h:form id="form_dialog">
+
+				<p:panelGrid style="margin-top:5px">
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{individuMsgs.individu_identifiant}" />
+						</p:column>
+						<p:column>
+							<h:inputText value="#{sessionBeanFve.individuSearchDto.identifiant}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Matricule étudiant" />
+						</p:column>
+						<p:column>
+							<h:inputText />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{individuMsgs.individu_nom_latin}" />
+						</p:column>
+						<p:column>
+							<h:inputText value="#{sessionBeanFve.individuSearchDto.nomLatin}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="#{individuMsgs.individu_prenom_latin}" />
+						</p:column>
+						<p:column>
+							<h:inputText value="#{sessionBeanFve.individuSearchDto.prenomLatin}" />
+						</p:column>
+					</p:row>
+
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{individuMsgs.individu_nom_arabe}" />
+						</p:column>
+						<p:column>
+							<h:inputText value="#{sessionBeanFve.individuSearchDto.nomArabe}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{individuMsgs.individu_prenom_arabe}" />
+						</p:column>
+						<p:column>
+							<h:inputText value="#{sessionBeanFve.individuSearchDto.prenomArabe}" />
+						</p:column>
+					</p:row>
+
+					<!-- 					<p:row> -->
+					<!-- 						<p:column> -->
+					<!-- 							<h:outputText value="#{individuMsgs.individu_date_naissance}" /> -->
+					<!-- 						</p:column> -->
+					<!-- 						<p:column> -->
+					<!-- 							<h:inputText /> -->
+					<!-- 						</p:column> -->
+					<!-- 						<p:column> -->
+					<!-- 							<h:outputText value="Lieu de naissance" /> -->
+					<!-- 						</p:column> -->
+					<!-- 						<p:column> -->
+					<!-- 							<h:inputText -->
+					<!-- 								value="#{sessionBeanFve.individuSearchDto.lieuNaissance}" /> -->
+					<!-- 						</p:column> -->
+					<!-- 					</p:row> -->
+
+				</p:panelGrid>
+				<br />
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:commandButton id="btn_AdvSearch"
+								actionListener="#{dossierInscriptionBB.advancedSearch()}"
+								value="#{commonmsgs.bouton_rechercher}"
+								onclick="PF('advancedSearchPanel').hide()"
+								update=":form_dossierInscriptionDetail,@(.diaPanel)"
+								icon="ui-icon-search" onstart="PF('allWidget').block()"
+								oncomplete="PF('allWidget').unblock()">
+
+								<f:param name="searchMode" value="advanced" />
+
+								<f:param name="matricule" value="#{matricule.value}" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton id="btn_HideSearchDialogID"
+								value="#{commonmsgs.bouton_fermer}" type="button"
+								onclick="PF('advancedSearchPanel').hide();">
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

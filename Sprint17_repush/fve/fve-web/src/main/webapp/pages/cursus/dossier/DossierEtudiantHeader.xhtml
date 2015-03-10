@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<p:panelGrid styleClass="ui-panelgrid-full-width"  rendered="#{dossierEtudiantSearchBean.dossierEtudiant != null}">
+		<p:row>
+			<p:column style="width:10%">
+				<h:outputText value="#{individuMsgs.individu_nom_latin}" />
+			</p:column>
+			<p:column style="width:15%">
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomLatin}"
+					styleClass="value" />
+			</p:column>
+			<p:column style="width:10%">
+				<h:outputText value="#{individuMsgs.individu_nom_arabe}" />
+			</p:column>
+			<p:column style="width:15%">
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomArabe}"
+					styleClass="value" />
+			</p:column>
+			<p:column style="width:10%">
+				<h:outputText value="#{individuMsgs.individu_date_naissance}" />
+			</p:column>
+			<p:column style="width:15%">
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.dateNaissance}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column>
+				<h:outputText value="#{dossierEtudiantMsgs.dossier_etudiant_matricule}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantBean.dossierEtudiantDto.numeroMatricule}"
+					styleClass="value">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="#{individuMsgs.individu_prenom_latin}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomLatin}"
+					styleClass="value" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{individuMsgs.individu_prenom_arabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomArabe}"
+					styleClass="value" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{individuMsgs.individu_lieu_naissance}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.lieuNaissance}"
+					styleClass="value" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{dossierEtudiantMsgs.dossier_etudiant_bac_matricule}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantBean.dossierEtudiantDto.dossierBachelierMatricule}"
+					styleClass="value">
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<br/>
+	</p:panelGrid>
+
+
+</ui:composition>

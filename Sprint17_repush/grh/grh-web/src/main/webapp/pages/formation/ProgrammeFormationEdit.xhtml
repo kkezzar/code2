@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{formationMgs.pnl_enregistrer_programme_formation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<ui:include src="/pages/formation/ProgrammeFormationSearch.xhtml">
+				<ui:param name="nameMBean" value="#{programmeFormationEditMBean}"></ui:param>
+				<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+				<ui:param name="renderedNew" value="true"></ui:param>
+			</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty programmeFormationEditMBean.programmeFormationGrhDto}">
+     <p:tabView id="tabview">
+                <p:tab title="#{formationMgs.programme_formation_title}"> 
+					<h:form id="form_besoin_formation_edit">
+						<p:panelGrid cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">						
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.code}"
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:inputText
+										value="#{programmeFormationEditMBean.programmeFormationGrhDto.code}"
+										required="true"
+										requiredMessage="#{formationMgs.code_required}"
+										></p:inputText>
+								</p:column>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.intitule}"
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:inputText
+										value="#{programmeFormationEditMBean.programmeFormationGrhDto.intitule}"
+										required="true"
+										requiredMessage="#{formationMgs.intitule_required}" styleClass="input-xlarge-px"
+										></p:inputText>
+								</p:column>
+								</p:row>
+							
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_debut} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:calendar id="datedebut" navigator="true" required="true"
+										requiredMessage="#{formationMgs.date_debut_required}"
+										value="#{programmeFormationEditMBean.programmeFormationGrhDto.dateDebut}">
+									</p:calendar>
+								</p:column>
+
+
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_fin} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:calendar id="dateFin" navigator="true" required="true"
+										requiredMessage="#{formationMgs.date_fin_required}"
+										value="#{programmeFormationEditMBean.programmeFormationGrhDto.dateFin}">
+									</p:calendar>
+								</p:column>
+							</p:row>
+                              <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.objectif} "
+										styleClass="required" />
+								</p:column>
+								<p:column colspan="3">
+									<p:inputText
+										value="#{programmeFormationEditMBean.programmeFormationGrhDto.objectif}"
+										required="true"
+										requiredMessage="#{formationMgs.objectif_required}"
+										styleClass="input-xxlarge-px"></p:inputText>
+								</p:column>
+
+							</p:row>
+						</p:panelGrid>
+
+<br></br>
+	<p:outputPanel id="CyclesFormationPnl">
+							<p:outputPanel id="detailCyclesFormationPnl"
+								rendered="#{programmeFormationEditMBean.programmeFormationGrhDto.id!=null}">
+<p:dataTable var="cycle" value="#{programmeFormationEditMBean.programmeFormationGrhDto.cycleFormationDtos}" id="cyclesTable"
+						widgetVar="cyclesTable" rowKey="#{cycle.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.cycle_datable_no_result}">
+                     
+
+						<f:facet name="header">
+							#{formationMgs.cycle_formation_programme_title} 
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+                         <p:column headerText="#{formationMgs.code}" >
+							<h:outputText value="#{cycle.code}"  styleClass="value">
+						
+						</h:outputText>
+						</p:column>
+						    <p:column headerText="#{formationMgs.intitule}" >
+							<h:outputText value="#{cycle.intitule}"  styleClass="value">
+						
+						</h:outputText>
+						</p:column>
+					  <p:column headerText="#{formationMgs.date_debut}" >
+							<h:outputText value="#{cycle.dateDebut}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+						
+						<p:column headerText="#{formationMgs.date_fin}" >
+							<h:outputText value="#{cycle.dateDebut}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+					</p:dataTable>
+</p:outputPanel>
+</p:outputPanel>
+<br></br>
+
+						<p:toolbar id="ProgrammeFormationToolBar" styleClass="toolBarMesrs">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+									styleClass="ui-button-save" id="savesBtn" icon="ui-icon-disk"
+									update=":pnl_Gerer"
+									actionListener="#{programmeFormationEditMBean.onSave}">
+
+
+								</p:commandButton>
+
+
+
+							</p:toolbarGroup>
+
+
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									immediate="true" process="@this" id="backBtn"
+									icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+									actionListener="#{programmeFormationEditMBean.initDetail}">
+
+
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:form>
+					
+
+
+		
+
+		
+		</p:tab>
+		<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" disabled="#{programmeFormationEditMBean.programmeFormationGrhDto.id==null}"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="ProgrammeFormationGrh" scope="request" />
+							<c:set var="identifiant"
+								value="#{programmeFormationEditMBean.programmeFormationGrhDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="ProgrammeFormationGrh" />
+							<ui:param name="identifiant"
+								value="#{programmeFormationEditMBean.programmeFormationGrhDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+					</p:tabView>
+				</p:outputPanel>
+			</p:outputPanel>
+
+		</p:outputPanel>
+		
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

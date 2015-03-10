@@ -1,0 +1,229 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+		<h:outputText value="#{individumsgs.individu_description}"
+			style="font-weight: bold;" />
+		<hr></hr>
+		<p:panelGrid id="descriptionDet" styleClass="ui-panelgrid-full-width">
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_identite}: " />
+				</p:column>
+				<p:column colspan="3">
+					<h:outputText id="identifiant"
+						value="#{individuMgrBean.refIndividuDto.identifiant}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_civilite}: " />
+				</p:column>
+				<p:column colspan="3">
+					<h:outputText id="Civilite"
+						value="#{individuMgrBean.refIndividuDto.civiliteLibelleLongFr}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nom_latin}: " />
+				</p:column>
+
+				<p:column style="width:35%">
+					<h:outputText id="Nom"
+						value="#{individuMgrBean.refIndividuDto.nomLatin}"
+						styleClass="value" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nom_arabe}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="NomArabe"
+						value="#{individuMgrBean.refIndividuDto.nomArabe}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenom_latin}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="préNom"
+						value="#{individuMgrBean.refIndividuDto.prenomLatin}"
+						styleClass="value" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenom_arabe}: " />
+				</p:column>
+ 
+				<p:column style="width:35%">
+					<h:outputText id="préNomArabe"
+						value="#{individuMgrBean.refIndividuDto.prenomArabe}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nomJeuneFille_latin}:" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="nomJeuneFilleLatin"
+						value="#{individuMgrBean.refIndividuDto.nomJeuneFilleLatin}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText
+						value="#{individumsgs.individu_nomJeuneFille_arabe}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="nomJeuneFilleArabe"
+						value="#{individuMgrBean.refIndividuDto.nomJeuneFilleArabe}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_datenaissance}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{individuMgrBean.refIndividuDto.dateNaissance}"
+						id="datenaissance" styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_presume}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{individuMgrBean.refIndividuDto.presume?'Oui':'Non' }"
+						id="presume" styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_qualite}: " />
+				</p:column>
+				<p:column colspan="3">
+					<h:outputText id="fonction"
+						value="#{individuMgrBean.refIndividuDto.qualite}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nationalite}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="nationalite"
+						value="#{individuMgrBean.refIndividuDto.nationaliteLibelleLongFr}"
+						styleClass="value" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_SitFamiliale}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="SitFamiliale"
+						value="#{individuMgrBean.refIndividuDto.situationFamilialeLibelleLongFr}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_service_national}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="servicenational"
+						value="#{individuMgrBean.refIndividuDto.serviceNatLibelleLongFr}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_Groupe_Sanguin}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="GroupeSanguin"
+						value="#{individuMgrBean.refIndividuDto.groupeSanguinLibelleLongFr}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+
+		
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenompere_latin}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="preNompere"
+						value="#{individuMgrBean.refIndividuDto.prenomPereLatin}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenompere_arabe}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="preNompereArabe"
+						value="#{individuMgrBean.refIndividuDto.prenomPereArabe}"
+						styleClass="value" />
+
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nommere_latin}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="Nommere"
+						value="#{individuMgrBean.refIndividuDto.nomMereLatin}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_nommere_arabe}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="NommereArabe"
+						value="#{individuMgrBean.refIndividuDto.nomMereArabe}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenommere_latin}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="preNommere"
+						value="#{individuMgrBean.refIndividuDto.prenomMereLatin}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText value="#{individumsgs.individu_prenommere_arabe}: " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText id="preNommereArabe"
+						value="#{individuMgrBean.refIndividuDto.prenomMereArabe}"
+						styleClass="value" />
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+	
+
+</ui:composition>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory name="sessionFactory">
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.password">dev2013</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://192.168.3.127:5432/fve_db</property>
+        <property name="hibernate.connection.username">dev</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+         <property name="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</property>
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="hibernate.max_fetch_depth">3</property>
+        <property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
+        <!--  <property name="hibernate.query.substitutions">true 1, false 0</property> -->
+        <property name="hibernate.query.substitutions">true "true", false "false"</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">none</property>
+        <property name="hibernate.batch_size">30</property>
+    </session-factory>
+</hibernate-configuration>

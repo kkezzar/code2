@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+			<p:panelGrid id="panelEditDecision" rendered="#{!preinscriptionSearchMBean.tabDecisionDisabled}">
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Décision" for="decision"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="decision" 
+							required="true"
+							requiredMessage="La décision est obligatoire"
+							style="width:100%;text-align:left"
+							value="#{preinscriptionSearchMBean.dto.decisionDto.acceptee}"
+							label="Décision"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem itemLabel="--Décision--"/>
+							<f:selectItem itemLabel="Positive"  itemValue="true"/>
+							<f:selectItem itemLabel="Négative"  itemValue="false"/>
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto != null ?  preinscriptionSearchMBean.dto.decisionDto.acceptee ? 'Acceptée': 'Refusée': ''}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Référence de la décision" for="referenceDecision"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="referenceDecision" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="La référence de la décision est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.decisionDto.reference}"
+							rendered="#{preinscriptionSearchMBean.editionMode}" />
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto.reference}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Motif" for="motifDecision"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="motifDecision" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="Le motif de la décision est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.decisionDto.motif}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/> 
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto.motif}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Date décision" for="dateDecision"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:calendar id="dateDecision" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="La date de la décision est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.decisionDto.date}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto.date}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
+						</h:outputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Observation" for="observation"/>
+					</p:column>
+					<p:column style="width:250px" colspan="3">
+						<p:inputTextarea id="observation" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="L'observation pour la décision est obligatoire" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto.observation}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.decisionDto.observation}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/> 
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+</ui:composition>
+

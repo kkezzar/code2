@@ -1,0 +1,36 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<pe:blockUI target="tabview" widgetVar="tabviewWidget">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+
+	<p:tabView multiple="false" activeIndex="0" widgetVar="gpWidget"
+		id="tabview">
+		<p:tab
+			title="#{groupePedagogiqueMsgs.groupepedagogique_tab_groupe_information}">
+			<ui:include
+				src="/pages/cursus/groupepedagogique/GroupePedagogiqueInfoEdit.xhtml" />
+		</p:tab>
+		<p:tab
+			title="#{groupePedagogiqueMsgs.groupepedagogique_tab_association}"
+			disabled="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id==null or groupePedagogiqueManagerBean.apSectionList == null}">
+			<ui:include
+				src="/pages/cursus/groupepedagogique/AssociationEdit.xhtml" />
+		</p:tab>
+		<p:tab
+			title="#{groupePedagogiqueMsgs.groupepedagogique_tab_affectation}"
+			disabled="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.id ==null}">
+			<ui:include
+				src="/pages/cursus/groupepedagogique/AffectationGroupeEdit.xhtml" />
+		</p:tab>
+
+	</p:tabView>
+
+
+</ui:composition>

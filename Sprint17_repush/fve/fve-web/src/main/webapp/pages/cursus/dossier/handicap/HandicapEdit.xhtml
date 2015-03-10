@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:outputPanel styleClass="infoEtudiantStyle">
+		<p:outputPanel styleClass="handicapPanel">
+			<h:form id="handicapForm" prependId="true">
+
+				<pe:blockUI target="handicapForm" widgetVar="handicapWidget">
+					<i class="fa fa-spinner fa-spin" />
+				</pe:blockUI>
+				<p:fieldset id="handicapData"
+					legend="#{handicapMsgs.handicap_data_table_list_title}"
+					styleClass="mesrsFieldset">
+					<p:dataTable id="handicapDataTable" var="row"
+						value="#{handicapManagerBean.listSituationHandicapDto}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" lazy="true" paginatorPosition="bottom"
+						rowKey="#{row.id}" rowsPerPageTemplate="5,10,15"
+						emptyMessage="#{handicapMsgs.handicap_data_table_seacrh_result_no_result}"
+						style="margin:8px" rowIndexVar="rowIndex"
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+
+						<p:ajax event="page" update="@all" process="@(.handicapPanel)"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="sort" update="@all" process="@(.handicapPanel)" />
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_column_index}"
+							style="width:5%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_list_column_handicap_type_libelle_latin}"
+							style="width:20%">
+							<h:outputText value="#{row.refLlLatinTypeHandicap}" />
+						</p:column>
+
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_list_column_handicap_type_libelle_arabe}"
+							style="width:20%">
+							<h:outputText value="#{row.refLlArabeTypeHandicap}" />
+						</p:column>
+
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_list_column_date_debut}"
+							styleClass="textOnLeft" style="width:8%">
+							<h:outputText value="#{row.dateDebut}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_list_column_date_fin}"
+							styleClass="textOnLeft" style="width:8%">
+							<h:outputText value="#{row.dateFin}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{handicapMsgs.handicap_data_table_list_column_observation}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.observation}" style="width:100%" />
+						</p:column>
+
+						<p:column width="8%" style="text-align:center">
+							<p:commandButton id="editHandicapSituation" icon="ui-icon-pencil"
+								process="handicapDataTable"
+								actionListener="#{handicapManagerBean.editSituation(row)}"
+								update="@(.handicapPanel)">
+							</p:commandButton>
+							<h:outputText value="  " />
+							<pe:tooltip for="editHandicapSituation"
+								value="#{commonmsgs.bouton_update}" showEffect="fadeIn"
+								hideEffect="fadeIn" />
+
+							<p:commandButton id="removeHandicapSituation"
+								icon="ui-icon-trash" process="handicapDataTable"
+								actionListener="#{handicapManagerBean.removeSituation(row)}"
+								update="@(.handicapPanel)">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_delete_confirmation}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+							<pe:tooltip for="removeHandicapSituation"
+								value="#{commonmsgs.bouton_supprimer}" showEffect="fadeIn"
+								hideEffect="fadeIn" />
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+
+				<br />
+				<br />
+				<p:fieldset id="itemData"
+					legend="#{handicapMsgs.handicap_edit_situation}"
+					styleClass="mesrsFieldset">
+					<p:panelGrid id="situation" styleClass="ui-panelgrid-full-width">
+						<p:row>
+							<p:column style="width:30%">
+								<p:outputLabel value="#{handicapMsgs.handicap_type_handicap}"
+									for="type" />
+							</p:column>
+							<p:column style="width:70%">
+								<p:selectOneMenu id="type" style="width:80%"
+									value="#{handicapManagerBean.selectedHandicap.refCodeTypeHandicap}"
+									valueChangeListener="#{handicapManagerBean.entityChanged}"
+									required="true" filter="true" filterMatchMode="contains"
+									requiredMessage="#{handicapMsgs.handicap_type_handicap_required}"
+									label="#{handicapMsgs.handicap_type_handicap}">
+
+									<f:selectItem
+										itemLabel="#{handicapMsgs.handicap_type_handicap_select}"
+										itemValue="" />
+									<f:selectItems value="#{handicapManagerBean.listTypeHandicap}" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:30%">
+								<p:outputLabel value="#{handicapMsgs.handicap_date_debut}"
+									for="firstDate" />
+							</p:column>
+							<p:column style="width:70%">
+								<p:calendar navigator="true" validator="dateValidator"
+									binding="#{firstDate}" id="firstDate"
+									value="#{handicapManagerBean.selectedHandicap.dateDebut}"
+									pattern="dd/MM/yyyy" required="true"
+									valueChangeListener="#{handicapManagerBean.entityChanged}"
+									requiredMessage="#{handicapMsgs.handicap_date_debut_required}">
+
+								</p:calendar>
+							</p:column>
+
+						</p:row>
+						<p:row>
+							<p:column style="width:30%">
+								<h:outputText value="#{handicapMsgs.handicap_date_fin}" />
+							</p:column>
+							<p:column style="width:70%">
+								<p:calendar navigator="true" validator="dateValidator"
+									binding="#{secondDate}"
+									valueChangeListener="#{handicapManagerBean.entityChanged}"
+									value="#{handicapManagerBean.selectedHandicap.dateFin}"
+									pattern="dd/MM/yyyy">
+									<f:attribute name="firstDate" value="#{firstDate}" />
+								</p:calendar>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:30%">
+								<h:outputText value="#{handicapMsgs.handicap_observation}" />
+							</p:column>
+							<p:column style="width:70%">
+								<p:inputTextarea style="width:100%"
+									valueChangeListener="#{handicapManagerBean.entityChanged}"
+									value="#{handicapManagerBean.selectedHandicap.observation}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br />
+					<br />
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnValidateID" icon="ui-icon-disk"
+								value="#{commonmsgs.bouton_enregistrer}" process="itemData"
+								onstart="PF('handicapWidget').block()"
+								onsuccess="PF('handicapWidget').unblock()"
+								actionListener="#{handicapManagerBean.save()}"
+								update="@(.handicapPanel)">
+
+							</p:commandButton>
+							<p:separator />
+							<p:commandButton id="addSituation" icon="ui-icon-plusthick"
+								value="#{commonmsgs.bouton_nouveau}" process="@none"
+								disabled="#{handicapManagerBean.situationId == null}"
+								actionListener="#{handicapManagerBean.addSituation()}"
+								update="@(.handicapPanel)">
+
+							</p:commandButton>
+						</p:toolbarGroup>
+					</p:toolbar>
+
+				</p:fieldset>
+			</h:form>
+		</p:outputPanel>
+	</p:outputPanel>
+</ui:composition>

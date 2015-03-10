@@ -1,0 +1,165 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+	<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
+		xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+		<h:form id="form_dossier_employe_diplomes">
+
+
+			<p:panelGrid cellspacing="0"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				<p:row>
+					<p:column styleClass="title">
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_diplomes}" />
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:dataTable var="diplome"
+							value="#{dossierEmployeBean.listDiplomes}" id="diplomesTable"
+							widgetVar="diplomesTable" rowKey="#{diplome.id}"
+							style="margin-top:5px" resizableColumns="true" paginator="true"
+							rows="5" paginatorPosition="bottom"
+							columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+							rowIndexVar="rowIndex"
+							emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_diplome_no_result} ">
+
+							<f:facet name="header">
+								<p:toolbar>
+									<p:toolbarGroup align="left">
+
+
+										<p:commandButton id="btnAddConjoint"
+											styleClass="ui-button-bleu" title="Ajouter diplome"
+											icon="ui-icon-plusthick" process="@this diplomesTable"
+											ajax="true" immediate="true"
+											action="#{dossierEmployeBean.addDiplome}"
+											update="diplomesTable @this"></p:commandButton>
+									</p:toolbarGroup>
+									<p:toolbarGroup align="right">
+
+
+									</p:toolbarGroup>
+								</p:toolbar>
+							</f:facet>
+							<p:column
+								headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+								style="width:10px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{dossierEmployemsgs.dossier_employe_type_diplome}">
+							<p:selectOneMenu style="width:100%" required="true" requiredMessage="#{dossierEmployemsgs.dossier_employe_type_diplome_required}"
+								value="#{diplome.nomenclatureByTypeDiplomeDto.id}" filter="true" filterMatchMode="contains" 
+								label="#{dossierEmployemsgs.dossier_employe_type_diplome_select}">
+								<f:selectItem
+									itemLabel="#{dossierEmployemsgs.dossier_employe_type_diplome_select}"
+									itemValue="" />
+								<f:selectItems value="#{dossierEmployeBean.listeTypeDiplome}" />
+
+							</p:selectOneMenu>
+
+							</p:column>
+							<p:column headerText="#{dossierEmployemsgs.dossier_employe_intitule}">
+								<p:inputText value="#{diplome.intitule}" required="true" requiredMessage="#{dossierEmployemsgs.dossier_employe_intitule_required}"
+									style="width:100%"></p:inputText>
+								
+							
+
+							</p:column>
+
+							<p:column headerText="#{dossierEmployemsgs.dossier_employe_etablissement}">
+								<p:selectOneMenu style="width:100%" required="true" requiredMessage="#{dossierEmployemsgs.dossier_employe_etablissement_required}"
+								value="#{diplome.refEtablissementDto.id}" filter="true" filterMatchMode="contains"
+								label="#{dossierEmployemsgs.dossier_employe_etablissement_select}">
+								<f:selectItem
+									itemLabel="#{dossierEmployemsgs.dossier_employe_etablissement_select}"
+									itemValue="" />
+									<f:selectItems value="#{dossierEmployeBean.listeEtablissements}" />
+								</p:selectOneMenu>
+
+							</p:column>
+							<p:column headerText="#{dossierEmployemsgs.dossier_employe_annee_obtention}">
+							<p:inputText value="#{diplome.anneeObtention}" required="true" requiredMessage="#{dossierEmployemsgs.dossier_employe_annee_obtention_required}"
+									style="width:100%"></p:inputText>
+								
+
+							</p:column>
+							<p:column style="width:50px">
+								<p:commandButton id="btnRemoveDiplome" 
+									action="#{dossierEmployeBean.removeDiplome()}"
+									icon="ui-icon-trash" ajax="true" update="diplomesTable"
+									process="@this" immediate="true">
+									<f:setPropertyActionListener
+										target="#{dossierEmployeBean.selectedDiplomeIndex}"
+										value="#{rowIndex}" />
+								</p:commandButton>
+							</p:column>
+						</p:dataTable>
+					</p:column>
+
+				</p:row>
+				
+				<p:row>
+			<p:column>
+				<p:toolbar id="emploiDiplomeToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"  styleClass="ui-button-save" process="@form"
+						id="saveDiplomesBtn" icon="ui-icon-disk" update=":tabViewEdit:form_dossier_employe_diplomes:diplomesTable :form_dossier_employe_search" 
+						actionListener="#{dossierEmployeBean.onSave}">
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<!-- <p:commandButton value="#{commonmsgs.bouton_annuler}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{dossierEmployeBean.init()}">
+					</p:commandButton> -->
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			</p:column>
+			</p:row>
+			</p:panelGrid>
+
+		</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</ui:composition>
+
+
+
+</ui:composition>
+

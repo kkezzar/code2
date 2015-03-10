@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" closable="true"
+			life="5000" />
+
+		<h:form id="form_ueDetail">
+			<p:panel id="pnl_ueDetail"
+				header="#{uniteEnseignementMsgs.unite_enseignement_page_title_detail} #{ueBB.ue.libelleFr}">
+
+				<p:fieldset id="fs_actions"
+					style="margin-top: 5px;margin-bottom: 5px;">
+
+					<p:spacer width="10"></p:spacer>
+
+<!-- 					<p:commandButton value="#{commonmsgs.bouton_validate}" -->
+<!-- 						action="#{ueBB.validateUe}" rendered="#{!ueBB.ue.estValide}" -->
+<!-- 						update="pnl_ueDetail"> -->
+<!-- 						<f:param name="ueId" value="#{ueBB.ueId}" /> -->
+<!-- 					</p:commandButton> -->
+<!-- 					<p:commandButton value="#{commonmsgs.bouton_invalidate}" -->
+<!-- 						action="#{ueBB.invalidateUe}" rendered="#{ueBB.ue.estValide}" -->
+<!-- 						update="pnl_ueDetail"> -->
+<!-- 						<f:param name="ueId" value="#{ueBB.ueId}" /> -->
+<!-- 					</p:commandButton> -->
+
+<!-- 					<p:spacer width="10"></p:spacer> -->
+
+<!-- 					<p:commandButton type="button" value="#{commonmsgs.bouton_imprime}" -->
+<!-- 						title="#{commonmsgs.bouton_imprime}" icon="ui-icon-print" /> -->
+<!-- 					<p:spacer width="10"></p:spacer> -->
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						action="#{ueBB.goback}" icon="ui-icon-arrowthick-1-w" />
+
+				</p:fieldset>
+
+				<p:tabView>
+					<p:tab
+						title="#{uniteEnseignementMsgs.unite_enseignement_anglet_descriptif}">
+						<p:panelGrid style="width:100%">
+							<p:row>
+								<p:column>
+									<h:outputText for="inptTxt_code"
+										value="#{uniteEnseignementMsgs.unite_enseignement_code} *" />
+								</p:column>
+								<p:column>
+									<h:outputText id="inptTxt_code" value="#{ueBB.ue.code}"
+										styleClass="outputLabel" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_nature}" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{ueBB.ue.ncNatureUeLlFr}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText for="inptTxt_libelleFr"
+										value="#{uniteEnseignementMsgs.unite_enseignement_libelle_fr} *" />
+								</p:column>
+								<p:column>
+									<h:outputText id="inptTxt_libelleFr"
+										value="#{ueBB.ue.libelleFr}" styleClass="outputLabel" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_abreviation_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.abreviationFr}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_libelle_ar} *" />
+								</p:column>
+								<p:column>
+									<h:outputText id="inptTxt_libelleAr"
+										value="#{ueBB.ue.libelleAr}" styleClass="outputLabel" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_abreviation_ar}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.abreviationAr}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_type_ue} *" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.refCodeTypeUe}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_caractere}"
+										style="width:30px" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.refCodeCaractereUe}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_credit}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.credits}"
+										styleClass="outputLabel" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_appreciation}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.refCodeAppreciation}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+							<!-- 							<p:row> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText -->
+							<!-- 										value="#{uniteEnseignementMsgs.unite_enseignement_note_obtension}" /> -->
+							<!-- 								</p:column> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText value="#{ueBB.ue.noteObtension}" -->
+							<!-- 										styleClass="outputLabel" /> -->
+							<!-- 								</p:column> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText -->
+							<!-- 										value="#{uniteEnseignementMsgs.unite_enseignement_note_eliminatoire}" /> -->
+							<!-- 								</p:column> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText value="#{ueBB.ue.noteEliminatoire}" -->
+							<!-- 										styleClass="outputLabel" /> -->
+							<!-- 								</p:column> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText -->
+							<!-- 										value="#{uniteEnseignementMsgs.unite_enseignement_note_de_base}" /> -->
+							<!-- 								</p:column> -->
+							<!-- 								<p:column> -->
+							<!-- 									<h:outputText value="#{ueBB.ue.noteDeBase}" -->
+							<!-- 										styleClass="outputLabel" /> -->
+							<!-- 								</p:column> -->
+							<!-- 							</p:row> -->
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_pres}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.volumeHorairePres}"
+										styleClass="outputLabel" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_volume_horaire_perso}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{ueBB.ue.volumeHorairePerso}"
+										styleClass="outputLabel" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab
+						title="#{uniteEnseignementMsgs.unite_enseignement_anglet_detail}">
+
+						<p:panelGrid cellpadding="5" styleClass="panelColumns">
+							<p:row>
+								<p:column>
+									<p:tree value="#{ueBB.ueDetailTreeView}" var="node"
+										dynamic="true" cache="true" selectionMode="single">
+										<p:treeNode>
+											<p:commandLink value="#{node}"
+												update="@([id$=pngrd_detailUe])"
+												actionListener="#{ueBB.selectNode(node)}">
+												<f:param name="ueId" value="#{ueBB.ueId}" />
+												<f:param name="node" value="#{node}" />
+											</p:commandLink>
+										</p:treeNode>
+									</p:tree>
+								</p:column>
+								<p:column>
+									<p:panelGrid id="pngrd_detailUe">
+										<f:facet name="header">
+											<p:row>
+												<p:column>
+													<h:outputText binding="#{slectedNode}" value="#{ueBB.node}" />
+												</p:column>
+											</p:row>
+										</f:facet>
+										<p:row>
+											<p:column>
+												<p:editor value="#{ueBB.nodeValue}" width="700" height="400"
+													disabled="true" />
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab
+						title="#{uniteEnseignementMsgs.unite_enseignement_anglet_List_mc}">
+
+						<p:dataTable resizableColumns="true" id="dtTble_mc"
+							value="#{ueBB.ratachementMcList}" var="currentRattachementMc"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_code}" />
+								</f:facet>
+								<h:outputText value="#{currentRattachementMc.mcCode}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_libelle_fr}" />
+								</f:facet>
+
+								<h:outputText value="#{currentRattachementMc.mcLibelleFr}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_libelle_ar}" />
+								</f:facet>
+
+								<h:outputText value="#{currentRattachementMc.mcLibelleAr}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText
+										value="#{uniteEnseignementMsgs.unite_enseignement_type_ue}" />
+								</f:facet>
+
+								<h:outputText value="#{currentRattachementMc.mcRefCodeType}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:tabView>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

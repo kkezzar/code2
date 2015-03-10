@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dd018130-35bd-4943-a652-cdbfcd6ff423">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="adresse" class="java.lang.String"/>
+	<parameter name="contact" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<field name="individuNomArabe" class="java.lang.String"/>
+	<field name="individuPrenomArabe" class="java.lang.String"/>
+	<field name="individuDateNaissance" class="java.util.Date"/>
+	<field name="individuLieuNaissance" class="java.lang.String"/>
+	<field name="numeroInscription" class="java.lang.String"/>
+	<field name="refLibelleNiveauArabe" class="java.lang.String"/>
+	<field name="refLibelleDomaineArabe" class="java.lang.String"/>
+	<field name="refLibelleFiliereArabe" class="java.lang.String"/>
+	<field name="anneeAcademiqueCode" class="java.lang.String"/>
+	<field name="llEtablissementArabe" class="java.lang.String"/>
+	<field name="llEtablissementLatin" class="java.lang.String"/>
+	<field name="individuNomLatin" class="java.lang.String"/>
+	<field name="individuPrenomLatin" class="java.lang.String"/>
+	<field name="individuibelleWilayaNaissance" class="java.lang.String"/>
+	<field name="adresseResidence" class="java.lang.String"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="183" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0d93ee81-9fee-44d1-bc3f-9e4842b2488e" x="140" y="71" width="290" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ وزارة التـعليـم العــالي و البــحث العلـــمي]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4b6fc6d-6e3c-4389-8e45-e1a9242d3461" x="140" y="11" width="290" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[République Algérienne Démocratique et Populaire]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="94509570-25d5-49fb-b1e9-f4cfad757121" x="218" y="103" width="343" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{llEtablissementLatin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="793c6f2c-9ef3-493e-93ec-8c738dd15884" x="140" y="31" width="290" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[الجـمهوريــــة الجــزائريــة الديمــقراطيــة الشــعبية]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="1b2fac74-439e-4e72-9b66-a6967ae41b1a" x="10" y="97" width="552" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="603062c8-552c-4030-b561-512917098030" x="218" y="128" width="343" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{llEtablissementArabe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d477b613-d49f-4556-99ba-d84bbb9203a7" x="140" y="51" width="290" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ministère de l’Enseignement Supérieur et de la Recherche Scientifique]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="4e9ea22c-b1cb-4a3f-a4b6-178a3b88dce2" x="10" y="10" width="130" height="87"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="3f3da763-43ce-4ce5-8714-6553e7f3f696" x="430" y="10" width="131" height="87"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7c35bef6-3a16-4655-b8b6-a08b86d16930" x="140" y="27" width="223" height="30"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Lettre d'engagement]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="197" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="793da7e9-f95a-4c2e-a760-1614f94c9a6b" x="0" y="0" width="100" height="25"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Je soussigné(e),]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3179bed9-ce39-4644-a0c0-d3f256c18c00" x="0" y="33" width="59" height="21"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Mr,Mlle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c6b06876-79a9-4b2f-b786-e649c8f2f192" x="0" y="66" width="59" height="20"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Née le]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef27ce17-1523-4e10-a5b8-1c881bb1c89b" x="172" y="66" width="11" height="20"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[à]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c60a44c6-3a54-4570-879a-7682ee210e02" x="0" y="96" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[et demeurant à]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="80cea391-e48c-4712-9896-75d51d825353" x="0" y="141" width="508" height="39"/>
+				<textElement>
+					<font size="12" isUnderline="false"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Avoir pris connaissance du « Règlement Intérieur » de mes droits et de mes obligations et m’engage de les respecter les termes sans aucune réserve jusqu’à la fin de ma formation.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="02052d5e-d712-404b-b8d9-c8812e0bfbfa" x="59" y="34" width="159" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuNomLatin}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="519123ad-8873-4081-86f3-7adf0aa03d09" x="228" y="34" width="216" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuPrenomLatin}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="7b596738-aa3a-4b61-a10f-44d08c30a3fe" x="62" y="66" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuDateNaissance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="10a77ac8-a8e1-42a9-98c3-b4f72d4e4992" x="193" y="66" width="334" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{individuibelleWilayaNaissance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4a3118f7-d7f7-4118-acc0-aa18b5fa9ad3" x="100" y="96" width="440" height="42"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adresseResidence}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="127" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4ce75dd0-753e-4eca-8ca9-d1aa284eac78" x="0" y="2" width="140" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Cachet de l’APC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e1621ffd-d1da-4c96-9410-4d06c4fa97f0" x="455" y="2" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Lu et Approuvé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7c365576-d7e0-4c47-99c7-584320cbfa32" x="455" y="22" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="187" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="496dbcc7-c1ea-4b5f-9bdc-10787c7a4c79" x="-2" y="111" width="552" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{llEtablissementArabe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3a07137e-921e-426d-a0eb-71c3a6b5c97e" x="7" y="151" width="544" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{contact}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9311606e-118f-40cb-94a9-57ef10a58803" x="0" y="131" width="552" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{adresse}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8a0a3c16-9760-4436-ad67-c39bd59997e1" x="-1" y="98" width="552" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[$F{llEtablissementLatin}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement uuid="3dac3b03-e6cc-4231-89e9-505eff87bea7" x="-3" y="171" width="165" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="8afa90fe-fc16-49b3-8a1d-48e9b45bd474" x="-1" y="97" width="552" height="1" forecolor="#999999"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+		<p:panelGrid id="panelEditDemande" rendered="#{!preinscriptionSearchMBean.tabDemandeDisabled}">
+			<p:row>
+				<p:column style="width:250px" >
+					<h:outputText value="Année académique" style="width:100%;text-align:left" for="anneeAcademique"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.anneeAcademiqueId}" 
+						style="width:100%;text-align:left"
+						label="Choisir une année académique" 
+						required="true"
+						requiredMessage="L'année académique est obligatoire"
+						id="anneeAcademique"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Choisir une année académique"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.anneeAcademiquesDemande}" />
+						<p:ajax update="etablissementSelection,filiereSelection,domaineSelection,cycleSelection,niveauSelection,specialiteSelection"
+						listener="#{preinscriptionSearchMBean.onAnneeAcademiqueDemandeSelected()}" process="@this" 
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"/>
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleAnneeAcademique}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<h:outputText value="Numéro demande" style="width:100%;text-align:left" for="numeroDemande"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<h:outputText id="numeroDemande" value="#{preinscriptionSearchMBean.dto.id}" style="width:100%;text-align:left" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:250px" >
+					<h:outputText value="Domaine" style="width:100%;text-align:left" for="domaineSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.domaineId}" 
+						style="width:100%;text-align:left"
+						label="Domaine"
+						id="domaineSelection"
+						disabled="#{preinscriptionSearchMBean.domaines == null}"
+						required="true"
+						requiredMessage="Le domaine est obligatoire"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Domaine"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.domaines}" />
+						<p:ajax update="etablissementSelection,filiereSelection,cycleSelection,niveauSelection,specialiteSelection"
+						listener="#{preinscriptionSearchMBean.onDomaineSelected()}" process="@this"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()" />
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleDomaine}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<h:outputText value="Etablissement*" style="width:100%;text-align:left" for="etablissementSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.etablissementId}" 
+						style="width:100%;text-align:left"
+						label="Etablissement"
+						id="etablissementSelection"
+						disabled="#{preinscriptionSearchMBean.etablissementsDemande == null}"
+						required="true"
+						requiredMessage="L'établissement est obligatoire"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Etablissement"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.etablissementsDemande}" />
+						<p:ajax update="domaineSelection,filiereSelection,cycleSelection,niveauSelection,specialiteSelection" 
+						listener="#{preinscriptionSearchMBean.onEtablissementSelected()}" 
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"/>
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleEtablissement}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:250px" >
+					<h:outputText value="Filière" style="width:100%;text-align:left" for="filiereSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.filiereId}" 
+						style="width:100%;text-align:left"
+						label="Filière"
+						id="filiereSelection"
+						disabled="#{preinscriptionSearchMBean.filieres == null}"
+						required="true"
+						requiredMessage="La filière est obligatoire"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Filière"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.filieres}" />
+						<p:ajax update="cycleSelection,niveauSelection,specialiteSelection" 
+						listener="#{preinscriptionSearchMBean.onFiliereSelected}" process="@this"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"/>
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleFiliere}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<h:outputText value="Cycle" style="width:100%;text-align:left" for="cycleSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.cycleId}" 
+						style="width:100%;text-align:left"
+						label="Cycle"
+						id="cycleSelection"
+						disabled="#{preinscriptionSearchMBean.cycles == null}"
+						required="true"
+						requiredMessage="Le cycle est obligatoire"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Cycle"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.cycles}" />
+						<p:ajax update="niveauSelection,specialiteSelection" 
+						listener="#{preinscriptionSearchMBean.onCycleSelected}" process="@this"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"/>
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleCycle}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:250px" >
+					<h:outputText value="Niveau" style="width:100%;text-align:left" for="niveauSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.niveauId}" 
+						style="width:100%;text-align:left"
+						label="Niveau"
+						id="niveauSelection"
+						disabled="#{preinscriptionSearchMBean.niveaux == null}"
+						required="true"
+						requiredMessage="Le niveau est obligatoire"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Niveau"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.niveaux}" />
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleNiveau}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<h:outputText value="Specialité" style="width:100%;text-align:left" for="specialiteSelection"/>
+				</p:column>
+				<p:column style="width:250px" >
+					<p:selectOneMenu value="#{preinscriptionSearchMBean.dto.specialiteId}" 
+						style="width:100%;text-align:left"
+						label="Specialité"
+						required="true"
+						requiredMessage="La spécialité est obligatoire"
+						id="specialiteSelection"
+						disabled="#{preinscriptionSearchMBean.specialites == null}"
+						rendered="#{preinscriptionSearchMBean.editionMode}">
+						<f:selectItem itemLabel="Spécialité"/>
+						<f:selectItems value="#{preinscriptionSearchMBean.specialites}" />
+					</p:selectOneMenu>
+					<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.libelleSpecialite}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+</ui:composition>

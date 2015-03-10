@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+
+		<p:panel
+			header="#{parametragemsgs.parametrage_menu_parametres_config}"
+			style="border:0;" rendered="#{paramConfigDroitBean.readAllow}">
+			<br></br>
+			<h:form id="searchForm">
+
+
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{parametragemsgs.parametrage_domaine}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectDomaine"
+								value="#{paramConfigSearchBean.idDomain}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{parametragemsgs.parametrage_domaine}">
+								<f:selectItem
+									itemLabel="#{parametragemsgs.parametrage_select_domaine}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listItemDomaines}" />
+								<p:ajax listener="#{paramConfigSearchBean.domainChanged}"
+									update="selectEntity" />
+								<f:param name="idDomain"
+									value="#{paramConfigSearchBean.idDomain}" />
+								<f:param name="idConfig"
+									value="#{paramConfigSearchBean.idConfig}" />
+
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column>
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectEntity"
+								value="#{paramConfigSearchBean.idConfig}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{parametragemsgs.parametrage_entite}">
+								<f:selectItem
+									itemLabel="#{parametragemsgs.parametrage_select_configuration}"
+									itemValue="" />
+								<f:selectItems value="#{paramConfigSearchBean.listItemConfig}" />
+
+							</p:selectOneMenu>
+						</p:column>
+
+
+
+
+						<p:column>
+						</p:column>
+						<p:column>
+							<p:commandButton id="submitSearch"
+								value="#{commonmsgs.button_search}"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()"
+								action="#{paramConfigSearchBean.findResources}">
+								<f:param name="idDomain"
+									value="#{paramConfigSearchBean.idDomain}" />
+								<f:param name="idConfig"
+									value="#{paramConfigSearchBean.idConfig}" />
+
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<br></br>
+				<p:dataTable resizableColumns="true" id="evenementData"
+					rendered="#{paramConfigSearchBean.listRefFileConfigDto!=null}"
+					value="#{paramConfigSearchBean.listRefFileConfigDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+					<f:facet name="header">
+						<h:outputText value="#{parametragemsgs.parametrage_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.nomDomaine}">
+						<f:facet name="header">
+							<h:outputText value="#{parametragemsgs.parametrage_domaine}" />
+						</f:facet>
+						<h:outputText value="#{current.nomDomaine}" />
+					</p:column>
+					<p:column sortBy="#{current.nameConfiguration}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration}" />
+						</f:facet>
+
+						<h:outputText value="#{current.nameConfiguration}" />
+					</p:column>
+
+					<p:column sortBy="#{current.name}">
+						<f:facet name="header">
+							<h:outputText value="#{parametragemsgs.parametrage_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{current.name}" />
+					</p:column>
+
+					<p:column style="width:8%" exportable="false"
+						rendered="#{paramConfigDroitBean.editAllow}">
+
+
+						<p:commandButton id="modifyButton" ajax="false"
+							action="#{paramConfigSearchBean.toEdit}" icon="ui-icon-pencil"
+							title="#{commonmsgs.button_update}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+							<f:param value="#{current.id}" name="idf"></f:param>
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

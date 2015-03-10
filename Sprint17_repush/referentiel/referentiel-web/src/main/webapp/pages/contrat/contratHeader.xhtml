@@ -1,0 +1,51 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel >  
+      
+      <h:outputText value="#{contratmsgs.contrat_information}" style="font-weight: bold;" /> 
+      
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+			<h:outputText value="#{contratmsgs.contrat_identite}:  " />
+			 </p:column>
+							 <p:column>
+			<h:outputText value="#{contratBckBean.refContratDto.identifiant}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+			<h:outputText value="#{contratmsgs.contrat_nature_contrat}:  " />
+			 </p:column>
+							 <p:column>
+			<h:outputText value="#{contratBckBean.refContratDto.natureLibelleLongFr}" style="font-weight: bold;"/>
+		</p:column>
+      
+		<p:column>
+			<h:outputText value="#{contratmsgs.contrat_objet_contrat}:  " />
+			 </p:column>
+							 <p:column>
+			<h:outputText value="#{contratBckBean.refContratDto.objetContratFr}" style="font-weight: bold;"/>
+		</p:column> 
+      </p:row>
+      
+      <p:row >
+		<p:column>
+			<h:outputText value="#{contratmsgs.contrat_service}:  " />
+			 </p:column>
+							 <p:column>
+			<h:outputText value="#{contratBckBean.refContratDto.llStructureLatin}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+			<h:outputText value="#{contratmsgs.contrat_etablissement}:  " />
+			 </p:column>
+							 <p:column>
+			<h:outputText value="#{contratBckBean.refContratDto.llEtablissementLatin}" style="font-weight: bold;"/>
+		</p:column>
+      </p:row>
+      </p:panelGrid>          
+    </p:panel>
+    
+</ui:composition>

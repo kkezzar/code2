@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchProjetsMsgs.Projets_recherche_page_valide_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+<!-- RECHERCHE PROJET DE RECHERCHE -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchProjetID" 
+						  searchKeyWords="#{validationProjetMB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{validationProjetMB.searchProjets()}"
+						  searchAdvancedMethodName="#{validationProjetMB.searchProjets()}"
+						  toUpdateOnSearch=":mainForm"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  textWatermark="#{rchProjetsMsgs.projet_recherche_search_text_key_words}">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>	
+	</p:toolbar>
+	<br />
+<!-- LISTE PROJET DE RECHERCHE -->
+	<p:dataTable id="projetDataTable" var="row"
+							value="#{validationProjetMB.listprojet}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchProjetsMsgs.projet_recherche_datatable_list_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{validationProjetMB.selectedProjet}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{validationProjetMB.onProjetRowSelect}" update=":mainForm"	
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchProjetsMsgs.programmes_circuits_validation_datatable_list_processus_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_code}">
+				<h:outputText value="#{row.code}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_intitule}">
+				<h:outputText value="#{row.intituleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_programme}">
+				<h:outputText value="#{row.programeDto.code}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_date_debut}">
+				<h:outputText value="#{row.dateDebutPrev}" style="color:#336699;text-align:center"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_date_fin}" >
+				<h:outputText value="#{row.dateFinPrev}" style="color:#336699;text-align:center"><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projet_recherche_datatable_list_column_situation}" >
+				<h:outputText value="#{row.situationDto.libelleSituation}" style="color:#336633;text-align:center" >/</h:outputText>
+				</p:column>
+	</p:dataTable>
+		
+<!-- detail PROJET DE RECHERCHE -->
+
+<p:outputPanel id="projetPanelDetails">
+	<p:panel header="#{programmeBB.titleDetailsProgram}" rendered="#{validationProjetMB.canShowPjetDetails}" style="margin-bottom:8px;">
+	 <p:tabView orientation="left" id="tvProjet">
+     <p:tab title="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_identification}">   
+	<p:panelGrid  id="panelGridProjetEdit" style="width:100%;margin-bottom:8px;">
+	                  <p:row>
+                         <p:column colspan="4" styleClass="title">#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_identification}</p:column>
+                      </p:row>
+                                                                
+	                 <p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_code}" /></p:column>
+						<p:column colspan="3"><h:outputText id ="txtCodeProgjet" value="#{validationProjetMB.selectedProjet.code}" styleClass="value"/>	</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_date_identification}" /></p:column>
+						<p:column colspan="3"> 
+						<h:outputText id ="txtidentProgjet" value="#{validationProjetMB.selectedProjet.dateIdentification}"   styleClass="value">
+						<f:convertDateTime pattern="dd-MM-yyyy" /></h:outputText>
+						    </p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_intitule}" /></p:column>
+						<p:column colspan="3"><h:outputText id ="txtintituleProgjet" value="#{validationProjetMB.selectedProjet.intituleFr}" styleClass="value"/>	
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_programme}" /></p:column>
+						<p:column colspan="3">
+						<h:outputText id ="txtprogrammeProgjet" value="#{validationProjetMB.selectedProjet.programeDto.intituleFr}" styleClass="value"/>							
+						</p:column>
+	                </p:row>
+					 <p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_structure}" /></p:column>						
+					<p:column colspan="3">
+							<h:outputText id ="txtstructureProgjet" value="#{validationProjetMB.selectedProjet.structureDto.refStructureLibelleLatin}" styleClass="value"/>	
+						</p:column>					
+					</p:row>
+					
+					<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_group_recherche}" /></p:column>
+						<p:column colspan="3">
+							<h:outputText id ="txtgroupProgjet" value="#{validationProjetMB.selectedProjet.groupeDto.refGroupeLibelleFr}" styleClass="value"/>	
+						</p:column>
+				   </p:row>					
+					<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_theme_recherche}" /></p:column>
+						<p:column colspan="3">
+							<h:outputText id ="txtthemeProgjet" value="#{validationProjetMB.selectedProjet.themeDto.ncThemeLibelleLatin}" styleClass="value"/>	
+						</p:column>
+				   </p:row>	
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_objectifs}" /></p:column>
+						<p:column colspan="3">
+						<h:outputText id ="txtobjectifProgjet" value="#{validationProjetMB.selectedProjet.objectif}" styleClass="value"/>		</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_justification}" /></p:column>
+						<p:column colspan="3">
+						<h:outputText id ="txtjustificationProjet" value="#{validationProjetMB.selectedProjet.justification}" styleClass="value"/>		</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_date_debut_previsionelle}" /></p:column>
+						<p:column colspan="3">						
+						<h:outputText id ="txtdatedebprev" value="#{validationProjetMB.selectedProjet.dateDebutPrev}"   styleClass="value">
+						<f:convertDateTime pattern="dd-MM-yyyy" /></h:outputText>				                                    
+						 </p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:20%;text-align:right;"><p:outputLabel value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_date_fin_previsionnelle}" /></p:column>
+						<p:column colspan="3">					
+					    <h:outputText id ="txtDatefinprevProgjet" value="#{validationProjetMB.selectedProjet.dateFinPrev}"   styleClass="value">
+						<f:convertDateTime pattern="dd-MM-yyyy" /></h:outputText>
+					   </p:column>					
+					</p:row>		
+	
+	</p:panelGrid>	
+	
+	</p:tab>
+	<p:tab id="validationTab" title="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_validation}" >	
+	<p:dataTable id="validationDataTable" var="row"
+							value="#{validationProjetMB.listEtapeValidation}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_validation}"
+							rowIndexVar="rowIndex"							
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<f:facet name="header">#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_validation}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_groupe}" style="text-align:center;">
+						<h:outputText value="#{row.etapeCircuitDto.groupeLibelleFr}" style="color:#336699;float:left;"/>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_date_reponce}" style="text-align:center;">
+						<h:outputText value="#{row.dateReponce}" style="color:#336699;float:left;"><f:convertDateTime pattern="dd-MM-yyyy" /></h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_heure}" style="text-align:center;">
+						<h:outputText value="#{row.dateReponce}" style="color:#336699;float:left;">
+						
+						<f:convertDateTime pattern=" HH:mm:ss" />
+						</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_reponse}" style="text-align:center;">
+						<h:outputText value="#{row.reponceDto.libelleLongFr}" style="color:#336699;float:left;"><f:convertDateTime pattern="dd-MM-yyyy" /></h:outputText>
+				</p:column>
+				<p:column headerText="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_observation}" style="text-align:center;">
+						<h:outputText value="#{row.observation}" style="color:#336699;float:left;"/>
+				</p:column>				
+				
+				<p:column style="width:32px" >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editValidationButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{validationProjetMB.updateValidation()}" 
+									process="@this"	
+									update=":dlgFormValidation"
+									oncomplete="PF('dlgAddValidation').show();">										
+									<f:setPropertyActionListener target="#{validationProjetMB.validationId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+      			
+      			
+      			
+      			
+	</p:dataTable>
+	
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup align="left">
+	<p:commandButton id="saveProjetButtonID" 
+							action="#{validationProjetMB.saveProjetValidation()}"  icon="ui-icon-disk"  
+							value = "#{rchProjetsMsgs.projets_recherche_button_dialog_valider_projets}"
+							process="@this :mainForm:tvProjet:panelGridProjetEdit" 		ajax="true"		
+							update=":mainForm:projetDataTable :mainForm:tvProjet :mainForm:msgProgram"					
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+	</p:commandButton>
+		<!---->
+	</p:toolbarGroup>
+	</p:toolbar>
+	
+	<p:messages id="msgindevaluations" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	</p:tab>
+		
+	
+	
+	</p:tabView>
+	<p:messages id="msgProgram" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	</p:panel>
+	</p:outputPanel>
+
+	<p:messages id="msgProcess" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+</h:form>
+<!-- Dialogue Activite -->
+
+<p:dialog  widgetVar="dlgAddValidation"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchProjetsMsgs.projets_recherche_dialog_ajouter_reponse_validation}"
+ 					id="dlgAddValidationId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormValidation">
+	<p:messages id="msgValidationDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+  	<p:panelGrid  id="panelGridValidation" style="width:100%;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchProjetsMsgs.projet_recherche_datatable_list_column_etape_validation}" />	</p:column>
+						<p:column colspan="3">						
+						<h:outputText value="#{validationProjetMB.etapeValidationDto.etapeCircuitDto.libelleFr}" styleClass="value"/>						
+						</p:column>				
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_groupe}" />	</p:column>
+						<p:column colspan="3">
+						<h:outputText value="#{validationProjetMB.etapeValidationDto.etapeCircuitDto.groupeLibelleFr}" styleClass="value" style="width:100%;"/>
+						</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="text-align:right;">	<h:outputText value="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_date_reponce}" />	</p:column>
+						<p:column colspan="3">
+						<p:calendar value="#{validationProjetMB.etapeValidationDto.dateReponce}"  pattern="dd/MM/yyyy" required="true"	
+														requiredMessage="#{rchStructureMsgs.structure_recherche_dialog_add_theme_end_date_required}"/>						
+						
+						</p:column>
+				</p:row>
+				
+				<p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_reponse}" />	</p:column>
+						<p:column colspan="3">						
+						<p:selectOneMenu id="TypesPartenaireID" 	value="#{validationProjetMB.selectedReponse}" style="width:100%;" 
+								required="true" requiredMessage="#{rchProjetsMsgs.projet_recherche_datatable_list_column_partenaire}">
+								<f:selectItems value="#{validationProjetMB.listReonses}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+					
+								
+						</p:selectOneMenu>
+						
+						
+						</p:column>
+				</p:row>
+		
+		        <p:row>
+						<p:column style="text-align:right;">	<h:outputText value="#{rchProjetsMsgs.projets_recherche_programme_detail_tabview_tab_observation}" />	</p:column>
+						<p:column colspan="3">
+						<p:inputText value="#{validationProjetMB.etapeValidationDto.observation}"  style="width:100%;"></p:inputText>
+						</p:column>
+				</p:row>
+		
+		
+		</p:panelGrid>
+		<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddValidationDialogID"
+							 value="#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_theme_fermer_libelle}" 	
+							 type="button" onclick="PF('dlgAddValidation').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>		
+				<p:toolbarGroup align="right" >
+						<p:commandButton id="btnAddValidation" 
+							action="#{validationProjetMB.saveValidation}"  
+							icon="ui-icon-plusthick"  
+							value = "#{rchStructureMsgs.structure_recherche_button_dialog_ajouter_theme_ajouter_libelle}"							
+							process="@this :dlgFormValidation"
+							ajax="true"							
+							update=":mainForm:tvProjet:validationTab :mainForm:tvProjet:msgindevaluations @form"
+							oncomplete="handleUpdateValidationRequest(xhr, status, args)">
+						</p:commandButton>
+						
+						
+						
+						
+						
+							</p:toolbarGroup>		
+			
+	</p:toolbar>		
+</h:form>
+<script type="text/javascript">
+   								 function handleUpdateValidationRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddValidation').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddValidation').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+			
+
+
+
+
+
+
+
+
+<!-- SURCHARGE CSS -->
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<!-- AJAX PROGRESS -->
+<pe:blockUI target="mainForm" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

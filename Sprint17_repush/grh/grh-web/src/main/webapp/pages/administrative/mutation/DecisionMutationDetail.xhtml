@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:panelGrid
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+		<p:row>
+			<p:column colspan="2" styleClass="title">
+				<h:outputText value="#{mutationMgs.decision_mutation_title}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:25%">
+				<h:outputLabel value="#{mutationMgs.employe} " />
+			</p:column>
+			<p:column style="width:75%">
+				<p:commandLink onclick="PF('employeDetailDialog').show()"
+					rendered="#{mutationDtoParam.dossierEmployeDto!=null}"
+					immediate="true">
+					<h:outputText
+						value="#{mutationDtoParam.dossierEmployeDto.refIndividuDto.nomLatin} #{mutationDtoParam.dossierEmployeDto.refIndividuDto.prenomLatin}"
+						styleClass="value" />
+				</p:commandLink>
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.date_decision} " />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{mutationDtoParam.dateDecision}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.etablissement_origine} " />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{mutationDtoParam.etabOrigineDto.llEtablissementLatin}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.etablissement_accueil} " />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{mutationDtoParam.etabDemandeDto.llEtablissementLatin}"
+					styleClass="value">
+
+				</h:outputText>
+
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.objet} " />
+			</p:column>
+
+			<p:column>
+				<h:outputText value="#{mutationDtoParam.objet}" styleClass="value">
+
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.necessite_service} " />
+			</p:column>
+			<p:column>
+				<h:outputText value="Oui" styleClass="value">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+
+
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.date_accord_etab_origine} " />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{mutationDtoParam.dateAccordEtabOrigine}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.date_accord_etab_accueil} " />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{mutationDtoParam.dateAccordEtabAccueil}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputLabel value="#{mutationMgs.date_effet} " />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{mutationDtoParam.dateEffet}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+
+
+	</p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">         
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.bac.CapaciteEtabDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.bac.CapaciteEtab
+		</class-b>
+
+		<field>
+			<a>idAnneeAcademique</a>
+			<b>anneeAcademique.id</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiquePremiereAnnee</a>
+			<b>anneeAcademique.premiereAnnee</b>
+		</field>
+
+		<field>
+			<a>anneeAcademiqueDeuxiemeAnnee</a>
+			<b>anneeAcademique.deuxiemeAnnee</b>
+		</field>
+
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.bac.NoteAccessFiliereDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.bac.NoteAccessFiliere
+		</class-b>
+
+		<field>
+			<a>idPrioriteSerieBac</a>
+			<b>prioriteSerieBac.id</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.bac.PrioriteSerieBacDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.bac.PrioriteSerieBac
+		</class-b>
+
+		<field>
+			<a>idCapaciteEtab</a>
+			<b>capaciteEtab.id</b>
+		</field>
+
+	</mapping>
+
+</mappings>

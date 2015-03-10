@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation"
+	>
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+<ui:define name="title">#{bacSearchMsgs.bac_import_page_title}</ui:define>
+<ui:define name="pageTitleContent">#{bacSearchMsgs.bac_import_page_title}</ui:define>
+<ui:define name="centerContent">
+	
+	<p:panel id="titlePage" header="#{bacSearchMsgs.bac_import_panel_nouvelle_importation_header}">
+	<h:form id="form1" enctype="multipart/form-data">
+	<p:panelGrid id="gridImportSelection" style="margin-bottom:5px;width:100%;" >
+	<p:row>
+			<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{bacSearchMsgs.bac_import_grid_nouvelle_importation_column_annee}" /></p:column>
+<!-- 			<p:selectOneMenu id="listAnneesID" 	value="#{bacBB.selectedYear}"  style="width:250px;"> -->
+<!-- 												<f:selectItems value="#{bacBB.listYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" /> -->
+<!-- 			</p:selectOneMenu> -->
+			<p:column><h:outputLabel id="anneeId" value="#{bacBB.selectedYear}" 	 styleClass="value"/></p:column>
+			<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{bacSearchMsgs.bac_import_grid_nouvelle_importation_column_type_importation}" /></p:column>
+			<p:column colspan="2"><p:selectOneMenu id="listTypesImportationID" 	value="#{bacBB.selectedTypeImportCode}"  style="width:250px;" required="true" requiredMessage="Type importation requis !">
+								                <f:selectItem itemLabel="Que voulez-vous importer ?" itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{bacBB.listTypesImport}" var="v" 	itemLabel="#{v.label}" itemValue="#{v.value}" />
+								<p:ajax listener="#{bacBB.handleImportTypesChange}" 	event="valueChange" update="importResultOutputPanel labelUploadFileName txtUploadFileName btnImport" process="@this"/>
+								
+			</p:selectOneMenu></p:column>
+	</p:row>
+	<p:row>		
+			<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{bacSearchMsgs.bac_import_grid_nouvelle_importation_column_type_selection_fichier} " /></p:column>
+			<p:column colspan="3"><p:fileUpload update="msg labelUploadFileName txtUploadFileName btnImport" sizeLimit="50000000" fileUploadListener="#{bacBB.handleFileUpload}" mode="advanced" dragDropSupport="false" 
+									process="@this" 	allowTypes="/(\.|\/)(xlsx)$/" value="#{bacBB.fileToImport}"
+									label="Parcourir ..." uploadLabel="Charger ..."  cancelLabel="Annuler le chargement">
+			</p:fileUpload></p:column>
+				</p:row>	
+	<p:row>
+			<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{bacSearchMsgs.bac_import_grid_nouvelle_importation_column_type_total_lignes}" /></p:column>
+			<p:column><p:inputText  id="totalLignes" value="#{bacBB.totalRows}" style="width:50%;"  maxlength="7" required="true" requiredMessage="Nombre total de lignes à importer requis !"/></p:column>
+			<p:column colspan="2"><h:outputLabel id="labelUploadFileName"  value="#{bacBB.paramFileName}"  styleClass="value"/></p:column>
+	</p:row>
+</p:panelGrid>
+    		<p:toolbar>
+							<p:toolbarGroup align="left">
+									<p:commandButton id="btnImport" value="#{bacSearchMsgs.bac_import_bouton_importer_label}" ajax="true" actionListener="#{bacBB.importFile}" onstart="PF('blockUIWidgetImport').block()"
+											oncomplete="PF('blockUIWidgetImport').unblock()" update="importResultOutputPanel listImportsDataTable">
+											<f:param name="paramFileName" value="#{txtUploadFileName.value}"></f:param>
+									</p:commandButton>
+							</p:toolbarGroup>
+			</p:toolbar>
+
+		
+	<pe:keyFilter for="totalLignes" mask="int"/>  
+	<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="true" closable="true" />
+	<br />
+	
+	<p:outputPanel id="importResultOutputPanel">
+	<p:fieldset id="fsImportResult"  legend="Résultat d'Importation :" styleClass="mesrsFieldset"  rendered="#{bacBB.showImportResultOutput}">
+		<p:tabView id="tvImportResult" style="padding:0px">
+				<p:tab title="Synthèse Importation">
+					<p:panelGrid id="gridImportSelection" columns="2" style="width:850px" 	columnClasses="oneCol, twoCol">
+					
+					<h:outputLabel value="Type Importation : " />
+					<h:outputLabel value="#{bacBB.currentImportDto.libelleTypeImportation}" 	styleClass="labelValue" />
+					<h:outputLabel value="NB Lignes départ : " />
+					<h:outputLabel value="#{bacBB.currentImportDto.nbDepart}" 	styleClass="labelValue" />
+					<h:outputLabel value="NB Lignes importées : " />
+					<h:outputLabel value="#{bacBB.currentImportDto.nbImportes}" 	styleClass="labelValue" />
+					<h:outputLabel value="NB Lignes ignorées : " />
+					<h:outputLabel value="#{bacBB.currentImportDto.nbIgnores}" 	styleClass="labelValue" />
+					<h:outputLabel value="Situation Importation : " />
+					<h:outputLabel value="#{bacBB.currentImportDto.situation}" 	styleClass="labelValue" />
+					
+					</p:panelGrid>
+				</p:tab>
+				<p:tab title="Détail importation">
+							<p:dataTable id="lazyImportBachelorsFileDataTable" var="row"
+								value="#{bacBB.lazyBachelorFilesModel}"
+								rowKey="#{row.matricule}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="Aucune ligne trouvée."
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								rendered="#{bacBB.showDatatableBachelorsFiles}">
+								
+								<f:param name="paramImportId" value="#{txtImportAction.value}" />
+								<f:param name="paramImportTypeCode" value="#{txtImportType.value}" />
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+			    					<f:facet name="header">  
+            								Dossiers Bacheliers Importés
+       						 	</f:facet>  
+											<p:column	headerText="N°" style="width:30px; text-align:center;">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="MATRICULE" style="width:20px; text-align:center;">
+														<h:outputText value="#{row.matricule}" />
+											</p:column>
+				
+											<p:column   	headerText="NOM_AR" style="width:60px" styleClass="textOnRight">
+														<h:outputText value="#{row.nomAr}" />
+											</p:column>
+											
+											<p:column   	headerText="PRENOM_AR" style="width:60px" styleClass="textOnRight">
+														<h:outputText value="#{row.prenomAr}" />
+											</p:column>
+											
+											<p:column   	headerText="NOM_Fr" style="width:60px">
+														<h:outputText value="#{row.nomFr}" />
+											</p:column>
+											
+											<p:column   	headerText="PRENOM_FR" style="width:60px">
+														<h:outputText value="#{row.prenomFr}" />
+											</p:column>
+											
+											<p:column   	headerText="SEXE" style="width:40px">
+														<h:outputText value="#{row.refCodeSexe}" />
+											</p:column>
+											
+											<p:column   	headerText="SERIE BAC" style="width:30px">
+														<h:outputText value="#{row.refCodeSerieBac}" />
+											</p:column>
+											<p:column   	headerText="LIBELLE SERIE_BAC" style="width:40px">
+														<h:outputText value="#{row.libelleSerieBac}" />
+											</p:column>
+											
+											<p:column   	headerText="VILLE NAISSANCE" style="width:30px" styleClass="textOnRight">
+														<h:outputText value="#{row.libelleVilleNaissance}" />
+											</p:column>
+											
+											<p:column   	headerText="DATE NAISSANCE" style="width:30px">
+														<h:outputText value="#{row.dateNaissance}">
+														<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+														</h:outputText>
+											</p:column>
+									
+											<p:column   	headerText="MOYENNE BAC" style="width:20px">
+														<h:outputText value="#{row.moyenneBac}" />
+											</p:column>
+											
+											<p:column   	headerText="WILAYA BAC" style="width:20px">
+														<h:outputText value="#{row.refCodeWilayaBac}" />
+											</p:column>
+											
+											<p:column   	headerText="NOM PERE" style="width:30px">
+														<h:outputText value="#{row.prenomPere}" />
+											</p:column>
+											
+											<p:column   	headerText="NOM PRENOM_MERE" style="width:60px">
+														<h:outputText value="#{row.nomPrenomMere}" />
+											</p:column>
+											
+											<p:column   	headerText="TELEPHONE" style="width:30px">
+														<h:outputText value="#{row.telephone}" />
+											</p:column>
+											
+											<p:column   	headerText="WILAYA RESIDENCE" style="width:30px">
+														<h:outputText value="#{row.refCodeWilayaResidence}" />
+											</p:column>
+											
+<!-- 											<p:column   	headerText="ADRESSE RESIDENCE" style="width:30px"> -->
+<!-- 														<h:outputText value="#{row.adresseResidence}" /> -->
+<!-- 											</p:column> -->
+
+						</p:dataTable>
+							<p:dataTable id="lazyImportBachelorsAffectationDataTable" var="row"
+								value="#{bacBB.lazyBachelorAffectationsModel}"
+								rowKey="#{row.matriculeBachelier}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="Aucune ligne trouvée."
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								rendered="#{bacBB.showDatatableBachelorsAffectations}">
+								
+								<f:param name="paramImportId" value="#{txtImportAction.value}" />
+								<f:param name="paramImportTypeCode" value="#{txtImportType.value}" />
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+			    				<f:facet name="header">  
+            								Affectations Bacheliers Importées
+       						 	</f:facet>  
+											<p:column	headerText="N°" style="width:30px">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="MATRICULE" style="width:20px">
+														<h:outputText value="#{row.matriculeBachelier}" />
+											</p:column>
+				
+											<p:column   	headerText="ETAB" style="width:20px">
+														<h:outputText value="#{row.refCodeEtablissement}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliere}" />
+											</p:column>
+											
+											<p:column   	headerText="N° CHOIX" style="width:20px">
+														<h:outputText value="#{row.numeroChoix}" />
+											</p:column>
+											
+											<p:column   	headerText="NOTE" style="width:30px">
+														<h:outputText value="#{row.noteAffectation}" />
+											</p:column>
+											
+											<p:column   	headerText="ETAB RECOURS" style="width:30px">
+														<h:outputText value="#{row.refCodeEtablissementRecours}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE RECOURS" style="width:30px">
+														<h:outputText value="#{row.refCodeFiliereRecours}" />
+											</p:column>
+											
+											<p:column   	headerText="ETAB REORIENTATION" style="width:30px">
+														<h:outputText value="#{row.refCodeEtablissementOrientation}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE REORIENTATION" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliereOrientation}" />
+											</p:column>
+											
+											<p:column   	headerText="TYPE AFFECTATION" style="width:30px">
+														<h:outputText value="#{row.refCodeTypeAffectation}" />
+											</p:column>
+											<p:column   	headerText="ETAB AFFECT DEFINITIVE" style="width:40px">
+														<h:outputText value="#{row.refCodeEtablissementAffectation}" />
+											</p:column>
+												<p:column   	headerText="FILIERE AFFECT DEFINITIVE" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliereAffectation}" />
+											</p:column>
+
+						</p:dataTable>
+						<br />
+						<p:dataTable id="lazyAbortBachelorsAffectationDataTable" var="row"
+								value="#{bacBB.bachelorAffectationsWithErrors}"
+								rowKey="#{row.matriculeBachelier}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="Aucune ligne trouvée."
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								rendered="#{bacBB.showDatatableBachelorsAffectations}">
+								
+								<f:param name="paramImportId" value="#{txtImportAction.value}" />
+								<f:param name="paramImportTypeCode" value="#{txtImportType.value}" />
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetImport').block()" oncomplete="PF('blockUIWidgetImport').unblock()"/>
+			    				<f:facet name="header">  
+            								Affectations Bacheliers Non Importées
+       						 	</f:facet>  
+											<p:column	headerText="N°" style="width:30px">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="MATRICULE" style="width:20px">
+														<h:outputText value="#{row.matriculeBachelier}" />
+											</p:column>
+				
+											<p:column   	headerText="ETAB" style="width:20px">
+														<h:outputText value="#{row.refCodeEtablissement}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliere}" />
+											</p:column>
+											
+											<p:column   	headerText="N° CHOIX" style="width:20px">
+														<h:outputText value="#{row.numeroChoix}" />
+											</p:column>
+											
+											<p:column   	headerText="NOTE" style="width:30px">
+														<h:outputText value="#{row.noteAffectation}" />
+											</p:column>
+											
+											<p:column   	headerText="ETAB RECOURS" style="width:30px">
+														<h:outputText value="#{row.refCodeEtablissementRecours}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE RECOURS" style="width:30px">
+														<h:outputText value="#{row.refCodeFiliereRecours}" />
+											</p:column>
+											
+											<p:column   	headerText="ETAB REORIENTATION" style="width:30px">
+														<h:outputText value="#{row.refCodeEtablissementOrientation}" />
+											</p:column>
+											
+											<p:column   	headerText="FILIERE REORIENTATION" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliereOrientation}" />
+											</p:column>
+											
+											<p:column   	headerText="TYPE AFFECTATION" style="width:30px">
+														<h:outputText value="#{row.refCodeTypeAffectation}" />
+											</p:column>
+											<p:column   	headerText="ETAB AFFECT DEFINITIVE" style="width:40px">
+														<h:outputText value="#{row.refCodeEtablissementAffectation}" />
+											</p:column>
+												<p:column   	headerText="FILIERE AFFECT DEFINITIVE" style="width:40px">
+														<h:outputText value="#{row.refCodeFiliereAffectation}" />
+											</p:column>
+						</p:dataTable>
+				</p:tab>
+	
+		</p:tabView>
+	</p:fieldset>
+	 </p:outputPanel>
+			<p:dataTable id="listImportsDataTable" var="row"
+								value="#{bacBB.listImports}"
+								rowKey="#{row.id}"
+								emptyMessage="Aucune importation trouvée."
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								>
+								
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+			    				<f:facet name="header">  
+            								Historique des importations
+       						 	</f:facet>  
+											<p:column	headerText="N°"  style=" text-align:center;">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="Importation">
+														<h:outputText value="#{row.libelleTypeImportation}" />
+											</p:column>
+											<p:column	headerText="Année académique" style=" text-align:center;">
+														<h:outputText value="#{row.anneeBac}" />
+											</p:column>
+													<p:column	headerText="Situation" style=" text-align:center;">
+														<h:outputText value="#{row.situation}" />
+											</p:column>
+											<p:column	headerText="Date début" style=" text-align:center;">
+														<h:outputText value="#{row.dateDebutImportation}">
+																						<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+														</h:outputText>
+											</p:column>
+											<p:column	headerText="Date fin" style=" text-align:center;">
+														<h:outputText value="#{row.dateFinImportation}" >
+																					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+														</h:outputText>
+											</p:column>
+											<p:column	headerText="Total départ" style=" text-align:right;">
+														<h:outputText value="#{row.nbDepart}" />
+											</p:column>
+											<p:column	headerText="Total importés" style=" text-align:right;">
+														<h:outputText value="#{row.nbImportes}" />
+											</p:column>
+											<p:column	headerText="Total ignorés" style=" text-align:right;">
+														<h:outputText value="#{row.nbIgnores}" />
+											</p:column>
+		</p:dataTable>
+	 <h:inputHidden  id="txtImportActionId" binding="#{txtImportAction}" value="#{bacBB.paramImportId}"  style="font-size:12px"/>
+	 <h:inputHidden  id="txtImportTypeCode" binding="#{txtImportType}" value="#{bacBB.paramImportTypeCode}"  style="font-size:12px"/>
+	 <h:inputHidden  id="txtUploadFileName" binding="#{txtFileName}" value="#{bacBB.paramFileName}"  style="font-size:12px"/>
+	</h:form>
+	
+	</p:panel>
+		
+	<pe:blockUI  id="blockUIImport" target="@([id$=gridImportSelection])" content="blockUIContentImport" widgetVar="blockUIWidgetImport"/>  
+ 	<h:panelGrid id="blockUIContentImport" columns="2" style="display:none;" styleClass="blockUITable">  
+    				<h:graphicImage library="images" name="ajax-loader1.gif"  style="margin-right: 12px; vertical-align: middle;"/>  
+    				<h:outputText value="Importation en cours ..." style="white-space: nowrap;"/>  
+	</h:panelGrid>
+	<pe:blockUI target="@([id$=lazyImportBachelorsFileDataTable]) @([id$=lazyImportBachelorsAffectationDataTable]) @([id$=lazyAbortBachelorsAffectationDataTable])" widgetVar="blockUIWidgetImportPaging">
+        				<h:graphicImage library="images" name="ajax-loader1.gif" width="20px" height="20px"/>  
+    </pe:blockUI>
+    <style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+            </style>
+</ui:define>
+</ui:composition>
+</html>

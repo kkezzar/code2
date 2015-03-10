@@ -1,0 +1,25 @@
+
+
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+		
+			<p:outputPanel styleClass="photoContentStyle">
+				<p:panelGrid id="infosPhotoDetail" columns="1">
+							<p:graphicImage id="nomphotoViewDetail" value="#{empty photoBean.dossierEtudiantDto.photo?'/resources/images/boy.png':photoBean.photo}" 
+								ajax="true" height="#{photoBean.height_photo}"
+								width="#{photoBean.width_photo}"
+								alt="#{documentmsgs.document_photo_vide}">
+
+								<f:param name="url" value="#{photoBean.url}" />
+								<f:param name="dossierEtudiantId" value="#{photoBean.dossierEtudiantId}" />
+							</p:graphicImage>
+                            
+				</p:panelGrid>
+			</p:outputPanel>
+
+</ui:composition>
+

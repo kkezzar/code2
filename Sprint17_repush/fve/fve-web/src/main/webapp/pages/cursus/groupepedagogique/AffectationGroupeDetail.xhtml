@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{groupeAffectationBean.showGroupeInfo(true)}" />
+	</f:view>
+	<p:outputPanel id="affectationPanel" styleClass="affectationPanel"
+		rendered="#{groupeAffectationBean.groupeInfoList!=null and !groupeAffectationBean.onlyAffectation}">
+		<p:dataTable id="affDataTable" var="row"
+			value="#{groupeAffectationBean.groupeInfoList}">
+			<f:facet name="header">
+				<h:outputText
+					value="#{groupePedagogiqueMsgs.groupepedagogique_groupe_affectation_etudiant_title}" />
+			</f:facet>
+			<p:column style="width:16px">
+				<p:rowToggler />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText style="color:green;font-weight: bold;text-align:left"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_list_column_nom_affichage}" />
+				</f:facet>
+				<h:outputText value="#{row.groupePedagogiqueDto.nomAffichage}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText style="color:green;font-weight: bold;text-align:left"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_list_column_libelle_ap}" />
+				</f:facet>
+
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText style="color:green;font-weight: bold;text-align:left"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_list_column_capacite_min}" />
+				</f:facet>
+				<h:outputText value="#{row.groupePedagogiqueDto.capaciteMin}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText style="color:green;font-weight: bold;text-align:left"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_list_column_capacite_max}" />
+				</f:facet>
+				<h:outputText value="#{row.groupePedagogiqueDto.capaciteMax}" />
+			</p:column>
+			<p:rowExpansion>
+
+
+				<p:dataTable var="_etudiant" value="#{row.etudiants}">
+					<p:column width="10%">
+						<f:facet name="header">
+							<h:outputText style="text-align:left;width:100%"
+								value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_photo}" />
+						</f:facet>
+
+						<p:graphicImage value="#{photoEtudiantBB.photo}"
+							rendered="#{_etudiant.photoName!=null}"
+							alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+							<f:param name="url" value="#{_etudiant.photoName}" />
+						</p:graphicImage>
+						<p:graphicImage value="/resources/images/boy.png"
+							rendered="#{_etudiant.photoName==null}"
+							alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+						</p:graphicImage>
+					</p:column>
+
+					<p:column width="20%" sortBy="#{_etudiant.numeroInscription}">
+						<f:facet name="header">
+							<h:outputText style="text-align:left;width:100%"
+								value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_numero_inscription}" />
+						</f:facet>
+						<h:outputText value=" #{_etudiant.numeroInscription}" />
+					</p:column>
+
+					<p:column width="25%" sortBy="#{_etudiant.nom}">
+						<f:facet name="header">
+							<h:outputText style="text-align:left;width:100%"
+								value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_nom}" />
+						</f:facet>
+						<h:outputText value="  #{_etudiant.nom}" />
+					</p:column>
+					<p:column width="25%" sortBy="#{_etudiant.prenom}">
+						<f:facet name="header">
+							<h:outputText style="text-align:left;width:100%"
+								value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_prenom}" />
+						</f:facet>
+						<h:outputText value="  #{_etudiant.prenom}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{_etudiant.dateNaissance}">
+						<f:facet name="header">
+							<h:outputText style="text-align:left;width:100%"
+								value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_date_naissance}" />
+
+						</f:facet>
+						<h:outputText value="  #{_etudiant.dateNaissance}"
+							style="text-align:center">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:rowExpansion>
+		</p:dataTable>
+
+
+
+	</p:outputPanel>
+
+
+
+	<p:outputPanel id="onlyAffPanel" styleClass="affectationPanel"
+		rendered="#{groupeAffectationBean.etudiantsList!=null and groupeAffectationBean.onlyAffectation}">
+		<p:dataTable id="OnlyEtDataTable" var="_etudiant"
+			value="#{groupeAffectationBean.etudiantsList}">
+			<p:column width="10%">
+				<f:facet name="header">
+					<h:outputText style="font-weight: bold;text-align:left;width:100%"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_photo}" />
+				</f:facet>
+				<p:graphicImage value="#{photoEtudiantBB.photo}"
+					rendered="#{_etudiant.photoName!=null}"
+					alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+					<f:param name="url" value="#{_etudiant.photoName}" />
+				</p:graphicImage>
+				<p:graphicImage value="/resources/images/boy.png"
+					rendered="#{_etudiant.photoName==null}"
+					alt="#{documentmsgs.document_photo_vide}" width="40" height="40">
+				</p:graphicImage>
+			</p:column>
+
+			<p:column width="20%" sortBy="#{_etudiant.numeroInscription}">
+				<f:facet name="header">
+					<h:outputText style="font-weight: bold;text-align:left;width:100%"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_numero_inscription}" />
+				</f:facet>
+				<h:outputText value=" #{_etudiant.numeroInscription}" />
+			</p:column>
+
+			<p:column width="25%" sortBy="#{_etudiant.nom}">
+				<f:facet name="header">
+					<h:outputText style="font-weight: bold;text-align:left;width:100%"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_nom}" />
+				</f:facet>
+				<h:outputText value="  #{_etudiant.nom}" />
+			</p:column>
+			<p:column width="25%" sortBy="#{_etudiant.prenom}">
+				<f:facet name="header">
+					<h:outputText style="font-weight: bold;text-align:left;width:100%"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_prenom}" />
+				</f:facet>
+				<h:outputText value="  #{_etudiant.prenom}" />
+			</p:column>
+			<p:column width="10%" sortBy="#{_etudiant.dateNaissance}">
+				<f:facet name="header">
+					<h:outputText style="font-weight: bold;text-align:left;width:100%"
+						value="#{groupePedagogiqueMsgs.groupepedagogique_data_table_column_etudiant_date_naissance}" />
+
+				</f:facet>
+				<h:outputText value="  #{_etudiant.dateNaissance}"
+					style="text-align:center">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+	</p:outputPanel>
+
+</ui:composition>
+
+
+

@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{formationMgs.pnl_enregistrer_session_formation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<ui:include src="/pages/formation/SessionFormationSearch.xhtml">
+				<ui:param name="nameMBean" value="#{sessionFormationEditMBean}"></ui:param>
+				<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+				<ui:param name="renderedNew" value="true"></ui:param>
+			</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty sessionFormationEditMBean.sessionFormationDto}">
+               <p:tabView id="tabview">
+                <p:tab title="#{formationMgs.session_formation_title}">  
+					<h:form id="form_session_formation_edit">
+						<p:panelGrid cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.cycle_formation}"
+										styleClass="required" />
+								</p:column>
+								<p:column >
+								
+								<p:selectOneMenu required="true" filter="true" filterFunction="contains" styleClass="input-xlarge-px"
+										requiredMessage="#{formationMgs.cycle_formation_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.cycleFormationDto.id}"
+										label="#{formationMgs.cycle_formation}">
+										<f:selectItem itemLabel="#{formationMgs.cycle_formation_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{sessionFormationEditMBean.listeCycles}" />
+										<p:ajax
+											listener="#{sessionFormationEditMBean.onCycleChange}"
+											event="valueChange" process="@this"
+											 />
+									</p:selectOneMenu>	
+									<p:spacer></p:spacer>
+									<p:commandButton title="voir dأ©tail" icon="ui-icon-info" style="margin-top:0px" 
+										ajax="true"
+										immediate="true" 
+										onclick="PF('cycleFormationDetailDialog').show()"
+										></p:commandButton>
+										
+								</p:column>
+								
+							
+								<p:column >
+									<h:outputLabel value="#{formationMgs.formation}"
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:selectOneMenu required="true" filter="true" filterFunction="contains" styleClass="input-xlarge-px"
+										requiredMessage="#{formationMgs.formation_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.formationCatalogueDto.id}"
+										label="#{formationMgs.formation}">
+										<f:selectItem itemLabel="#{formationMgs.formation_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{sessionFormationEditMBean.listFormationsCatalogue}" />
+										
+									</p:selectOneMenu>	
+								</p:column>
+								
+								</p:row>
+							
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_debut} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:calendar id="datedebut" navigator="true" required="true"
+										requiredMessage="#{formationMgs.date_debut_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.dateDebut}">
+									</p:calendar>
+								</p:column>
+
+
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_fin} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:calendar id="dateFin" navigator="true" required="true"
+										requiredMessage="#{formationMgs.date_fin_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.dateFin}">
+									</p:calendar>
+								</p:column>
+							</p:row>
+                             <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.organisme_formation}"
+										styleClass="required" />
+								</p:column>
+								<p:column >
+								<p:selectOneMenu required="true" filter="true" filterFunction="contains" styleClass="input-xlarge-px"
+										requiredMessage="#{formationMgs.organisme_formation_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.refStructureDto.id}"
+										label="#{formationMgs.organisme_formation}">
+										<f:selectItem itemLabel="#{formationMgs.organisme_formation_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{sessionFormationEditMBean.listeOrganismes}" />
+										
+									</p:selectOneMenu>	
+								</p:column>
+								
+								</p:row>
+								</p:panelGrid>
+						<br></br>
+						<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{formationMgs.formateur}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="formateur" value="#{sessionFormationEditMBean.listeFormateur}" id="formateursTable" 
+						widgetVar="formateursTable" rowKey="#{formateur.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.formateur_datable_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddFormateur" styleClass="ui-button-bleu" title="ajouter formateur" icon="ui-icon-plusthick"  
+										ajax="true"
+										immediate="true" 
+										oncomplete="PF('individuDialog').show()"
+										>
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" styleClass="value" />
+						</p:column>
+
+						<p:column
+							headerText="#{formationMgs.formateur}">
+							<h:outputText value="#{formateur.refIndividuDto.nomLatin} #{formateur.refIndividuDto.prenomLatin}" styleClass="value" />
+						</p:column>
+						
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveFormateur"  
+									action="#{sessionFormationEditMBean.onRemoveFormateur()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="formateursTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{sessionFormationEditMBean.selectedFormateurIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+
+<br></br>
+		<p:panelGrid id="pnlLieu" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+							     <p:row>
+									<p:column colspan="4" styleClass="title"> 
+										<h:outputText value="Lieu de Formation"   />
+									</p:column>
+								</p:row>
+								 <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.type_lieu}" 
+										styleClass="required" />
+								</p:column>
+								<p:column >
+								<p:selectOneRadio value="#{sessionFormationEditMBean.sessionFormationDto.externe}" required="true" requiredMessage="#{formationMgs.type_lieu}" styleClass="value" >
+											<f:selectItem itemLabel="#{formationMgs.interne}"
+											itemValue="false" />
+											<f:selectItem itemLabel="#{formationMgs.externe}"
+											itemValue="true" />
+											<p:ajax
+											listener="#{sessionFormationEditMBean.onTypeLieuChange}"
+											event="valueChange" process="@this" update="pnlLieu"
+											 />
+										</p:selectOneRadio>
+								
+								</p:column>
+								</p:row>
+								 <p:row>
+								<p:column id="columnLabelLieu">
+									<h:outputLabel value="#{formationMgs.lieu_interne}"
+										styleClass="required" rendered="#{sessionFormationEditMBean.sessionFormationDto.externe!=true}" />
+										<h:outputLabel value="#{formationMgs.lieu_externe}"
+										styleClass="required"  rendered="#{sessionFormationEditMBean.sessionFormationDto.externe==true}"/>
+								</p:column>
+								<p:column id="columnValueLieu">
+								<p:selectOneMenu required="true" filter="true" filterFunction="contains"  styleClass="input-xlarge-px"
+										requiredMessage="#{formationMgs.lieu_interne_required}"
+										value="#{sessionFormationEditMBean.sessionFormationDto.refLieuDto.id}"
+										label="#{formationMgs.organisme_formation}" rendered="#{sessionFormationEditMBean.sessionFormationDto.externe!=true}">
+											<f:selectItem itemLabel="#{formationMgs.lieu_interne_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{sessionFormationEditMBean.listeLieux}" />
+										
+									</p:selectOneMenu>	
+									<p:inputText
+										value="#{sessionFormationEditMBean.sessionFormationDto.lieuExterne}"
+										required="true"
+										requiredMessage="#{formationMgs.lieu_externe_required}"
+										styleClass="input-xlarge-px" rendered="#{sessionFormationEditMBean.sessionFormationDto.externe==true}"></p:inputText>
+									
+								</p:column>
+								</p:row>
+						</p:panelGrid>
+						<br></br>
+	
+  
+
+						<p:toolbar id="SessionFormationToolBar" styleClass="toolBarMesrs">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+									styleClass="ui-button-save" id="savesBtn" icon="ui-icon-disk"
+									update=":pnl_Gerer"
+									actionListener="#{sessionFormationEditMBean.onSave}">
+                                           <p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{formationMgs.save_confirm_msg}"
+												icon="ui-icon-alert" />
+
+								</p:commandButton>
+<p:spacer width="5px"></p:spacer>
+<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+											id="removeBtn" 
+											disabled="#{sessionFormationEditMBean.sessionFormationDto.id==null}"
+											styleClass="ui-button-delete-o"
+											onstart="PF('blockUISessionFormation').block()"
+											oncomplete="PF('blockUISessionFormation').unblock()"
+											actionListener="#{sessionFormationEditMBean.onDelete}" update=":pnl_Gerer">
+											<p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{formationMgs.delete_confirm_msg}"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+
+
+
+
+							</p:toolbarGroup>
+
+
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									immediate="true" process="@this" id="backBtn"
+									icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+									actionListener="#{sessionFormationEditMBean.initDetail}">
+
+
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:form>
+					
+                         
+
+		
+
+		
+		</p:tab>
+		<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents" disabled="#{sessionFormationEditMBean.sessionFormationDto.id==null and sessionFormationEditMBean.sessionFormationDto.inscriptionSessionFormationDtos!=null}"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="SessionFormation" scope="request" />
+							<c:set var="identifiant"
+								value="#{sessionFormationEditMBean.sessionFormationDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="SessionFormation" />
+							<ui:param name="identifiant"
+								value="#{sessionFormationEditMBean.sessionFormationDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+					</p:tabView>
+					<ui:include
+				src="/pages/commons/IndividuComponent.xhtml" >
+				<ui:param name="dialogHeader"  value="Ajouter formateur"></ui:param>
+				<ui:param name="dialogWidgetVar"  value="individuDialog"></ui:param>
+				<ui:param name="nameOfManagedBean"  value="#{sessionFormationEditMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":tabview:form_session_formation_edit:formateursTable"></ui:param>
+				</ui:include>
+		
+				<p:dialog position="center" appendTo="@(body)" header="Cycle de Formation" width="850px"
+									id="cycleFormationDetailDialog" widgetVar="cycleFormationDetailDialog"
+									modal="true" resizable="false"
+									style="font-size:#{sessionBean.fontSize}px">
+									<ui:include
+										src="/pages/formation/CycleFormationDetail.xhtml">
+										<ui:param name="cycleFormationDtoParam"
+											value="#{sessionFormationEditMBean.cycleFormationDto}"></ui:param>
+									</ui:include>
+								</p:dialog>
+				</p:outputPanel>
+			</p:outputPanel>
+
+		</p:outputPanel>
+		
+
+
+<pe:blockUI widgetVar="blockUISessionFormation" target="pnl_Gerer">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+
+	</ui:define>
+</ui:composition>
+</html>

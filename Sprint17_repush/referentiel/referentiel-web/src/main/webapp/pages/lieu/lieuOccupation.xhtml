@@ -1,0 +1,594 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{occupationLieuMgrBean.occupationCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+
+	<p:fieldset>
+		<ui:include src="/pages/lieu/lieuHeader.xhtml" />
+	</p:fieldset>
+	<p:fieldset legend="Lieu occupations">
+		<br></br>
+		<h:form id="OccupationsFromId" prependId="false">
+
+			<br></br>
+			<p:dataTable id="occupationStructureData" paginator="true"
+				paginatorPosition="bottom" styleClass="occupStrStyle"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{occupationLieuMgrBean.listRefStructureDto}" var="current">
+
+
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@(.occupStrStyle)"
+					process="@(.occupStrStyle)" />
+				<f:facet name="header">
+					<h:outputText value="#{lieumsgs.lieu_occupation_structure }      " />
+					<p:commandButton id="addStructureButton" ajax="true"
+						icon="ui-icon-plusthick" onclick="PF('dlgStructureList').show()"
+						rendered="#{lieuOccupationCrudBean.editAllow}">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llStructureLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_structure_titre}" />
+					</f:facet>
+					<h:outputText value="#{current.llStructureLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.llTypeOccupationFr}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_Type_Occupation}" />
+					</f:facet>
+					<h:outputText value="#{current.llTypeOccupationFr}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{lieuOccupationCrudBean.deleteAllow}" width="100">
+					<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+						actionListener="#{occupationLieuMgrBean.deleteStructure(current)}"
+						process="@(.occupStrStyle)" update="@(.occupStrStyle)">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:commandButton id="updateStrButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupStrStyle)"
+						update="@(.occupStrStyle)"
+						rendered="#{lieuOccupationCrudBean.editAllow}"
+						action="infoOccupationLieuEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname" value="Occupation lieu par structure" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{occupationLieuMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+
+			<br></br>
+			<p:dataTable id="occupationLieuGroupeData"
+				value="#{occupationLieuMgrBean.listRefGroupeDto}" var="current"
+				paginator="true" paginatorPosition="bottom"
+				styleClass="occupLieuStyle"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@(.occupLieuStyle)"
+					process="@(.occupLieuStyle)" />
+				<f:facet name="header">
+					<h:outputText value="#{lieumsgs.lieu_occupationLieu_groupe}      " />
+					<p:commandButton id="addGroupeButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{lieuOccupationCrudBean.createAllow}"
+						onclick="PF('dlgGroupeList').show()">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llGroupe}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_groupe}" />
+					</f:facet>
+					<h:outputText value="#{current.llGroupe}" />
+				</p:column>
+				<p:column sortBy="#{current.llTypeOccupationFr}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_Type_Occupation}" />
+					</f:facet>
+					<h:outputText value="#{current.llTypeOccupationFr}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+
+				<p:column style="width:8%"
+					rendered="#{lieuOccupationCrudBean.deleteAllow}" width="200">
+					<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{occupationLieuMgrBean.deleteGroupe(current)}"
+						process="@(.occupLieuStyle)" update="@(.occupLieuStyle)">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="updateGrpOccButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupLieuStyle)"
+						update="@(.occupLieuStyle)"
+						rendered="#{lieuOccupationCrudBean.editAllow}"
+						action="infoOccupationLieuGroupeEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname" value="Occupation lieu par groupe" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{occupationLieuMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+
+
+			<br></br>
+
+			<p:dataTable id="occupationLieuIndividuData"
+				value="#{occupationLieuMgrBean.listRefIndividuDto}" var="current"
+				paginator="true" paginatorPosition="bottom"
+				styleClass="occupIdvStyle"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@(.occupIdvStyle)"
+					process="@(.occupIdvStyle)" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{lieumsgs.lieu_occupationLieu_individu}      " />
+					<p:commandButton id="addIndividuButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{lieuOccupationCrudBean.createAllow}"
+						onclick="PF('dlgIndividuList').show()">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+
+					</p:commandButton>
+
+				</f:facet>
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_individu_name} " />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin} #{current.prenomLatin}" />
+				</p:column>
+
+				<p:column sortBy="#{current.llTypeOccupationFr}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_Type_Occupation}" />
+					</f:facet>
+					<h:outputText value="#{current.llTypeOccupationFr}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}" width="50">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+
+
+				<p:column style="width:8%"
+					rendered="#{lieuOccupationCrudBean.deleteAllow}" width="200">
+					<p:commandButton id="removeIndividuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{occupationLieuMgrBean.deleteIndividu(current)}"
+						process="@(.occupIdvStyle)" update="@(.occupIdvStyle)">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="updateIndvButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupIdvStyle)"
+						update="@(.occupIdvStyle)"
+						rendered="#{lieuOccupationCrudBean.editAllow}"
+						action="infoOccupationLieuIndividuEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname" value="Occupation lieu par individu" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{occupationLieuMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+
+
+
+
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+
+
+<!-- 		<p:dialog header="#{structuremsgs.structure_list_ajout}" -->
+<!-- 			widgetVar="dlgStructureList" resizable="false" width="300" -->
+<!-- 			appendTo="@(body)" modal="true" draggable="true"> -->
+<!-- 			<h:form id="listStructureOccupationForm" prependId="false"> -->
+<!-- 				<p:panelGrid id="descriptionStr" styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText -->
+<!-- 								value="#{lieumsgs.lieu_occupationLieu_selection_strucuture}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:selectOneMenu id="occupationLieuStructureData" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idStructure}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_occupationLieu_structure}" -->
+<!-- 								required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_structure_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_occupationLieu_selection_strucuture}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listRefStructureDto}" /> -->
+
+<!-- 							</p:selectOneMenu> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_Type_Occupation}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:selectOneMenu id="typeOccupationSelect" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idTypeOccupation}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_Type_Occupation}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_TypeOccupation_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_selection_Type_Occupation}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listTypeOccupation}" /> -->
+<!-- 							</p:selectOneMenu> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_debut}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateDebut}" -->
+<!-- 								id="datedebutstructure" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_debut}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_occupation_date_debut_recired}"> -->
+<!-- 								<f:ajax render="datedebutstructure" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateFin}" -->
+<!-- 								id="datefinstructure" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_fin}"> -->
+<!-- 								<f:ajax render="datefinstructure" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 				<br></br> -->
+<!-- 				<p:panelGrid styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+
+<!-- 						<p:column> -->
+
+<!-- 							<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 								icon="ui-icon-check" process="@form" -->
+<!-- 								actionListener="#{occupationLieuMgrBean.addStructure()}" -->
+<!-- 								update="@(.occupStrStyle)" oncomplete="dlgStructureList.hide()"> -->
+<!-- 								<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+<!-- 							</p:commandButton> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 								immediate="true" icon="ui-icon-close" -->
+<!-- 								oncomplete="dlgStructureList.hide()" /> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 			</h:form> -->
+<!-- 		</p:dialog> -->
+
+
+<!-- 		<p:dialog header="#{groupemsgs.groupe_list_ajout}" -->
+<!-- 			widgetVar="dlgGroupeList" resizable="false" width="300" -->
+<!-- 			appendTo="@(body)" modal="true" draggable="true"> -->
+<!-- 			<h:form id="listGroupeOccupationForm" prependId="false"> -->
+<!-- 				<p:panelGrid id="descriptionGrp" styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText -->
+<!-- 								value="#{lieumsgs.lieu_occupationLieu_selection_groupe}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:selectOneMenu id="selectGroupeData" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idGroupe}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_occupationLieu_groupe}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_groupe_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_occupationLieu_selection_groupe}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+
+<!-- 							</p:selectOneMenu> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_Type_Occupation}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:selectOneMenu id="occupationLieuTypeOccupationData" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idTypeOccupation}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_Type_Occupation}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_TypeOccupation_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_selection_Type_Occupation}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listTypeOccupation}" /> -->
+
+<!-- 							</p:selectOneMenu> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_debut} *" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateDebut}" -->
+<!-- 								id="datedebutgroupe" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_debut}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_occupation_date_debut_recired}"> -->
+<!-- 								<f:ajax render="datedebutgroupe" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateFin}" -->
+<!-- 								id="datefingroupe" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_fin}"> -->
+<!-- 								<f:ajax render="datefingroupe" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 				<br></br> -->
+<!-- 				<p:panelGrid styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+
+<!-- 						<p:column> -->
+
+<!-- 							<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 								icon="ui-icon-check" process="@form" -->
+<!-- 								actionListener="#{occupationLieuMgrBean.addGroupe()}" -->
+<!-- 								update="@(.occupLieuStyle)" oncomplete="dlgGroupeList.hide()"> -->
+<!-- 								<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+<!-- 							</p:commandButton> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 								immediate="true" icon="ui-icon-close" -->
+<!-- 								oncomplete="dlgGroupeList.hide()" /> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 			</h:form> -->
+<!-- 		</p:dialog> -->
+
+
+<!-- 		<p:dialog header="#{lieumsgs.lieu_occupationLieu_individu}" -->
+<!-- 			widgetVar="dlgIndividuList" resizable="false" width="300" -->
+<!-- 			appendTo="@(body)" modal="true" draggable="true"> -->
+<!-- 			<h:form id="listIndividuOccupationForm" prependId="false"> -->
+<!-- 				<p:panelGrid id="descriptionIndividu" styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText -->
+<!-- 								value="#{lieumsgs.lieu_occupationLieu_selection_Individu}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+
+<!-- 							<p:selectOneMenu id="occupationLieuIndividuSelect" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idIndividu}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_occupationLieu_individu}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_individu_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_occupationLieu_selection_Individu}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+<!-- 							</p:selectOneMenu> -->
+
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_Type_Occupation}*" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:selectOneMenu id="occupationLieuTypeOccupationData3" -->
+<!-- 								style="text-align: left;width:160px" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.idTypeOccupation}" -->
+<!-- 								filter="true" filterMatchMode="startsWith" -->
+<!-- 								label="#{lieumsgs.lieu_Type_Occupation}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_TypeOccupation_required}"> -->
+<!-- 								<f:selectItem -->
+<!-- 									itemLabel="#{lieumsgs.lieu_selection_Type_Occupation}" -->
+<!-- 									itemValue="" /> -->
+<!-- 								<f:selectItems value="#{comboBckBean.listTypeOccupation}" /> -->
+
+<!-- 							</p:selectOneMenu> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_debut} *" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateDebut}" -->
+<!-- 								id="datedebutindividu" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_debut}" required="true" -->
+<!-- 								requiredMessage="#{lieumsgs.lieu_occupation_date_debut_recired}"> -->
+<!-- 								<f:ajax render="datedebutindividu" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+
+<!-- 					<p:row> -->
+<!-- 						<p:column> -->
+<!-- 							<h:outputText value="#{lieumsgs.lieu_occupation_date_fin}" /> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:calendar navigator="true" -->
+<!-- 								value="#{occupationLieuMgrBean.refOccupationLieuDto.dateFin}" -->
+<!-- 								id="datefinindividu" showButtonPanel="true" -->
+<!-- 								label="#{lieumsgs.lieu_occupation_date_fin}"> -->
+<!-- 								<f:ajax render="datefinindividu" event="change" /> -->
+<!-- 							</p:calendar> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 				<br></br> -->
+<!-- 				<p:panelGrid styleClass="noBorder1"> -->
+<!-- 					<p:row> -->
+
+<!-- 						<p:column> -->
+
+<!-- 							<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 								icon="ui-icon-check" process="@form" -->
+<!-- 								actionListener="#{occupationLieuMgrBean.addIndividu()}" -->
+<!-- 								update="@(.occupIdvStyle)" oncomplete="dlgIndividuList.hide()"> -->
+<!-- 								<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+<!-- 							</p:commandButton> -->
+<!-- 						</p:column> -->
+<!-- 						<p:column> -->
+<!-- 							<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 								immediate="true" icon="ui-icon-close" -->
+<!-- 								oncomplete="dlgIndividuList.hide()" /> -->
+<!-- 						</p:column> -->
+<!-- 					</p:row> -->
+<!-- 				</p:panelGrid> -->
+<!-- 			</h:form> -->
+<!-- 		</p:dialog> -->
+
+	</p:fieldset>
+	<h:form>
+		<p:commandButton value="#{commonmsgs.button_return}"
+			icon="ui-icon-disk" process="@this" action="#{lieuBckBean.back}">
+			<p:confirm header="Confirmation" message="#{commonmsgs.msg_sortir}"
+				icon="ui-icon-alert" />
+			<f:param name="searchValue" value="#{lieuBckBean.searchValue}" />
+		</p:commandButton>
+	</h:form>
+</ui:composition>

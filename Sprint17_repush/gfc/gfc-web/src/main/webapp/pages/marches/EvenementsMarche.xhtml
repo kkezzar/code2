@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{marchesMsgs.page_title_consulter_evenements_marche}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<!-- 					<p:toolbarGroup align="right">
+						<p:commandButton value="Nouvel évenement"
+							action="#{evenementsMarcheBean.addAction()}" update=":form_crud"
+							process="@this"></p:commandButton>
+					</p:toolbarGroup> -->
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{evenementsMarcheBean.model}" rowIndexVar="rowIndex"
+					paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}"
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{evenementsMarcheBean.onRowSelectDetailEvenementMarche}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.intitule_fr}">
+						<h:outputText value="#{current.dateEvenement}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.type.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Marché">
+						<h:outputText
+							value="#{current.marche.intituleFr} /  Réf Contrat. #{current.marche.contrat.identifiant}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Description">
+						<h:outputText value="#{current.description}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+				<p:panelGrid rendered="#{evenementsMarcheBean.view}" styleClass="ui-panelgrid-full-width">
+									<f:facet name="header">
+						<p:row>
+							<p:column>
+
+			Détail de l'évenement
+
+							</p:column>
+						</p:row>
+					</f:facet>
+				<p:row>
+				<p:column>
+		
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Date" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.dateEvenement}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<p:outputLabel value="Type d'évenement" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.type.libelleLongFr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Marché" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.marche.intituleFr} / Réf.Contrat #{evenementsMarcheBean.evenementMarcheDto.marche.contact.identifiant}">
+										</h:outputText>
+
+									</p:column>
+									<p:column>
+										<h:outputText value="Description" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.description}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Impact" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.impact}">
+										</h:outputText>
+
+									</p:column>
+									<p:column>
+										<h:outputText value="Mesures prises" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.mesurePrise}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.evenementMarcheDto.observation}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+					</p:column>
+					</p:row>
+					<!-- Actions -->
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="4">
+
+								<p:commandButton value="#{commonmsgs.bouton_retour}"
+									styleClass="pull-right" id="cancelBtn" update=":form_view"
+									immediate="true" process="@this"
+									actionListener="#{evenementsMarcheBean.cancelAction()}">
+								</p:commandButton>
+
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

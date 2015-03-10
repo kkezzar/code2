@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panelGrid cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.cycle_formation}"
+										 />
+								</p:column>
+								<p:column colspan="3">
+								<p:commandLink onclick="PF('cycleFormationDetailDialog').show()" immediate="true">
+					   <h:outputText
+						value="#{sessionFormationDtoParam.cycleFormationDto.intitule}"
+						styleClass="value" />
+				</p:commandLink>
+									
+										
+								</p:column>
+								</p:row>
+							
+							<p:row>
+							
+								<p:column >
+									<h:outputLabel value="#{formationMgs.formation}"
+										 />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{sessionFormationDtoParam.formationCatalogueDto.intitule}" styleClass="value"/>
+								</p:column>
+								
+								</p:row>
+							
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_debut} "
+										 />
+								</p:column>
+								<p:column >
+								<h:outputText value="#{sessionFormationDtoParam.dateDebut}" styleClass="value">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</h:outputText>	
+								</p:column>
+
+
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_fin} "
+										 />
+								</p:column>
+								<p:column >
+									<h:outputText value="#{sessionFormationDtoParam.dateFin}" styleClass="value">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</h:outputText>
+								</p:column>
+							</p:row>
+                             <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.organisme_formation}"
+										 />
+								</p:column>
+								<p:column >
+								<h:outputText value="#{sessionFormationDtoParam.refStructureDto.llStructureLatin}" styleClass="value"/>
+								</p:column>
+								
+								</p:row>
+								</p:panelGrid>
+						<br></br>
+						<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{formationMgs.formateur}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="formateur" value="#{sessionFormationDtoParam.formateurSessionFormationDtos}" 
+						widgetVar="formateursTable" rowKey="#{formateur.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.formateur_datable_no_result}">
+
+						<f:facet name="header">
+							
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" styleClass="value" />
+						</p:column>
+
+						<p:column
+							headerText="#{formationMgs.formateur}">
+							<h:outputText value="#{formateur.refIndividuDto.nomLatin} #{formateur.refIndividuDto.prenomLatin}" styleClass="value" />
+						</p:column>
+						
+						
+						
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+
+<br></br>
+		<p:panelGrid  cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+							     <p:row>
+									<p:column colspan="4" styleClass="title"> 
+										<h:outputText value="Lieu de Formation"   />
+									</p:column>
+								</p:row>
+								 <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.type_lieu}" 
+										 />
+								</p:column>
+								<p:column >
+								<h:outputText value="#{sessionFormationDtoParam.externe!=true?formationMgs.interne:formationMgs.externe}" styleClass="value"/>
+								</p:column>
+								</p:row>
+								 <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.lieu_interne}"
+										 rendered="#{sessionFormationDtoParam.externe!=true}" />
+										<h:outputLabel value="#{formationMgs.lieu_externe}"
+										  rendered="#{sessionFormationDtoParam.externe==true}"/>
+								</p:column>
+								<p:column >
+								<h:outputText value="#{sessionFormationDtoParam.externe!=true?sessionFormationDtoParam.refLieuDto.designation:sessionFormationDtoParam.lieuExterne}" styleClass="value"/>
+								</p:column>
+								</p:row>
+						</p:panelGrid>
+
+         <p:dialog position="center" appendTo="@(body)" header="Cycle de Formation" width="850px"
+									id="cycleFormationDetailDialog" widgetVar="cycleFormationDetailDialog"
+									modal="true" resizable="false"
+									style="font-size:#{sessionBean.fontSize}px">
+									<ui:include
+										src="/pages/formation/CycleFormationDetail.xhtml">
+										<ui:param name="cycleFormationDtoParam"
+											value="#{sessionFormationDtoParam.cycleFormationDto}"></ui:param>
+									</ui:include>
+								</p:dialog>
+</ui:composition>

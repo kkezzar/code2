@@ -1,0 +1,911 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"> 
+	<f:event type="preRenderView" listener="#{reservationMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<p:panel style="height:600px" id="reservationlieuPanel" rendered="#{lieuMgrBean.refLieuDto.reservable}">
+<p:fieldset >
+		<ui:include src="/pages/lieu/lieuHeader.xhtml" />
+</p:fieldset>
+<p:fieldset legend="Lieu reservé par">
+		<br></br>
+		<h:form id="ReservationFromId" prependId="false">
+			<br></br>
+			<p:dataTable id="reservationStructureData" styleClass="strReser"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{reservationMgrBean.listRefStructureDto}" var="current">
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{lieumsgs.lieu_reservation_structure_titre}      " />
+					<p:commandButton id="addStructureButton" ajax="true"
+						icon="ui-icon-plusthick"
+						onclick="PF('dlgStructureLieuList').show()"
+						rendered="#{lieuReservationCrudBean.createAllow}">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llStructureLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_structure}" />
+					</f:facet>
+					<h:outputText value="#{current.llStructureLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatinResponsable}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_responsable}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.nomLatinResponsable} #{current.prenomLatinResponsable}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{lieuReservationCrudBean.deleteAllow or lieuReservationCrudBean.createAllow or lieuReservationCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+						actionListener="#{reservationMgrBean.deleteStructure(current)}"
+						process="@(.strReser)" update="@(.strReser)"
+						rendered="#{lieuReservationCrudBean.deleteAllow}">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>	
+					
+							<p:commandButton id="validation" icon="ui-icon-circle-check" title="#{commonmsgs.button_validreserv}" 
+							process="@(.strReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="lieuEtatValidationReservation.xhtml">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="id" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="lieur" value="#{current.designationLieu}" />
+						<f:param  name="entitiname" value="reservationlieu" />
+					</p:commandButton>
+					
+					
+					       <p:commandButton id="updateStrButton" icon="ui-icon-pencil" title="#{commonmsgs.button_update}" 
+							process="@(.strReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="infoReservationLieuEdit.xhtml"  
+							onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" >
+					       <f:param name="idf" value="#{current.id}" />
+					       <f:param name="id" value="#{current.id}" />
+					       <f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="lieur" value="#{current.designationLieu}" />
+					       <f:param name="entitiname" value="Reservation lieu pour structure" />
+					       <f:setPropertyActionListener value="#{current}" target="#{reservationMgrBean.refReservationDto}" />
+					       </p:commandButton>				
+				</p:column>
+			</p:dataTable>
+			<br></br>
+			<p:dataTable id="reservationGroupeData" styleClass="grpReser" value="#{reservationMgrBean.listRefGroupeDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText value="#{lieumsgs.lieu_reservation_groupe}      " />
+					<p:commandButton id="addGroupeButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{lieuReservationCrudBean.createAllow}"
+						onclick="PF('dlgGroupeLieuList').show()">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+
+					</p:commandButton>
+				</f:facet>
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llGroupe}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_groupe}" />
+					</f:facet>
+					<h:outputText value="#{current.llGroupe}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatinResponsable}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_responsable}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.nomLatinResponsable} #{current.prenomLatinResponsable}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{lieuReservationCrudBean.deleteAllow or lieuReservationCrudBean.createAllow or lieuReservationCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{reservationMgrBean.deleteGroupe(current)}"
+						process="@(.grpReser)"
+						rendered="#{lieuReservationCrudBean.deleteAllow}"
+						update="@(.grpReser)">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+			
+							<p:commandButton id="validation2" icon="ui-icon-circle-check" title="#{commonmsgs.button_validreserv}" 
+							process="@(.grpReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="lieuEtatValidationReservation.xhtml">
+					       <f:param name="idf" value="#{current.id}" />
+					       <f:param name="id" value="#{current.id}" />
+					       <f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="lieur" value="#{current.designationLieu}" />
+					       <f:param name="entitiname" value="reservationlieu" />
+				           </p:commandButton>
+				           
+				 	<p:commandButton id="validation" process="@(.grpReser)" 
+						icon="ui-icon-check" title="#{commonmsgs.button_validreserv}"
+						onclick="PF('dlgValidation').show()" rendered="false">
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname" value="Structure" />
+						<f:param name="objetr" value="#{current.objet}" />
+					</p:commandButton>
+
+					
+
+					 <p:commandButton  id="updateGrpButton" icon="ui-icon-pencil" title="#{commonmsgs.button_update}" 
+							process="@(.grpReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="infoReservationLieuGroupeEdit.xhtml"  
+							onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" >
+					       <f:param name="idf" value="#{current.id}" />
+					       <f:param name="id" value="#{current.id}" />
+					       <f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="entitiname" value="Reservation lieu pour groupe" />
+					       	<f:setPropertyActionListener value="#{current}" target="#{reservationMgrBean.refReservationDto}" />
+					</p:commandButton>
+				     
+				</p:column>
+			</p:dataTable>
+			<br></br>
+			<p:dataTable  id="reservationIndividuData" styleClass="indvReser"
+				value="#{reservationMgrBean.listRefIndividuDto}" var="current"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@(.indvReser)" process="@(.indvReser)" />
+				<f:facet name="header">
+					<h:outputText value="#{lieumsgs.lieu_reservation_individu}      " />
+					<p:commandButton id="addIndividuButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{lieuReservationCrudBean.createAllow}"
+						onclick="PF('dlgIndividuLieuList').show()">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+					</p:commandButton>
+
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatin}" width="200">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_individu_name} " />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin} #{current.prenomLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{lieuReservationCrudBean.deleteAllow or lieuReservationCrudBean.createAllow or lieuReservationCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeIndividuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{reservationMgrBean.deleteIndividu(current)}"
+						process="@(.indvReser)"
+						rendered="#{lieuReservationCrudBean.deleteAllow}"
+						update="@(.indvReser)">
+						<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					
+							<p:commandButton id="validation" icon="ui-icon-circle-check" title="#{commonmsgs.button_validreserv}" 
+							process="@(.indvReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="lieuEtatValidationReservation.xhtml">
+					       <f:param name="idf" value="#{current.id}" />
+					       <f:param name="id" value="#{current.id}" />
+					       <f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="lieur" value="#{current.designationLieu}" />
+					       <f:param name="entitiname" value="reservationlieu" />
+					       </p:commandButton>
+				           
+					<p:commandButton id="validation2" process="@(.strReser)" 
+						icon="ui-icon-check" title="#{commonmsgs.button_validreserv}"
+						onclick="PF('dlgValidation').show()" rendered="false">
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname" value="Structure" />
+						<f:param name="objetr" value="#{current.objet}" />
+					</p:commandButton>
+					
+					 <p:commandButton  id="updateIndividuButton" icon="ui-icon-pencil" title="#{commonmsgs.button_update}" 
+							process="@(.indvReser)" rendered="#{lieuReservationCrudBean.createAllow}" action="infoReservationLieuIndividuEdit.xhtml"  
+							onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" >
+					       <f:param name="idf" value="#{current.id}" />
+					       <f:param name="id" value="#{current.id}" />
+					       <f:param name="idr" value="#{current.id}" />
+					       <f:param name="objetr" value="#{current.objet}" />
+					       <f:param name="entitiname" value="Reservation lieu pour individu" />
+					       	<f:setPropertyActionListener value="#{current}" target="#{reservationMgrBean.refReservationDto}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		</p:fieldset>
+	</p:panel>
+
+<!-- 	<p:dialog header="#{structuremsgs.structure_list_ajout}" -->
+<!-- 		widgetVar="dlgStructureLieuList" resizable="false" width="700" -->
+<!-- 		appendTo="@(body)" modal="true" -->
+<!-- 		draggable="true"> -->
+<!-- 		<h:form id="listStructureReservationForm"> -->
+<!-- 			<p:panelGrid id="descriptionStr" styleClass="noBorder1"> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_selection_strucuture}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:selectOneMenu id="ReservationStructureList" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.idStructure}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{lieumsgs.lieu_structure}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_structure_required}"> -->
+<!-- 							<f:selectItem itemLabel="#{lieumsgs.lieu_selection_strucuture}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefStructureDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_reservation_objet}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="objet2" style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.objet}" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_objet}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_reservation_objet_required}"> -->
+<!-- 						</p:inputText> -->
+
+
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_reservation_responsable}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+
+<!-- 						<p:selectOneMenu id="Responsablereservation" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.idResponsable}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_responsable}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_reservation_responsable_required}"> -->
+<!-- 							<f:selectItem itemLabel="#{lieumsgs.lieu_selection_responsable}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefIndividuDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+
+
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateDebut}" -->
+<!-- 							id="datedebutstr" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_debut}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_date_debut_recired}"> -->
+<!-- 							<f:ajax render="datedebutstr" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureDebut}" -->
+<!-- 							id="heuredebutstr" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_debut}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_debut_recired}"> -->
+<!-- 							<f:ajax render="heuredebutstr" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heuredebutstr" -->
+<!-- 							value="Veuillez saisir lheure de début" showEffect="fade" -->
+<!-- 							hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateFin}" -->
+<!-- 							id="datefinstr" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_fin}"> -->
+<!-- 							<f:ajax render="datefinstr" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureFin}" -->
+<!-- 							id="heurefinstr" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_fin}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_fin_recired}"> -->
+<!-- 							<f:ajax render="heurefinstr" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heurefinstr" value="Veuillez saisir lheure de fin" -->
+<!-- 							showEffect="fade" hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_observation}" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="observationstr" -->
+<!-- 							style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.observation}" -->
+<!-- 							label="#{lieumsgs.lieu_observation}"> -->
+<!-- 						</p:inputText> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<br></br> -->
+<!-- 					<p:column> -->
+
+<!-- 						<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 							icon="ui-icon-check" process="@form" -->
+<!-- 							actionListener="#{reservationMgrBean.addStructure()}" -->
+<!-- 							update="@(.strReser)" oncomplete="dlgStructureLieuList.hide()"> -->
+<!-- 							<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+<!-- 						</p:commandButton> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 							icon="ui-icon-close" oncomplete="dlgStructureLieuList.hide()" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 			</p:panelGrid> -->
+<!-- 		</h:form> -->
+<!-- 	</p:dialog> -->
+
+<!-- 	<p:dialog header="#{groupemsgs.groupe_list_ajout}" -->
+<!-- 		widgetVar="dlgGroupeLieuList" resizable="false" width="700" -->
+<!-- 		appendTo="@(body)" modal="true" -->
+<!-- 		draggable="true"> -->
+<!-- 		<h:form id="listGroupeReservationForm"> -->
+<!-- 			<p:panelGrid id="descriptionGroupe" styleClass="noBorder1"> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_selection_groupe}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:selectOneMenu id="ReservationGroupeData" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.idGroupe}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_groupe}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_groupe_required}"> -->
+<!-- 							<f:selectItem itemLabel="#{lieumsgs.lieu_selection_groupe}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+
+<!-- 				<p:row> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_reservation_objet}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="objet3" style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.objet}" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_objet}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_reservation_objet_required}"> -->
+<!-- 						</p:inputText> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_reservation_responsable}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+
+<!-- 						<p:selectOneMenu id="Responsablereservation" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.idResponsable}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_responsable}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_reservation_responsable_required}"> -->
+<!-- 							<f:selectItem itemLabel="#{lieumsgs.lieu_selection_responsable}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+
+
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateDebut}" -->
+<!-- 							id="datedebutgroupe" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_debut}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_date_debut_recired}"> -->
+<!-- 							<f:ajax render="datedebutgroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureDebut}" -->
+<!-- 							id="heuredebutgroupe" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_debut}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_debut_recired}"> -->
+<!-- 							<f:ajax render="heuredebutgroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heuredebutgroupe" -->
+<!-- 							value="Veuillez saisir lheure de début" showEffect="fade" -->
+<!-- 							hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateFin}" -->
+<!-- 							id="datefingroupe" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_fin}"> -->
+<!-- 							<f:ajax render="datefingroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureFin}" -->
+<!-- 							id="heurefingroupe" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_fin}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_fin_recired}"> -->
+<!-- 							<f:ajax render="heurefingroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heurefingroupe" -->
+<!-- 							value="Veuillez saisir lheure de fin" showEffect="fade" -->
+<!-- 							hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_observation}" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="observationgroupe" -->
+<!-- 							style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.observation}" -->
+<!-- 							label="#{lieumsgs.lieu_observation}"> -->
+<!-- 						</p:inputText> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<br></br> -->
+<!-- 					<p:column> -->
+
+<!-- 						<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 							icon="ui-icon-check" process="@form" -->
+<!-- 							actionListener="#{reservationMgrBean.addGroupe()}" -->
+<!-- 							update="@(.grpReser)" oncomplete="dlgGroupeLieuList.hide()"> -->
+<!-- 							<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+<!-- 						</p:commandButton> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 							icon="ui-icon-close" oncomplete="dlgGroupeLieuList.hide()" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 			</p:panelGrid> -->
+<!-- 		</h:form> -->
+<!-- 	</p:dialog> -->
+
+<!-- 	<p:dialog header="#{individumsgs.individu_list_ajout}" -->
+<!-- 		widgetVar="dlgIndividuLieuList" resizable="false" width="700" -->
+<!-- 		appendTo="@(body)" modal="true" -->
+<!-- 		draggable="true"> -->
+<!-- 		<h:form id="listIndividuReservationForm"> -->
+<!-- 			<p:panelGrid id="descriptionIndividu" styleClass="noBorder1"> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_selection_individu}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:selectOneMenu id="ReservationIndividuData" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.idIndividu}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_individu}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_individu_required}"> -->
+<!-- 							<f:selectItem itemLabel="#{lieumsgs.lieu_selection_individu}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_reservation_objet}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="objet3" style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.objet}" -->
+<!-- 							label="#{lieumsgs.lieu_reservation_objet}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_reservation_objet_required}"> -->
+<!-- 						</p:inputText> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateDebut}" -->
+<!-- 							id="datedebutgroupe" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_debut}" required="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_date_debut_recired}"> -->
+<!-- 							<f:ajax render="datedebutgroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_debut}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureDebut}" -->
+<!-- 							id="heuredebutgroupe" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_debut}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_debut_recired}"> -->
+<!-- 							<f:ajax render="heuredebutgroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heuredebutgroupe" -->
+<!-- 							value="Veuillez saisir lheure de début" showEffect="fade" -->
+<!-- 							hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_date_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.dateFin}" -->
+<!-- 							id="datefingroupe" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_date_fin}"> -->
+<!-- 							<f:ajax render="datefingroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 					</p:column> -->
+
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_heure_fin}*" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true"  -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.heureFin}" -->
+<!-- 							id="heurefingroupe" style="width:40px" showButtonPanel="true" -->
+<!-- 							label="#{lieumsgs.lieu_heure_fin}" required="true" -->
+<!-- 							pattern="HH:mm" timeOnly="true" -->
+<!-- 							requiredMessage="#{lieumsgs.lieu_heure_fin_recired}"> -->
+<!-- 							<f:ajax render="heurefingroupe" event="change" /> -->
+<!-- 						</p:calendar> -->
+<!-- 						<p:tooltip for="heurefingroupe" -->
+<!-- 							value="Veuillez saisir lheure de fin" showEffect="fade" -->
+<!-- 							hideEffect="fade" /> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{lieumsgs.lieu_observation}" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputText id="observationgroupe" -->
+<!-- 							style="text-align: left; width:300px" -->
+<!-- 							value="#{reservationMgrBean.refReservationDto.observation}" -->
+<!-- 							label="#{lieumsgs.lieu_observation}"> -->
+<!-- 						</p:inputText> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+
+<!-- 				<p:row> -->
+<!-- 					<br></br> -->
+<!-- 					<p:column> -->
+
+<!-- 						<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 							icon="ui-icon-check" process="@form" -->
+<!-- 							actionListener="#{reservationMgrBean.addIndividu()}" -->
+<!-- 							update="@(.indvReser)" oncomplete="dlgIndividuLieuList.hide()"> -->
+<!-- 							<f:param name="idf" value="#{lieuBckBean.refLieuDto.id}" /> -->
+
+<!-- 						</p:commandButton> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_cancel}" icon="ui-icon-close" oncomplete="dlgIndividuLieuList.hide()" /> -->
+<!-- 					</p:column> -->
+					
+<!-- 				</p:row> -->
+<!-- 			</p:panelGrid> -->
+<!-- 		</h:form> -->
+<!-- 	</p:dialog> -->
+
+<!--     <p:dialog header="#{etatvalidationmsgs.affectation_situation_title}"  -->
+<!-- 		widgetVar="dlgValidation" resizable="false" width="700" -->
+<!-- 		appendTo="@(body)" modal="true" -->
+<!-- 		draggable="true"> -->
+<!-- 		             <p:panel> -->
+<!-- 						<p:panelGrid styleClass="noBorder1"> -->
+<!-- 							<p:row> -->
+<!-- 								<p:column> -->
+<!-- 									<h:outputText value="#{equipementmsgs.equipement_infos} : " /> -->
+<!-- 									<h:outputText value="#{reservationMgrBean.entitiname}  " /> -->
+<!-- 									<h:outputText value="#{reservationMgrBean.idf}"	style="font-weight: bold;" /> -->
+<!-- 								</p:column> -->
+<!-- 										</p:row> -->
+<!-- 						</p:panelGrid> -->
+<!-- 					</p:panel> -->
+					
+<!-- 				<p:panel style="height:600px" id="etatValidationReservationPanell" -->
+<!-- 				header="#{lieumsgs.lieu_etat_validation_reservation}"> -->
+			
+<!-- 					<p:fieldset legend="#{etatvalidationmsgs.affectation_etatvalidation}">	 -->
+<!-- 	<h:form id="etatValidationFormId222" enctype="multipart/form-data" prependId="false"> -->
+<!--         <h:inputHidden value="#{situationMgrBean.param(reservation, reservationMgrBean.idf)}" /> -->
+<!-- 		<p:dataTable id="affectationSituationsData222" paginator="true" styleClass="affSitOutPanel" -->
+<!-- 			paginatorPosition="bottom" rows="5" -->
+<!-- 			emptyMessage="#{commonmsgs.warn_info_aucun_result}" -->
+<!-- 			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}" -->
+<!-- 			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  " -->
+<!-- 			value="#{situationMgrBean.listRefAffectationSituationDto}" -->
+<!-- 			var="current"> -->
+
+<!-- 			<f:facet name="header"> -->
+				
+					
+<!-- 					<p:commandButton id="addsituationButton" -->
+<!-- 					actionListener="#{situationMgrBean.beforeAdd}" process="@form" -->
+<!-- 					icon="ui-icon-tag" ajax="true" -->
+<!-- 					oncomplete="dlgAffecterSituationValidation.show()" -->
+<!-- 					rendered="#{situationCrudBean.createAllow}"> -->
+<!-- 				</p:commandButton> -->
+				
+<!-- 			</f:facet> -->
+
+<!-- 			<p:column sortBy="#{current.dateSituation}"> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 					<h:outputText value="#{affectationmsgs.situation_date}" /> -->
+<!-- 				</f:facet> -->
+<!-- 				<h:outputText value="#{current.dateSituation}"> -->
+<!-- 					<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" -->
+<!-- 						timeZone="GMT+1" /> -->
+<!-- 				</h:outputText> -->
+<!-- 			</p:column> -->
+
+<!-- 			<p:column sortBy="#{current.typeSituationLibelleLongFr}"> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 					<h:outputText value="#{affectationmsgs.situation_situation}" /> -->
+<!-- 				</f:facet> -->
+<!-- 				<h:outputText value="#{current.typeSituationLibelleLongFr}"></h:outputText> -->
+<!-- 			</p:column> -->
+<!-- 			<p:column sortBy="#{current.observation}"> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 					<h:outputText value="#{affectationmsgs.situation_observation}" /> -->
+<!-- 				</f:facet> -->
+<!-- 				<h:outputText value="#{current.observation}"></h:outputText> -->
+<!-- 			</p:column> -->
+<!-- 		</p:dataTable> -->
+<!-- 	</h:form> -->
+<!-- 	<p:commandButton value="#{commonmsgs.button_cancel}" icon="ui-icon-close" oncomplete="dlgValidation.hide()" /> -->
+
+				
+<!-- 	</p:fieldset> -->
+	
+
+<!-- 	<p:dialog header="#{etatvalidationmsgs.affectation_situation_title}" -->
+<!-- 		widgetVar="dlgAffecterSituationValidation" resizable="false" width="450" -->
+<!-- 		modal="true" appendTo="@(body)"> -->
+<!-- 		<h:form id="dlgformValidation"> -->
+<!-- 			<p:panelGrid id="descriptionSituationValidation" styleClass="noBorder1"> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{etatvalidationmsgs.selection_situation} *" /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:selectOneMenu id="selectSituation" -->
+<!-- 							value="#{situationMgrBean.refSituationDto.entiteSituationId}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{etatvalidationmsgs.selection_situation}" required="true" -->
+<!-- 							requiredMessage="#{etatvalidationmsgs.situation_required}"> -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{etatvalidationmsgs.selection_situation}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{situationMgrBean.listeTypeSituation}"> -->
+<!-- 							</f:selectItems> -->
+
+<!-- 						</p:selectOneMenu> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText -->
+<!-- 							value="#{etatvalidationmsgs.etatvalidation_observation} " /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:inputTextarea id="observation" -->
+<!-- 							style="text-align: left; width:300px" -->
+<!-- 							value="#{situationMgrBean.refSituationDto.observation}" -->
+<!-- 							label="#{etatvalidationmsgs.etatvalidation_observation}"> -->
+<!-- 						</p:inputTextarea> -->
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_ok}" -->
+<!-- 							icon="ui-icon-check" -->
+<!-- 							actionListener="#{situationMgrBean.addSituation}" update="@(.affSitOutPanel)" -->
+<!-- 							oncomplete="dlgAffecterSituationValidation.hide()" process="@form"> -->
+							
+<!-- 						</p:commandButton> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:commandButton value="#{commonmsgs.button_cancel}" -->
+<!-- 							icon="ui-icon-close" oncomplete="dlgAffecterSituationValidation.hide()" /> -->
+
+<!-- 					</p:column> -->
+<!-- 				</p:row> -->
+<!-- 			</p:panelGrid> -->
+<!-- 		</h:form>		 -->
+<!-- 	</p:dialog> -->
+<!-- 			</p:panel> -->
+			
+<!-- 	</p:dialog> -->
+    <p:commandButton value="#{commonmsgs.button_return}" icon="ui-icon-disk" process="@this" action="#{lieuBckBean.back}">
+					<p:confirm header="Confirmation" message="#{commonmsgs.msg_sortir}" icon="ui-icon-alert" />
+					<f:param name="searchValue" value="#{lieuBckBean.searchValue}" />
+   </p:commandButton>
+</ui:composition>

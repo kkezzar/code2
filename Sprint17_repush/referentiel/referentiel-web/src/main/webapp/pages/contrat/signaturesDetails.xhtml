@@ -1,0 +1,215 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{partenaireMgrBean.signatureCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+	<ui:include src="/pages/contrat/contratHeader.xhtml" />
+	<br></br>
+
+
+	<h:form id="signatureForm" prependId="false">
+
+		<p:dataTable id="signStructureData" paginator="true"
+			styleClass="parStrOutPanel" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{partenaireMgrBean.listRefStructureDto}"
+			var="partenaireStructure" editable="true">
+
+			<f:facet name="header">
+				<h:outputText value="#{contratmsgs.contrat_partenaire_structure}" />
+			</f:facet>
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@form" process="@form" />
+			<p:ajax event="rowEdit"
+				listener="#{partenaireMgrBean.onSignatureEdit}"
+				update="@(.parStrOutPanel)" />
+			<p:ajax event="rowEditCancel"
+				listener="#{partenaireMgrBean.onSignatureCancel}"
+				update="@(.parStrOutPanel)" />
+
+			<p:column headerText="#{contratmsgs.contrat_structure}">
+				<h:outputText value="#{partenaireStructure.llStructureLatin}" />
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_role}">
+				<h:outputText value="#{partenaireStructure.llRoleFr}" />
+			</p:column>
+
+
+			<p:column headerText="#{contratmsgs.contrat_siganture_date}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{partenaireStructure.dateSiganture}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true"  value="#{partenaireStructure.dateSiganture}">
+						</p:calendar>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_signature_refrence}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{partenaireStructure.reference}">
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{partenaireStructure.reference}"></p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:6%"
+				rendered="#{signatureCrudBean.createAllow}">
+				<p:rowEditor />
+			</p:column>
+		</p:dataTable>
+
+
+		<br></br>
+
+
+		<p:dataTable resizableColumns="true" id="signGroupeData"
+			styleClass="parGrpOutPanel"
+			value="#{partenaireMgrBean.listRefGroupeDto}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			editable="true">
+			<f:facet name="header">
+				<h:outputText value="#{contratmsgs.contrat_partenaire_groupe}" />
+			</f:facet>
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@form" process="@form" />
+			<p:ajax event="rowEdit"
+				listener="#{partenaireMgrBean.onSignatureEdit}"
+				update="@(.parGrpOutPanel)" />
+			<p:ajax event="rowEditCancel"
+				listener="#{partenaireMgrBean.onSignatureCancel}"
+				update="@(.parGrpOutPanel)" />
+			<p:column sortBy="#{current.llGroupe}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_groupe}" />
+				</f:facet>
+				<h:outputText value="#{current.llGroupe}" />
+			</p:column>
+			<p:column sortBy="#{current.llRoleFr}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_role}" />
+				</f:facet>
+				<h:outputText value="#{current.llRoleFr}" />
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_siganture_date}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{current.dateSiganture}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true"  value="#{current.dateSiganture}">
+						</p:calendar>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_signature_refrence}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{current.reference}">
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{current.reference}"></p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:6%" rendered="#{signatureCrudBean.editAllow}">
+				<p:rowEditor />
+			</p:column>
+		</p:dataTable>
+
+
+		<br></br>
+
+
+		<p:dataTable resizableColumns="true" id="signIndividuData"
+			styleClass="parIdvOutPanel"
+			value="#{partenaireMgrBean.listRefIndividuDto}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			editable="true">
+			<f:facet name="header">
+				<h:outputText value="#{contratmsgs.contrat_partenaire_individu}" />
+			</f:facet>
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@form" process="@form" />
+			<p:ajax event="rowEdit"
+				listener="#{partenaireMgrBean.onSignatureEdit}"
+				update="@(.parIdvOutPanel)" />
+			<p:ajax event="rowEditCancel"
+				listener="#{partenaireMgrBean.onSignatureCancel}"
+				update="@(.parIdvOutPanel)" />
+			<p:column sortBy="#{current.nomLatin}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_individu_name}" />
+				</f:facet>
+				<h:outputText value="#{current.nomLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.prenomLatin}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_individu_prenom}" />
+				</f:facet>
+				<h:outputText value="#{current.prenomLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.llRoleFr}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_role}" />
+				</f:facet>
+				<h:outputText value="#{current.llRoleFr}" />
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_siganture_date}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{current.dateSiganture}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:calendar navigator="true"  value="#{current.dateSiganture}">
+						</p:calendar>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="#{contratmsgs.contrat_signature_refrence}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{current.reference}">
+						</h:outputText>
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{current.reference}"></p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:6%" rendered="#{signatureCrudBean.editAllow}">
+				<p:rowEditor />
+			</p:column>
+		</p:dataTable>
+
+	</h:form>
+
+
+</ui:composition>

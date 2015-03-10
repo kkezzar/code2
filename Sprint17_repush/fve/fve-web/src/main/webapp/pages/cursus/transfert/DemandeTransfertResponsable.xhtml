@@ -1,0 +1,595 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+	#{dossierTransfertMsgs.dossier_transfert_consulter_les_demandes}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<!-- toolbar -->
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:selectOneMenu id="selectAnnee" style="margin:5px 5px 0px 5px;"
+							value="#{dossierTransfertResponsableMBean.idAnneeAcademique}"
+							label="#{printMsgs.print_anne_univeristaire}">
+							<f:selectItem
+								itemLabel="#{printMsgs.print_select_annee_academique}"
+								itemValue="" />
+							<f:selectItems
+								value="#{dossierTransfertResponsableMBean.listAnneeAcademique}" />
+
+							<p:ajax onstart="PF('allWidget').block()"
+								onsuccess="PF('allWidget').unblock()"
+								listener="#{dossierTransfertResponsableMBean.handleAnneeAcademiqueChange}"
+								event="valueChange" update=":form_view,form_search" />
+						</p:selectOneMenu>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable"
+					value="#{dossierTransfertResponsableMBean.transfertResultSearch}"
+					var="transfert" rowKey="#{transfert.id}" paginator="true"
+					paginatorPosition="bottom" selectionMode="single" rows="8"
+					sortMode="multiple"
+					emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossierTransfertResponsableMBean.onRowSelect}"
+						process="@this" onstart="PF('allWidget').block()"
+						onsuccess="PF('allWidget').unblock()" update=":form_view" />
+
+					<f:facet name="header">
+						<h:outputText value="Liste des opérations de transferts" />
+					</f:facet>
+
+					<!--                             <p:column
+                                headerText="#{dossierTransfertMsgs.dossier_transfert_anne_univeristaire}"
+                                width="10%">
+                                <h:outputText value="#{dossierTransfert.anneeAcademiqueCode}"
+                                              >
+                                </h:outputText>
+                            </p:column> 
+
+                            <p:column
+                                headerText="#{dossierTransfertMsgs.dossier_transfert_date_depot}"
+                                width="10%">
+                                <h:outputText value="#{dossierTransfert.dateDepot}"
+                                              >
+                                    <f:convertDateTime pattern="dd-MM-yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            
+                            -->
+
+					<!-- Domaine -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+						width="25%" sortBy="#{transfert.refCodeDomaineDemande}">
+
+						<h:outputText value="#{transfert.libelleDomaineDemandeFr}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Filiere -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}"
+						width="25%" sortBy="#{transfert.refCodeFiliereDemandee}">
+
+						<h:outputText value="#{transfert.libelleFiliereDemandeeFr}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Capacité du transfert -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_capacite_transfert}"
+						width="10%" sortBy="#{transfert.capaciteTransfert}">
+
+						<h:outputText value="#{transfert.capaciteTransfert}"></h:outputText>
+					</p:column>
+
+					<!-- Nombre de demandes refusees -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+						width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+
+						<h:outputText value="#{transfert.nbrDemandesRejetees}">
+						</h:outputText>
+					</p:column>
+
+
+					<!-- Nombre de demandes acceptees -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+						width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+
+						<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Nombre de demandes acceptées -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+						width="20%" sortBy="#{transfert.nbrDemandesAccordees}">
+						<h:outputText value="#{transfert.nbrDemandesAccordees}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<!-- CRUD form -->
+			<p:outputPanel id="form_view">
+				<p:dataTable id="DossiersTransfertDataTable"
+					rendered="#{dossierTransfertResponsableMBean.view}"
+					value="#{dossierTransfertResponsableMBean.dossiersTransfertDtos}"
+					var="dossierTransfert" paginator="true" rows="20"
+					sortBy="#{dossierTransfert.moyenneBac}" sortOrder="DESCENDING"
+					sortMode="Single"
+					emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{dossierTransfertMsgs.dossier_transfert_liste_title}" />
+					</f:facet>
+
+					<p:ajax event="rowEdit"
+						listener="#{dossierTransfertResponsableMBean.onRowDossierTransfertDtoEdit}"
+						update="" />
+					<p:ajax event="rowEditCancel"
+						listener="#{dossierTransfertResponsableMBean.onRowDossierTransfertDtoCancel}"
+						update="" />
+
+					<p:column style="width:16px">
+						<p:rowToggler />
+					</p:column>
+
+					<!-- Matricule Bac -->
+					<p:column headerText="Matricule Bac" width="380px">
+						<h:outputText value="#{dossierTransfert.bacMatricule}">
+						</h:outputText>
+					</p:column>
+
+					<!-- NIN -->
+					<!-- 						<p:column headerText="Nin"  width="300px">
+
+							<h:outputText value="#{dossierTransfert.individuNin}"
+								>
+							</h:outputText>
+						</p:column> -->
+
+					<!-- Nom -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_nom}"
+						width="10%">
+						<h:outputText value="#{dossierTransfert.individuNomLatin}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Prenom -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_prenom}"
+						width="10%">
+						<h:outputText value="#{dossierTransfert.individuPrenomLatin}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Etablissement d'origine -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_etab_origine}"
+						width="20%">
+						<h:outputText value="#{dossierTransfert.refLibelleEtabOrigine}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Moyenne general -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_moyenne_generale}"
+						width="150px">
+						<h:outputText value="#{dossierTransfert.moyenneBac}">
+						</h:outputText>
+					</p:column>
+
+					<!-- Exception ? -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_cas_exceptionnel}">
+						<h:outputText value="#{dossierTransfert.casExceptionnelLieblleFr}" />
+					</p:column>
+
+					<!-- Acordee ? -->
+					<p:column
+						headerText="#{dossierTransfertMsgs.dossier_transfert_demande_accordee}">
+						<h:outputText value="#{dossierTransfert.isAccordeeLieblleFr}" />
+					</p:column>
+
+					<p:rowExpansion>
+						<p:tabView>
+
+							<p:tab title="Information Demande">
+								<p:panelGrid style="width:100%">
+
+									<f:facet name="header">
+										<p:row>
+											<p:column colspan="4">#{dossierTransfertMsgs.dossier_transfert_detail_demande}</p:column>
+										</p:row>
+									</f:facet>
+
+									<p:row>
+										<p:column colspan="4" styleClass="ui-widget-header">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_detail_etudiant}" />
+										</p:column>
+									</p:row>
+
+									<!-- Detail de l'etudiant -->
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_nin} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.individuNin}" />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_matricule} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.dossierEtudiantMatricule}" />
+										</p:column>
+									</p:row>
+
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_nom} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.individuNomLatin.toUpperCase()}" />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_nom_ar} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.individuNomArabe}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_prenom} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.individuPrenomLatin.substring(0,1).toUpperCase().concat(dossierTransfert.individuPrenomLatin.substring(1).toLowerCase())}" />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_prenom_ar} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.individuPrenomArabe}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_date_naissance} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.individuDateNaissance}">
+												<f:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_nationalite} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.individuNationaliteLibelleLongFr}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_serie_bac} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.bacLibelleSerie}" />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_matricule_bac} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.bacMatricule}" />
+										</p:column>
+									</p:row>
+
+									<!-- Detail de la demande de transfert -->
+									<p:row>
+										<p:column colspan="4" styleClass="ui-widget-header">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_detail_demande}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_date_depot} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.dateDepot}">
+												<f:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_type_transfert} " />
+										</p:column>
+										<p:column>
+											<h:outputText value="#{dossierTransfert.refLibelleTransfert}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_origine} " />
+										</p:column>
+										<p:column colspan="3">
+											<h:outputText
+												value="#{dossierTransfert.refLibelleEtabOrigine}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_domaine_origine} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.domaineOrigineLibelleFr}" />
+										</p:column>
+
+
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_filiere_origine} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.filiereOrigineLibelleFr}" />
+										</p:column>
+									</p:row>
+
+									<p:row id="etabAccueilRow"
+										rendered="#{dossierTransfert.refCodeTypeTransfert eq 'TIU'}">
+
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_accueil} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.refLibelleEtabAccueil}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_domaine_demande} " />
+										</p:column>
+										<p:column>
+
+											<h:outputText
+												value="#{dossierTransfert.domaineDemandeLibelleFr}" />
+										</p:column>
+
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.filiereDemandeeLibelleFr}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_motif_transfert}" />
+										</p:column>
+										<p:column colspan="3">
+											<h:outputText
+												value="#{dossierTransfert.refCodeMotifLibelleFr}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_objet}" />
+										</p:column>
+										<p:column colspan="3">
+											<h:outputText value="#{dossierTransfert.objet}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column colspan="4" styleClass="ui-widget-header">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_resultat_decision}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column colspan="2" styleClass="ui-widget-header">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_accueil} (#{dossierTransfertResponsableMBean.dossierTransfertDto.refLibelleEtabAccueil})" />
+										</p:column>
+
+										<p:column colspan="2" styleClass="ui-widget-header">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_origine} (#{dossierTransfertResponsableMBean.dossierTransfertDto.refLibelleEtabAccueil})" />
+										</p:column>
+									</p:row>
+
+									<!-- Resultats de l'etablissement d'accueil -->
+									<p:row>
+
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_decision}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.refLibelleAvisEtabAccueil} " />
+										</p:column>
+
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_decision}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.refLibelleAvisEtabOrigine}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_motif_rejet}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.refLibelleMotifEtabAccueil}" />
+										</p:column>
+
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_motif_rejet}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.refLibelleMotifEtabOrigine}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_observation}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.observationEtabAccueil}" />
+										</p:column>
+
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_observation}</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfert.observationEtabOrigine}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_offre_formation}</p:column>
+										<p:column colspan="3">
+											<h:outputText value="#{dossierTransfert.ofLibelleFr}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column colspan="4" styleClass="ui-widget-header">
+											<h:outputText value="Resultat finale" />
+										</p:column>
+									</p:row>
+
+									<!-- Resultats Finale -->
+									<p:row>
+										<p:column>#{dossierTransfertMsgs.dossier_transfert_resultat}</p:column>
+										<p:column colspan="3">
+											<h:outputText value="#{dossierTransfert.refLibelleAvisFinal}" />
+										</p:column>
+									</p:row>
+
+								</p:panelGrid>
+							</p:tab>
+
+							<p:tab title="Documents">
+								<ui:include
+									src="/pages/document/DocumentManageComponentWS.xhtml">
+									<c:set var="entity" value="DossierTransfert-xx--" scope="view" />
+									<c:set var="identifiant" value="#{identifiant}" scope="view" />
+									<ui:param name="entity" value="DossierTransfert" />
+									<ui:param name="identifiant"
+										value="#{dossierTransfert.id.toString()}" />
+									<ui:param name="editionMode" value="#{false}" />
+								</ui:include>
+							</p:tab>
+
+							<!-- OFFRE DE FORMATION - HISTORIQUE  -->
+							<p:tab id="tabHistorique" title="Historique">
+								<eh:EntityHistoryComponent
+									list="#{dossierTransfert.dossierTransfertHistory}"
+									idParamName="id" idParamValue="#{dossierTransfert}"></eh:EntityHistoryComponent>
+							</p:tab>
+
+						</p:tabView>
+
+					</p:rowExpansion>
+
+					<!-- Actions -->
+					<f:facet name="footer">
+						<p:row>
+							<p:column></p:column>
+							<p:column style="text-align: left">
+
+								<p:commandButton id="returnBtn" icon="ui-icon-arrowreturn-1-w"
+									value="#{commonmsgs.bouton_retour}" immediate="true"
+									update=":form_view,:form_search"
+									action="#{dossierTransfertResponsableMBean.cancelResultatsTransfertAction()}"></p:commandButton>
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:dataTable>
+			</p:outputPanel>
+
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

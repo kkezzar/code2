@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/pages/common/SearchEtudiantInscrit.xhtml">
+<ui:param name="pnlTitle" value="#{empty exclusionBean.exclusionId or exclusionBean.exclusionId eq 'null' ? 'Nouvel Exclusion':'Modification Exclusion' }"></ui:param>
+
+<ui:define name="detailContent">
+	<p:fieldset legend="#{exclusionMsgs.exclusion_etudiant}">
+	
+    <p:panelGrid   >
+     <p:row>
+            <p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_nin_etudiant}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuNin}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_matricule}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.dossierEtudiantMatricule}" styleClass="labelValue"/>
+			</p:column>
+			<p:column  >	
+			<h:outputText value="#{exclusionMsgs.exclusion_nom_etudiant}:" />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuNomLatin.toUpperCase()}" styleClass="labelValue"/>
+			</p:column>
+	
+			<p:column  >			
+			<h:outputText value="#{exclusionMsgs.exclusion_prenom_etudiant}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuPrenomLatin.substring(0,1).toUpperCase().concat(exclusionBean.exclusionDto.individuPrenomLatin.substring(1).toLowerCase())}" styleClass="labelValue"/>
+			</p:column>
+			
+			<p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_nom_ar}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuNomArabe}" styleClass="labelValue"/>
+			</p:column>	
+			<p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_prenom_ar}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuPrenomArabe}" styleClass="labelValue"/>
+			</p:column>
+			
+			<p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_date_naissance}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuDateNaissance}" styleClass="labelValue">
+			<f:convertDateTime pattern="dd-MM-yyyy" />
+			</h:outputText>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionMsgs.exclusion_nationalite}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{exclusionBean.exclusionDto.individuNationaliteLibelleLongFr}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>		
+	        </p:panelGrid>
+	        
+     </p:fieldset>
+	<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>	
+    <p:tabView orientation="top" style="height:750px;"  id="tabView" widgetVar="tabviewWidget">
+       
+        <p:tab title="#{exclusionMsgs.exclusion_exclusion_info}"  >
+         <ui:include src="/pages/cursus/exclusion/ExclusionInfosEdit.xhtml"/>
+        </p:tab>
+        
+        <p:tab title="#{exclusionMsgs.exclusion_reintegration_info}"  disabled="#{exclusionBean.exclusionId==null}">
+           <ui:include src="/pages/cursus/exclusion/ReintegrationEdit.xhtml"/>
+        </p:tab>
+ 
+    </p:tabView>
+  
+    </ui:define>
+
+
+
+</ui:composition>
+</html>

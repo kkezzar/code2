@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net   http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAffectDomLmdEtabDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefAffectDomLmdEtab
+		</class-b>
+
+		  <!-- DomaineLMD -->
+		<field>
+			<a>identifiantDomaineLMD</a>
+			<b>refDomaineLMD.identifiant</b>
+		</field>
+		<field>
+			<a>idDomaineLMD</a>
+			<b>refDomaineLMD.id</b>
+		</field>
+		<field>
+			<a>llDomaine</a>
+			<b>refDomaineLMD.llDomaine</b>
+		</field>
+
+
+         <!-- Etablissement -->
+		<field>
+			<a>identifiantEtablissement</a>
+			<b>refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+		
+		<field>
+			<a>llEtablissementLatin</a>
+			<b>refEtablissement.llEtablissementLatin</b>
+		</field>
+		
+		<field>
+			<a>llEtablissementArabe</a>
+			<b>refEtablissement.llEtablissementArabe</b>
+		</field>
+		
+		
+		
+		
+         <!-- Groupe -->
+
+<field>
+			<a>idGroupe</a>
+			<b>refGroupe.id</b>
+		</field>
+		<field>
+			<a>lcGroupe</a>
+			<b>refGroupe.lcGroupe</b>
+		</field>
+		<field>
+			<a>lcGroupeArabe</a>
+			<b>refGroupe.lcGroupeArabe</b>
+		</field>
+		<field>
+			<a>llGroupe</a>
+			<b>refGroupe.llGroupe</b>
+		</field>
+		<field>
+			<a>llGroupeArabe</a>
+			<b>refGroupe.llGroupeArabe</b>
+		</field>
+
+
+	
+         <!-- Structure -->
+
+<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+		
+		<field>
+		<a>identifiantStructure</a>
+			<b>refStructure.identifiant</b>
+		</field>
+		
+		<field>
+			<a>lcStructure</a>
+			<b>refStructure.lcStructureLatin</b>
+		</field>
+		<field>
+			<a>lcStructureArabe</a>
+			<b>refStructure.lcStructureArabe</b>
+		</field>
+		<field>
+			<a>llStructure</a>
+			<b>refStructure.llStructureLatin</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>refStructure.llStructureArabe</b>
+		</field>
+
+	</mapping>
+
+
+</mappings>

@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="dlgPhoto" widgetVar="dlgPhoto" resizable="false"
+		modal="true" appendTo="@(body)" closable="true" showHeader="true"
+		header="#{documentmsgs.document_photo_attacher_photo}">
+
+		<p:messages id="messagesdlgPhoto" showSummary="true" autoUpdate="true"
+			closable="true" />
+
+		<h:form id="photoForm" enctype="multipart/form-data" onsubmit="loadProperty()" prependId="false">
+			<p:panelGrid id="panel">
+				<p:row>
+					<p:column style="text-align:center">
+
+						<p:photoCam id="photocam" rendered="#{photoBean.photo_attache_capture == false}"
+							widgetVar="pc" listener="#{photoBean.oncapture}"
+							update="panel,urlphoto,nomphoto">
+						</p:photoCam>
+
+						<h:outputText style="padding:10px 0px;" value="#{documentmsgs.document_photo_or}" rendered="#{photoBean.photo_attache_capture == false}" />
+
+						<p:fileUpload id="iduploadDoc" 
+							rendered="#{photoBean.photo_attache_capture == false}"
+							fileUploadListener="#{photoBean.handleFileUpload}"
+							update="panel,urlphoto,nomphoto" 
+							mode="advanced" 
+							auto="true" 
+							multiple="false" label="#{documentmsgs.document_photo_upload}"
+							required="true" dragDropSupport="true" process="@this"
+							requiredMessage="#{documentmsgs.document_document_upload_required}"
+							uploadLabel="#{documentmsgs.document_photo_upload}"
+							sizeLimit="#{photoBean.limit_size_photo}"
+							invalidSizeMessage="#{documentmsgs.document_limite_size_fichier_upload} #{photoBean.limit_size_photo} Octets"
+							allowTypes="#{photoBean.allow_types_photo}" 
+							onstart="loadProperty()"
+							oncomplete="loadProperty()" 
+							>
+                            <f:attribute name="dossierEtudiantId" value="#{photoBean.dossierEtudiantId}" />
+						</p:fileUpload>
+						
+					    <p:remoteCommand name="loadProperty">
+       						 <f:setPropertyActionListener for="idLoader"
+                                     value="#{photoBean.dossierEtudiantId}"
+                                     target="#{photoBean.dossierEtudiantId}"/>
+               			</p:remoteCommand>
+	                 
+
+
+	                 	<p:graphicImage id="nomphoto"
+							value="#{empty photoBean.url?'/resources/images/boy.png':photoBean.photo}"
+							rendered="#{photoBean.photo_attache_capture == true}"
+
+							alt="#{documentmsgs.document_photo_vide}" 
+							cache="false" >
+
+							<f:param name="url" value="#{photoBean.url}" />
+							<f:param name="dossierEtudiantId"
+								value="#{photoBean.dossierEtudiantId}" />
+						</p:graphicImage>
+						
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+
+						<p:commandButton id="takepicture" 
+							rendered="#{photoBean.photo_attache_capture == false}"
+							process="@this"
+							value="#{documentmsgs.document_button_take_picture}"
+							onclick="PF('pc').capture()" 
+							icon="ui-icon-image">
+							<f:param name="url" value="#{photoBean.url}" />
+							<f:param name="dossierEtudiantId"
+								value="#{photoBean.dossierEtudiantId}" />
+						</p:commandButton>
+				 		
+						<p:commandButton id="tryagain"
+						    ajax="true"
+						    update="photoForm:panel,urlphoto,nomphoto"
+						    process="@this"
+							rendered="#{photoBean.photo_attache_capture == true}"
+							value="#{documentmsgs.document_button_tryagain}"
+							icon="ui-icon-arrowrefresh-1-e"
+							actionListener="#{photoBean.tryaAainPhoto}">
+
+							<f:param name="url" value="#{photoBean.url}" />
+							<f:param name="dossierEtudiantId"
+								value="#{photoBean.dossierEtudiantId}" />
+						</p:commandButton>
+                     
+						<p:commandButton id="usethispicture" 
+							value="#{documentmsgs.document_button_use_photo}"
+							onsuccess="PF('dlgPhoto').hide();"
+							update="@(.photoContentStyle)"
+							actionListener="#{photoBean.savePhoto}" 
+							icon="ui-icon-circle-check">
+							<f:param name="url" value="#{photoBean.url}"  />
+							<f:param name="dossierEtudiantId"
+								value="#{photoBean.dossierEtudiantId}" />
+						</p:commandButton>
+
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+
+			<h:inputHidden id="urlphoto" value="#{photoBean.url}" />
+			<h:inputHidden id="dossierEtudiantId" value="#{photoBean.dossierEtudiantId}" /> 
+		</h:form>
+	</p:dialog>
+
+	<p:outputPanel styleClass="photoContentStyle">
+		<p:panelGrid id="infosPhoto" columns="1" style="text-align:center">
+			<!-- #{FacesContext.getCurrentInstance().getExternalContext()/resources/images/boy.png} -->
+
+			<p:graphicImage id="nomphotoView"
+				value="#{empty photoBean.dossierEtudiantDto.photo?'/resources/images/boy.png':photoBean.photo}"
+				ajax="true" height="#{photoBean.height_photo}"
+				width="#{photoBean.width_photo}"
+				alt="#{documentmsgs.document_photo_vide}">
+				
+				<f:param name="url" value="#{photoBean.url}" />
+				<f:param name="dossierEtudiantId" value="#{photoBean.dossierEtudiantId}" />
+			</p:graphicImage>
+
+			<p:commandButton id="openDlgPhoto" immediate="true"
+				value="#{empty photoBean.dossierEtudiantDto.photo?documentmsgs.document_photo_add:documentmsgs.document_photo_modif}"
+				icon="ui-icon-plusthick"
+				onclick="if(#{photoBean.dossierEtudiantId!=null}) PF('dlgPhoto').show()">
+				<f:param name="dossierEtudiantId" value="#{photoBean.dossierEtudiantId}" />
+				<p:ajax resetValues="true" update="@([id$=photoForm])" immediate="true" />
+			</p:commandButton>
+
+		</p:panelGrid>
+	</p:outputPanel>
+
+
+</ui:composition>

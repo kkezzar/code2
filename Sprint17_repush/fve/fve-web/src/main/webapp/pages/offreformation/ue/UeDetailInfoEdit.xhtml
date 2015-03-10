@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel styleClass="ueDetailInfo" id="ueDetailInfo">
+
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column>
+					<p:tree value="#{ueBB.ueDetailTreeView}" var="node" dynamic="true"
+						cache="true" selectionMode="single">
+						<p:treeNode>
+							<p:commandLink value="#{node}" update="@([id$=pngrd_detailUe])"
+								onstart="PF('tabUIWidget').block()"
+								onsuccess="PF('tabUIWidget').unblock()"
+								process=":form_ueSearch:tbvw_ueDetail:ueDetailInfo"
+								actionListener="#{ueBB.selectNode(node)}">
+
+							</p:commandLink>
+						</p:treeNode>
+					</p:tree>
+				</p:column>
+				<p:column>
+					<p:panelGrid id="pngrd_detailUe">
+						<f:facet name="header">
+							<p:row>
+								<p:column>
+									<h:outputText binding="#{slectedNode}" value="#{ueBB.node}" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<p:editor value="#{ueBB.nodeValue}" width="700" height="400" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<p:commandButton id="cmdbtn_enregistrerDetail"
+					value="#{commonmsgs.bouton_enregistrer}"
+					onstart="PF('tabUIWidget').block()"
+					onsuccess="PF('tabUIWidget').unblock()"
+					process=":form_ueSearch:tbvw_ueDetail:ueDetailInfo"
+					action="#{ueBB.saveUe}" icon="ui-icon-disk">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</p:outputPanel>
+
+</ui:composition>
+

@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panel id="infosGroupePanel">
+
+		<h:form>
+
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel value="#{groupemsgs.groupe_identite}" />
+					</p:column>
+					<p:column style="width:70%">
+						<h:outputText value="#{groupeMgrBean.refGroupeDto.identifiant}"
+							styleClass="value" />
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel value="#{groupemsgs.groupe_date_creation}"
+							for="datenaissance" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:column>
+							<p:calendar navigator="true"
+								value="#{groupeMgrBean.refGroupeDto.dateCreation}"
+								required="true" id="datenaissance" showButtonPanel="true"
+								validator="dateValidator" pattern="dd/MM/yyyy" style="width:95%"
+								label="#{etablissementmsgs.etablissement_date_creation}"
+								valueChangeListener="#{groupeMgrBean.codeChanged}"
+								requiredMessage="#{groupemsgs.groupe_date_creation_required}" />
+						</p:column>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel value="#{groupemsgs.groupe_type}" for="typeGroupe" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:selectOneMenu id="typeGroupe" styleClass="value"
+							style="width:96%;text-align:left"
+							value="#{groupeMgrBean.refGroupeDto.idTypeGroupe}"
+							required="true" filter="true" filterMatchMode="contains"
+							valueChangeListener="#{groupeMgrBean.codeChanged}"
+							requiredMessage="#{groupemsgs.groupe_type_required}"
+							label="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation}">
+							<f:selectItem itemLabel="#{groupemsgs.groupe_type}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeGroupe}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel value="#{groupemsgs.groupe_libelle_long_latin}"
+							for="llgroupe" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="llgroupe" style="text-align: left; width:95%"
+							value="#{groupeMgrBean.refGroupeDto.llGroupe}"
+							label="#{groupemsgs.groupe_libelle_long_latin}" required="true"
+							requiredMessage="#{groupemsgs.groupe_libelle_long_latin_required}">
+						</p:inputText>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<h:outputText value="#{groupemsgs.groupe_libelle_court_latin} " />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="lcLatin" style="text-align: left;width:95%"
+							value="#{groupeMgrBean.refGroupeDto.lcGroupe}"
+							label="#{groupemsgs.groupe_libelle_court_latin}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel value="#{groupemsgs.groupe_libelle_long_arabe}"
+							for="llArabe" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="llArabe" style="text-align: right; width:95%"
+							value="#{groupeMgrBean.refGroupeDto.llGroupeArabe}"
+							required="true"
+							requiredMessage="#{groupemsgs.groupe_libelle_long_arabe_required}"
+							label="#{groupemsgs.groupe_libelle_long_arabe}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<h:outputText value="#{groupemsgs.groupe_libelle_court_ar} " />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="lcAr" style="text-align: right;width:95%"
+							value="#{groupeMgrBean.refGroupeDto.lcGroupeArabe}"
+							label="#{groupemsgs.groupe_libelle_court_ar}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+			<br />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.button_save}"
+						update=":globalPanel" onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()" icon="ui-icon-disk"
+						action="#{groupeMgrBean.saveGroupe}" />
+				</p:toolbarGroup>
+			</p:toolbar>
+		</h:form>
+	</p:panel>
+
+</ui:composition>

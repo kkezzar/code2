@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panelGrid  style="margin-top:5px" >
+     <p:row>
+		
+			<p:column styleClass="left" >
+			<h:outputText value="#{individuMsgs.individu_identifiant}:  " />
+			<h:outputText value="#{individuBean.individuDto.identifiant}" styleClass="labelValue"/>
+			</p:column>
+			<p:column styleClass="right" >	
+			<h:outputText value="#{individuBean.individuDto.nomLatin} #{individuBean.individuDto.prenomLatin} " styleClass="labelValue"/>	
+				 			
+			<h:outputText value=" #{individuBean.individuDto.nomArabe} #{individuBean.individuDto.prenomArabe}" styleClass="labelValue"/>
+			</p:column>
+	        </p:row>
+	        </p:panelGrid>
+ 
+    
+</ui:composition>

@@ -1,0 +1,263 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+                  xmlns:c="http://java.sun.com/jsp/jstl/core">
+   
+      <p:fieldset legend="Evenement">
+         <h:form id="evenementEditInfoForm">
+              <p:panelGrid id="infosEvenement1" styleClass="noBorder1"> 
+              <p:row >
+				<p:column>
+					<h:outputText value="#{evenementmsgs.evenement_identifiant} *" />
+				</p:column> 
+				<p:column>
+            		 <p:inputText id="identif" style="text-align: left; width:400px"
+						value="#{evenementMgrBean.refEvenementDto.identifiant}"
+						label="#{evenementmsgs.evenement_identifiant}" required="true" 
+                     	requiredMessage="#{evenementmsgs.evenement_identifiant_required}"
+                     	disabled="#{evenementMgrBean.updateMode}">
+					</p:inputText>
+				
+				</p:column>
+				</p:row>
+				<p:row >
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_objet} *" />
+						</p:column> 
+						<p:column>
+               <p:inputText id="objet" style="text-align: left; width:400px"
+						value="#{evenementMgrBean.refEvenementDto.objet}"
+						label="#{evenementmsgs.evenement_objet}" required="true" 
+                        requiredMessage="#{evenementmsgs.evenement_objet_required}">
+				</p:inputText>
+				
+				</p:column>
+				</p:row>
+				<p:row >
+				
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_description} *" />
+						</p:column> 
+						<p:column>
+				<p:inputTextarea id="description" style="text-align: left; width:400px"
+						value="#{evenementMgrBean.refEvenementDto.description}"
+						label="#{evenementmsgs.evenement_description}" required="true" 
+                        requiredMessage="#{evenementmsgs.evenement_description_required}">
+				</p:inputTextarea>
+				</p:column>
+				</p:row>
+				</p:panelGrid>
+				 <p:panelGrid id="infosEvenement2" styleClass="noBorder1">
+				  <p:row >
+				
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_type} *" />
+						</p:column> 
+						<p:column>
+				<p:selectOneMenu id="typeEvenement"
+								value="#{evenementMgrBean.refEvenementDto.typeId}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{evenementmsgs.evenement_type}" required="true" requiredMessage="#{evenementmsgs.evenement_type_required}">
+								<f:selectItem itemLabel="#{evenementmsgs.evenement_select_Type}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listTypeEvenement}" />
+							</p:selectOneMenu>
+							</p:column>
+							<p:column></p:column>
+						
+                     </p:row>
+				<p:row >
+						<p:column width="100px">
+							<h:outputText value="#{evenementmsgs.evenement_date_debut} *" />
+						</p:column> 
+						<p:column width="100px">
+							<p:calendar navigator="true"  value="#{evenementMgrBean.refEvenementDto.dateDebut}" id="dateDebut" showButtonPanel="true" required="true"
+							label="#{evenementmsgs.evenement_date_debut}"  requiredMessage="#{evenementmsgs.evenement_date_debut_required}" pattern="dd/MM/yyyy">
+							   <f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+							</p:column>
+						<p:column width="100px">
+							<h:outputText value="#{evenementmsgs.evenement_date_fin} *" />
+						</p:column> 
+						<p:column width="100px">
+								<p:calendar navigator="true"  value="#{evenementMgrBean.refEvenementDto.dateFin}" id="dateFin" showButtonPanel="true" required="true"
+							label="#{evenementmsgs.evenement_date_fin}"  requiredMessage="#{evenementmsgs.evenement_date_fin_required}" pattern="dd/MM/yyyy">
+							   <f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+							</p:column>
+							</p:row>
+				<p:row >
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_heure}" />
+						</p:column> 
+						<p:column>
+							<p:calendar navigator="true"  value="#{evenementMgrBean.refEvenementDto.heure}" label="#{evenementmsgs.evenement_heure}"  pattern="HH:mm" timeOnly="true" /> 
+							</p:column>
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_nbre_jours}" />
+						</p:column> 
+						<p:column>
+							<p:inputText id="nbreJours" style="text-align: left"
+						value="#{evenementMgrBean.refEvenementDto.nbreJours}"
+						label="#{evenementmsgs.evenement_nbre_jours}"  
+                       >
+                       <f:validateLongRange minimum="0" maximum="365" />
+                       </p:inputText>
+                       </p:column>
+                       </p:row>
+				<p:row >
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_frequence}" />
+						</p:column> 
+						<p:column>
+                       <p:selectOneMenu id="frequence"
+								value="#{evenementMgrBean.refEvenementDto.frequenceRepetitionId}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{evenementmsgs.evenement_frequence}" >
+                       <f:selectItem itemLabel="#{evenementmsgs.evenement_select_Frequence}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listRepetition}" />
+							</p:selectOneMenu>
+							</p:column>
+							 </p:row>
+				<p:row >
+						<p:column>
+							<h:outputText value="#{evenementmsgs.evenement_observation}" />
+						</p:column> 
+						<p:column>
+							<p:inputTextarea id="observation" style="text-align: left; width:400px; length:100px"
+						value="#{evenementMgrBean.refEvenementDto.observation}"
+						label="#{evenementmsgs.evenement_observation}"  
+                       >
+                       </p:inputTextarea>
+                       </p:column>
+						</p:row>
+					
+						
+				<p:row >
+				
+						<p:column>
+						
+				<p:commandButton value="#{commonmsgs.button_save}"
+			icon="ui-icon-disk"   process="@form" update="@form"
+            action="#{evenementMgrBean.saveEvenement}">
+          <f:param name="idf" value="#{evenementMgrBean.idf}"/>
+            </p:commandButton>
+            </p:column>
+           
+            </p:row>
+            </p:panelGrid>
+           </h:form>
+       </p:fieldset>
+            <br></br>
+            
+        <p:fieldset legend="#{evenementmsgs.evenement_les_taches}" rendered="#{evenementMgrBean.id!=null}">
+             <h:form id="tacheForm">
+             <p:dataTable var="tache" value="#{evenementMgrBean.listTacheOfEvenement}" rendered="#{evenementMgrBean.listTacheOfEvenement!=null}"
+					id="tacheTable" editable="true"  paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+					<h:outputText value="#{evenementmsgs.evenement_les_taches}      " />
+						  
+					<p:commandButton update="@form" action="#{evenementMgrBean.addTache}"
+								icon="ui-icon-plus"
+								 immediate="true" process="@form">
+					<f:param name="id" value="#{evenementMgrBean.id}"/>
+					
+                       </p:commandButton>
+                     </f:facet>
+                    <f:param name="idf" value="#{evenementMgrBean.idf}"/>
+					<p:ajax event="rowEdit" listener="#{evenementMgrBean.onEdit}" process="@form" update="@this">
+				
+					</p:ajax>
+					<p:ajax event="rowEditCancel" listener="#{evenementMgrBean.onCancel}" process="@form">
+					</p:ajax>
+
+					<p:column headerText="#{evenementmsgs.evenement_tache}" width="15">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tache.titre}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{tache.titre}"   label="#{evenementmsgs.evenement_tache}" required="true"  style="text-align: left; width:200px" requiredMessage="#{evenementmsgs.evenement_tache_required}"/>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column headerText="#{evenementmsgs.evenement_tache_description}" width="60">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tache.description}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{tache.description}"  label="#{evenementmsgs.evenement_tache_description}" style="text-align: left; width:300px" required="true" requiredMessage="#{evenementmsgs.evenement_tache_description_required}"/>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+                     <p:column id="typet" headerText="#{evenementmsgs.evenement_type_tache}" width="15">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{tache.typeLibelleLongFr}" />
+							</f:facet>
+							<f:facet name="input">
+							 <p:selectOneMenu id="typetache" 
+								value="#{tache.typeId}" 
+								label="#{evenementmsgs.evenement_type_tache}" >
+                       <f:selectItem itemLabel="#{evenementmsgs.evenement_select_type_tache}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listTypeTache}" required="true" requiredMessage="#{evenementmsgs.evenement_type_tache_required}"/>
+							</p:selectOneMenu>
+								
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					
+					<p:column width="5">
+						<f:facet name="header">
+							
+						</f:facet>
+						<p:rowEditor>
+						</p:rowEditor>
+                       
+					</p:column>
+
+                     <p:column width="2">
+						<f:facet name="header">
+							
+						</f:facet>
+						
+						
+						<p:commandButton icon="ui-icon-trash" title="supprimer element de la liste" immediate="true" process="@form"
+                       actionListener="#{evenementMgrBean.deleteTache(tache)}" update="@(.ui-datatable)"  > 
+                       <p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+						<f:param name="idf" value="#{evenementMgrBean.idf}"/>
+                       </p:commandButton>
+					</p:column>
+				</p:dataTable>
+				</h:form>
+        </p:fieldset>
+            <br></br>  
+		<h:form id="returneditevent">
+		<p:panelGrid id="MenuGrid1" styleClass="noBorder1">
+				<p:row>
+				 <p:column>
+             <p:commandButton value="#{commonmsgs.button_return}"
+     			icon="ui-icon-arrowreturnthik-1-w" process="@form" immediate="true" 
+              action="#{evenementMgrBean.toSearch}">
+             </p:commandButton> 
+             </p:column>	
+
+             </p:row>
+             </p:panelGrid>
+             </h:form>
+           
+ </ui:composition> 
+              
+

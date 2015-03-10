@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{etatequipementMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+	<p:fieldset>
+		<ui:include src="/pages/equipement/equipementHeader.xhtml" />
+	</p:fieldset>
+	<br></br>
+	<p:fieldset legend="Etat equipement">
+		<h:form id="EataEquipementFromId" prependId="false">
+			<br></br>
+			<p:dataTable resizableColumns="true" id="EtatEquipementData"
+				styleClass="etatStyle"
+				value="#{etatequipementMgrBean.listRefEtatEquipementDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_etat_equipement}      " />
+					<p:commandButton id="addEtatButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{equipementCrudBean.createAllow}"
+						onclick="PF('dlgEtatList').show()">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.etat_equipement_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.etatEquipementLibelleLongFr}">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.etat_equipement}" />
+					</f:facet>
+					<h:outputText value="#{current.etatEquipementLibelleLongFr}" />
+				</p:column>
+				<p:column sortBy="#{current.dateEtat}">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.etat_equipement_date}" />
+					</f:facet>
+					<h:outputText value="#{current.dateEtat}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.observation}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.etat_equipement_observation}" />
+					</f:facet>
+					<h:outputText value="#{current.observation}"></h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{equipementCrudBean.deleteAllow}" width="80">
+					<p:commandButton id="removeetatButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{etatequipementMgrBean.deleteEtat(current)}"
+						process="@(.etatStyle)" update="@(.etatStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</p:fieldset>
+
+
+
+	<p:dialog header="#{equipementmsgs.etat_ajout}" widgetVar="dlgEtatList"
+		appendTo="@(body)" modal="true" resizable="false" width="300"
+		draggable="true">
+		<h:form id="listEtatForm" prependId="false">
+			<p:panelGrid id="descriptionEtat" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.etat_selection_etat}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="etatequipementList"
+							style="text-align: left;width:160px"
+							value="#{etatequipementMgrBean.refEtatEquipementDto.etatEquipementId}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_etat_equipement}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_etat_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_etatequipement_selection_etat}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listEtatEquipement}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_etat_date}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{etatequipementMgrBean.refEtatEquipementDto.dateEtat}"
+							id="dateetat" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_etat_date}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_etat_date_recired}">
+							<f:ajax render="dateetat" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputTextarea id="observationgroupe" style="text-align"
+							value="#{etatequipementMgrBean.refEtatEquipementDto.observation}"
+							label="#{equipementmsgs.equipement_observation}">
+						</p:inputTextarea>
+
+
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{etatequipementMgrBean.addEtat()}"
+							update="@(.etatStyle)" oncomplete="dlgEtatList.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+
+
+</ui:composition>

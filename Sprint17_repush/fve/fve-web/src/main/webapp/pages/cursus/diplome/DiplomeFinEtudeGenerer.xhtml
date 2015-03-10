@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{diplomeFinEtudeMsgs.diplome_panel_title_validerr}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:growl id="msgs" showDetail="true" autoUpdate="true"
+			showSummary="false" closable="true" life="5000" />
+		<pe:blockUI target="form_diplomefinetude" widgetVar="globalWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<h:form id="form_diplomefinetude">
+			<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%;text-align:left"
+							value="#{searchMsgs.annee_academique}" for="annee"></p:outputLabel>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="annee" filter="true"
+							style="width:100%;text-align:left" filterMatchMode="contains"
+							required="true"
+							value="#{diplomeFinEtudeGererBean.anneeAcademiqueId}"
+							label="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}">
+							<p:ajax update="panelSearch" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{diplomeFinEtudeGererBean.anneeChanged}" />
+							<f:selectItem
+								itemLabel="#{diplomeFinEtudeMsgs.diplome_fin_etude_annee_academique}"
+								itemValue="" />
+							<f:selectItems
+								value="#{diplomeFinEtudeGererBean.anneeAcademiqueList}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:15%">
+						<p:outputLabel style="width:100%;text-align:left"
+							value="#{searchMsgs.offre_formation}" for="oof"></p:outputLabel>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="oof" required="true"
+							style="width:100%;text-align:left"
+							value="#{diplomeFinEtudeGererBean.oofId}" filter="true"
+							filterMatchMode="contains"
+							label="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation}">
+							<p:ajax update="form_diplomefinetude" onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								listener="#{diplomeFinEtudeGererBean.ofChanged}" />
+							<f:selectItem
+								itemLabel="#{diplomeFinEtudeMsgs.diplome_fin_etude_offre_formation}"
+								itemValue="" />
+							<f:selectItems
+								value="#{diplomeFinEtudeGererBean.offreFormationList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton id="btnSearch" value="Rechercher"
+						update="form_diplomefinetude" icon="ui-icon-search"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{diplomeFinEtudeGererBean.searchBilan}">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<br />
+
+
+			<p:outputPanel id="detail"
+				rendered="#{diplomeFinEtudeGererBean.showDetail}">
+
+				<p:dataTable id="dtTbl_diplome_a_generer"
+					styleClass="globalPanelStyle"
+					value="#{diplomeFinEtudeGererBean.diplomeFinEtudeList}"
+					var="current" rowKey="#{current.id}" resizableColumns="true"
+					paginator="true" rows="20" lazy="true"
+					paginatorPosition="bottom"
+					currentPageReportTemplate="{currentPage}/{totalPages} pages * {startRecord}-{endRecord}/{totalRecords} enr."
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					emptyMessage="#{diplomeFinEtudeMsgs.diplome_fin_etude_datable_list_bilan_no_result}">
+
+					<p:ajax event="page" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()" />
+					<p:ajax event="sort" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{diplomeFinEtudeMsgs.diplome_fin_etude_resultat_recherche_bilan}" />
+					</f:facet>
+
+					<p:column sortBy="#{current.numeroInscription}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.diplome_fin_etude_numero_inscription}" />
+						</f:facet>
+
+						<h:outputText value="#{current.numeroInscription}" />
+					</p:column>
+
+					<p:column sortBy="#{current.etudiantNomLatin}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.diplome_fin_etude_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{current.etudiantNomLatin} " />
+					</p:column>
+					<p:column sortBy="#{current.etudiantPrenomLatin}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.diplome_fin_etude_prenom}" />
+						</f:facet>
+
+						<h:outputText value="#{current.etudiantPrenomLatin} " />
+					</p:column>
+
+
+
+
+					<p:column style="text-align:center" sortBy="#{current.moyenne}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.bilan_session_moyenne}" />
+						</f:facet>
+
+						<h:outputText value="#{current.moyenne}" />
+					</p:column>
+
+					<p:column style="text-align:center"
+						sortBy="#{current.mentionLibelleFr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.bilan_session_mention}" />
+						</f:facet>
+
+						<h:outputText value="#{current.mentionLibelleFr}"
+							style="text-align:center" />
+					</p:column>
+
+					<p:column style="text-align:center"
+						sortBy="#{current.dateObtention}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.bilan_session_date_delibiration}" />
+
+						</f:facet>
+
+						<h:outputText value="#{current.dateObtention}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="text-align:center" sortBy="#{current.estValide}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{diplomeFinEtudeMsgs.diplome_fin_etude_validation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.estValide?'Oui':'Non'}"
+							style="text-align:center" />
+					</p:column>
+
+				</p:dataTable>
+				<br />
+				<br />
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_validate}"
+							update="form_diplomefinetude" icon="ui-icon-disk"
+							onstart="PF('globalWidget').block()"
+							oncomplete="PF('globalWidget').unblock()"
+							actionListener="#{diplomeFinEtudeGererBean.validate()}">
+						</p:commandButton>
+
+					</p:toolbarGroup>
+				</p:toolbar>
+			</p:outputPanel>
+		</h:form>
+		<h:form id="form_diplome_fin_etude_consult">
+			<p:outputPanel id="detailDiplomePanelId"
+				rendered="#{not empty diplomeFinEtudeGererBean.dossierInscriptionAdministrativeDto}">
+
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panel header="#{groupePedagogiqueMsgs.groupepedagogique_info_title}">
+		<p:panelGrid id="groupe" styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_annee_academique} " />
+				</p:column>
+				<p:column>
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.codeAnneeAcademique}" />
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_periode} " />
+				</p:column>
+				<p:column>
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.periodeLibelleLongLt}" />
+				</p:column>
+			</p:row>
+			<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel
+					value="#{groupePedagogiqueMsgs.groupePedagogique_offre_formation} " />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText styleClass="value"
+					value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.ofLibelleFr}" />
+			</p:column>
+
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_type}" />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.idSection==null?'Section':'Groupe'}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<h:outputText
+						value="#{groupePedagogiqueMsgs.groupePedagogique_code}" />
+				</p:column>
+				<p:column>
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.codeGroupe}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage}" />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.nomAffichage}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_nom_affichage_arabe}" />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.nomAffichageArabe}"
+						styleClass="value" />
+				</p:column>
+				</p:row>
+				<p:row rendered="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.idSection !=null}">
+				<p:column style="width:15%">
+					<h:outputText
+						value="#{groupePedagogiqueMsgs.groupePedagogique_section}" />
+				</p:column>
+				<p:column colspan="3">
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.nomSection}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_date_creation}">
+
+					</p:outputLabel>
+				</p:column>
+				<p:column colspan="3" >
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.dateCreation}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel style="width:100%"
+						value="#{groupePedagogiqueMsgs.groupePedagogique_capacite_min}" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.capaciteMin}" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<p:outputLabel style="width:100%"
+						value="#{groupePedagogiqueMsgs.groupePedagogique_capacite_max}" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText styleClass="value"
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.capaciteMax}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_latin}" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupe}"
+						styleClass="value" />
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_long_arabe}" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.llGroupeArabe}"
+						styleClass="value" />
+				</p:column>
+
+
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText
+						value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_latin}" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupe}"
+						styleClass="value" />
+				</p:column>
+
+
+				<p:column style="width:15%">
+					<h:outputText
+						value="#{groupePedagogiqueMsgs.groupePedagogique_libelle_court_arabe} " />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{groupePedagogiqueManagerBean.groupePedagogiqueDto.lcGroupeArabe}"
+						styleClass="value" />
+				</p:column>
+
+			</p:row>
+
+		</p:panelGrid>
+
+	</p:panel>
+
+
+</ui:composition>
+

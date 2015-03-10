@@ -1,0 +1,656 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{formationMgs.pnl_enregistrer_besoin_formation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<ui:include src="/pages/formation/BesoinFormationSearch.xhtml">
+				<ui:param name="nameMBean" value="#{besoinFormationEditMBean}"></ui:param>
+				<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+				<ui:param name="renderedNew" value="true"></ui:param>
+			</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty besoinFormationEditMBean.besoinFormationDto}">
+					<p:tabView id="tabview">
+						<p:tab title="Besoin de Formation">
+							<h:form id="form_besoin_formation_edit">
+								<p:panelGrid cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<!-- <p:row>
+								<p:column colspan="4" styleClass="title">
+									<h:outputText
+										value="#{formationMgs.pnl_enregistrer_besoin_formation}" />
+								</p:column>
+
+							</p:row> -->
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{formationMgs.type_besoin} "
+												styleClass="required" />
+										</p:column>
+										<p:column colspan="3">
+											<p:selectOneMenu required="true"
+												requiredMessage="#{formationMgs.type_besoin_required}"
+												value="#{besoinFormationEditMBean.besoinFormationDto.nomenclatureDto.id}"
+												label="#{formationMgs.type_besoin}">
+												<f:selectItem itemLabel="#{formationMgs.type_besoin_select}"
+													itemValue="0" />
+												<f:selectItems
+													value="#{besoinFormationEditMBean.listeNcTypeBesoin}" />
+												<p:ajax
+													listener="#{besoinFormationEditMBean.onTypeBesoinChange}"
+													event="valueChange" process="@this"
+													update="detailBesoinFormationPnl" />
+											</p:selectOneMenu>
+										</p:column>
+
+
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{formationMgs.date_debut} "
+												styleClass="required" />
+										</p:column>
+										<p:column>
+											<p:calendar id="datedebut" navigator="true" required="true"
+												requiredMessage="#{formationMgs.date_debut_required}"
+												value="#{besoinFormationEditMBean.besoinFormationDto.dateDebut}">
+											</p:calendar>
+										</p:column>
+
+
+										<p:column>
+											<h:outputLabel value="#{formationMgs.date_fin} "
+												styleClass="required" />
+										</p:column>
+										<p:column>
+											<p:calendar id="dateFin" navigator="true" required="true"
+												requiredMessage="#{formationMgs.date_fin_required}"
+												value="#{besoinFormationEditMBean.besoinFormationDto.dateFin}">
+											</p:calendar>
+										</p:column>
+
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputLabel value="#{formationMgs.objectif} "
+												styleClass="required" />
+										</p:column>
+										<p:column colspan="3">
+											<p:inputText
+												value="#{besoinFormationEditMBean.besoinFormationDto.objectif}"
+												required="true"
+												requiredMessage="#{formationMgs.objectif_required}"
+												styleClass="input-xxlarge-px"></p:inputText>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<br></br>
+								<p:outputPanel id="detailBesoinFormationPnl">
+									<p:outputPanel id="detailBesoinStructure"
+										rendered="#{besoinFormationEditMBean.renderStrucrure}">
+										<p:panelGrid cellspacing="0"
+											styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+											<p:row>
+												<p:column colspan="4" styleClass="title">
+													<h:outputText
+														value="#{formationMgs.besoin_formation_structure_title}" />
+												</p:column>
+
+											</p:row>
+
+											<p:row>
+												<p:column >
+													<h:outputLabel value="#{formationMgs.structure} "
+														styleClass="required" />
+												</p:column>
+												<p:column colspan="3" style="text-align:left">
+													<p:commandLink id="strcuture"
+														onclick="PF('structureDetailDialog').show()"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto!=null}"
+														immediate="true">
+														<h:outputText
+															value="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto.llStructureLatin}"
+															styleClass="value" />
+													</p:commandLink>
+													<p:inputText
+														value="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto}"
+														required="true"
+														requiredMessage="#{formationMgs.structure_required}"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto==null}"
+														onclick="PF('dlgAddStructure').show()" />
+													<p:spacer width="10px"></p:spacer>
+													<p:commandButton id="btnAddStructure"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto!=null}"
+														title="Ajouter Structure" icon="ui-icon-edit" ajax="true"
+														immediate="true" onsuccess="PF('dlgAddStructure').show()"></p:commandButton>
+
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+										<p:dataTable var="formationStructure"
+											value="#{besoinFormationEditMBean.listFormationsStructure}"
+											id="formationsStructureTable"
+											widgetVar="formationsStructureTable"
+											rowKey="#{formationStructure.id}" style="margin-top:5px"
+											resizableColumns="true" paginator="true" rows="5"
+											paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{formationMgs.formation_datable_no_result}">
+
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+														<p:commandButton styleClass="ui-button-bleu"
+															title="ajouter formation" icon="ui-icon-plusthick"
+															ajax="true" immediate="true"
+															actionListener="#{besoinFormationEditMBean.onAddDetailBesoinFormation}"
+															update="formationsStructureTable">
+														</p:commandButton>
+
+													</p:toolbarGroup>
+													<p:toolbarGroup align="right">
+
+
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{formationMgs.numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" styleClass="value" />
+											</p:column>
+
+
+											<p:column headerText="#{formationMgs.formation}">
+												<p:selectOneMenu required="true" style="width:100%;"
+													value="#{formationStructure.formationCatalogueDto.id}"
+													filter="true" filterMatchMode="contains"
+													label="#{formationMgs.formation}"
+													requiredMessage="#{formationMgs.formation_required}">
+
+													<f:selectItem itemLabel="#{formationMgs.formation_select}"
+														itemValue="" />
+													<f:selectItems
+														value="#{besoinFormationEditMBean.listFormationsCatalogue}" />
+
+												</p:selectOneMenu>
+											</p:column>
+
+
+											<p:column
+												headerText="#{formationMgs.corps}/#{formationMgs.grade}">
+												<p:selectOneMenu required="true" style="width:100%;"
+													value="#{formationStructure.gradeDto.id}" filter="true"
+													filterMatchMode="contains" label="#{formationMgs.grade}"
+													requiredMessage="#{formationMgs.grade_required}">
+
+													<f:selectItem itemLabel="#{formationMgs.grade_select}"
+														itemValue="" />
+													<f:selectItems
+														value="#{besoinFormationEditMBean.listGrades}" />
+
+												</p:selectOneMenu>
+											</p:column>
+											<p:column headerText="#{formationMgs.nombre_candidat}"
+												style="width:15%">
+												<p:inputText value="#{formationStructure.nbCandidat}"
+													required="true"
+													requiredMessage="#{formationMgs.nombre_candidat_required}"></p:inputText>
+											</p:column>
+
+
+											<p:column style="width:8%">
+												<p:commandButton
+													action="#{besoinFormationEditMBean.onRemoveDetailBesoinFormation}"
+													icon="ui-icon-trash" ajax="true"
+													update="formationsStructureTable" process="@this"
+													immediate="true">
+													<f:setPropertyActionListener
+														target="#{besoinFormationEditMBean.selectedFormationStructureIndex}"
+														value="#{rowIndex}" />
+												</p:commandButton>
+											</p:column>
+										</p:dataTable>
+										<p:dialog position="center" appendTo="@(body)"
+											header="Détail de la Structure" id="structureDetailDialog"
+											widgetVar="structureDetailDialog" modal="true"
+											resizable="false"
+											style="font-size:#{sessionBean.fontSize}px;">
+											<ui:include
+												src="/pages/commons/StructureDetailComponent.xhtml">
+												<ui:param name="refStructureDtoParam"
+													value="#{besoinFormationEditMBean.besoinFormationDto.refStructureDto}"></ui:param>
+											</ui:include>
+										</p:dialog>
+									</p:outputPanel>
+									<p:outputPanel id="detailBesoinGroupe"
+										rendered="#{besoinFormationEditMBean.renderGroupe}">
+										<p:panelGrid cellspacing="0"
+											styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+											<p:row>
+												<p:column colspan="4" styleClass="title">
+													<h:outputText
+														value="#{formationMgs.besoin_formation_groupe_title}" />
+												</p:column>
+
+											</p:row>
+											<p:row>
+												<p:column >
+													<h:outputLabel value="#{formationMgs.groupe} "
+														styleClass="required" />
+												</p:column>
+												<p:column colspan="3" style="text-align:left">
+													<p:commandLink id="groupe"
+														onclick="PF('groupeDetailDialog').show()"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto!=null}"
+														immediate="true">
+														<h:outputText
+															value="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto.llGroupe}"
+															styleClass="value" />
+													</p:commandLink>
+													<p:inputText
+														value="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto}"
+														required="true"
+														requiredMessage="#{formationMgs.groupe_required}"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto==null}"
+														onclick="PF('dlgAddGroupe').show()" />
+													<p:spacer width="10px"></p:spacer>
+													<p:commandButton id="btnAddGroupe"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto!=null}"
+														title="Ajouter Groupe" icon="ui-icon-edit" ajax="true"
+														immediate="true" onsuccess="PF('dlgAddGroupe').show()"></p:commandButton>
+
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+										<p:dataTable var="formationGroupe"
+											value="#{besoinFormationEditMBean.listFormationsGroupe}"
+											id="formationsGroupeTable" widgetVar="formationsGroupeTable"
+											rowKey="#{formationGroupe.id}" style="margin-top:5px"
+											resizableColumns="true" paginator="true" rows="5"
+											paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{formationMgs.formation_datable_no_result}">
+
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+														<p:commandButton styleClass="ui-button-bleu"
+															title="ajouter formation" icon="ui-icon-plusthick"
+															ajax="true" immediate="true"
+															update="formationsGroupeTable"
+															actionListener="#{besoinFormationEditMBean.onAddDetailBesoinFormation}">
+														</p:commandButton>
+
+													</p:toolbarGroup>
+													<p:toolbarGroup align="right">
+
+
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{formationMgs.numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" styleClass="value" />
+											</p:column>
+
+
+											<p:column headerText="#{formationMgs.formation}">
+												<p:selectOneMenu required="true" style="width:100%;"
+													value="#{formationGroupe.formationCatalogueDto.id}"
+													filter="true" filterMatchMode="contains"
+													label="#{formationMgs.formation}"
+													requiredMessage="#{formationMgs.formation_required}">
+
+													<f:selectItem itemLabel="#{formationMgs.formation_select}"
+														itemValue="" />
+													<f:selectItems
+														value="#{besoinFormationEditMBean.listFormationsCatalogue}" />
+
+												</p:selectOneMenu>
+											</p:column>
+
+
+											<p:column headerText="#{formationMgs.nombre_candidat}"
+												style="width:15%">
+												<p:inputText value="#{formationGroupe.nbCandidat}"
+													required="true"
+													requiredMessage="#{formationMgs.nombre_candidat_required}"></p:inputText>
+											</p:column>
+
+
+											<p:column style="width:8%">
+												<p:commandButton
+													action="#{besoinFormationEditMBean.onRemoveDetailBesoinFormation}"
+													icon="ui-icon-trash" ajax="true"
+													update="formationsGroupeTable" process="@this"
+													immediate="true">
+													<f:setPropertyActionListener
+														target="#{besoinFormationEditMBean.selectedFormationGroupeIndex}"
+														value="#{rowIndex}" />
+												</p:commandButton>
+											</p:column>
+										</p:dataTable>
+
+										<p:dialog position="center" appendTo="@(body)"
+											header="Détail du groupe" id="groupeDetailDialog"
+											widgetVar="groupeDetailDialog" modal="true" resizable="false"
+											style="font-size:#{sessionBean.fontSize}px;">
+											<ui:include src="/pages/commons/GroupeDetailComponent.xhtml">
+												<ui:param name="refGroupeDtoParam"
+													value="#{besoinFormationEditMBean.besoinFormationDto.refGroupeDto}"></ui:param>
+											</ui:include>
+										</p:dialog>
+
+									</p:outputPanel>
+									<p:outputPanel id="detailBesoinEmploye"
+										rendered="#{besoinFormationEditMBean.renderEmploye}">
+										<p:panelGrid cellspacing="0"
+											styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+											<p:row>
+												<p:column colspan="4" styleClass="title">
+													<h:outputText
+														value="#{formationMgs.besoin_formation_employe_title}" />
+												</p:column>
+											</p:row>
+											<p:row>
+												<p:column >
+													<h:outputLabel value="#{formationMgs.employe} "
+														styleClass="required" />
+												</p:column>
+												<p:column colspan="3" style="text-align:left">
+													<p:commandLink id="employe"
+														onclick="PF('employeDetailDialog').show()"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto!=null}"
+														immediate="true">
+														<h:outputText
+															value="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto.refIndividuDto.nomLatin} #{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+															styleClass="value" />
+													</p:commandLink>
+													<p:inputText
+														value="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto}"
+														required="true"
+														requiredMessage="#{formationMgs.employe_required}"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto==null}"
+														onclick="PF('dossierEmployeDialogSearch').show()" />
+													<p:spacer width="10px"></p:spacer>
+													<p:commandButton id="btnAddEmploye"
+														rendered="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto!=null}"
+														title="Ajouter Employé" icon="ui-icon-edit" ajax="true"
+														immediate="true"
+														onsuccess="PF('dossierEmployeDialogSearch').show()"></p:commandButton>
+
+												</p:column>
+											</p:row>
+										</p:panelGrid>
+										<p:dataTable var="formationEmploye"
+											value="#{besoinFormationEditMBean.listFormationsEmploye}"
+											id="formationsEmployeTable"
+											widgetVar="formationsEmployeTable"
+											rowKey="#{formationEmploye.id}" style="margin-top:5px"
+											resizableColumns="true" paginator="true" rows="5"
+											paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{formationMgs.formation_datable_no_result}">
+
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+														<p:commandButton styleClass="ui-button-bleu"
+															title="ajouter formation" icon="ui-icon-plusthick"
+															ajax="true" immediate="true"
+															update="formationsEmployeTable"
+															actionListener="#{besoinFormationEditMBean.onAddDetailBesoinFormation}">
+														</p:commandButton>
+
+													</p:toolbarGroup>
+													<p:toolbarGroup align="right">
+
+
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:column headerText="#{formationMgs.numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" styleClass="value" />
+											</p:column>
+
+
+											<p:column headerText="#{formationMgs.formation}">
+												<p:selectOneMenu required="true" style="width:100%;"
+													value="#{formationEmploye.formationCatalogueDto.id}"
+													filter="true" filterMatchMode="contains"
+													label="#{formationMgs.formation}"
+													requiredMessage="#{formationMgs.formation_required}">
+
+													<f:selectItem itemLabel="#{formationMgs.formation_select}"
+														itemValue="" />
+													<f:selectItems
+														value="#{besoinFormationEditMBean.listFormationsCatalogue}" />
+
+												</p:selectOneMenu>
+											</p:column>
+											<p:column style="width:8%">
+												<p:commandButton
+													action="#{besoinFormationEditMBean.onRemoveDetailBesoinFormation}"
+													icon="ui-icon-trash" ajax="true"
+													update="formationsEmployeTable" process="@this"
+													immediate="true">
+													<f:setPropertyActionListener
+														target="#{besoinFormationEditMBean.selectedFormationEmployeIndex}"
+														value="#{rowIndex}" />
+												</p:commandButton>
+											</p:column>
+										</p:dataTable>
+
+
+										<p:dialog position="center" appendTo="@(body)"
+											header="Employé" id="employeDetailDialog"
+											widgetVar="employeDetailDialog" modal="true"
+											resizable="false" style="font-size:#{sessionBean.fontSize}px">
+											<ui:include
+												src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+												<ui:param name="dossierEmployeDtoParam"
+													value="#{besoinFormationEditMBean.besoinFormationDto.dossierEmployeDto}"></ui:param>
+											</ui:include>
+										</p:dialog>
+
+									</p:outputPanel>
+								</p:outputPanel>
+
+
+								<br></br>
+
+								<p:toolbar id="BesoinFormationToolBar" styleClass="toolBarMesrs">
+									<p:toolbarGroup>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											styleClass="ui-button-save" id="savesBtn" icon="ui-icon-disk"
+											update=":pnl_Gerer"
+											actionListener="#{besoinFormationEditMBean.onSave}">
+
+
+										</p:commandButton>
+
+
+
+									</p:toolbarGroup>
+
+
+
+									<p:toolbarGroup align="right">
+										<p:commandButton value="#{commonmsgs.bouton_retour}"
+											immediate="true" process="@this" id="backBtn"
+											icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+											actionListener="#{besoinFormationEditMBean.initDetail}">
+
+
+										</p:commandButton>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</h:form>
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+								<ui:param name="nameMBean" value="#{besoinFormationEditMBean}"></ui:param>
+								<ui:param name="updateAjax"
+									value=":tabview:form_besoin_formation_edit:detailBesoinFormationPnl"></ui:param>
+								<ui:param name="dialogWidgetVar"
+									value="dossierEmployeDialogSearch"></ui:param>
+								<ui:param name="dialogHeader" value="Sélectionner un employé"></ui:param>
+
+							</ui:include>
+
+
+							<p:dialog widgetVar="dlgAddGroupe" appendTo="@(body)"
+								modal="true" header="Sélectionner un groupe" id="dlgAddGroupeId"
+								resizable="false" style="font-size:#{sessionBean.fontSize}px">
+								<h:form id="dlgFormGroupe">
+
+									<cmp:GroupSelectComponent id="cmpSelectGroupe"
+										selectedRow="#{besoinFormationEditMBean.selectedGroupeReferentiel}"
+										beanName="#{besoinFormationEditMBean}"
+										selectRowListenerName="onRowGroupSelect"
+										searchGroupMethod="#{besoinFormationEditMBean.searchGroup()}"
+										searchGroupKeyWord="#{besoinFormationEditMBean.refGroupSearchKeyWord}"
+										listData="#{besoinFormationEditMBean.listGroupesReferentiel}"
+										toUpdate=":tabview:form_besoin_formation_edit:detailBesoinFormationPnl"
+										dialogIdToHide="dlgAddGroupe" />
+								</h:form>
+							</p:dialog>
+
+							<p:dialog widgetVar="dlgAddStructure" appendTo="@(body)"
+								modal="true" header="Sélectionner une structure"
+								id="dlgAddStructureId" resizable="false" width="800px"
+								style="font-size:#{sessionBean.fontSize}px;">
+								<h:form id="dlgForm">
+									<br />
+									<p:panelGrid id="gridSelectionTypeStructure"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">>
+					<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{structuremsgs.structure_type_structure_fr}" />
+											</p:column>
+											<p:column>
+												<p:selectOneMenu
+													value="#{besoinFormationEditMBean.selectedTypeStructureReferentielId}">
+													<f:selectItems
+														value="#{besoinFormationEditMBean.listTypesStructuresReferentiel}"
+														var="y" itemLabel="#{y.label}" itemValue="#{y.value}" />
+													<p:ajax
+														listener="#{besoinFormationEditMBean.handleTypeStructureChange}"
+														event="valueChange" process="@this"
+														update="structuresReferentielDataTable" />
+												</p:selectOneMenu>
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+
+									<p:dataTable id="structuresReferentielDataTable" var="row"
+										value="#{besoinFormationEditMBean.listStructuresReferentiel}"
+										rowKey="#{row.id}"
+										emptyMessage="#{structuremsgs.structure_recherche_datatable_list_structures_referentiel_empty}"
+										rowIndexVar="rowIndex"
+										selection="#{besoinFormationEditMBean.selectedStructureReferentiel}"
+										selectionMode="single"
+										currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										paginator="true" rows="5" paginatorPosition="bottom"
+										rowsPerPageTemplate="5,10" style="margin-bottom:8px;">
+										<p:ajax event="rowSelect"
+											listener="#{besoinFormationEditMBean.onRowStructureSelect}"
+											update=":tabview:form_besoin_formation_edit:detailBesoinFormationPnl"
+											oncomplete="PF('dlgAddStructure').hide();" />
+										<p:column headerText="" style="text-align:center;">
+											<h:outputText value="#{rowIndex+1}" />
+										</p:column>
+										<p:column
+											headerText="#{structuremsgs.structure_type_structure_fr}"
+											style="text-align:left;">
+											<h:outputText value="#{row.typeLibelleLongFr}"
+												style="color:#336699;" />
+										</p:column>
+										<p:column headerText="#{structuremsgs.structure_libelle}"
+											style="text-align:left;">
+											<h:outputText value="#{row.llStructureLatin}"
+												style="color:#336699;" />
+										</p:column>
+										<p:column
+											headerText="#{structuremsgs.structure_libelle_arabe}"
+											style="text-align:left;">
+											<h:outputText value="#{row.llStructureArabe}"
+												style="color:#336699;" />
+										</p:column>
+										<p:column headerText="#{structuremsgs.structure_nif}"
+											style="text-align:left;">
+											<h:outputText value="#{row.nif}" style="color:#336699;" />
+										</p:column>
+										<p:column headerText="#{structuremsgs.structure_nis}"
+											style="text-align:left;">
+											<h:outputText value="#{row.nis}" style="color:#336699;" />
+										</p:column>
+									</p:dataTable>
+
+
+
+								</h:form>
+							</p:dialog>
+						</p:tab>
+						<!-- les documents -->
+						<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+							disabled="#{besoinFormationEditMBean.besoinFormationDto.id==null}"
+							title="#{commonmsgs.tab_documents}"
+							titletip="#{commonmsgs.tab_documents_tooltip}">
+							<f:facet name="title">
+								<h:outputText value="" />
+								<i class="fa fa-files-o"></i>
+							</f:facet>
+							<ui:include src="/pages/document/DocumentComponent.xhtml">
+								<c:set var="entity" value="BesoinFormation" scope="request" />
+								<c:set var="identifiant"
+									value="#{besoinFormationEditMBean.besoinFormationDto.id.toString()}"
+									scope="request" />
+								<ui:param name="entity" value="BesoinFormation" />
+								<ui:param name="identifiant"
+									value="#{besoinFormationEditMBean.besoinFormationDto.id.toString()}" />
+								<ui:param name="editionMode" value="true" />
+							</ui:include>
+						</p:tab>
+					</p:tabView>
+				</p:outputPanel>
+			</p:outputPanel>
+
+		</p:outputPanel>
+
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

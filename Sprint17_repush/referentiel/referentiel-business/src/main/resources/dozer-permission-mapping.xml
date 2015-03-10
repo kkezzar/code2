@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefPermissionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefPermission
+		</class-b>
+		<field>
+			<a>idFonction</a>
+			<b>refFonction.id</b>
+		</field>
+		<field>
+			<a>idfFonction</a>
+			<b>refFonction.identifiant</b>
+		</field>
+		<field>
+			<a>nomLatinFonction</a>
+			<b>refFonction.nom</b>
+		</field>
+		<field>
+			<a>nomArabeFonction</a>
+			<b>refFonction.nomArabe</b>
+		</field>
+		<field>
+			<a>urlFonction</a>
+			<b>refFonction.url</b>
+		</field>
+		<field>
+			<a>rangFonction</a>
+			<b>refFonction.rang</b>
+		</field>
+		<field>
+			<a>actionFonction</a>
+			<b>refFonction.action</b>
+		</field>
+		<field>
+			<a>idModule</a>
+			<b>refFonction.refModule.id</b>
+		</field>
+		<field>
+			<a>idfModule</a>
+			<b>refFonction.refModule.identifiant</b>
+		</field>
+		<field>
+			<a>nomLatinModule</a>
+			<b>refFonction.refModule.nom</b>
+		</field>
+		<field>
+			<a>nomArabeModule</a>
+			<b>refFonction.refModule.nomArabe</b>
+		</field>
+		<field>
+			<a>rangModule</a>
+			<b>refFonction.refModule.rang</b>
+		</field>
+		<field>
+			<a>idDomaine</a>
+			<b>refFonction.refModule.refDomaine.id</b>
+		</field>
+		<field>
+			<a>idfDomaine</a>
+			<b>refFonction.refModule.refDomaine.identifiant</b>
+		</field>
+		<field>
+			<a>nomLatinDomaine</a>
+			<b>refFonction.refModule.refDomaine.nom</b>
+		</field>
+		<field>
+			<a>nomArabeDomaine</a>
+			<b>refFonction.refModule.refDomaine.nomArabe</b>
+		</field>
+
+		<field>
+			<a>iconModule</a>
+			<b>refFonction.refModule.icon</b>
+		</field>
+
+		<field>
+			<a>tooltipModule</a>
+			<b>refFonction.refModule.tooltip</b>
+		</field>
+
+		<field>
+			<a>descriptionModule</a>
+			<b>refFonction.refModule.description</b>
+		</field>
+		
+		<field>
+			<a>rangDomaine</a>
+			<b>refFonction.refModule.refDomaine.rang</b>
+		</field>
+		<field>
+			<a>idRole</a>
+			<b>role.id</b>
+		</field>
+		<field>
+			<a>roleCode</a>
+			<b>role.code</b>
+		</field>
+		<field>
+			<a>roleLlFr</a>
+			<b>role.libelleLongFr</b>
+		</field>
+		<field>
+			<a>roleLlAr</a>
+			<b>role.libelleLongAr</b>
+		</field>
+		<field>
+			<a>roleLcFr</a>
+			<b>role.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>roleLcAr</a>
+			<b>role.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>roleStatus</a>
+			<b>role.status</b>
+		</field>
+		<field>
+			<a>idPeriode</a>
+			<b>refFonction.refPeriode.id</b>
+		</field>
+
+		<field>
+			<a>idfPeriode</a>
+			<b>refFonction.refPeriode.identifiant</b>
+		</field>
+
+		<field>
+			<a>nomPeriode</a>
+			<b>refFonction.refPeriode.nom</b>
+		</field>
+
+		<field>
+			<a>dateDebutPeriode</a>
+			<b>refFonction.refPeriode.dateDebut</b>
+		</field>
+
+		<field>
+			<a>dateFinPeriode</a>
+			<b>refFonction.refPeriode.dateFin</b>
+		</field>
+
+		<field>
+			<a>periodique</a>
+			<b>refFonction.refPeriode.periodique</b>
+		</field>
+	</mapping>
+
+
+</mappings>

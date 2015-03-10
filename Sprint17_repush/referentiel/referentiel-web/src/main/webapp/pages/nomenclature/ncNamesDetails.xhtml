@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+<ui:define name="main">
+<p:panel header="#{commonmsgs.menu_nomenclature_list}"  style="border:0;" >
+	           
+             <h:outputText value="#{nomenclaturemsgs.nc_description}" style="font-weight: bold;" /> 
+               <hr></hr>
+               <p:panelGrid id="editDescription" styleClass="noBorder1"> 
+                 
+                 <p:row >
+                    <p:column>
+					   <h:outputText value="#{nomenclaturemsgs.nc_list_nom_libelle}:  " />
+			        </p:column>
+				    <p:column>
+					   <h:outputText value="#{ncNamesMgrBean.ncNamesDto.nomNomenclature}" style="font-weight: bold;"/>
+				    </p:column> 
+						
+                 </p:row>
+						<br></br>
+				<p:row >
+                    <p:column>
+					   <h:outputText value="#{nomenclaturemsgs.nc_description}:  " />
+			        </p:column>
+				    <p:column>
+					   <h:outputText value="#{ncNamesMgrBean.ncNamesDto.description}" style="font-weight: bold;"/>
+				    </p:column> 
+						
+                 </p:row>
+                 
+                 
+                 <p:row >
+                    <p:column>
+					   <h:outputText value="#{nomenclaturemsgs.nc_list_ref_etrangere}:  " />
+			        </p:column>
+				    <p:column>
+					   <h:outputText value="#{ncNamesMgrBean.ncNamesDto.nomNomenclatureRef}" style="font-weight: bold;"/>
+				    </p:column> 
+						
+                 </p:row>
+                 
+                 <p:row >
+                    <p:column>
+					   <h:outputText value="#{nomenclaturemsgs.nc_list_ref_description}:  " />
+			        </p:column>
+				    <p:column>
+					   <h:outputText value="#{ncNamesMgrBean.ncNamesDto.descriptionRef}" style="font-weight: bold;"/>
+				    </p:column> 
+						
+                 </p:row>
+                  </p:panelGrid>
+                 				
+             
+           </p:panel>
+       </ui:define> 
+</ui:composition>
+</html>

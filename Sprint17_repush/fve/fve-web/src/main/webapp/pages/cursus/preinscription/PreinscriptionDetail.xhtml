@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+		<p:panel id="pnl_dossierEtudiantEditDossier"
+			header="Détail de la préinscription de #{preinscriptionMBean.dto.nomDemandeur} #{preinscriptionMBean.dto.prenomDemandeur}">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<br />
+			<p:tabView orientation="top" style="height:750px;">
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_etudiant_title}">
+					<ui:include src="/pages/cursus/individu/IndividuDetail.xhtml" />
+				</p:tab>
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_titreacces_title}">
+					<ui:include
+						src="/pages/cursus/dossier/titreacces/TitreAccessDetail.xhtml" />
+				</p:tab>
+				<p:tab
+					title="Demande">
+					<ui:include src="/pages/cursus/preinscription/DemandeDetail.xhtml" />
+				</p:tab>
+			</p:tabView>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

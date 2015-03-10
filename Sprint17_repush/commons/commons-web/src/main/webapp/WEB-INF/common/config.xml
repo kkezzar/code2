@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+	<application>
+		<action-listener>org.primefaces.application.DialogActionListener</action-listener>
+		<navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+		<view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+		<locale-config>
+			<default-locale>fr</default-locale>
+			<supported-locale>ar</supported-locale>
+		</locale-config>
+
+		<!-- UI config -->
+		<resource-bundle>
+			<base-name>ui</base-name>
+			<var>uiConfig</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.authentificationMessages</base-name>
+			<var>authentificationMsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.commonMessages</base-name>
+			<var>commonmsgs</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>locale.documentMessages</base-name>
+			<var>documentMsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.situationMessages</base-name>
+			<var>cmpSituationMsgs</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>locale.individuMessages</base-name>
+			<var>individumsgs</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>locale.referentielSelectGroupMessages</base-name>
+			<var>cmpGroupMsgs</var>
+		</resource-bundle>
+				
+		<resource-bundle>
+			<base-name>locale.referentielSelectPartnerMessages</base-name>
+			<var>cmpPartnerMsgs</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>locale.groupeMessages</base-name>
+			<var>groupemsgs</var>
+		</resource-bundle>
+			<resource-bundle>
+			<base-name>locale.structureMessages</base-name>
+			<var>structuremsgs</var>
+		</resource-bundle>	
+		
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+
+	<factory>
+	  <!-- Exception Handler (extended mode) -->
+	  <exception-handler-factory>
+	    org.primefaces.extensions.component.ajaxerrorhandler.AjaxExceptionHandlerFactory
+	  </exception-handler-factory>
+	</factory> 
+	
+</faces-config>

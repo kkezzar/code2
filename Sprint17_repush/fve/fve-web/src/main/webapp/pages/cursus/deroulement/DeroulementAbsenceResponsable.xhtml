@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<pe:blockUI target="absenceRespPanel" widgetVar="absenceBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	<p:outputPanel id="absenceRespPanel">
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+		<p:row>
+				<p:column style="width:10%">
+			<p:outputLabel value="#{examenMsgs.examen_examen} " for="_salle" />
+			</p:column>
+			<p:column style="width:90%">
+			<p:selectOneMenu id="_salle" filter="true" style="width:50%"
+				filterMatchMode="contains" required="true"
+				value="#{deroulementAbsenceResponsableBean.salleExamenDto.id}"
+				label="#{examenMsgs.examen_examen}">
+				<p:ajax update="absenceRespPanel" process="@this"
+					onstart="PF('absenceBlock').block()"
+					onsuccess="PF('absenceBlock').unblock()"
+					listener="#{deroulementAbsenceResponsableBean.salleChanged()}" />
+				<f:selectItem itemLabel="#{examenMsgs.examen_salle_tout}"
+					itemValue="" />
+				<f:selectItems
+					value="#{deroulementAbsenceResponsableBean.salleExamenList}" />
+			</p:selectOneMenu>
+			</p:column>
+			</p:row>
+		</p:panelGrid>
+
+		<p:dataTable id="_dtTbl_etudiants" editable="true"
+			value="#{deroulementAbsenceResponsableBean.absenceResponsableList}"
+			var="currentResponsable"  
+			currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			resizableColumns="true" paginator="true" rowIndexVar="rowIndex"
+			rows="20" paginatorPosition="bottom"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+			emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}">
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_liste_responsable}" />
+			</f:facet>
+			<p:column headerText="#{examenMsgs.examen_numero}" style="width:5%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_nom}" />
+				</f:facet>
+
+				<h:outputText value="#{currentResponsable.individuNomLatin} " />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_prenom}" />
+				</f:facet>
+
+				<h:outputText value="#{currentResponsable.individuPrenomLatin} " />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_absent}" />
+				</f:facet>
+				<p:selectBooleanCheckbox id="absentId"
+					value="#{currentResponsable.absent}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_motif_absence}" />
+
+				</f:facet>
+
+
+				<p:inputText value="#{currentResponsable.motifAbsence}"
+					style="width:100%" label="#{examenMsgs.examen_motif_absence}" />
+
+			</p:column>
+		</p:dataTable>
+		<br />
+		<p:commandButton id="_btnSave"
+			value="#{commonmsgs.bouton_enregistrer}" update="absenceRespPanel"
+			icon="ui-icon-disk" process="absenceRespPanel"
+			actionListener="#{deroulementAbsenceResponsableBean.save()}"
+			onstart="PF('absenceBlock').block()"
+			oncomplete="PF('absenceBlock').unblock()">
+		</p:commandButton>
+	</p:outputPanel>
+</ui:composition>
+

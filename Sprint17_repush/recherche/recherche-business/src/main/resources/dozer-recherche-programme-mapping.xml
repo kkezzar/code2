@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.ProgrammeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.Programme</class-b>
+      		<field>
+      					<a>typeProgrammeId</a>
+	  					<b>typeProgramme.id</b>
+      		</field> 
+      		<field>
+      					<a>typeProgrammeCode</a>
+	  					<b>typeProgramme.code</b>
+      		</field> 
+      		<field>
+      					<a>typeProgrammeLibelle</a>
+	  					<b>typeProgramme.libelleLongFr</b>
+      		</field> 
+      		<field>
+      					<a>circuitValidationId</a>
+	  					<b>circuitValidation.id</b>
+      		</field> 
+      		<field>
+      					<a>circuitValidationCode</a>
+	  					<b>circuitValidation.code</b>
+      		</field> 
+      		<field>
+      					<a>circuitValidationLibelle</a>
+	  					<b>circuitValidation.libelleFr</b>
+      		</field> 
+   	</mapping>
+</mappings>

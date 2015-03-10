@@ -1,0 +1,465 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{besoinRecrutementmsgs.pnl_enregistrer_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/besoinRecrutement/BesoinRecrutementSearch.xhtml" >
+				<ui:param name="renderedNouveau"  value="true"></ui:param>
+				<ui:param name="nameMBean"  value="#{besoinRecrutementMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty besoinRecrutementMBean.besoinRecrutementDto}"
+					>
+					<p:tabView id="tabView">
+					<p:tab title="#{besoinRecrutementmsgs.pnl_enregistrer_title}" >
+					<h:form id="form_besoin_employe_edit">
+
+
+		<p:panelGrid columns="1" cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:panelGrid id="descriptionDossier"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				
+
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="Besoin de recrutement"  styleClass="value"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel value="#{besoinRecrutementmsgs.date_ouverture}" styleClass="required" />
+					</p:column>
+					<p:column>
+					<p:calendar id="dateOuverture" navigator="true" required="true" requiredMessage="#{besoinRecrutementmsgs.date_ouverture_required}"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.dateOuverture}">
+						</p:calendar>
+						
+					</p:column>
+					<p:column>
+						<h:outputLabel
+							value="#{besoinRecrutementmsgs.objet} " styleClass="required" />
+					</p:column>
+					<p:column  >
+					<p:inputTextarea id="objet" required="true" requiredMessage="#{besoinRecrutementmsgs.objet_required}" style="width:100%;height:50px"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.objet}">
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+				
+				<p:row>
+					<p:column>
+						<h:outputLabel
+							value="#{besoinRecrutementmsgs.mode} " styleClass="required"  />
+					</p:column>
+
+					<p:column style="width:25%">
+						<p:selectOneMenu id="mode"  required="true" requiredMessage="#{besoinRecrutementmsgs.mode_required}" styleClass="input-large-px"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.nomenclatureByModeRecrutementDto.id}"
+							label="#{besoinRecrutementmsgs.mode}">
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.mode_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listeModeRecrutement}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputLabel
+							value="#{besoinRecrutementmsgs.type} " styleClass="required" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="type"  required="true" requiredMessage="#{besoinRecrutementmsgs.type_required}" styleClass="input-large-px"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.nomenclatureByTypeRecrutementDto.id}"
+							label="#{besoinRecrutementmsgs.type}">
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.type_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listeTypeRecrutement}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel
+							value="#{besoinRecrutementmsgs.date_limit_depot} " />
+					</p:column>
+					<p:column style="width:25%">
+						<p:calendar id="dateLimite" navigator="true"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.dateDepot}">
+						</p:calendar>
+					</p:column>
+					<p:column>
+						<h:outputLabel
+							value="#{besoinRecrutementmsgs.date_prevue_recrutement} " />
+					</p:column>
+					<p:column>
+						<p:calendar id="datePerevue" navigator="true"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.dateRecrutement}">
+						</p:calendar>
+					</p:column>
+				</p:row>
+                  <p:row>
+					<p:column>
+						<h:outputLabel value="#{besoinRecrutementmsgs.date_publiction} " />
+					</p:column>
+					<p:column>
+					<p:calendar id="datePublication" navigator="true"
+							value="#{besoinRecrutementMBean.besoinRecrutementDto.datePublication}">
+						</p:calendar>						
+					</p:column>
+<!-- 					<p:column> -->
+<!-- 						<h:outputLabel -->
+<!-- 							value="#{besoinRecrutementmsgs.observation} " /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column>					 -->
+<!-- 					<p:inputTextarea id="observation" style="width:100%;height:50px" -->
+<!-- 							value="#{besoinRecrutementMBean.besoinRecrutementDto.observation}"> -->
+<!-- 						</p:inputTextarea> -->
+<!-- 					</p:column> -->
+				</p:row>
+			</p:panelGrid>	
+
+
+      <p:panelGrid id="postesPnl"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+			<p:row>
+				<p:column styleClass="title" colspan="4">
+					<h:outputText value="#{besoinRecrutementmsgs.poste_a_recruter_title}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="poste" value="#{besoinRecrutementMBean.listDetailRecrutementDtos}" id="postesTable"
+						widgetVar="postesTable" rowKey="#{poste.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{besoinRecrutementmsgs.datable_list_poste_no_result} ">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								
+								<p:commandButton id="btnAddPoste" styleClass="ui-button-bleu"   disabled="#{ empty besoinRecrutementMBean.besoinRecrutementDto.id}"
+								     title="Ajouter poste" icon="ui-icon-plusthick" action="#{besoinRecrutementMBean.onAddPoste}" update=":pnl-poste"
+						                process="@this postesTable" 
+										ajax="true"
+										immediate="true" 
+										onsuccess="PF('posteDialog').show()"
+						></p:commandButton>	
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{besoinRecrutementmsgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.reference}" style="width:15%">
+							<h:outputText value="#{poste.reference}"  style="width:100%"
+								>
+							</h:outputText>
+
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.corps}" style="width:15%">
+							<h:outputText value="#{poste.corpsDto.nomenclatureByIdNomenclatureCorps.libelleLongFr}"  style="width:100%"
+								>
+							</h:outputText>
+
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.grade}" style="width:15%">
+							<h:outputText value="#{poste.gradeDto.nomenclatureDto.libelleLongFr}"  style="width:100%"
+								>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.categorie}" style="width:15%">
+							<h:outputText value="#{poste.categorieProfessionnelleDto.nomenclatureByCategorieDto.libelleLongFr}"  style="width:100%"
+								>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.poste_superieur}" style="width:15%">
+							<h:outputText value="#{poste.posteSuperieureDto.typePosteSuperieurDto.libelleLongFr}"  style="width:100%"
+								>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{besoinRecrutementmsgs.structure}" style="width:20%">
+							<h:outputText value="#{poste.refStructureDto.llStructureLatin}"  style="width:100%"
+								>
+							</h:outputText>
+						</p:column>
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemovePoste"  
+									action="#{besoinRecrutementMBean.removePoste()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="postesTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{besoinRecrutementMBean.selectedDetailRecrutementIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			</p:panelGrid>
+		
+				<p:toolbar id="besoinInfoToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+						id="saveBesoinrecrutementBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{besoinRecrutementMBean.onSave}" onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+
+						<p:confirm header="Confirmation"
+							message="#{besoinRecrutementmsgs.save_confirm_msg}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+						<p:spacer width="10px"></p:spacer>
+					<p:commandButton value="#{commonmsgs.bouton_envoyer}" disabled="#{ empty besoinRecrutementMBean.listDetailRecrutementDtos}"
+						id="sendBesoinRecrutementBtn" icon="ui-icon-extlink" update=":pnl_Gerer"
+						actionListener="#{besoinRecrutementMBean.onSend}"  >
+
+						<p:confirm header="Confirmation"
+							message="#{besoinRecrutementmsgs.save_confirm_msg}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:spacer width="10px"></p:spacer>
+					<p:commandButton value="#{commonmsgs.bouton_supprimer}"  disabled="#{ empty besoinRecrutementMBean.besoinRecrutementDto.id}"
+						id="deleteBesoinrecrutementBtn" icon="ui-icon-trash" update=":pnl_Gerer"
+						actionListener="#{besoinRecrutementMBean.onRemove}">
+
+						<p:confirm header="Confirmation"
+							message="#{besoinRecrutementmsgs.delete_confirm_msg}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{besoinRecrutementMBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:panelGrid>
+	</h:form>
+	</p:tab>
+	<p:tab title="#{commonmsgs.tab_historique}" disabled="#{besoinRecrutementMBean.besoinRecrutementDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{besoinRecrutementMBean.besoinRecrutementHistory}"
+															idParamName="id"
+															idParamValue="#{besoinRecrutementMBean.besoinRecrutementDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+
+
+			<p:dialog position="center"   appendTo="@(body)"
+		header="#{besoinRecrutementmsgs.pnl_enregistrer_poste_pouvoir}" id="posteDialog"
+		widgetVar="posteDialog" modal="true" 
+		 resizable="false"  >
+		<p:outputPanel id="pnl-poste" >
+		<h:form id="form_poste_edit">
+		
+			<!-- <p:panelGrid columns="1" cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border"> -->
+			<p:panelGrid id="descriptionDossier"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				
+
+				
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.reference} " styleClass="required"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:inputText id="reference"  value="#{besoinRecrutementMBean.detailRecrutementDto.reference}" 
+							label="#{besoinRecrutementmsgs.reference}" required="true" requiredMessage="#{besoinRecrutementmsgs.reference_required}">
+						</p:inputText>
+					</p:column>
+					
+				</p:row>
+
+
+<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.corps} " styleClass="required"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:selectOneMenu id="corps" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{besoinRecrutementmsgs.corps_required}"
+							value="#{besoinRecrutementMBean.selectedCorpsId}"
+							label="#{besoinRecrutementmsgs.corps}">
+							<p:ajax update="grade categorie poste"  partialSubmit="true"  
+										listener="#{besoinRecrutementMBean.onCorpsSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.corps_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listeCorps}" />
+                                 
+						</p:selectOneMenu>
+					</p:column>
+					</p:row>
+				
+				
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.grade} " styleClass="required"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:selectOneMenu id="grade" style="width:100%" filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{besoinRecrutementmsgs.grade_required}"
+							value="#{besoinRecrutementMBean.selectedGradeId}"
+							label="#{besoinRecrutementmsgs.grade}">
+							<p:ajax update="categorie poste"  partialSubmit="true"
+										listener="#{besoinRecrutementMBean.onGradeSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.grade_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listeGrade}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				
+				
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.categorie}"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<h:outputText  id="categorie" value="#{besoinRecrutementMBean.detailRecrutementDto.categorieProfessionnelleDto.nomenclatureByCategorieDto.libelleLongFr}"  styleClass="value" />
+					</p:column>
+					</p:row>
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.nbre_poste} " styleClass="required"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:inputText id="nbrePoste"  value="#{besoinRecrutementMBean.detailRecrutementDto.nbrePoste}" 
+							label="#{besoinRecrutementmsgs.nbre_poste}" required="true" requiredMessage="#{besoinRecrutementmsgs.nbre_poste_required}">
+							 <f:validateLongRange minimum="1" maximum="1000"></f:validateLongRange>
+						</p:inputText>
+					</p:column>
+					
+				</p:row>
+				
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.poste_superieur}"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:selectOneMenu id="poste" style="width:100%" filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+							value="#{besoinRecrutementMBean.selectedPosteSuperieurId}"
+							label="#{besoinRecrutementmsgs.poste_superieur}">
+							<p:ajax   partialSubmit="true"
+										listener="#{besoinRecrutementMBean.onPosteSuperieurSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.poste_superieur_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listePosteSuperieur}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				
+				<p:row>
+					<p:column  >
+						<p:outputLabel value="#{besoinRecrutementmsgs.structure}"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:selectOneMenu id="structure" style="width:100%"   filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+							value="#{besoinRecrutementMBean.selectedStructureId}"
+							label="#{besoinRecrutementmsgs.structure}">
+							<p:ajax   partialSubmit="true"
+										listener="#{besoinRecrutementMBean.onStructureSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.structure_select}"
+								itemValue="" />
+							<f:selectItems value="#{besoinRecrutementMBean.listeStructure}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					
+				</p:row>
+			<!-- </p:panelGrid> -->
+			<p:row>
+					<p:column  colspan="2">
+			<p:toolbar id="posteInfoToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"  styleClass="ui-button-save" 
+						id="savePosteRecrutBtn" icon="ui-icon-disk" update=":tabView:form_besoin_employe_edit" 
+						actionListener="#{besoinRecrutementMBean.addPoste()}"  onstart="PF('page').block()"  onsuccess="PF('page').unblock()"  >
+
+						<!-- oncomplete="if (!args.validationFailed) {posteDialog.hide()}" -->
+					</p:commandButton>
+					
+				</p:toolbarGroup>
+
+
+						
+							
+							
+
+				<p:toolbarGroup align="right">
+					
+				</p:toolbarGroup>
+			</p:toolbar>
+			</p:column>
+			</p:row>
+	</p:panelGrid>
+		
+		</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+
+					
+				
+			</p:outputPanel>
+
+		</p:outputPanel>
+</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

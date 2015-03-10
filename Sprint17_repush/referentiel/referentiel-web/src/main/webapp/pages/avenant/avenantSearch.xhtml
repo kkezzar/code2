@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_avenants}" style="border:0;">
+			<h:form id="searchForm" dir="#{localeBean.dir}"
+			        onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+		
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							icon="ui-icon-document" action="#{avenantBean.toNew}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{avenantDroitBean.createAllow}" />
+						<p:separator />
+						<p:commandButton title="Print" icon="ui-icon-print" />
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{avenantBean.searchInput}" id="searchInput"
+							rendered="#{avenantDroitBean.readAllow}" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton update=":searchForm" ajax="true" id="searchButton"
+							icon="ui-icon-search" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							actionListener="#{avenantBean.findGeneric}"
+							rendered="#{avenantDroitBean.readAllow}" />
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()"
+							rendered="#{avenantDroitBean.readAllow}">
+							<h:outputText value="#{commonmsgs.button_advanced_search}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="contratData"
+					rendered="#{avenantBean.listRefContratDto!=null}"
+					value="#{avenantBean.listRefContratDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{avenantmsgs.liste_avenant}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_identite}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+
+
+					<p:column sortBy="#{current.idContrat}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_identite_contrat}" />
+						</f:facet>
+
+						<h:outputText value="#{current.idContrat}" />
+					</p:column>
+
+
+
+
+
+					<p:column sortBy="#{current.objetContratFr}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_objet_avenant}" />
+						</f:facet>
+
+						<h:outputText value="#{current.objetContratFr}" />
+					</p:column>
+					<p:column sortBy="#{current.dateCreation}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_date_creation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateCreation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.llStructureLatin}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_service}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llStructureLatin}" />
+					</p:column>
+					<p:column sortBy="#{current.llSituationFr}">
+						<f:facet name="header">
+							<h:outputText value="#{avenantmsgs.avenant_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateSituation}">
+						<f:facet name="header">
+							<h:outputText value="Date" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateSituation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:8%">
+						<p:commandButton id="readButton" action="#{avenantBean.toDetails}"
+							icon="ui-icon-document" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{avenantDroitBean.readAllow}"
+							title="#{commonmsgs.button_consulter}">
+							<f:setPropertyActionListener value="#{current}"
+								target="#{avenantBean.refContratDto}" />
+							<f:param name="idf" value="#{current.id}" />
+							<f:param name="idc" value="#{current.id}" />
+							<f:param name="identifiant" value="#{current.identifiant}" />
+							<f:param name="editMode" value="#{true}" />
+						</p:commandButton>
+						<p:commandButton id="modifyButton" action="#{avenantBean.toEdit}"
+							icon="ui-icon-pencil" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{avenantDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:setPropertyActionListener value="#{current}"
+								target="#{avenantBean.refContratDto}" />
+							<f:param name="idf" value="#{current.id}" />
+							<f:param name="idc" value="#{current.id}" />
+							<f:param name="identifiant" value="#{current.identifiant}" />
+							<f:param name="editMode" value="#{true}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_identite}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="identifiantSearch" style="text-align: left"
+								value="#{avenantBean.searchDto.identifiant}"
+								label="#{avenantmsgs.avenant_identite}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{avenantmsgs.avenant_objet_avenant}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="objetContratSearch" style="text-align: left"
+								value="#{avenantBean.searchDto.objetContratFr}"
+								label="#{avenantmsgs.avenant_objet_avenant}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row rendered="false">
+
+						<p:column>
+							<h:outputText
+								value="#{avenantmsgs.avenant_reference_documentaire}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="refDocSearch" style="text-align: left"
+								value="#{avenantBean.searchDto.referenceDocumentaire}"
+								label="#{avenantmsgs.avenant_reference_documentaire}">
+
+							</p:inputText>
+						</p:column>
+
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					actionListener="#{avenantBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

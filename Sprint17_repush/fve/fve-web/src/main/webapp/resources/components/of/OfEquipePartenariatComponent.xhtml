@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+ <!-- INTERFACE COMPOSANT OF PARTENARIAT -->
+<composite:interface>
+		 
+		<composite:attribute name="ofDto"  type="dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationDto"	shortDescription=" Of PARTENARIAT - Object offre de formation"/>
+		<composite:attribute name="toEdit"	 type="java.lang.Boolean"	required="true"  shortDescription=" Of PARTENARIAT - Mode edition"/>
+		
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT OF PARTENARIAT -->          
+<composite:implementation>
+	
+	<p:fieldset id="fsOfSearchContract" legend="#{ofmsgs.OFFRE_FORMATION_PARTENARIAT_RECHERCHE_CONTRAT_LEGEND}"  rendered="#{cc.attrs.toEdit}">
+		<h:form id="form1">			
+					<p:toolbar styleClass="toolBarMesrs" style="width:750px;" rendered="#{cc.attrs.toEdit}">
+								<p:toolbarGroup    align="left">
+										<h:outputLabel  value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_MOT_CLE_RECHERCHE}"/> 	<p:separator />
+										<p:inputText id="keyWordsContactID" binding="#{txtKeyWordsContract}"   value="#{ofBB.keyWordsContract}"  title="#{ofmsgs.OF_SEARCH_TEXT_KEYWORDS}"	  style="width:350px"
+															 label="#{ofmsgs.offre_formation_search_field_libelle}"  />
+										<p:separator/>
+								</p:toolbarGroup>
+
+								<p:toolbarGroup    align="left">
+										<p:commandButton value="#{ofmsgs.OFFRE_FORMATION_BTN_RECHERCHE_CONTRAT_LABEL}"  	id="btnSearchContract" title="#{ofmsgs.OFFRE_FORMATION_BTN_RECHERCHE_CONTRAT_TOOLTIP}"
+												onstart="PF('blockUIWidgetSearchContrat').block()" oncomplete="PF('blockUIWidgetSearchContrat').unblock()"
+												icon="ui-icon-search" 	actionListener="#{ofBB.searchContract()}" update="@([id$=ofTeamSearchContratDataTable])">
+												
+																	<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentContractId" value="#{txtContractID.value}" />
+										</p:commandButton>
+								</p:toolbarGroup>
+						</p:toolbar>	
+						<br />
+						<p:dataTable id="ofTeamSearchContratDataTable" var="row"
+														value="#{ofBB.listSearchContractsLazy}"
+														rowIndexVar="rowIndex"
+														emptyMessage="#{ofmsgs.OFFRE_FORMATION_CONTRATS_SEARCH_NO_RESULT}"
+														paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+														paginator="true" 
+														rows="5" 
+														lazy="true" 
+														paginatorPosition="bottom"
+														rowsPerPageTemplate="5,10,15"
+														selection="#{ofBB.selectedContract}"
+														selectionMode="single"
+														rowKey="#{row.identifiant}"
+														styleClass="ofSeacrhMemberDatatableCss" >
+														
+														<f:facet name="header">  
+            														#{ofmsgs.OFFRE_FORMATION_CONTRATS_SEARCH_TABLE_HEADER}
+       						 							</f:facet>  
+																	<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentContractId" value="#{txtContractID.value}" />
+														
+														<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetSearchContrat').block()" oncomplete="PF('blockUIWidgetSearchContrat').unblock()"/>
+														<p:ajax event="sort" update="@all" process="@form" onstart="PF('blockUIWidgetSearchContrat').block()" oncomplete="PF('blockUIWidgetSearchContrat').unblock()"/>
+														<p:ajax event="rowSelect" listener="#{ofBB.onRowSelectContract}" update="@([id$=form2])"  oncomplete="PF('dlgAddContract').show()"/>
+											
+														<p:column	 styleClass="center" style="width:10px">
+																	<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+				
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_COL_CODE}" styleClass="left" style="width:40px">
+																	<h:outputText value="#{row.identifiant}" />
+														</p:column>
+											
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_COL_REFERENCE}"  styleClass="left" style="width:20px">
+																	<h:outputText value="#{row.referenceDocumentaire}" />
+														</p:column>
+														
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_COL_OBJET_FR}"  styleClass="left" style="width:230px">
+																	<h:outputText value="#{row.objetContratFr}" />
+														</p:column>
+														
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_COL_OBJET_AR}"  styleClass="right">
+																	<h:outputText value="#{row.objetContratAr}" />
+														</p:column>
+														
+														<p:column styleClass="center" style="width:120px">
+														
+                											<p:commandButton id="showContractDetailDlgId" icon="ui-icon-plusthick"
+                													 						value="#{ofmsgs.OFFRE_FORMATION_CONTRAT_AJOUT_DLG_AFFICHER_BTN}" 
+                													 						actionListener="#{ofBB.prepareContractDetail(row.identifiant)}"
+                													 						update="@([id$=form2])"
+                																			oncomplete="PF('dlgAddContract').show()">
+                													
+                													<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentContractId" value="#{txtContractID.value}" />
+																	
+                    										</p:commandButton>
+                														
+            											</p:column>
+						
+						</p:dataTable>
+	
+		</h:form>	
+     </p:fieldset>
+      <br />  	
+       	<p:fieldset id="fsOfListPartners" legend="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_LISTE_LEGEND}"  style="margin:0px;">
+				
+				<h:form id="form3">
+					
+					<p:dataTable id="ofPartnersOfDataTable" var="row"
+														value="#{ofBB.listOfPartners}"
+														binding="#{ofBB.partnersOfDataTable}"
+														rowIndexVar="rowIndex"
+														emptyMessage="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_NO_RESULT}" 
+														paginatorPosition="bottom"
+														rowsPerPageTemplate="5,10,15"
+														paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+														paginator="true" 
+														rows="5" 
+														lazy="true" 
+														rowKey="#{row.id}"
+														styleClass="ofSeacrhMemberDatatableCss">
+														
+														<f:facet name="header">  
+            														#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_HEADER}
+       						 							</f:facet>  
+       						 								
+														<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+														<f:param name="ofId" value="#{txtIdOf.value}" />
+														<f:param name="editionMode" value="#{txtEditionMode.value}" />
+														<f:param name="currentContractId" value="#{txtContractID.value}" />
+														
+														<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetListPartners').block()" oncomplete="PF('blockUIWidgetListPartners').unblock()"/>
+														<p:ajax event="sort" update="@all" process="@form" onstart="PF('blockUIWidgetListPartners').block()" oncomplete="PF('blockUIWidgetListPartners').unblock()"/>
+											
+														<p:column	 style="width:10px"  styleClass="center">
+																	<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+				
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_COL_CODE}" style="width:40px"  styleClass="left">
+																	<h:outputText value="#{row.refCodePartenaire}" />
+														</p:column>
+														
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_COL_LIBELLE_FR}"   styleClass="left" style="width:360px">
+																	<h:outputText value="#{row.libelleFr}" />
+														</p:column>
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_COL_LIBELLE_AR}"   styleClass="right">
+																	<h:outputText value="#{row.libelleAr}" />
+														</p:column>
+														
+														<p:column  styleClass="center" rendered="#{cc.attrs.toEdit}" style="width:120px">
+														<p:commandButton 
+																	id="removePartnerButtonID"
+																	update="@([id$=ofPartnersOfDataTable])" ajax="true" process="@this"
+																	value="#{ofmsgs.OFFRE_FORMATION_PARTENAIRES_TABLE_COL_BTN_SUPPRIMER}"  
+																	action="#{ofBB.removePartner(row.id)}"
+																	onstart="PF('blockUIWidgetListPartners').block()" 
+ 																	oncomplete="PF('blockUIWidgetListPartners').unblock();" 
+ 																	icon="ui-icon-minusthick">
+																	<p:confirm		header="#{ofmsgs.offre_formation_confirm_dialog_header}"	 message="Voulez-vous  supprimer ce partenaire ?"	icon="ui-icon-alert" />
+																	
+																<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+																<f:param name="ofId" value="#{txtIdOf.value}" />
+																<f:param name="editionMode" value="#{txtEditionMode.value}" />
+															<f:param name="currentContractId" value="#{txtContractID.value}" />
+																	
+														</p:commandButton>
+														</p:column>
+					</p:dataTable>											
+				</h:form>
+				
+		</p:fieldset>
+		
+      <!-- POPUP DETAIL CONTRAT -->
+			
+	<p:dialog id="modalDialogContract" header="#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_DIALOG_HEADER}" widgetVar="dlgAddContract" resizable="false"  	
+						style=" font-size:12px" appendTo="@(body)" modal="true" width="700">  
+			<h:form id="form2">
+			<p:outputPanel  id="detailContractPopup">		
+       					 <br />
+       					 <p:panelGrid columns="2" style="width:675px;">  
+            						<f:facet name="header">  
+        										#{ofmsgs.OFFRE_FORMATION_CONTRAT_INFOS_DIALOG_TABLE_HEADER}
+    								</f:facet>  
+  
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_ROW_CODE}"/>
+            						<h:outputLabel value="#{ofBB.selectedContract.identifiant}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_ROW_REFERENCE}"/>
+            						<h:outputLabel value="#{ofBB.selectedContract.referenceDocumentaire}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_ROW_OBJET_FR}"/>
+            						<h:outputLabel value="#{ofBB.selectedContract.objetContratFr}" styleClass="labelValue"/>
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_ROW_DATE_DEBUT}"/>
+            						<h:outputLabel value="#{ofBB.selectedContract.dateDebutValidite.day}/#{ofBB.selectedContract.dateDebutValidite.month}/#{ofBB.selectedContract.dateDebutValidite.year}" styleClass="labelValue"/>
+            						
+            						
+            						<h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_SEARCH_CONTRAT_TABLE_ROW_DATE_FIN}"/>
+            						<h:outputLabel value="#{ofBB.selectedContract.dateFinValidite.day}/#{ofBB.selectedContract.dateFinValidite.month}/#{ofBB.selectedContract.dateFinValidite.year}" styleClass="labelValue"/>
+            						
+           				</p:panelGrid>  
+  						<br />
+              			
+              			<p:dataTable 		id="contractPartnersDataTable" var="row"
+														value="#{ofBB.selectedContractPartners}"
+														rowIndexVar="rowIndex"
+														emptyMessage="#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_PARTENAIRES_NO_RESULT}"
+														paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+														paginator="true" 
+														rows="5" 
+														lazy="true" 
+														paginatorPosition="bottom"
+														rowsPerPageTemplate="5,10,15"
+														binding="#{ofBB.partnersDataTable}"
+														style="margin:0px; width:675px;">
+														
+														<f:facet name="header"  styleClass="center">  
+            														#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_PARTENAIRES_TABLE_HEADER}
+       						 							</f:facet>  
+       						 							
+       						 							<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+														<f:param name="ofId" value="#{txtIdOf.value}" />
+														<f:param name="editionMode" value="#{txtEditionMode.value}" />
+														<f:param name="currentContractId" value="#{txtContractID.value}" />
+													
+														<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetSearchContrat').block()" oncomplete="PF('blockUIWidgetSearchContrat').unblock()"/>
+														<p:ajax event="sort" update="@all" process="@form" onstart="PF('blockUIWidgetSearchContrat').block()" oncomplete="PF('blockUIWidgetSearchContrat').unblock()"/>
+											
+														<p:column	 styleClass="center" style="width:10px">
+																	<h:outputText value="#{rowIndex+1}" />
+														</p:column>
+				
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_PARTENAIRES_COL_CODE}" styleClass="left" style="width:20px">
+																	<h:outputText value="#{row.idIndividu}#{row.idGroupe}#{row.idStructure} " />
+														</p:column>
+											
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_PARTENAIRES_COL_LIBELLE_FR}"  styleClass="left">
+																	<h:outputText value="#{row.nomLatin}#{row.llGroupe}#{row.llStructureLatin} " />
+														</p:column>		
+																	
+														<p:column   	headerText="#{ofmsgs.OFFRE_FORMATION_CONTRAT_DETAIL_PARTENAIRES_COL_ROLE_FR}"  styleClass="left">
+																	<h:outputText value="#{row.llRoleFr}" />
+														</p:column>	
+														
+														<p:column    styleClass="center">
+																	<p:selectBooleanCheckbox  binding="#{ofBB.isSelectedPartner}"/>
+														</p:column>	
+																	
+							</p:dataTable>										
+							<br />
+							
+								<h:panelGrid columns="2" columnClasses="center, center" styleClass="buttonsTable" style="width:675px;">
+  				  
+							 		<p:commandButton id="btnHideSearchContractDialogID" value="#{ofmsgs.OFFRE_FORMATION_CONTRAT_AJOUT_DLG_FERMER_BTN}"  
+																	     icon="ui-icon-close"	type="button" onclick="PF('dlgAddContract').hide();" />
+					
+			        				<p:commandButton id="btnAddContractId"  
+			        												update="@([id$=ofPartnersOfDataTable])" ajax="true" process="@form"
+			        												value="#{ofmsgs.OFFRE_FORMATION_CONTRAT_AJOUT_DLG_AJOUTER_BTN}" 
+			        												action="#{ofBB.addPartnersToOf()}"
+			        												icon="ui-icon-plusthick"
+			        												onstart="PF('blockUIWidgetListPartners').block()" oncomplete="PF('blockUIWidgetListPartners').unblock(); PF('dlgAddContract').hide();"	>
+			        												
+			        												<f:param name="keyWordsContract" value="#{txtKeyWordsContract.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentContractId" value="#{txtContractID.value}" />
+																	
+                				</p:commandButton>
+              			
+              			</h:panelGrid>		 	
+              			<h:inputHidden  id="idContactTxtID" 		binding="#{txtContractID}" value="#{ofBB.currentContractId}"/>
+              </p:outputPanel>		
+             </h:form>
+		</p:dialog>
+
+		<p:confirmDialog global="true" showEffect="fade">
+
+			<h:panelGrid columns="2" styleClass="buttonPanel" cellspacing="2">
+			<p:row>
+			
+					<p:column styleClass="middle">
+							<p:commandButton 	value="#{ofmsgs.offre_formation_confirm_dialog_cancel_button}" 	type="button" styleClass="ui-confirmdialog-no" 	icon="ui-icon-close" />
+					</p:column>
+					
+					<p:column styleClass="middle">
+							<p:commandButton 	value="#{ofmsgs.offre_formation_confirm_dialog_confirm_button}"  type="button" styleClass="ui-confirmdialog-yes"  	icon="ui-icon-check" />
+					</p:column>
+					
+			</p:row>
+			</h:panelGrid>
+			
+		</p:confirmDialog>
+<pe:blockUI target="@([id$=ofTeamSearchContratDataTable])" widgetVar="blockUIWidgetSearchContrat">
+        				<h:graphicImage library="images" name="ajax-loader1.gif"/>  
+</pe:blockUI>
+
+<pe:blockUI target="@([id$=ofPartnersOfDataTable])" widgetVar="blockUIWidgetListPartners">
+        				<h:graphicImage library="images" name="ajax-loader1.gif"/>  
+</pe:blockUI>
+  		
+</composite:implementation>
+
+</html>

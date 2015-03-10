@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<p:outputPanel id="infoPanel" styleClass="examenTabStyle">
+		<p:panelGrid styleClass="ui-panelgrid-full-width" id="examenInfo">
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_matiere}" for="mc" />
+				</p:column>
+				<p:column style="width:35%" >
+					<p:selectOneMenu id="mc" required="true"
+						requiredMessage="#{examenMsgs.examen_matiere_required}"
+						style="width:100%"
+						value="#{examenSessionBean.examenSessionDto.rattachementMcId}"
+						filter="true" filterMatchMode="contains"
+						label="#{examenMsgs.examen_matiere}">
+						<f:selectItem itemLabel="#{examenMsgs.examen_matiere_select}"
+							itemValue="" />
+						<f:selectItems value="#{examenSessionBean.rattachementMcList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+				<p:column  colspan="2"/>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_type_examen}"
+						for="typeExamen" />
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="typeExamen" required="true"
+						requiredMessage="#{examenMsgs.examen_type_examen_required}"
+						styleClass="value" style="width:100%"
+						value="#{examenSessionBean.examenSessionDto.refTypeExamen}"
+						filter="true" filterMatchMode="contains"
+						label="#{examenMsgs.examen_type_examen}">
+						<f:selectItem itemLabel="#{examenMsgs.examen_type_examen_select}"
+							itemValue="" />
+						<f:selectItems value="#{examenSessionBean.typeExamenList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_anonymat} ?" />
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectBooleanCheckbox id="anonymat"
+						value="#{examenSessionBean.examenSessionDto.anonymat}">
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_examen}"
+						for="dateExamen" />
+				</p:column>
+				<p:column style="width:35%">
+					<p:calendar navigator="true" widgetVar="calwidget"
+						styleClass="value"
+						value="#{examenSessionBean.examenSessionDto.dateExamen}"
+						id="dateExamen" label="#{examenMsgs.examen_date_examen}"
+						pattern="dd/MM/yyyy" required="true"
+						requiredMessage="#{examenMsgs.examen_date_examen_required}" />
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_heure_debut}"
+						for="heureDebut" />
+				</p:column>
+				<p:column style="width:35%">
+					<p:calendar id="heureDebut" styleClass="value" navigator="true"
+						value="#{examenSessionBean.examenSessionDto.heureDebut}"
+						label="#{examenMsgs.examen_heure_debut}" pattern="HH:mm"
+						timeOnly="true" required="true"
+						requiredMessage="#{examenMsgs.examen_heure_debut_required}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_duree}" for="dureeExamen" />
+				</p:column>
+				<p:column style="width:35%" colspan="3">
+					<p:inputText id="dureeExamen" styleClass="value"
+						value="#{examenSessionBean.examenSessionDto.duree}"
+						label="#{examenMsgs.examen_numero_session}" required="true"
+						requiredMessage="#{examenMsgs.examen_duree_required}">
+						<f:validateLongRange minimum="60" maximum="360" />
+					</p:inputText>
+					#{examenMsgs.examen_duree_minutes}
+					</p:column>
+			</p:row>
+
+			<p:row rendered="#{examenSessionBean.modelExist}">
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_modele_matiere}"
+						for="modele" />
+				</p:column>
+				<p:column style="width:35%" colspan="3">
+					<p:selectOneMenu id="modele" required="false"
+						requiredMessage="#{examenMsgs.examen_matiere_required}"
+						style="width:100%"
+						value="#{examenSessionBean.examenSessionDto.modeleExamenId}"
+						filter="true" filterMatchMode="startsWith"
+						label="#{examenMsgs.examen_modele_matiere}">
+						<f:selectItem
+							itemLabel="#{examenMsgs.examen_modele_matiere_select}"
+							itemValue="" />
+						<f:selectItems value="#{examenSessionBean.modeleExamenList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+		<br />
+
+		<p:toolbar id="_examenToolBar">
+			<p:toolbarGroup align="left">
+				<p:commandButton id="btnSave"
+					value="#{commonmsgs.bouton_enregistrer}"
+					actionListener="#{examenSessionBean.saveExamen()}"
+					icon="ui-icon-disk" update="@(.examenStyle)"
+					process="infoPanel" onstart="PF('detailSessionBlock').block()"
+						onsuccess="PF('detailSessionBlock').unblock()">
+
+				</p:commandButton>
+				<p:separator />
+				<p:commandButton id="btnDeleteExamen"
+					value="#{commonmsgs.bouton_supprimer}"
+					actionListener="#{examenSessionBean.deleteExamen()}"
+					icon="ui-icon-minus" update="@(.examenStyle)"
+					process="infoPanel" onstart="PF('detailSessionBlock').block()"
+					onsuccess="PF('detailSessionBlock').unblock()"
+					disabled="#{examenSessionBean.examenSessionDto.id==0}">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:separator />
+				<p:commandButton id="btnAddExamen"
+					value="#{commonmsgs.bouton_nouveau}"
+					actionListener="#{examenSessionBean.addExamen()}"
+					icon="ui-icon-plusthick"
+					update="@(.examenTabStyle)"
+					process="@this" onstart="PF('detailSessionBlock').block()"
+					onsuccess="PF('detailSessionBlock').unblock()">
+				</p:commandButton>
+
+			</p:toolbarGroup>
+			
+		</p:toolbar>
+
+	</p:outputPanel>
+</ui:composition>
+

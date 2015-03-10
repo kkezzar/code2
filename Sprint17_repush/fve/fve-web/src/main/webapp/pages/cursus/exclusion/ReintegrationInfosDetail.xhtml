@@ -1,0 +1,181 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core" >
+
+
+	<p:outputPanel >
+	<center><h3> <h:outputText value="#{reintegrationMsgs.reintegration_nouveau_reintegration_title}" styleClass="labelValue" /> / <h:outputText value="#{reintegrationBean.reintegrationDto.anneeAcademiqueCode}" styleClass="labelValue" /></h3>
+	</center>
+	<pe:blockUI target="reintegrationFormEdit" widgetVar="reintegrationFormBlock">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}" style="white-space: nowrap;" />
+			</h:panelGrid>
+			</pe:blockUI>
+	<h:form id="reintegrationFormEdit">
+
+	<p:fieldset legend="#{reintegrationMsgs.reintegration_etudiant}">
+	
+    <p:panelGrid   >
+     <p:row>
+            <p:column >
+			<h:outputText value="#{reintegrationMsgs.reintegration_nin_etudiant}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{reintegrationBean.reintegrationDto.individuNin}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{reintegrationMsgs.reintegration_matricule}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{reintegrationBean.reintegrationDto.dossierEtudiantMatricule}" styleClass="labelValue"/>
+			</p:column>
+			<p:column  >	
+			<h:outputText value="#{reintegrationMsgs.reintegration_nom_etudiant}:" />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{reintegrationBean.reintegrationDto.individuNomLatin.toUpperCase()}" styleClass="labelValue"/>
+			</p:column>
+	
+			<p:column  >			
+			<h:outputText value="#{reintegrationMsgs.reintegration_prenom_etudiant}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{reintegrationBean.reintegrationDto.individuPrenomLatin.substring(0,1).toUpperCase().concat(reintegrationBean.reintegrationDto.individuPrenomLatin.substring(1).toLowerCase())}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>		
+	        </p:panelGrid>
+	        
+     </p:fieldset>
+     <br></br>
+     <p:fieldset legend="reintegration">
+    
+    <p:panelGrid id="gererreintegration" styleClass="noBorder1">
+                        
+ <p:row>
+						<p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_date_demande_reintegration} *" />
+						</p:column>
+						<p:column>
+
+							 <p:calendar navigator="true"  value="#{reintegrationBean.reintegrationDto.dateDemande}"  
+					  			showButtonPanel="true"
+						        label="#{reintegrationMsgs.reintegration_date_demande_reintegration}" 
+						        required="true" 
+						        requiredMessage="#{reintegrationMsgs.reintegration_date_demande_reintegration_recired}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>		
+						  
+						</p:column>
+						
+						<p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_objet} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{reintegrationBean.reintegrationDto.objet}"
+								label="#{reintegrationMsgs.reintegration_objet}" 
+								required="true"
+								requiredMessage="#{reintegrationMsgs.reintegration_objet_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+				   <p:row>
+				    <p:column style="">
+							<h:outputText value="#{reintegrationMsgs.reintegration_resultat} " />
+						</p:column>
+				   </p:row>
+
+				   <p:row>
+				    <p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_date_decision_reintegration} " />
+						</p:column>
+						<p:column>
+						 <p:calendar navigator="true"  value="#{reintegrationBean.reintegrationDto.dateResultat}"  
+					  			showButtonPanel="true"
+						        label="#{reintegrationMsgs.reintegration_date_decision_reintegration}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>	
+						  </p:column>	
+
+						<p:column>
+							<p:selectOneRadio value="#{reintegrationBean.reintegrationDto.resultat}">  
+                                <f:selectItem itemLabel="Refusée" itemValue="Refusée" />  
+                                <f:selectItem itemLabel="Accordée" itemValue="Accordée" />  
+                            </p:selectOneRadio>
+						</p:column>
+	               </p:row>	
+					 
+					  <p:row>  
+						
+						<p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_motif_refus}" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{reintegrationBean.reintegrationDto.motif}"
+								label="#{reintegrationMsgs.reintegration_motif_refus}">
+							</p:inputText>
+						</p:column>
+						
+					</p:row>
+					
+					<p:row>
+					 <p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_date_autorisation} " />
+						</p:column>
+					<p:column>						
+							 <p:calendar navigator="true"  value="#{reintegrationBean.reintegrationDto.dateAutorisation}"  
+					  			showButtonPanel="true"
+						        label="#{reintegrationBean.reintegrationDto.dateAutorisation}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>		
+						  
+						</p:column>
+					</p:row>
+					
+					<p:row>
+					 <p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_date_reintegration} " />
+						</p:column>
+					<p:column>
+											
+							 <p:calendar navigator="true"  value="#{reintegrationBean.reintegrationDto.dateReintegration}"  
+					  			showButtonPanel="true"
+						        label="#{reintegrationBean.reintegrationDto.dateAutorisation}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>		
+						  
+						</p:column>
+					</p:row>
+                                          
+                    
+		
+	</p:panelGrid>
+                  <p:row>
+						<p:column>
+						</p:column>
+						<p:column> 
+						
+						<p:commandButton value="#{commonmsgs.bouton_annuler}" icon="ui-icon-cencel" id="retour" 
+						update="@(.detailContentStyle)" 
+				        onstart="PF('reintegrationFormBlock').block()" process="reintegrationFormEdit" 	onsuccess="PF('reintegrationFormBlock').unblock()"
+						actionListener="#{assiduiteBean.delete()}">	
+						</p:commandButton>
+						</p:column>
+				 </p:row>
+     </p:fieldset>
+         	
+	</h:form>
+</p:outputPanel>
+
+
+</ui:composition>

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_habilitation_fonction_objet}"
+			style="border:0;">
+			<ui:include src="/pages/fonction/fonctionInfo.xhtml" />
+			<br />
+			<br />
+			<h:form id="fonctionFromId">
+
+				<h:outputText value="#{habilitationmsgs.action_description}"
+					style="font-weight: bold;" />
+				<hr></hr>
+				<p:panelGrid id="actionDescription" styleClass="noBorder1">
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{habilitationmsgs.action_identifiant_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="action_identifiant" style="font-weight: bold;"
+								value="#{actionBckBean.refActionDto.identifiant}" />
+						</p:column>
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.action_name_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="action_nom" style="font-weight: bold;"
+								value="#{actionBckBean.refActionDto.nom}" />
+						</p:column>
+
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.action_name_arabe_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="action_nomArabe" style="font-weight: bold;"
+								value="#{actionBckBean.refActionDto.nomArabe}" />
+						</p:column>
+
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.action_rang_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="action_rang" style="font-weight: bold;"
+								value="#{actionBckBean.refActionDto.rang}" />
+						</p:column>
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column rendered="#{actionBckBean.refActionDto.idPeriode!=null}">
+							<h:outputText value="#{habilitationmsgs.action_periode_label}" />
+						</p:column>
+						<p:column rendered="#{actionBckBean.refActionDto.idPeriode!=null}">
+							<h:outputText id="fct_periode" style="font-weight: bold;"
+								value="#{actionBckBean.refActionDto.nomPeriode}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+				<br></br>
+				<p:column>
+					<p:commandButton value="#{commonmsgs.button_return}"
+						icon="ui-icon-arrowreturnthick-1-w" process="@this"
+						action="#{actionBckBean.back}" ajax="false">
+						<f:param name="searchValue" value="#{actionBckBean.searchValue}" />
+					</p:commandButton>
+				</p:column>
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

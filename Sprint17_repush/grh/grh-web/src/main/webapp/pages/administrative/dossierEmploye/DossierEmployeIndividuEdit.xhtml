@@ -1,0 +1,411 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+           
+			<p:panelGrid id="descriptionIdv" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+				<p:spacer width="10px"></p:spacer>
+					<h:outputText
+						value="Détail de l'individu" />
+						<p:commandButton icon="ui-icon-pencil" immediate="true"
+						styleClass="ui-button-bleu" onsuccess="PF('individuDialog').show()"				
+						title="selectionner individu"
+						></p:commandButton>
+				</p:column>
+				
+			</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel value="#{individumsgs.individu_identite} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="identifiantIdv"
+							 maxlength="18"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.identifiant}" disabled="true"
+							label="#{individumsgs.individu_identite}"
+						 required="true"
+							requiredMessage="#{individumsgs.individu_identite_required}">
+						</p:inputText>
+					</p:column>
+					<p:column colspan="2" ></p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel value="#{individumsgs.individu_civilite} " />
+					</p:column>
+					<p:column style="width:25%">
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.civiliteLibelleLongFr} " />
+						<!-- <p:selectOneMenu id="Civilite"	style ="width:100%"						
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.civiliteId}"
+							label="#{individumsgs.individu_civilite}">
+							<f:selectItem
+								itemLabel="#{individumsgs.select_civilite_individu}"
+								itemValue="" />
+							<f:selectItems value="#{dossierEmployeBean.listeCivilite}" />
+							<p:ajax update="" />
+						</p:selectOneMenu> -->
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_nom_latin} " />
+					</p:column>
+					<p:column>
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomLatin} " />
+						<!-- <p:inputText id="Nom" style="text-align: left;width:160px"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomLatin}"
+							label="#{individumsgs.individu_nom_latin}" required="true"
+							
+							validatorMessage="#{individumsgs.individu_nom_latin_invalid}"
+							requiredMessage="#{individumsgs.individu_nom_required}"
+							autocomplete="off" onkeyup="this.value=this.value.toUpperCase();">
+						</p:inputText> -->
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_nom_arabe} " />
+					</p:column>
+					<p:column>
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomArabe}" />
+						<!-- <p:inputText id="NomArabe" style="text-align: right; width:160px"
+							dir="rtl" value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomArabe}"
+							
+							validatorMessage="#{individumsgs.individu_nom_arabe_invalid}"
+							label="#{individumsgs.individu_nom_arabe}" required="true"
+							requiredMessage="#{individumsgs.individu_nomarabe_required}">
+						</p:inputText> -->
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_prenom_latin} " />
+					</p:column>
+					<p:column>
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.prenomLatin}" />
+						<!-- <p:inputText id="préNom" style="text-align: left;width:160px"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+							label="#{individumsgs.individu_nom_latin}" required="true"
+							
+							validatorMessage="#{individumsgs.individu_prenom_latin_invalid}"
+							requiredMessage="#{individumsgs.individu_prenom_required}"
+							autocomplete="off"
+							onkeyup="this.value = this.value.substr(0,1).toUpperCase() + this.value.substr(1).toLowerCase();">
+						</p:inputText> -->
+					</p:column>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_prenom_arabe} *" />
+					</p:column>
+					<p:column>
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.prenomArabe}" />
+						<!-- <p:inputText id="préNomArabe"
+							style="text-align: right;width:160px" dir="rtl"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.prenomArabe}"
+							
+							validatorMessage="#{individumsgs.individu_prenom_arabe_invalid}"
+							label="#{individumsgs.individu_prenom_arabe}" required="true"
+							requiredMessage="#{individumsgs.individu_prenomarabe_required}">
+						</p:inputText> -->
+					</p:column>
+				</p:row>
+
+				<p:row id="rowNe"
+					rendered="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.civiliteId eq individumsgs.individu_civilite_idMme}">
+					<p:column>
+						<h:outputText
+							value="#{individumsgs.individu_nomJeuneFille_latin} " />
+					</p:column>
+					<p:column>
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomJeuneFilleLatin}" />
+						<!-- <p:inputText id="nomJeuneFilleLatin"
+							style="text-align: left;width:160px"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomJeuneFilleLatin}"
+							
+							validatorMessage="#{individumsgs.individu_nom_jeune_fille_latin_invalid}"
+							label="#{individumsgs.individu_nomJeuneFille_latin}"
+							autocomplete="off" onkeyup="this.value=this.value.toUpperCase();">
+						</p:inputText> -->
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{individumsgs.individu_nomJeuneFille_arabe} " />
+					</p:column>
+					<p:column>
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomJeuneFilleArabe}" />
+						<!-- <p:inputText id="nomJeuneFilleArabe"
+							style="text-align: right;width:160px" dir="rtl"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nomJeuneFilleArabe}"
+							
+							validatorMessage="#{individumsgs.individu_nom_jeune_fille_arabe_invalid}"
+							label="#{individumsgs.individu_nomJeuneFille_arabe}">
+						</p:inputText> -->
+					</p:column>
+				</p:row>
+                <p:row>
+                 <p:column>
+				<h:outputText value="#{individumsgs.individu_presume} " />
+				</p:column>
+                 <p:column>
+				  <h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume?'Oui':'Non' }"  />	
+				</p:column> 
+                 <p:column>
+				<h:outputText value="#{individumsgs.individu_datenaissance} " />
+				</p:column>
+                 <p:column>
+				<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.dateNaissance}"   ><f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>	
+				</p:column>  
+				
+				</p:row>
+<!-- 				<p:row> -->
+<!-- 					<p:column> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+						<!-- <p:selectBooleanCheckbox id="presume"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume}"
+							itemLabel="#{individumsgs.individu_presume}" label="#{individumsgs.individu_presume}">
+							<p:ajax update="datenaissance"  >
+
+							</p:ajax>
+						</p:selectBooleanCheckbox> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<h:outputText value="#{individumsgs.individu_datenaissance} " /> -->
+<!-- 					</p:column> -->
+<!-- 					<p:column> -->
+<!-- 						<p:calendar navigator="true" readonlyInput="true" -->
+<!-- 							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.dateNaissance}" -->
+<!-- 							id="datenaissance" label="#{individumsgs.individu_datenaissance}" -->
+<!-- 							pattern="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume==null or dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume==false? 'dd/MM/yyyy' : 'yyyy'}"  -->
+<!-- 							requiredMessage="#{individumsgs.individu_datenaissance_required}"  yearRange="c-90:c" mindate="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume==false? '1/1/1800' : 'c-50000'}" maxdate="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.presume==false? localeBean.currentDate : '1' }" -->
+<!-- 						 > -->
+							
+						 
+						
+<!-- 						</p:calendar>	 -->
+<!-- 					</p:column> -->
+
+<!-- 				</p:row> -->
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_qualite}" />
+					</p:column>
+					<p:column>
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.qualite}" />
+<!-- 						<p:inputText id="qualite" style="text-align: left;width:160px" -->
+<!-- 							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.qualite}" -->
+<!-- 							label="#{individumsgs.individu_qualite}"> -->
+<!-- 						</p:inputText> -->
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_nationalite} " />
+					</p:column>
+					<p:column style ="width:25%">
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nationaliteLibelleLongFr}" />
+<!-- 						<p:selectOneMenu id="nationalite" style ="width:100%" -->
+<!-- 							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.nationaliteId}" -->
+<!-- 							label="#{individumsgs.individu_nationalite}" required="true" -->
+<!-- 							requiredMessage="#{individumsgs.select_nationalite_individu}"> -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{individumsgs.select_nationalite_individu}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{dossierEmployeBean.listeNationalite}" /> -->
+<!-- 						</p:selectOneMenu> -->
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_SitFamiliale}" />
+					</p:column>
+					<p:column style ="width:25%">
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.situationFamilialeLibelleLongFr}" />
+<!-- 						<p:selectOneMenu id="SitFamiliale" style="width:100%" -->
+							
+<!-- 							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.situationFamilialeId}" -->
+<!-- 							label="#{individumsgs.individu_SitFamiliale}"> -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{individumsgs.select_individu_SitFamiliale}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{dossierEmployeBean.listeSituationFamiliale}" /> -->
+<!-- 						</p:selectOneMenu> -->
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_service_national}" />
+					</p:column>
+					<p:column style ="width:25%">
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.serviceNatLibelleLongFr}" />
+						<!-- <p:selectOneMenu id="servicenational" style ="width:100%"
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.serviceNatId}"
+							label="#{individumsgs.individu_service_national}">
+							<f:selectItem itemLabel="#{individumsgs.select_service_national}"
+								itemValue="" />
+							<f:selectItems value="#{dossierEmployeBean.listeSitSceNat}" />
+						</p:selectOneMenu> -->
+					</p:column>
+					<p:column>
+						<h:outputText value="#{individumsgs.individu_Groupe_Sanguin}" />
+					</p:column>
+					<p:column style ="width:25%">
+					<h:outputText
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.groupeSanguinLibelleLongFr}" />
+						<!-- <p:selectOneMenu id="GroupeSanguin" style ="width:100%"
+							
+							value="#{dossierEmployeBean.dossierEmployeDto.refIndividuDto.groupeSanguinId}"
+							label="#{individumsgs.individu_Groupe_Sanguin}">
+							<f:selectItem itemLabel="#{individumsgs.select_Groupe_Sanguin}"
+								itemValue="" />
+							<f:selectItems value="#{dossierEmployeBean.listeGroupeSanguin}" />
+						</p:selectOneMenu> -->
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			
+			
+			<p:dialog
+		header="#{dossierEmployemsgs.dossier_employe_individu_title}" id="individuDialog"
+		widgetVar="individuDialog" modal="true" showEffect="fade"
+		hideEffect="fade" resizable="true" width="850px" >
+		<p:outputPanel id="pnl-individu" style="width:800px">
+			<h:form id="form_individu">
+			
+			<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" id="searchPanel">
+				<p:row>
+
+					<p:column>
+						<p:outputLabel value="#{individumsgs.individu_nom_latin}"
+							for="searchNom" />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{dossierEmployeBean.individuSearchDto.nomLatin}" required="true"
+							id="searchNom"
+							requiredMessage="#{individumsgs.individu_nom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:outputLabel value="#{individumsgs.individu_prenom_latin}"
+							for="searchPrenom" />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{dossierEmployeBean.individuSearchDto.prenomLatin}" required="true"
+							id="searchPrenom"
+							requiredMessage="#{individumsgs.individu_prenom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+							id="searchBtn" onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()" icon="ui-icon-search"
+							process=":tabViewEdit:form_individu" update="individuDataTable"
+							actionListener="#{dossierEmployeBean.onSearchIndividu}">
+							</p:commandButton>						
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:dataTable id="individuDataTable" resizableColumns="true" 
+					value="#{dossierEmployeBean.individuModel}" var="current" rowKey="#{current.id}"
+					paginator="true" paginatorPosition="bottom" selectionMode="single"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+					lazy="true">
+				
+                     <p:ajax event="rowSelect" immediate="true"
+							listener="#{dossierEmployeBean.onIndividuSelect}" 
+							process="@this" onstart="PF('page').block()" onsuccess="individuDialog.hide()"
+							oncomplete="PF('page').unblock()" update=":pnl_detail" />
+				<p:column styleClass="textOnLeft" sortBy="#{current.identifiant}"
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_identifiant}" />
+					</f:facet>
+					<h:outputText value="#{current.identifiant}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.nomLatin}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_nom_latin}" />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.prenomLatin}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_prenom_latin}" />
+					</f:facet>
+					<h:outputText value="#{current.prenomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.nomArabe}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_nom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{current.nomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.prenomArabe}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_prenom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{current.prenomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.dateNaissance}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_date_naissance}" />
+
+					</f:facet>
+					<h:outputText value="#{current.dateNaissance}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				
+			</p:dataTable>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+		
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

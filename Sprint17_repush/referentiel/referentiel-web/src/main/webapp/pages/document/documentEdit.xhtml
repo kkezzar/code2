@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+
+<ui:composition template="/template/centertemplate.xhtml">
+
+	<ui:define name="main">
+								
+		<p:panel header="#{commonmsgs.menu_documents}" style="border:0;">
+
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+
+			<p:tabView effect="#{tabBean.effect}" effectDuration="normal"
+				id="documentTabViewID">
+
+				<p:tab id="infos" title="#{documentmsgs.document_infos}">
+
+					<p:panelGrid id="panelEdit" style="width:100%;margin:0px;">
+						<p:row>
+							<p:column style="vertical-align: top;">
+								<h:form id="documentEditForm" enctype="multipart/form-data">
+									
+	 								<h:inputHidden id="urldto" value="#{documentEditBean.refDocumentDto.url}" />
+									<p:panelGrid id="descriptionGrid" styleClass="" style="width:100%">
+										
+										<p:row>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_identifiant}" />
+											</p:column>
+											<p:column>
+												<p:inputText id="identifDoc" style="text-align: left"
+													value="#{documentEditBean.refDocumentDto.identifiant}"
+													label="#{documentmsgs.document_identifiant}"
+													required="true" disabled="true">
+												</p:inputText>
+											</p:column>
+
+											<p:column colspan="2" style="text-align:center">
+											 
+												<p:commandButton id="downfile"
+													icon="ui-icon-arrowthickstop-1-s"
+													value=" #{documentmsgs.document_telecharger_document} " 
+													ajax="false"
+													rendered="#{not empty documentEditBean.refDocumentDto.url}">
+
+													<p:fileDownload value="#{documentEditBean.file}" />
+
+													<f:param name="searchValue"
+														value="#{documentEditBean.searchValue}" />
+													<f:param name="idfDoc"
+														value="#{documentEditBean.refDocumentDto.id}" />
+													<f:param name="searchAdv"
+														value="#{documentEditBean.searchAdv}" />
+													<f:param name="searchListNomenclat"
+														value="#{documentSearchBean.searchListNomenclat}" />
+												</p:commandButton>
+												
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_titre} *" />
+											</p:column>
+											<p:column>
+																								
+												<p:inputText id="titreDoc"
+													style="text-align: left; width:200px"
+													value="#{documentEditBean.refDocumentDto.titreDocument}"
+													label="#{documentmsgs.document_titre}" required="true"
+													requiredMessage="#{documentmsgs.document_titre_document_required}">
+												</p:inputText>
+											</p:column>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_reference} *" />
+											</p:column>
+											<p:column>
+												<p:inputText id="reference" style="text-align: left"
+													value="#{documentEditBean.refDocumentDto.referenceDocument}"
+													label="#{documentmsgs.document_reference}" required="true"
+													requiredMessage="#{documentmsgs.document_reference_required}">
+												</p:inputText>
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputText
+													value="#{documentmsgs.document_date_document} * " />
+											</p:column>
+											<p:column>
+												<p:calendar navigator="true"
+													value="#{documentEditBean.refDocumentDto.dateDocument}"
+													id="dateDocument" showButtonPanel="true"
+													label="#{documentmsgs.document_date_document}"
+													required="true"
+													requiredMessage="#{documentmsgs.document_date_document_required}"
+													style="width:100px" pattern="dd/MM/yyyy"
+													maxdate="#{documentEditBean.currentDate}">
+													<f:convertDateTime pattern="dd/MM/yyyy" />
+												</p:calendar>
+											</p:column>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_classement} *" />
+											</p:column>
+											<p:column>
+											   
+												<p:selectOneMenu id="classement" style=";"
+													value="#{documentEditBean.refDocumentDto.classementId}"
+													label="#{documentmsgs.document_classement}" required="true"
+													requiredMessage="#{documentmsgs.document_classement_required}">
+													<f:selectItem
+														itemLabel="#{documentmsgs.document_select_classement_document}"
+														itemValue="" />
+													<f:selectItems value="#{comboBckBean.listClassement}" />
+												</p:selectOneMenu>
+												
+												<br />
+												<!-- 
+										    	<p:layout style="max-width:300px;min-height:120px;width:400px;text-align: left">  
+												    <p:layoutUnit position="center">
+											              
+						  							<p:tree 
+													     value="#{documentEditBean.root}" 
+													     var="node" 
+													     dynamic="true"
+													     selectionMode="single"
+	               										 selection="#{documentEditBean.selectedNode}">
+												        <p:treeNode>
+												            <h:outputText value="#{node}" />
+												        </p:treeNode>
+											    	</p:tree>
+										
+												    </p:layoutUnit>
+												  
+												</p:layout>
+												 -->
+											    
+											     
+											</p:column>
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputText
+													value="#{documentmsgs.document_objet_document}" />
+											</p:column>
+											<p:column>
+												<p:inputTextarea id="objet"
+													style="text-align: left; width:200px"
+													value="#{documentEditBean.refDocumentDto.objetDocument}"
+													label="#{documentmsgs.document_objet_document}">
+												</p:inputTextarea>
+
+											</p:column>
+
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_description}" />
+											</p:column>
+											<p:column>
+												<p:inputTextarea id="descriptionDoc"
+													style="text-align: left; width:200px"
+													value="#{documentEditBean.refDocumentDto.description}"
+													label="#{documentmsgs.document_description}">
+												</p:inputTextarea>
+											</p:column>
+										</p:row>
+
+										<p:row>
+
+											<p:column>
+												<h:outputText
+													value="#{documentmsgs.document_type_document} *" />
+											</p:column>
+											<p:column  colspan="3">
+												<p:selectOneMenu id="typeDocument" style="text-align: left"
+													value="#{documentEditBean.refDocumentDto.typeDocumentId}"
+													label="#{documentmsgs.document_type_document}"
+													required="true"
+													requiredMessage="#{documentmsgs.document_type_document_required}">
+													<f:selectItem
+														itemLabel="#{documentmsgs.document_select_type_document}"
+														itemValue="" />
+													<f:selectItems value="#{comboBckBean.listTypeDocument}" />
+												</p:selectOneMenu>
+											</p:column>
+
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_lie}" />
+											</p:column>
+											<p:column>
+																							    
+												<p:autoComplete
+												  
+													value="#{documentEditBean.refParentDocumentDto}"
+													id="selectDocumentLie"
+													completeMethod="#{documentConverter.completeDocumentLie}"
+													var="documentDto" itemLabel="#{documentDto.detailDocument}"
+													itemValue="#{documentDto.id}"
+													converter="#{documentConverter}" forceSelection="true"
+													label="#{documentmsgs.document_lie}" styleClass="ui-document-autocomplete">
+									
+
+													<p:ajax event="itemSelect"
+														listener="#{documentConverter.handleSelect}"
+														update="doclietitre" immediate="true" />
+													<p:ajax event="itemUnselect"
+														listener="#{documentConverter.handleUnselect}"
+														update="doclietitre" immediate="true" />
+
+												</p:autoComplete>
+												<p:watermark for="selectDocumentLie" value="Recherche autocomplete par Identifiant, Titre ou Reférence" id="watermark" />
+
+											</p:column>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_lie_titre}" />
+											</p:column>
+
+											<p:column>
+												<h:outputText id="doclietitre"
+													style="text-align: left; width:200px"
+													value="#{documentEditBean.refParentDocumentDto.titreDocument} - #{documentEditBean.refParentDocumentDto.referenceDocument}" />
+											</p:column>
+										</p:row>
+
+										<p:row>
+
+											<p:column>
+												<h:outputText
+													value="#{documentmsgs.document_nature_document} *" />
+											</p:column>
+											<p:column>
+												<p:selectOneMenu id="natureDocument"
+													style="text-align: left"
+													value="#{documentEditBean.refDocumentDto.natureDocumentId}"
+													label="#{documentmsgs.document_nature_document}"
+													required="true"
+													requiredMessage="#{documentmsgs.document_nature_document_required}">
+													<f:selectItem
+														itemLabel="#{documentmsgs.document_select_nature_document}"
+														itemValue="" />
+													<f:selectItems value="#{comboBckBean.listNatureDocument}" />
+												</p:selectOneMenu>
+											</p:column>
+
+											<p:column>
+												<h:outputText
+													value="#{documentmsgs.document_langue_document} *" />
+											</p:column>
+											<p:column>
+												<p:selectOneMenu id="langueDocument"
+													style="text-align: left"
+													value="#{documentEditBean.refDocumentDto.langueId}"
+													label="#{documentmsgs.document_langue_document}"
+													required="true"
+													requiredMessage="#{documentmsgs.document_langue_document_required}">
+													<f:selectItem
+														itemLabel="#{documentmsgs.document_select_langue}"
+														itemValue="" />
+													<f:selectItems value="#{comboBckBean.listLangue}" />
+												</p:selectOneMenu>
+											</p:column>
+
+										</p:row>
+
+										<p:row rendered="#{empty documentEditBean.refDocumentDto.url}">
+
+											<p:column >
+												<h:outputText value="#{documentmsgs.document_fichier} *" />
+											</p:column>
+									        
+											<p:column>
+												 <p:outputLabel id="nomfichier" value="#{documentEditBean.refDocumentDto.url}" />
+								     			 <p:fileUpload id="idupload" fileUploadListener="#{documentEditBean.handleFileUpload}" 
+								       			   	  style="text-align: left"
+								       			      update="nomfichier,urldto"  
+								                      mode="advanced"                  
+								                      multiple="false" auto="true" 
+								                      label="#{documentmsgs.document_drag_drop_selct_fichier}" 
+								                      required="true" 
+								                      requiredMessage="#{documentmsgs.document_document_upload_required}"
+								                      cancelLabel="#{documentmsgs.document_fichier_upload_annuler}"    
+								                      uploadLabel="#{documentmsgs.document_charger_fichier}"             
+								                      sizeLimit="#{documentEditBean.limit_size}"                     
+								                      invalidSizeMessage="#{documentmsgs.document_limite_size_fichier_upload} #{documentEditBean.limit_size} Octets"    
+								                      allowTypes="#{documentEditBean.allow_types}" 
+								                      dragDropSupport="true"> 
+								      			      <f:param name="searchValue" value="#{documentEditBean.searchValue}"/>     
+								      			      <f:param name="idfDoc"   value="#{documentEditBean.refDocumentDto.id}"   />    
+								      			      <f:param name="searchAdv" value="#{documentEditBean.searchAdv}"/>        			    	    	                       	                     
+								      			  </p:fileUpload>
+								      			  <br />
+											</p:column>
+											
+										</p:row>
+
+										<p:row>
+											<p:column>
+												<h:outputText value="#{documentmsgs.document_mots_cles}" />
+											</p:column>
+											
+											<p:column colspan="3">
+												<p:autoComplete
+													value="#{documentEditBean.nomenclatureDtoList}"
+													id="selectmotscles" forceSelection="true"
+													completeMethod="#{motCleConverter.completeMotCle}"
+													var="motCleDto" multiple="true"
+													itemLabel="#{motCleDto.libelleLongFr}"
+													itemValue="#{motCleDto.id}" converter="#{motCleConverter}"
+													label="#{documentmsgs.document_mots_cles}"
+													styleClass="myautocomp">
+
+													<f:param name="searchValue"
+														value="#{documentEditBean.searchValue}" />
+													<f:param name="idfDoc"
+														value="#{documentEditBean.refDocumentDto.id}" />
+													<f:param name="searchAdv"
+														value="#{documentEditBean.searchAdv}" />
+													<f:param name="searchListNomenclat"
+														value="#{documentSearchBean.searchListNomenclat}" />
+
+												</p:autoComplete>
+
+											</p:column>
+
+										</p:row>
+
+										<p:row>
+											<p:column colspan="4">
+												<p:commandButton value="#{commonmsgs.button_save}"
+													icon="ui-icon-disk" update="urldto,individus" ajax="false"
+													actionListener="#{documentEditBean.saveDocument}">
+
+													<f:param name="searchValue"
+														value="#{documentEditBean.searchValue}" />
+													<f:param name="idfDoc"
+														value="#{documentEditBean.refDocumentDto.id}" />
+													<f:param name="searchAdv"
+														value="#{documentEditBean.searchAdv}" />
+													<f:param name="searchListNomenclat"
+														value="#{documentSearchBean.searchListNomenclat}" />
+
+												</p:commandButton>
+												
+												<p:commandButton value="#{commonmsgs.button_return}"
+													icon="ui-icon-arrowreturnthick-1-w"
+													action="#{documentEditBean.back}" process="@this">
+
+													<p:confirm header="Confirmation"
+														message="#{commonmsgs.msg_cancel_modification_confirmation}"
+														icon="ui-icon-alert" />
+
+													<f:param name="searchValue"
+														value="#{documentEditBean.searchValue}" />
+													<f:param name="searchAdv"
+														value="#{documentEditBean.searchAdv}" />
+													<f:param name="searchListNomenclat"
+														value="#{documentSearchBean.searchListNomenclat}" />
+
+												</p:commandButton>
+											</p:column>
+										</p:row>
+									</p:panelGrid>
+
+								</h:form>
+							</p:column>
+
+							<!-- document versions -->
+							<p:column  style="width:28%;vertical-align: top;" rendered="#{not empty documentEditBean.idfDoc}" >
+
+								<ui:include src="/pages/document/documentVersions.xhtml">
+
+									<ui:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+									<ui:param name="searchValue"
+										value="#{documentEditBean.searchValue}" />
+									<ui:param name="searchAdv"
+										value="#{documentEditBean.searchAdv}" />
+									<ui:param name="searchListNomenclat"
+										value="#{documentSearchBean.searchListNomenclat}" />
+									<ui:param name="idfEntity" value="#{documentEditBean.idfDoc}" />
+
+									<ui:param name="createAllow" value="true" />
+									<ui:param name="editAllow" value="true" />        
+									<ui:param name="deleteAllow" value="true" />
+								</ui:include>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+				</p:tab>
+
+				<c:forEach var="tabItem" items="#{documentDroitBean.listActions}"
+					varStatus="status">
+					<p:tab title="#{tabItem.nomFonction}"
+						disabled="#{documentEditBean.refDocumentDto.id==null}">
+						<ui:include src="#{tabItem.urlFonction}">
+							<ui:param name="createAllow" value="#{tabItem.creer}" />
+							<ui:param name="editAllow" value="#{tabItem.modifier}" />
+					<ui:param name="deleteAllow" value="#{tabItem.supprimer}" />
+							<ui:param name="idfDoc"
+								value="#{documentEditBean.refDocumentDto.id}" />
+							<ui:param name="idfEntity" value="#{documentEditBean.idfDoc}" /> >
+					<ui:param name="searchValue"
+								value="#{documentEditBean.searchValue}" />
+							<ui:param name="searchAdv" value="#{documentEditBean.searchAdv}" />
+							<ui:param name="searchListNomenclat"
+								value="#{documentSearchBean.searchListNomenclat}" />
+						</ui:include>
+					</p:tab>
+				</c:forEach>
+
+			</p:tabView>
+
+		</p:panel>
+	</ui:define>
+</ui:composition>
+
+</html>

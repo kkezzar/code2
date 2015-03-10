@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panelGrid id="descriptionEtudiant"
+		styleClass="ui-panelgrid-full-width ui-panelgrid-form-no-border">
+
+		<p:row>
+			<p:column colspan="4" styleClass="title">
+				<h:outputText value="Détail du dossier étudiant" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantMsgs.dossier_etudiant_matricule}" />
+			</p:column>
+
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.numeroMatricule}" />
+			</p:column>
+
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantMsgs.dossier_etudiant_date_creation}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.dateCreation}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_latin}" />
+			</p:column>
+			<p:column>
+				<h:outputText style="text-align: left" styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.etablissementOrigineFr}">
+				</h:outputText>
+			</p:column>
+
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_arabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText style="text-align: right" styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.etablissementOrigineAr}">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText
+					value="#{dossierEtudiantMsgs.dossier_etudiant_etablissement_affectation}" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierEtudiant.refLlEtablissementLatin} (#{dossierEtudiantSearchBean.dossierEtudiant.refCodeEtablissement}) " />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column colspan="4" styleClass="title">
+				<h:outputText
+					value="Détail de l'inscription administrative actuelle" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="Année academique" />
+			</p:column>
+			<p:column>
+				<h:outputText style="text-align: right" styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.anneeAcademiqueCode}">
+				</h:outputText>
+			</p:column>
+
+			<p:column>
+				<h:outputText value="Numéro dossier d'inscription" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.numeroInscription}">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="Type d'inscription" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.typeDossierLibelleFr}" />
+			</p:column>
+
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="Cycle" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.cycleLibelleLongLt}">
+				</h:outputText>
+			</p:column>
+			
+			<p:column>
+				<h:outputText value="Niveau" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.niveauLibelleLongLt}">
+				</h:outputText>
+			</p:column>
+
+
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="domaine" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}">
+				</h:outputText>
+			</p:column>
+
+			<p:column>
+				<h:outputText value="Filière" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="Spécialité" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}">
+				</h:outputText>
+			</p:column>
+
+			<p:column>
+				<h:outputText value="Offre de formation" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{dossierEtudiantSearchBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}">
+				</h:outputText>
+			</p:column>
+		</p:row>
+
+	</p:panelGrid>
+
+</ui:composition>

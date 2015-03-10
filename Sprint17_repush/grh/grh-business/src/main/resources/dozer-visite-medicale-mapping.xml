@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.VisiteMedicale
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.VisiteMedicaleDto
+		</class-b>
+		<field>
+			<a>dossierEmploye</a>
+			<b>dossierEmployeDto</b>
+		</field>
+		<field>
+			<a>medicaments</a>
+			<b>medicamentDtos</b>
+		</field>
+		<field>
+			<a>examenMedicals</a>
+			<b>examenMedicalDtos</b>
+		</field>
+
+		
+
+	</mapping>
+
+<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.Medicament
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.MedicamentDto
+		</class-b>
+		<field>
+			<a>nomenclature</a>
+			<b>nomenclatureDto</b>
+		</field>
+		
+          <field>
+			<a>visiteMedicale</a>
+			<b>visiteMedicaleDto</b>
+		</field>
+		
+
+	</mapping>
+
+<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.ExamenMedical
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.ExamenMedicalDto
+		</class-b>
+		<field>
+			<a>nomenclature</a>
+			<b>nomenclatureDto</b>
+		</field>
+		
+          <field>
+			<a>visiteMedicale</a>
+			<b>visiteMedicaleDto</b>
+		</field>
+		
+
+	</mapping>
+
+
+</mappings>

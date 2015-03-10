@@ -1,0 +1,255 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:outputPanel styleClass="infoEtudiantStyle">
+
+		<p:fieldset
+			legend="#{reintegrationMsgs.reintegration_liste_reintegrations}"
+			id="tablelistereintegrations">
+
+			<h:form id="resultlistReintegrationForm">
+
+				<p:dataTable resizableColumns="true" id="listeReintegrationsData"
+					value="#{reintegrationexclusionBean.listeReintegrationsDto}"
+					var="current" paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+					<f:param name="ligneId" value="#{reintegrationexclusionBean.ligneId}" />
+
+					<f:param name="exclusionId" value="#{reintegrationexclusionBean.exclusionId}" />
+
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@this" process="@this" />
+
+					<p:column sortBy="#{current.dateDemande}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_demande_reintegration}" />
+
+						</f:facet>
+						<h:outputText value="#{current.dateDemande}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.objet}">
+						<f:facet name="header">
+							<h:outputText value="#{reintegrationMsgs.reintegration_objet}" />
+						</f:facet>
+						<h:outputText value="#{current.objet}" />
+					</p:column>
+
+					<p:column sortBy="#{current.resultat}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_resultat_demande}" />
+						</f:facet>
+						<h:outputText value="#{current.resultat?'Refusée':'Accordée'}"></h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.motif}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_motif_refus}" />
+						</f:facet>
+						<h:outputText value="#{current.motif}">
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:5%">
+						<f:facet name="header">
+							<h:outputText value="#{commonmsgs.data_table_action_title}" />
+						</f:facet>
+
+
+						<p:commandButton id="updateReintegrationButton"
+							icon="ui-icon-pencil"
+							title="#{commonmsgs.data_table_action_update}" 
+							ajax="true" update="@([id$=reintegrationinfosForm])" process="@(.reintegrationinfosForm)"
+							actionListener="#{reintegrationexclusionBean.openReintegration(current)}">
+							<f:param name="exclusionId" value="#{reintegrationexclusionBean.exclusionId}" />
+							<f:param name="dossierEtudiantId" value="#{exclusionBean.dossierEtudiantId}"/>
+							<f:param name="reintegrationId" value="#{current.id}" />
+						</p:commandButton>
+						
+						<p:commandButton id="removeReintegrationButton"
+							icon="ui-icon-trash"
+							title="#{commonmsgs.data_table_action_delete}"
+							update="@([id$=reintegrationinfosForm])" process="@(.reintegrationinfosForm)"
+							actionListener="#{reintegrationexclusionBean.removeReintegration(current)}">
+
+							<p:confirm header="Confirmation" message="#{reintegrationMsgs.reintegration_confirm_delete_reintegration}" icon="ui-icon-alert" />
+							
+							<f:param name="exclusionId" value="#{reintegrationexclusionBean.exclusionId}" />
+							<f:param name="dossierEtudiantId" value="#{exclusionBean.dossierEtudiantId}"/>
+							
+							<p:ajax resetValues="true" update="@([id$=reintegrationinfosForm])" immediate="true" />
+
+						</p:commandButton>
+
+
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</p:fieldset>
+
+		<br />
+
+		<p:fieldset legend="#{reintegrationMsgs.reintegration_details}">
+
+			<h:form id="reintegrationinfosForm">
+				<p:panelGrid>
+									<p:row>
+									  <p:column>
+									   <p:commandButton id="addReintegrationButton" immediate="true"
+										icon="ui-icon-plusthick" 
+										value="#{reintegrationMsgs.reintegration_ajouter}">
+                                     
+										<f:param name="exclusionId" value="#{reintegrationexclusionBean.exclusionId}"/>
+	                                     <f:param name="dossierEtudiantId" value="#{exclusionBean.dossierEtudiantId}"/>
+										<p:ajax resetValues="true" update="reintegrationinfosForm" immediate="true" />
+									   </p:commandButton>
+									</p:column>
+									 </p:row>
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_demande_reintegration} *" />
+						</p:column>
+						<p:column>
+
+							<p:calendar navigator="true"
+								value="#{reintegrationexclusionBean.reintegrationDto.dateDemande}"
+								showButtonPanel="true"
+								label="#{reintegrationMsgs.reintegration_date_demande_reintegration}"
+								required="true"
+								requiredMessage="#{reintegrationMsgs.reintegration_date_demande_reintegration_recired}"
+								pattern="dd/MM/yyyy">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+
+						</p:column>
+
+						<p:column>
+							<h:outputText value="#{reintegrationMsgs.reintegration_objet} *" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{reintegrationexclusionBean.reintegrationDto.objet}"
+								label="#{reintegrationMsgs.reintegration_objet}" required="true"
+								requiredMessage="#{reintegrationMsgs.reintegration_objet_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="">
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_resultat} " style="font-weight: bold;"/>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_decision_reintegration} " />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"
+								value="#{reintegrationexclusionBean.reintegrationDto.dateResultat}"
+								showButtonPanel="true"
+								label="#{reintegrationMsgs.reintegration_date_decision_reintegration}"
+								pattern="dd/MM/yyyy">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+						</p:column>
+
+						<p:column>
+							<p:selectOneRadio
+								value="#{reintegrationexclusionBean.reintegrationDto.resultat}">
+								<f:selectItem itemLabel="Refusée" itemValue="false" />
+								<f:selectItem itemLabel="Accordée" itemValue="true" />
+							</p:selectOneRadio>
+						</p:column>
+					</p:row>
+
+					<p:row>
+
+						<p:column>
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_motif_refus}" />
+						</p:column>
+						<p:column>
+							<p:inputText style="text-align: left; width:250px"
+								value="#{reintegrationexclusionBean.reintegrationDto.motif}"
+								label="#{reintegrationMsgs.reintegration_motif_refus}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_autorisation} " />
+						</p:column>
+						<p:column>
+							<p:calendar navigator="true"
+								value="#{reintegrationexclusionBean.reintegrationDto.dateAutorisation}"
+								showButtonPanel="true"
+								label="#{reintegrationexclusionBean.reintegrationDto.dateAutorisation}"
+								pattern="dd/MM/yyyy">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_reintegration} " />
+						</p:column>
+						<p:column>
+
+							<p:calendar navigator="true"
+								value="#{reintegrationexclusionBean.reintegrationDto.dateReintegration}"
+								showButtonPanel="true"
+								label="#{reintegrationexclusionBean.reintegrationDto.dateAutorisation}"
+								pattern="dd/MM/yyyy">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:calendar>
+
+						</p:column>
+					</p:row>
+
+
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}" icon="ui-icon-disk"
+								actionListener="#{reintegrationexclusionBean.saveReintegration}"
+								id="save" update="reintegrationinfosForm,@([id$=listeReintegrationsData])">
+								<f:param name="dossierEtudiantId" value="#{reintegrationexclusionBean.exclusionBean.dossierEtudiantId}" />
+								<f:param name="exclusionId" value="#{reintegrationexclusionBean.exclusionId}" />
+								<f:param name="reintegrationId" value="#{reintegrationexclusionBean.reintegrationId}" />
+								<f:param name="ligneId" value="#{reintegrationexclusionBean.ligneId}" />
+							
+							</p:commandButton>
+						</p:column>
+
+					</p:row>
+				</p:panelGrid>
+				<br />
+			</h:form>
+		</p:fieldset>
+
+	</p:outputPanel>
+</ui:composition>

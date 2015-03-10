@@ -1,0 +1,38 @@
+
+	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+	<h:form id="form_demandeHabSubmitSearch">
+	<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>
+	<p:panel id="pnl_demandeSubmit" header="#{demandeHabilitationMsgs.demande_habilitation_gerer_title}">
+
+					<p:fieldset id="fieldsetListDmdesCrees"  legend="#{demandeHabilitationMsgs.demande_habilitation_list_demandes_a_gerer}" styleClass="mesrsFieldset" >
+						<ui:include src="/pages/habilitation/DemandeHabSearchComponent.xhtml">
+						<c:set var="fonctionParam" value="#{demandeHabilitationMsgs.demande_habilitation_fonction_gestion}" scope="request" />
+						</ui:include>
+						</p:fieldset>
+					
+			</p:panel>
+			 <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

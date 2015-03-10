@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+        <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.DemandeEquipementDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.DemandeEquipement</class-b>
+      		<field>
+      					<a>ncFamilleId</a>
+	  					<b>ncFamille.id</b>
+      		</field>
+      		<field>
+      					<a>ncFamilleCode</a>
+	  					<b>ncFamille.code</b>
+      		</field>
+      		<field>
+      					<a>ncFamilleLibelle</a>
+	  					<b>ncFamille.libelleLongFr</b>
+      		</field>
+      		<field>
+      					<a>ncSousFamilleId</a>
+	  					<b>ncSousFamille.id</b>
+      		</field>
+      		<field>
+      					<a>ncSousFamilleCode</a>
+	  					<b>ncSousFamille.code</b>
+      		</field>
+      		<field>
+      					<a>ncSousFamilleLibelle</a>
+	  					<b>ncSousFamille.libelleLongFr</b>
+      		</field>
+      		<field>
+      					<a>demandeBudgetId</a>
+	  					<b>demandeBudget.id</b>
+      		</field>
+      		<field>
+      					<a>demandeBudgetLibelle</a>
+	  					<b>demandeBudget.description</b>
+      		</field>
+      		
+      		<field>
+      					<a>demandeBudgetProgrammeId</a>
+	  					<b>demandeBudget.programme.id</b>
+      		</field>
+      		
+      		<field>
+      					<a>demandeBudgetProgrammeLibelle</a>
+	  					<b>demandeBudget.programme.intituleFr</b>
+      		</field>
+      		
+      	</mapping>
+</mappings>

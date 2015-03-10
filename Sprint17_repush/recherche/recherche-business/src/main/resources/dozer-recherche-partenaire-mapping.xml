@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+        <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.PartenaireDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.Partenaire</class-b>
+      		<field>
+      					<a>structureId</a>
+	  					<b>structure.id</b>
+      		</field>
+      		 <field>
+      					<a>structureLibelleLatin</a>
+	  					<b>structure.refStructure.llStructureLatin</b>
+      		</field> 
+      		 <field>
+      					<a>contratId</a>
+	  					<b>refContrat.id</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireId</a>
+	  					<b>refPartenaire.id</b>
+      		</field> 
+      		 <field>
+      					<a>contratObjet</a>
+	  					<b>refContrat.objetContratFr</b>
+      		</field> 
+      		 <field>
+      					<a>contratReference</a>
+	  					<b>refContrat.referenceDocumentaire</b>
+      		</field> 
+      		 <field>
+      					<a>contratDateDebutValidite</a>
+	  					<b>refContrat.dateDebutValidite</b>
+      		</field> 
+      		 <field>
+      					<a>contratDateFinValidite</a>
+	  					<b>refContrat.dateFinValidite</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireIndividuId</a>
+	  					<b>refPartenaire.refIndividu.id</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireIndividuNomLatin</a>
+	  					<b>refPartenaire.refIndividu.nomLatin</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireIndividuPrenomLatin</a>
+	  					<b>refPartenaire.refIndividu.prenomLatin</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireIndividuNomArabe</a>
+	  					<b>refPartenaire.refIndividu.nomArabe</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireIndividuPrenomArabe</a>
+	  					<b>refPartenaire.refIndividu.prenomArabe</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireStructureId</a>
+	  					<b>refPartenaire.refStructure.id</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireStructureDesignationLatin</a>
+	  					<b>refPartenaire.refStructure.llStructureLatin</b>
+      		</field> 
+      		 <field>
+      					<a>partenaireStructureDesignationArabe</a>
+	  					<b>refPartenaire.refStructure.llStructureArabe</b>
+      		</field> 
+      			 <field>
+      					<a>partenaireGroupeId</a>
+	  					<b>refPartenaire.refGroupe.id</b>
+      		</field> 
+      			 <field>
+      					<a>partenaireGroupeDesignationLatin</a>
+	  					<b>refPartenaire.refGroupe.llGroupe</b>
+      		</field> 
+      			 <field>
+      					<a>partenaireGroupeDesignationArabe</a>
+	  					<b>refPartenaire.refGroupe.llGroupeArabe</b>
+      		</field> 
+      		
+      		<field>
+      					<a>projetPartenairesDto</a>
+	  					<b>projetPartenaires</b>
+      		</field>
+      		
+      		
+      	</mapping>
+</mappings>

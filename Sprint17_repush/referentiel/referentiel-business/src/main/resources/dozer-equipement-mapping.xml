@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefEquipementDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefEquipement
+		</class-b>
+
+		<field>
+			<a>familleequipementId</a>
+			<b>nomenclatureByFamilleEquipement.id</b>
+		</field>
+		<field>
+			<a>familleequipementLibelleLongFr</a>
+			<b>nomenclatureByFamilleEquipement.libelleLongFr</b>
+		</field>
+		<field>
+			<a>familleequipementLibelleLongAr</a>
+			<b>nomenclatureByFamilleEquipement.libelleLongAr</b>
+		</field>
+		<field>
+			<a>familleequipementLibelleCourtFr</a>
+			<b>nomenclatureByFamilleEquipement.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>familleequipementLibelleCourtAr</a>
+			<b>nomenclatureByFamilleEquipement.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>familleequipementCode</a>
+			<b>nomenclatureByFamilleEquipement.code</b>
+		</field>
+
+
+
+		<field>
+			<a>sousfamilleequipementId</a>
+			<b>nomenclatureBySousFamilleEquipement.id</b>
+		</field>
+		<field>
+			<a>sousfamilleequipementLibelleLongFr</a>
+			<b>nomenclatureBySousfamilleEquipement.libelleLongFr</b>
+		</field>
+		<field>
+			<a>sousfamilleequipementLibelleLongAr</a>
+			<b>nomenclatureBySousFamilleEquipement.libelleLongAr</b>
+		</field>
+		<field>
+			<a>sousfamilleequipementLibelleCourtAr</a>
+			<b>nomenclatureBySousFamilleEquipement.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>sousfamilleequipementLibelleCourtFr</a>
+			<b>nomenclatureBySousFamilleEquipement.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>sousfamilleequipementCode</a>
+			<b>nomenclatureBySousFamilleEquipement.code</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefEquipementDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+
+
+
+
+</mappings>

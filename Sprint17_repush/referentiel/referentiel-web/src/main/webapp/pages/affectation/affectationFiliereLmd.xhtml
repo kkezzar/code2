@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{affectationMgrBean.filiereLMDCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="affectationFiliereFormId" prependId="false"
+		dir="#{localeBean.dir}">
+		<pe:blockUI target="affectationFiliereData" widgetVar="affFilWidget">
+			<h:graphicImage value="/images/ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:dataTable id="affectationFiliereData" styleClass="affDomOutPanel"
+			paginator="true" paginatorPosition="bottom" dir="#{localeBean.dir}"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectationMgrBean.listRefAffectationFiliereLMDDto}"
+			var="current">
+
+			<f:facet name="header">
+				<h:outputText dir="#{localeBean.dir}"
+					value="#{affectationmsgs.affectation_groupes_filieres}      " />
+				<p:commandButton id="addFiliereButton"
+					actionListener="#{affectationMgrBean.beforeAdd}" ajax="true"
+					onstart="PF('affFilWidget').block()"
+					onsuccess="PF('affFilWidget').unblock()" icon="ui-icon-plusthick"
+					oncomplete="PF('dlgAffecterFiliereLMD').show()" />
+			</f:facet>
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.affDomOutPanel)"
+				process="@(.affDomOutPanel)" />
+
+			<p:column sortBy="#{current.identifiantFiliere}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_code_filiere}" />
+				</f:facet>
+				<h:outputText value="#{current.identifiantFiliere}" />
+			</p:column>
+
+
+			<p:column sortBy="#{current.lcFiliere}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_filiere}" />
+				</f:facet>
+				<h:outputText value="#{current.lcFiliere} " />
+			</p:column>
+
+			<p:column sortBy="#{current.dateDebut}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_debut}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{current.dateFin}">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+				</f:facet>
+				<h:outputText value="#{current.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{affecFiliereLMDCrudBean.deleteAllow}">
+				<p:commandButton id="removeFiliereButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					onstart="PF('affFilWidget').block()"
+					onsuccess="PF('affFilWidget').unblock()"
+					actionListener="#{affectationMgrBean.deleteFiliereLMD(current)}"
+					process="@(.affDomOutPanel)" update="@(.affDomOutPanel)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+
+	<p:dialog header="#{affectationmsgs.affectation_filiere_title}"
+		closeOnEscape="true" widgetVar="dlgAffecterFiliereLMD" modal="true"
+		resizable="false" appendTo="@(body)" width="500">
+		<h:form id="dlgAffecterFiliereLMDForm" prependId="false">
+			<p:panelGrid id="descriptionFiliereAffecté"
+				styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_filiere} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="selectFiliere"
+							style="text-align: left;width:135px"
+							value="#{affectationMgrBean.refAffectationDto.idFiliere}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_selection_filiere}"
+							required="true"
+							requiredMessage="#{affectationmsgs.affectation_filiere_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_filiere}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefFiliereLmdDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_debut} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" binding="#{filiFirstDate}"
+							value="#{affectationMgrBean.refAffectationDto.dateDebut}"
+							id="debutFil" showButtonPanel="true" validator="dateValidator"
+							label="#{affectationmsgs.affectation_date_debut}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_debut_required}"
+							pattern="dd/MM/yyyy" />
+
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" validator="dateValidator"
+							value="#{affectationMgrBean.refAffectationDto.dateFin}"
+							id="finFil" showButtonPanel="true"
+							label="#{affectationmsgs.affectation_date_fin}" required="false"
+							requiredMessage="#{affectationmsgs.affectation_fin_required}"
+							pattern="dd/MM/yyyy">
+							<f:attribute name="firstDate" value="#{filiFirstDate}" />
+						</p:calendar>
+
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{affectationMgrBean.addFiliereLMD('dlgAffecterFiliereLMD')}"
+						update="@(.affDomOutPanel)">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						oncomplete="dlgAffecterFiliereLMD.hide()" />
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</h:form>
+	</p:dialog>
+
+
+
+</ui:composition>

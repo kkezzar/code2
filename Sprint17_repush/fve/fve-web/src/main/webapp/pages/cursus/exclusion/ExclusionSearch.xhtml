@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="centerContent">
+		<p:panel id="pnlGestionExclusion" header="Gérer l'exclusion">
+			
+			<h:form id="form_exclusion_List">
+			 <pe:blockUI target="form_exclusion_List" widgetVar="reportWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" showSummary="false" closable="true" life="5000" />
+	
+<!-- 			<p:toolbar styleClass="toolBarMesrs" id="toolbar"> -->
+<!-- 				<p:toolbarGroup align="left"> -->
+<!-- 					<p:panelGrid styleClass="rowStyle"> -->
+<!-- 						<p:row> -->
+<!-- 							<p:column style="width:120px"> -->
+<!-- 								<p:outputLabel -->
+<!-- 									value="#{exclusionMsgs.exclusion_annee_academique}" for="annee" /> -->
+<!-- 							</p:column> -->
+<!-- 							<p:column style="width:120px"> -->
+<!-- 								<p:selectOneMenu id="annee" style="width:100%;text-align:left" filter="true" -->
+<!-- 									filterMatchMode="startsWith" -->
+<!-- 									value="#{sessionBeanFve.exclusionSearchDto.anneeAcademiqueId}" > -->
+								
+<!-- 									<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_annee}" itemValue="" /> -->
+<!-- 									<f:selectItems 	value="#{dossierInscriptionSearchCmpBean.listeAnneeAcademiques}" /> -->
+<!-- 								</p:selectOneMenu> -->
+<!-- 							</p:column> -->
+
+<!-- 							<p:column style="width:120px"> -->
+<!-- 								<p:outputLabel value="#{exclusionMsgs.exclusion_matiere}" for="matiere" /> -->
+<!-- 							</p:column> -->
+<!-- 							<p:column style="width:200px" > -->
+<!-- 								<p:selectOneMenu id="matiere" style="width:100%;text-align:left" filterMatchMode="startsWith" -->
+<!-- 									value="#{sessionBeanFve.exclusionSearchDto.codeMc}" 	label="#{exclusionMsgs.exclusion_matiere}">										 -->
+<!-- 									<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_matiere}" itemValue="Choisir Matiere" /> -->
+<!-- 								<f:selectItems value="#{exclusionBean.listMatiere}" /> -->
+								
+<!-- 								</p:selectOneMenu> -->
+<!-- 							</p:column> -->
+						
+<!-- 							<p:column style="width:120px"> -->
+<!-- 								<p:outputLabel value="#{exclusionMsgs.exclusion_matricule}" for="matricule" /> -->
+<!-- 							</p:column> -->
+							
+<!-- 							<p:column style="width:200px" > -->
+<!-- 								<p:inputText id="matricule" style="width:100%;text-align:left" -->
+<!-- 									value="#{sessionBeanFve.exclusionSearchDto.numeroMatricule}" filter="true" filterMatchMode="startsWith" -->
+<!-- 									label="#{exclusionMsgs.exclusion_matricule}"> -->
+
+<!-- 									<f:param name="matiere" value="#{sessionBeanFve.exclusionSearchDto.codeMc}" /> -->
+<!-- 									<f:param name="anneeId" value="#{sessionBeanFve.exclusionSearchDto.anneeAcademiqueCode}" /> -->
+<!-- 									<p:ajax update="toolbar" onstart="PF('reportWidget').block()" -->
+<!-- 										onsuccess="PF('reportWidget').unblock()" />	 -->
+<!-- 								</p:inputText> -->
+<!-- 							</p:column>					 -->
+<!-- 						<p:column> -->
+<!-- 								<p:commandButton id="btnSearch" -->
+<!-- 									value="#{commonmsgs.bouton_rechercher}" -->
+<!-- 									update="@(.dataSearchContentStyle)"  -->
+<!-- 									style=" font-size:11px; text-align:left" -->
+<!-- 									onstart="PF('allWidget').block()" -->
+<!-- 									onsuccess="PF('allWidget').unblock()" -->
+<!-- 									actionListener="#{exclusionSearchBean.findAdvanced()}" 		icon="ui-icon-search"> -->
+									
+<!-- 									<f:param name="anneeId" value="#{exclusionSearchBean.anneeId}" /> -->
+<!-- 									<f:param name="showDetail" value="true" /> -->
+<!-- 								</p:commandButton> -->
+								
+					
+								
+<!-- 						<p:commandButton id="btnShowPanelSearch" value="#{commonmsgs.bouton_avance}..." title="#{commonmsgs.bouton_avance}..." -->
+<!-- 						onclick="PF('dlgExclusionSearch').show();"> -->
+					
+<!-- 						</p:commandButton>							 -->
+<!-- 						</p:column> -->
+<!-- 						</p:row> -->
+<!-- 					</p:panelGrid> -->
+<!-- 				</p:toolbarGroup> -->
+<!-- 			</p:toolbar> -->
+
+			<br />
+	
+
+<p:outputPanel  styleClass="dataSearchContentStyle">
+<p:fieldset id="exclusionData" styleClass="mesrsFieldset">
+<p:commandButton id="btnToNew" update="@(.dataGererContentStyle)"
+							value="#{commonmsgs.bouton_nouveau}"
+							title="#{commonmsgs.bouton_nouveau}"
+							style=" font-size:11px; text-align:left" icon="ui-icon-plusthick">
+
+</p:commandButton>
+<p:commandButton id="btnShowPanelSearch" value="#{commonmsgs.bouton_rechercher}" title="#{commonmsgs.bouton_rechercher}"
+						onclick="PF('dlgExclusionSearch').show();">
+						</p:commandButton>
+<p:dataTable id="ResultSearchDataTable" var="exclusion"
+						resizableColumns="false"
+						value="#{exclusionSearchBean.exclusionResultSearch}"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{exclusionMsgs.exclusion_datable_list_exclusion_no_result}"
+						rows="10"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					    currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+					    style="margin:8px"
+					    rowIndexVar="rowIndex" >
+					    
+					    
+					    <f:param name="searchValue" value="#{exclusionSearchBean.searchValue}" />
+					<p:ajax event="page" update="ResultSearchDataTable" onstart="PF('reportWidget').block()" onsuccess="PF('reportWidget').unblock()"
+						process="@(.dataSearchContentStyle)" />
+					<p:ajax event="sort" update="ResultSearchDataTable" onstart="PF('reportWidget').block()" onsuccess="PF('reportWidget').unblock()"
+						process="@(.dataSearchContentStyle)"/>
+					<p:ajax event="rowSelect" listener="#{exclusionSearchBean.onRowSelect}"
+						update=":form_exclusion_List" onstart="PF('reportWidget').block()" onsuccess="PF('reportWidget').unblock()" />
+						
+						
+					
+						<p:column headerText="#{exclusionMsgs.date_exclusion}" width="10%">
+							<h:outputText value="#{exclusion.dateDecision}" styleClass="labelValue">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+											
+						<p:column headerText="#{exclusionMsgs.exclusion_matricule}"	width="10%">
+							<h:outputText value="#{exclusion.dossierEtudiantMatricule}" styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="#{exclusionMsgs.exclusion_nom_etudiant}"	width="10%">
+							<h:outputText value="#{exclusion.individuNomLatin} #{exclusion.individuPrenomLatin}" styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="#{exclusionMsgs.exclusion_type_cause}" width="10%">
+							<h:outputText value="#{exclusion.refCodeTypeCause}" styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="#{exclusionMsgs.exclusion_type}" width="10%">
+							<h:outputText value="#{exclusion.refCodeTypeExclusion}" styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="#{exclusionMsgs.exclusion_matiere}" width="10%">
+							<h:outputText value="#{exclusion.libelleFrMc}" styleClass="labelValue">
+							
+							</h:outputText>
+						</p:column>
+					
+
+
+						<p:column style="width:15%" exportable="false">
+		
+						<p:commandButton id="ModifBouton" icon="ui-icon-pencil"   value=""
+						title="#{commonmsgs.data_table_action_update}"  update="@(.dataGererContentStyle)">
+					        <f:param name="exclusionId" value="#{exclusion.id}"> </f:param> 
+					        <f:param name="dossierInscriptionId" value="#{exclusion.dossierInscriptionId}"></f:param>
+					        <f:param name="renderedDetailContent" value="true"> </f:param>  
+						</p:commandButton>
+						
+						
+							
+						</p:column>
+
+					</p:dataTable>
+</p:fieldset>
+			
+</p:outputPanel>
+			</h:form>
+			
+		
+			
+			<p:outputPanel  styleClass="dataGererContentStyle" >
+			    <p:outputPanel  rendered="#{not param.readMode}" >
+		        <ui:include src="/pages/cursus/exclusion/ExclusionEdit.xhtml" >	</ui:include>
+			    </p:outputPanel>
+			</p:outputPanel>
+			
+			<p:dialog header="Recherche Exclusion" modal="true" appendTo="@(body)" widgetVar="dlgExclusionSearch" resizable="false"> 
+				<h:form id="form_exclusion">
+					<p:panelGrid id="gridSearchDmde" style="margin-top:5px;">
+
+						<p:row>
+							<p:column width="100">
+								<h:outputText
+									value="#{exclusionMsgs.exclusion_annee_academique }" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="anneeAcadSerach"
+									label="#{exclusionMsgs.exclusion_annee_academique}"
+									value="#{sessionBeanFve.exclusionSearchDto.anneeAcademiqueId}"
+									styleClass="labelValue">
+									<f:selectItem itemLabel="#{ouvertureOfMsgs.ouverture_select_annee_academique}" itemValue="" />
+									<f:selectItems value="#{dossierInscriptionSearchCmpBean.listeAnneeAcademiques}" />
+								</p:selectOneMenu>
+							</p:column>
+							
+						</p:row>
+						
+						<p:row>
+							<p:column width="100">
+								<h:outputText value="#{exclusionMsgs.date_exclusion}"  />
+							</p:column>
+							<p:column>
+							<p:calendar navigator="true" style="width:200px"
+							value="#{sessionBeanFve.exclusionSearchDto.dateDecision}"
+							id="dateexclusion"
+							label="#{exclusionMsgs.date_exclusion}"
+							pattern="dd/MM/yyyy" 
+							valueChangeListener="#{exclusionBean.entityChanged}"
+							mindate="1/1/1800" maxdate="#{localeBean.currentDate}" />
+							</p:column>
+					
+
+						</p:row>
+					
+						<p:row>
+							<p:column width="100">
+									<h:outputText value="#{exclusionMsgs.exclusion_matiere} " />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{sessionBeanFve.exclusionSearchDto.codeMc}"
+								label="#{exclusionMsgs.exclusion_matiere} *" >
+								
+								<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_matiere}" itemValue="Choisir Matiere" />
+								<f:selectItems value="#{exclusionBean.listMatiere}" />
+							</p:selectOneMenu>
+							</p:column>
+							</p:row>
+							
+								<p:row>
+							<p:column width="100">
+								<h:outputText value="#{exclusionMsgs.date_exclusion_debut}"  />
+							</p:column>
+							<p:column>
+							<p:calendar navigator="true" style="width:200px"
+							value="#{sessionBeanFve.exclusionSearchDto.dateDebut}"
+							id="datedebut"
+							label="#{exclusionMsgs.date_exclusion_debut}"
+							pattern="dd/MM/yyyy" 
+							valueChangeListener="#{exclusionBean.entityChanged}"
+							mindate="1/1/1800" maxdate="#{localeBean.currentDate}" />
+							</p:column>
+							
+							<p:column width="100">
+									<h:outputText value="#{exclusionMsgs.date_exclusion_fin}" />
+								</p:column>
+
+							<p:column>
+							<p:calendar navigator="true" style="width:200px"
+							value="#{sessionBeanFve.exclusionSearchDto.dateDecision}"
+							id="datefin"
+							label="#{exclusionMsgs.date_exclusion_fin}"
+							pattern="dd/MM/yyyy" 
+							valueChangeListener="#{exclusionBean.entityChanged}"
+							mindate="1/1/1800" maxdate="#{localeBean.currentDate}" />
+							</p:column>
+
+						</p:row>
+							
+						<p:row>
+							
+							<p:column width="100">
+								<h:outputText
+									value="#{exclusionMsgs.exclusion_matricule} " />
+							</p:column>
+							<p:column>
+								<p:inputText id="matriculetudiant" style="width:200px"
+									value="#{sessionBeanFve.exclusionSearchDto.dossierEtudiantMatricule}"></p:inputText>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column width="100">
+								<h:outputText
+									value="#{exclusionMsgs.exclusion_nom_etudiant}" />
+							</p:column>
+							<p:column>
+								<p:inputText id="nometudiant" style="width:200px"
+									value="#{sessionBeanFve.exclusionSearchDto.individuNomLatin}">
+								</p:inputText>
+							</p:column>
+							<p:column width="100">
+								<h:outputText
+									value="#{exclusionMsgs.exclusion_prenom_etudiant} " />
+							</p:column>
+							<p:column>
+								<p:inputText id="prenometudiant" style="width:200px"
+									value="#{sessionBeanFve.exclusionSearchDto.individuPrenomLatin}"></p:inputText>
+							</p:column>
+						</p:row>
+						
+						<p:row>
+							<p:column>
+								<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+									id="btnSearch" title="#{commonmsgs.bouton_rechercher}"
+									update="@(.dataSearchContentStyle)"  icon="ui-icon-search"
+									onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									onsuccess="dlgExclusionSearch.hide()">							
+								</p:commandButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					</h:form>
+				</p:dialog>
+		</p:panel>
+		
+
+	</ui:define>
+</ui:composition>
+</html>

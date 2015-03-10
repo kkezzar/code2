@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{affectationLieuStructureMsgs.affect_lieu_structure_pnl_consultation_title}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	<p:outputPanel id="pnl_affectation_lieu_structure" >
+		
+			
+			 <ui:include src="/pages/scolarite/affectationlieu/AffectationLieuStructureSearch.xhtml" >
+			 <ui:param name="editMode" value="false" /> 
+			 </ui:include>
+			 <br></br>
+			
+			
+			<h:form id="form_affectation_lieu_structure_detail">
+			 <p:fieldset  legend="Affectation lieu à une structure" rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and not affectationLieuStructureBean.hideDetail}">
+				<p:panelGrid columns="1" cellspacing="0">
+				<p:panelGrid >
+
+                <p:row><p:column style="width:200px">
+					<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique} *"></p:outputLabel>
+					
+					</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.anneeAcademiqueCode}" styleClass="labelValue"></p:outputLabel>
+					
+					</p:column>
+					</p:row>
+					<p:row><p:column style="width:200px">
+					<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite} *"></p:outputLabel>
+					</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.periodiciteLibelleLongFr}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_periode} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.periodeLibelleLongFr}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+							</p:row>
+					<p:row>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_jour} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.jourLibelleFr}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.plageHoraireLibelleFr}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+							</p:row>
+					<p:row>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_type_lieu} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:250px">
+					<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.refLieuTypeLibelleLongFr}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:350px">
+							<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.refLieuDesignation}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+							</p:row>
+					<p:row>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_type_structure} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:250px">
+							<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.refStructureTypeLibelle}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+					<p:column style="width:200px">
+							<p:outputLabel value="#{affectationLieuStructureMsgs.affect_lieu_structure_structure} *"></p:outputLabel>
+							</p:column>
+					<p:column style="width:400px">
+							<p:outputLabel value="#{affectationLieuStructureBean.affectationLieuStructureDto.llStructureLatin}" styleClass="labelValue"></p:outputLabel>
+							</p:column>
+					</p:row>
+					</p:panelGrid>
+					<p:toolbar id="affectationLieuStructureToolBar" styleClass="toolBarMesrs" style="width:100%;margin:0;">
+				<p:toolbarGroup>
+					
+				</p:toolbarGroup>
+			
+				
+
+				<p:toolbarGroup align="right">
+					<p:commandButton immediate="true" value="#{commonmsgs.bouton_annuler}"
+							id="backBtn" icon="ui-icon-arrowreturn-1-w" actionListener="#{affectationLieuStructureBean.annuler()}"   
+							 update=":pnl_affectation_lieu_structure"
+						     rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and not affectationLieuStructureBean.hideDetail}">
+							
+						</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+				</p:panelGrid>
+					</p:fieldset>
+					
+					</h:form>
+					
+			<!--     growl and blockUI               -->
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<pe:blockUI target="pnl_affectation_lieu_structure"
+				widgetVar="affectationLieuStructureFormBlock">
+				<h:panelGrid columns="2">
+					<h:graphicImage value="/resources/images/ajax-loader1.gif"
+						style="margin-right: 12px; vertical-align: middle;" />
+					<h:outputText value="#{commonmsgs.msg_wait}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

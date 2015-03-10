@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:form id="form_dossierInscriptionList">
+
+		<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+			actionListener="#{dossierInscriptionListBB.createNewDossierInscription()}"
+			icon="ui-icon-plusthick">
+
+			<p:ajax event="dialogReturn"
+				listener="#{dossierInscriptionListBB.addDioDialogReturn}"
+				update="dtTbl_dossierInscription" />
+
+			<f:param name="dossierEtudiantId"
+				value="#{dossierInscriptionListBB.dossierEtudiantId}" />
+			<f:param name="individuIdentifiant"
+				value="#{individuBean.individuIdentifiant}" />
+			<f:param name="codeTypeDossier" value="D002" />
+		</p:commandButton>
+
+		<p:spacer width="5"></p:spacer>
+
+		<p:commandButton type="button" value="#{commonmsgs.bouton_imprime}"
+			title="#{commonmsgs.bouton_imprime}" icon="ui-icon-print"
+			disabled="#{dossierInscriptionListBB.dossierInscriptionList.size() != 0}" />
+
+		<p:dataTable id="dtTbl_dossierInscription"
+			value="#{dossierInscriptionListBB.dossierInscriptionList}"
+			var="currentInscription" rowKey="#{currentInscription.id}"
+			selectionMode="single" style="margin-top:5px"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords}) "
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+			emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+			<p:ajax event="page" update="@this"></p:ajax>
+
+			<p:column style="width:10%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_numero_inscription}" />
+				</f:facet>
+
+				<h:outputText value="#{currentInscription.numeroInscription}" />
+			</p:column>
+			<p:column style="width:10%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_annee_academique}" />
+				</f:facet>
+
+				<h:outputText value="#{currentInscription.anneeAcademiqueCode}" />
+			</p:column>
+			<p:column style="width:50%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_offre_formation}" />
+				</f:facet>
+				<h:outputText value="#{currentInscription.offreFormationLibelleFr}" />
+			</p:column>
+			<p:column style="width:10%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_niveau}" />
+				</f:facet>
+
+				<h:outputText value="#{currentInscription.refCodeNiveau}" />
+			</p:column>
+
+			<p:column style="width:15%">
+				<f:facet name="header">
+					<h:outputText value="#{commonmsgs.data_table_action_title}" />
+				</f:facet>
+				<p:commandLink value="#{commonmsgs.data_table_action_open}"
+					actionListener="#{dossierInscriptionListBB.detailDossierInscription}">
+					<f:param name="dossierInscriptionId"
+						value="#{currentInscription.id}" />
+					<f:param name="dossierEtudiantId"
+						value="#{currentInscription.dossierEtudiantId}" />
+					<f:param name="individuIdentifiant"
+						value="#{individuBean.individuIdentifiant}" />
+				</p:commandLink>
+							|
+					<p:commandLink
+					actionListener="#{dossierInscriptionListBB.updateDossierInscription()}"
+					value="#{commonmsgs.data_table_action_update}">
+
+						<f:param name="dossierInscriptionId" value="#{currentInscription.id}" />
+						<f:param name="dossierEtudiantId" value="#{currentInscription.dossierEtudiantId}" />
+							<f:param name="individuIdentifiant" value="#{coordonneeBean.individuIdentifiant}" />
+							<f:param name="codeTypeDossier"	value="D002" />
+							<f:param name="dossierId" value="#{currentInscription.dossierId}" />		
+					</p:commandLink>
+					        	|
+					<p:commandLink value="#{dossierInscriptionAdministrativeMsgs.data_table_action_parcoursindividualise}" 	
+					action="/parcours/ParcoursEdit.xhtml">   
+					
+				</p:commandLink>
+
+							|
+				<p:commandLink type="button"
+					title="#{commonmsgs.data_table_action_delete}" icon="ui-icon-trash" />
+					
+				   
+				
+			</p:column>
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>
+

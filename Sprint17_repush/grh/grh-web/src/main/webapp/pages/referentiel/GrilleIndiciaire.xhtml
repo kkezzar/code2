@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="pageTitleContent">
+		#{grilleindicairemsgs.page_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel" style="width: 100%;" styleClass="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+<h:form>
+			<p:panelGrid id="panelSearch">
+						<p:row>
+							<p:column style="width: 200px;">
+								<h:outputText value="#{grhmsgs.grh_statut}" />
+							</p:column>
+							<p:column >
+								<p:selectOneMenu id="statut"
+									label="#{grhmsgs.grh_statut}"
+									value="#{grilleIndiciaireMBean.selectedStatutId}"
+									styleClass="labelValue"
+									style="width: 200px;">
+									<f:selectItem itemLabel="--Statut--"/>
+									<f:selectItems value="#{grilleIndiciaireMBean.statuts}" />
+									<p:ajax update=":statutPanel"
+											listener="#{grilleIndiciaireMBean.onStatutSelected()}" 
+											onstart="PF('page').block()"
+											onsuccess="PF('page').unblock()"
+											process="@this"/>
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+			</p:panelGrid>
+</h:form>
+<p:spacer height="20px"></p:spacer>
+<p:outputPanel id="statutPanel">
+	<p:panelGrid columns="1" cellspacing="0"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border"
+				rendered="#{grilleIndiciaireMBean.selectedStatutId != null}">
+				<p:panelGrid id="descriptionDossier"
+					styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="#{grhmsgs.grh_statut}      #{grilleIndiciaireMBean.statutDto.numero}  #{grilleIndiciaireMBean.statutDto.annee}" />
+					</p:column>
+					
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_statut_numero}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.numero}"    styleClass="value"/>					
+					</p:column>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_statut_annee}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.annee}"    styleClass="value"/>					
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_statut_date_creation}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.dateStatut}"    styleClass="value">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_date_effet}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.dateEffet}"    styleClass="value">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_statut_type}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.typeStatutDto.libelleLongFr}"    styleClass="value"/>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{grhmsgs.intitule}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.intitule}"    styleClass="value"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_date_publication}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.datePublication}"    styleClass="value">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{grhmsgs.grh_date_fin_validation}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{grilleIndiciaireMBean.statutDto.dateFinValidation}"    styleClass="value">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:row>
+				</p:panelGrid>
+	</p:panelGrid>
+<p:spacer height="20px"></p:spacer>
+<p:tabView rendered="#{grilleIndiciaireMBean.selectedStatutId != null}" >
+<p:tab title="Corps et Grades" >
+			<p:spacer height="20px"></p:spacer>
+			<p:panelGrid   styleClass="corpsEtGradePanel">
+				<f:facet name="header">
+					<p:row>
+						<p:column rowspan="2">
+							<h:outputText value="#{grhmsgs.grh_corps}" />
+						</p:column>
+						<p:column rowspan="2">
+							<h:outputText value="#{grilleindicairemsgs.grades}" />
+						</p:column>
+						<p:column rowspan="1" colspan="2">
+							<h:outputText value="#{grilleindicairemsgs.classement}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column rowspan="1" colspan="1">
+							<h:outputText value="Cat&eacute;gorie" />
+						</p:column>
+						<p:column rowspan="1" colspan="1">
+							<h:outputText value="#{grilleindicairemsgs.indice_minimal}" />
+						</p:column>
+					</p:row>
+					
+				</f:facet>
+				<c:forEach var="corpsMap" items="#{grilleIndiciaireMBean.corpsMap}">
+					<p:row>
+						<p:column rowspan="#{corpsMap.value.size()+1}" colspan="1">
+							<h:outputText value="#{corpsMap.key.nomenclatureByIdNomenclatureCorps.libelleLongFr}" />
+						</p:column>					
+					</p:row>
+					<c:forEach var="categorieProfessionnelle" items="#{corpsMap.value}">
+					<p:row>
+						<p:column colspan="1" rowspan="1">
+							<c:forEach var="grade" items="#{corpsMap.key.grades}">
+								<h:outputText value="#{grade.nomenclatureDto.libelleLongFr} " /><br></br>
+							</c:forEach>
+						</p:column>
+						<p:column colspan="1" rowspan="1">
+							<h:outputText value="#{categorieProfessionnelle.nomenclatureByCategorieDto.libelleLongFr}" />
+						</p:column>
+						<p:column colspan="1" rowspan="1">
+							<h:outputText value="#{categorieProfessionnelle.indiceMin}" />
+						</p:column>					
+					</p:row>	
+					</c:forEach>
+				</c:forEach>
+			</p:panelGrid>
+</p:tab>
+<p:tab title="Grille indiciaire">
+			<p:spacer height="20px"></p:spacer>
+			
+			<p:panelGrid   styleClass="grilleIndiciairePanel">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="#{grilleIndiciaireMBean.grilleContainsHorsCategories == 'true' ? '16':'15'}">
+							<h:outputText value="#{grilleindicairemsgs.grille_indiciaire_traitement}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column rowspan="2" id="groupeHeader" ><h:outputText value="#{grhmsgs.groupe}" /></p:column>
+						<p:column rowspan="2" colspan="#{grilleIndiciaireMBean.grilleContainsHorsCategories == 'true' ? '2':'1'}" id="categorieHeader" >
+							<h:outputText value="#{grhmsgs.categorie}" />
+						</p:column>
+						<p:column rowspan="2" id="indiceMinimalHeader" ><h:outputText value="#{grhmsgs.indice_minimal}" /></p:column>
+						<p:column colspan="12" id="indiceEchelonHeader" ><h:outputText value="#{grilleindicairemsgs.indice_echelon}" /></p:column>
+					</p:row>
+					<p:row>
+						<p:column >1er</p:column>
+						<p:column >2ème</p:column>
+						<p:column >3ème</p:column>
+						<p:column >4ème</p:column>
+						<p:column >5ème</p:column>
+						<p:column >6ème</p:column>
+						<p:column >7ème</p:column>
+						<p:column >8ème</p:column>
+						<p:column >9ème</p:column>
+						<p:column >10ème</p:column>
+						<p:column >11ème</p:column>
+						<p:column >12ème</p:column>
+					</p:row>
+				</f:facet>
+
+<c:if test="${grilleIndiciaireMBean.groupeDtos == null or grilleIndiciaireMBean.groupeDtos.isEmpty()}">
+	<p:row>
+		<p:column colspan="16">Auncune catégorie enregistréé</p:column>
+	
+	</p:row>
+</c:if>
+				<c:forEach var="groupe" items="#{grilleIndiciaireMBean.groupeDtos}" >
+					<p:row>
+						<p:column rowspan="#{groupe.horsCategorieProfessionnelleDtos.size() == 0  ? 
+						groupe.categorieProfessionnelleDtos.size()+1 : groupe.horsCategorieProfessionnelleDtos.size() + groupe.categorieProfessionnelleDtos.size() + 2 }">
+							<h:outputText value="#{groupe.nomenclatureGoupe.libelleLongFr}" />
+						</p:column>
+					</p:row>
+					
+					<c:forEach var="categorie" items="#{groupe.categorieProfessionnelleDtos}">
+						<p:row>
+							<p:column colspan="#{grilleIndiciaireMBean.grilleContainsHorsCategories == 'true' ? '2':'1'}" >
+								<h:outputText value="#{categorie.nomenclatureByCategorieDto.libelleLongFr}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{categorie.indiceMin}" />
+							</p:column>
+							<c:forEach var="echelon" items="#{categorie.grilleIndiciaireDtos}">
+								<p:column>
+									<h:outputText value="#{echelon.indice}" />	
+								</p:column>
+							</c:forEach>
+						</p:row>
+					</c:forEach>
+					<c:if test="#{groupe.horsCategorieProfessionnelleDtos.size() != 0}">
+						<p:row>
+							<p:column rowspan="#{groupe.horsCategorieProfessionnelleDtos.size() + groupe.categorieProfessionnelleDtos.size()+1}" colspan="1">Hors Categorie</p:column>
+						</p:row>
+						<c:forEach var="horsCategorie" items="#{groupe.horsCategorieProfessionnelleDtos}">
+							<p:row>
+								<p:column>
+									<h:outputText value="#{horsCategorie.nomenclatureByCategorieDto.libelleLongFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{horsCategorie.indiceMin}" />
+								</p:column>
+								<c:forEach var="echelonHC" items="#{horsCategorie.grilleIndiciaireDtos}">
+									<p:column>
+										<h:outputText value="#{echelonHC.indice}" />	
+									</p:column>
+								</c:forEach>
+							</p:row>
+						</c:forEach>
+					</c:if>
+				</c:forEach>
+				
+<!-- 			<p:row>  -->
+<!-- 					<p:column rowspan="3">Groupe 1</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column colspan="2">Categorie 1</p:column> -->
+<!-- 					<p:column>IndiceMin 1</p:column> -->
+<!-- 					<p:column>ec11</p:column> -->
+<!-- 					<p:column>ec21</p:column> -->
+<!-- 					<p:column>ec31</p:column> -->
+<!-- 					<p:column>ec41</p:column> -->
+<!-- 					<p:column>ec51</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column colspan="2">Categorie 2</p:column> -->
+<!-- 					<p:column>IndiceMin 2</p:column> -->
+<!-- 					<p:column>ec12</p:column> -->
+<!-- 					<p:column>ec22</p:column> -->
+<!-- 					<p:column>ec32</p:column> -->
+<!-- 					<p:column>ec42</p:column> -->
+<!-- 					<p:column>ec52</p:column> -->
+<!-- 				</p:row> -->
+				
+<!-- 				<p:row> -->
+<!-- 					<p:column rowspan="6">Groupe 2</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column colspan="2">Categorie 21</p:column> -->
+<!-- 					<p:column>IndiceMin 21</p:column> -->
+<!-- 					<p:column>ec112</p:column> -->
+<!-- 					<p:column>ec212</p:column> -->
+<!-- 					<p:column>ec312</p:column> -->
+<!-- 					<p:column>ec412</p:column> -->
+<!-- 					<p:column>ec512</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column colspan="2">Categorie 22</p:column> -->
+<!-- 					<p:column>IndiceMin 22</p:column> -->
+<!-- 					<p:column>ec122</p:column> -->
+<!-- 					<p:column>ec222</p:column> -->
+<!-- 					<p:column>ec322</p:column> -->
+<!-- 					<p:column>ec422</p:column> -->
+<!-- 					<p:column>ec522</p:column> -->
+<!-- 				</p:row> -->
+				
+<!-- 				<p:row> -->
+<!-- 					<p:column rowspan="4" colspan="1">Hors Categorie</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column>Sudivision1</p:column> -->
+<!-- 					<p:column>IncideHors1</p:column> -->
+<!-- 					<p:column>ech1</p:column> -->
+<!-- 					<p:column>ech2</p:column> -->
+<!-- 					<p:column>ech3</p:column> -->
+<!-- 					<p:column>ech4</p:column> -->
+<!-- 					<p:column>ech5</p:column> -->
+<!-- 				</p:row> -->
+<!-- 				<p:row> -->
+<!-- 					<p:column>Sudivision2</p:column> -->
+<!-- 					<p:column>IncideHors2</p:column> -->
+<!-- 					<p:column>ech21</p:column> -->
+<!-- 					<p:column>ech22</p:column> -->
+<!-- 					<p:column>ech23</p:column> -->
+<!-- 					<p:column>ech24</p:column> -->
+<!-- 					<p:column>ech25</p:column> -->
+<!-- 				</p:row>				 -->
+			</p:panelGrid>
+			
+</p:tab>
+<p:tab title="Postes supérieurs">
+			<p:spacer height="20px"></p:spacer>
+			<p:panelGrid styleClass="postesSuperieuresPanel">
+				<f:facet name="header">
+					<p:row>
+						<p:column rowspan="2">
+							<h:outputText value="#{grilleindicairemsgs.poste_superieur}" />
+						</p:column>
+						<p:column rowspan="1" colspan="2">
+							<h:outputText value="#{grilleindicairemsgs.bonification_indiciaire}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column rowspan="1" colspan="1">
+							<h:outputText value="#{grilleindicairemsgs.niveau}" />
+						</p:column>
+						<p:column rowspan="1" colspan="1">
+							<h:outputText value="#{grilleindicairemsgs.indice}" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<c:if test="${grilleIndiciaireMBean.posteSuperieureDtos == null or grilleIndiciaireMBean.posteSuperieureDtos.isEmpty()}">
+					<p:row>
+						<p:column colspan="16">Auncune poste supérieur enregistré</p:column>
+					</p:row>
+				</c:if>
+		
+				<c:forEach var="posteSuperieur" items="#{grilleIndiciaireMBean.posteSuperieureDtos}">
+					<p:row>
+						<p:column>
+							<h:outputText value="#{posteSuperieur.typePosteSuperieurDto.libelleLongFr}" />
+						</p:column>
+						<p:column>
+							???
+						</p:column>
+						<p:column>
+							<h:outputText value="#{posteSuperieur.bonificationIndiciaire}" />
+						</p:column>
+					</p:row>
+				</c:forEach>
+			</p:panelGrid>
+</p:tab>
+</p:tabView>
+
+</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

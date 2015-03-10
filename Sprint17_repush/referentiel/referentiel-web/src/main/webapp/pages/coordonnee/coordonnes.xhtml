@@ -1,0 +1,683 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{coordonneeMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="CoordonnesFromId">
+
+
+		<p:dataTable id="coordonnesAdresseData" paginator="true"
+			styleClass="adrOutPanel" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{coordonneeMgrBean.listRefAdresseDto}" var="current">
+
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="coordonnesAdresseData"
+				process="coordonnesAdresseData" />
+
+			<f:facet name="header">
+				<h:outputText value="#{coordonneemsgs.adresse_list}      " />
+				<p:commandButton id="addAdresseButton" icon="ui-icon-plusthick"
+					onstart="PF('blockAdrUI').block()"
+					oncomplete="PF('blockAdrUI').unblock()"
+					onsuccess="PF('dlgAdresseList').show()"
+					rendered="#{coordonneeCrudBean.createAllow}">
+
+				</p:commandButton>
+				<pe:blockUI target="coordonnesAdresseData" widgetVar="blockAdrUI">
+					<h:graphicImage value="/images/ajax-loader1.gif"
+						style="vertical-align: middle;" />
+				</pe:blockUI>
+
+			</f:facet>
+
+			<p:column sortBy="#{current.typeAdresseLibelleLongFr}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_type}" />
+				</f:facet>
+				<h:outputText value="#{current.typeAdresseLibelleLongFr}" />
+			</p:column>
+			<p:column sortBy="#{current.libelleAdresseLatin}" width="25%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_libelle}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleAdresseLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.communeLibelleLongFr}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_commune}" />
+				</f:facet>
+				<h:outputText value="#{current.communeLibelleLongFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.dairaLibelleLongFr}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_daira}" />
+				</f:facet>
+				<h:outputText value="#{current.dairaLibelleLongFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.wilayaLibelleLongFr}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_wilaya}" />
+				</f:facet>
+				<h:outputText value="#{current.wilayaLibelleLongFr}" />
+			</p:column>
+			<p:column sortBy="#{current.paysLibelleLongFr}" width="10%">
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.adresse_pays}" />
+				</f:facet>
+				<h:outputText value="#{current.paysLibelleLongFr}" />
+			</p:column>
+			<p:column style="width:5%"
+				rendered="#{coordonneeCrudBean.deleteAllow}">
+				<p:commandButton id="removeAdresseButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					onstart="PF('blockAdrUI').block()"
+					oncomplete="PF('blockAdrUI').unblock()"
+					actionListener="#{coordonneeMgrBean.deleteAdresse(current)}"
+					update="@(.adrOutPanel)">
+
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<br></br>
+		<p:outputPanel styleClass="telOutPanel">
+			<p:dataTable id="coordonnesTelephoneData" paginator="true"
+				paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{coordonneeMgrBean.listRefTelephoneDto}" var="current">
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="coordonnesTelephoneData"
+					process="coordonnesTelephoneData" />
+				<f:facet name="header">
+					<h:outputText value="#{coordonneemsgs.telephone_list}      " />
+					<p:commandButton id="addTelephoneButton" ajax="true"
+						onstart="PF('blockTelUI').block()"
+						oncomplete="PF('blockTelUI').unblock()" icon="ui-icon-plusthick"
+						onsuccess="PF('dlgTelephoneList').show()"
+						rendered="#{coordonneeCrudBean.createAllow}">
+
+					</p:commandButton>
+					<pe:blockUI target="coordonnesTelephoneData" widgetVar="blockTelUI">
+						<h:graphicImage value="/images/ajax-loader1.gif"
+							style="vertical-align: middle;" />
+					</pe:blockUI>
+				</f:facet>
+
+				<p:column sortBy="#{current.natureTelephoneLibelleLongFr}"
+					width="20%">
+					<f:facet name="header">
+						<h:outputText value="#{coordonneemsgs.telephone_nature}" />
+					</f:facet>
+					<h:outputText value="#{current.natureTelephoneLibelleLongFr}" />
+				</p:column>
+				<p:column sortBy="#{current.typeTelephoneLibelleLongFr}" width="30">
+					<f:facet name="header">
+						<h:outputText value="#{coordonneemsgs.adresse_type}" />
+					</f:facet>
+					<h:outputText value="#{current.typeTelephoneLibelleLongFr}" />
+				</p:column>
+				<p:column sortBy="#{current.numeroTelephone}" width="45">
+					<f:facet name="header">
+						<h:outputText value="#{coordonneemsgs.telephone_number}" />
+					</f:facet>
+					<h:outputText value="#{current.numeroTelephone}" />
+				</p:column>
+
+				<p:column style="width:5%"
+					rendered="#{coordonneeCrudBean.deleteAllow}">
+					<p:commandButton id="removeAdresseButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						onstart="PF('blockTelUI').block()"
+						oncomplete="PF('blockTelUI').unblock()"
+						actionListener="#{coordonneeMgrBean.deleteTelephone(current)}"
+						update="@(.telOutPanel)">
+
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<br></br>
+		<p:outputPanel styleClass="emailOutPanel">
+			<p:dataTable id="coordonnesEmailData" paginator="true"
+				paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{coordonneeMgrBean.listRefAdresseElectroniqueDto}"
+				var="current">
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="coordonnesEmailData"
+					process="coordonnesEmailData" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{coordonneemsgs.adresse_electronique_list}      " />
+					<p:commandButton id="addEmailButton" ajax="true"
+						onstart="PF('blockEmailUI').block()"
+						oncomplete="PF('blockEmailUI').unblock()" icon="ui-icon-plusthick"
+						onsuccess="PF('dlgEmailList').show()"
+						rendered="#{coordonneeCrudBean.createAllow}">
+
+					</p:commandButton>
+					<pe:blockUI target="coordonnesEmailData" widgetVar="blockEmailUI">
+						<h:graphicImage value="/images/ajax-loader1.gif"
+							style="vertical-align: middle;" />
+					</pe:blockUI>
+				</f:facet>
+
+				<p:column sortBy="#{current.natureAdresseElectroniqueLibelleLongFr}"
+					width="20%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_electronique_nature}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.natureAdresseElectroniqueLibelleLongFr}" />
+				</p:column>
+				<p:column sortBy="#{current.typeAdresseElectroniqueLibelleLongFr}"
+					width="30%">
+					<f:facet name="header">
+						<h:outputText value="#{coordonneemsgs.adresse_electronique_type}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.typeAdresseElectroniqueLibelleLongFr}" />
+				</p:column>
+				<p:column sortBy="#{current.nomAdresse}" width="45%">
+					<f:facet name="header">
+						<h:outputText value="#{coordonneemsgs.adresse_electronique_name}" />
+					</f:facet>
+					<h:outputText value="#{current.nomAdresse}" />
+				</p:column>
+
+				<p:column style="width:5%"
+					rendered="#{coordonneeCrudBean.deleteAllow}">
+					<p:commandButton id="removeEmailButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						onstart="PF('blockEmailUI').block()"
+						oncomplete="PF('blockEmailUI').unblock()"
+						actionListener="#{coordonneeMgrBean.deleteAdresseElectronique(current)}"
+						update="@(.emailOutPanel)">
+
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+
+	</h:form>
+
+
+	<p:dialog header="#{coordonneemsgs.adresse_list_title}" id="adrDlgId"
+		modal="true" appendTo="@(body)" widgetVar="dlgAdresseList"
+		closeOnEscape="true" resizable="false" width="650" height="300">
+		<h:form id="listAdresseForm" prependId="false">
+			<p:panelGrid id="adrDescription" styleClass="ui-panelgrid-full-width">
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel for="adresseTyprData"
+							value="#{coordonneemsgs.adresse_selection_type_adresse}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="adresseTyprData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseDto.typeAdresseId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_selection_type_adresse}"
+							required="true"
+							requiredMessage="#{coordonneemsgs.adresse_type_required}">
+							<f:selectItem itemLabel="#{coordonneemsgs.adresse_select_type}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeAdresse}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<p:outputLabel for="llAdresseFr"
+							value="#{coordonneemsgs.adresse_selection_adresse_fr}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputTextarea id="llAdresseFr"
+							style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseDto.libelleAdresseLatin}"
+							label="#{coordonneemsgs.adresse_selection_adresse_fr}"
+							required="true"
+							requiredMessage="#{coordonneemsgs.adresse_ll_latin_required}">
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel value="#{coordonneemsgs.adresse_selection_pays}"
+							for="AdressePaysData" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="AdressePaysData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseDto.paysId}" filter="true"
+							filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_selection_pays}" required="true"
+							requiredMessage="#{coordonneemsgs.adresse_pays_required}">
+							<f:selectItem itemLabel="#{coordonneemsgs.adresse_select_pays}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listPays}" />
+							<p:ajax listener="#{coordonneeMgrBean.paysChanged}"
+								event="change"
+								update="AdresseWilayaData,AdresseDairaData,AdresseCommuneData" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_selection_adresse_ar}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputTextarea id="llAdresseAr"
+							style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseDto.libelleAdresseArabe}"
+							label="#{coordonneemsgs.adresse_selection_adresse_ar}">
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+				<p:row>
+
+
+					<p:column style="width:15%">
+						<h:outputText value="#{coordonneemsgs.adresse_selection_wilaya}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="AdresseWilayaData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseDto.wilayaId}" filter="true"
+							filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_selection_wilaya}">
+							<f:selectItem itemLabel="#{coordonneemsgs.adresse_select_wilaya}"
+								itemValue="" />
+							<f:selectItems value="#{coordonneeMgrBean.listWilaya}" />
+							<p:ajax event="change"
+								listener="#{coordonneeMgrBean.wilayaChanged}"
+								update="adrDescription" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_selection_code_postal}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="codePostal" style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseDto.codePostal}"
+							label="#{coordonneemsgs.adresse_selection_code_postal}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{coordonneemsgs.adresse_selection_daira}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="AdresseDairaData" styleClass="dairaStyle"
+							style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseDto.dairaId}" filter="true"
+							filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_selection_daira}">
+							<f:selectItem itemLabel="#{coordonneemsgs.adresse_select_daira}"
+								itemValue="" />
+							<f:selectItems value="#{coordonneeMgrBean.listDaira}" />
+							<p:ajax listener="#{coordonneeMgrBean.dairaChanged}"
+								event="change" update="AdresseCommuneData" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{coordonneemsgs.adresse_selection_gps_lat}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="gpsLat" style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseDto.gpsLatitude}"
+							label="#{coordonneemsgs.adresse_selection_gps_lat}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{coordonneemsgs.adresse_selection_commune}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="AdresseCommuneData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseDto.communeId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_selection_commune}">
+							<f:selectItem
+								itemLabel="#{coordonneemsgs.adresse_select_commune}"
+								itemValue="" />
+							<f:selectItems value="#{coordonneeMgrBean.listCommune}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{coordonneemsgs.adresse_selection_gps_long}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="gpsLong" style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseDto.gpsLongitude}"
+							label="#{coordonneemsgs.adresse_selection_gps_long}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_principal}"
+							style="text-align: top" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refAdresseDto.principal}" />
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_liste_rouge}"
+							style="text-align: top" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refAdresseDto.listeRouge}" />
+					</p:column>
+
+				</p:row>
+
+				<br />
+				<br />
+			</p:panelGrid>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton value="#{commonmsgs.button_ok}" id="okAdrButton"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{coordonneeMgrBean.addAdresse('dlgAdresseList')}"
+						update="@(.adrOutPanel)">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						onstart="PF('blockAdrUI').block()"
+						oncomplete="PF('blockAdrUI').unblock()"
+						onclick="dlgAdresseList.hide()">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+			<p:blockUI block="adrDescription"
+				trigger="AdressePaysData,AdresseWilayaData,AdresseDairaData" />
+
+
+
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog header="#{coordonneemsgs.telephone_list_title}"
+		closeOnEscape="true" widgetVar="dlgTelephoneList" modal="true"
+		appendTo="@(body)" width="450" resizable="false" height="200">
+
+
+		<h:form id="listTelephoneForm">
+			<p:panelGrid id="telDescription" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value="#{coordonneemsgs.telephone_selection_nature} *" />
+
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="telephoneNatureData" style="width:100%"
+							value="#{coordonneeMgrBean.refTelephoneDto.natureTelephoneId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.telephone_selection_nature}"
+							required="true" update="numeroTelephone"
+							requiredMessage="#{coordonneemsgs.telephone_nature_required}">
+							<f:selectItem
+								itemLabel="#{coordonneemsgs.telephone_select_nature}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listNatTel}" />
+							<p:ajax listener="#{coordonneeMgrBean.telephoneNatureChanged}"
+								event="change" update="numeroTelephone" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText value="#{coordonneemsgs.telephone_selection_type} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="telephoneTypeData" style="width:100%"
+							value="#{coordonneeMgrBean.refTelephoneDto.typeTelephoneId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.telephone_selection_type}"
+							required="true"
+							requiredMessage="#{coordonneemsgs.telephone_type_required}">
+							<f:selectItem itemLabel="#{coordonneemsgs.telephone_select_type}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeTel}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value="#{coordonneemsgs.telephone_selection_numero} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputMask id="numeroTelephone"
+							style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refTelephoneDto.numeroTelephone}"
+							label="#{coordonneemsgs.telephone_selection_numero}"
+							mask="#{coordonneeMgrBean.maskTelephone}" required="true"
+							requiredMessage="#{coordonneemsgs.telephone_numero_required}">
+						</p:inputMask>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_principal}"
+							style="text-align: top;" />
+					</p:column>
+					<p:column style="width:10%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refTelephoneDto.principal}" />
+					</p:column>
+					<p:column style="width:40%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_liste_rouge}"
+							style="text-align: top" />
+					</p:column>
+					<p:column style="width:10%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refTelephoneDto.listeRouge}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{coordonneeMgrBean.addTelephone('dlgTelephoneList')}"
+						update="@(.telOutPanel)">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						onstart="PF('blockTelUI').block()"
+						oncomplete="PF('blockTelUI').unblock()"
+						onclick="dlgTelephoneList.hide()">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+		</h:form>
+
+	</p:dialog>
+
+
+
+	<p:dialog header="#{coordonneemsgs.adresse_electronique_list_title}"
+		closeOnEscape="true" modal="true" appendTo="@(body)"
+		widgetVar="dlgEmailList" width="450" height="200" resizable="false">
+
+		<h:form id="listEmailForm">
+			<p:panelGrid id="emailDescription"
+				styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_electronique_selection_nature} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="emailNatureData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseElectroniqueDto.natureAdresseElectroniqueId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_electronique_selection_nature}"
+							required="true"
+							requiredMessage="#{coordonneemsgs.adresse_electronique_nature_required}">
+							<f:selectItem
+								itemLabel="#{coordonneemsgs.adresse_electronique_select_nature}"
+								itemValue="" />
+							<f:selectItems
+								value="#{comboBckBean.listNatureAdresseElectronique}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_electronique_selection_type} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="emailTypeData" style="width:100%"
+							value="#{coordonneeMgrBean.refAdresseElectroniqueDto.typeAdresseElectroniqueId}"
+							filter="true" filterMatchMode="contains"
+							label="#{coordonneemsgs.adresse_electronique_selection_type}"
+							required="true"
+							requiredMessage="#{coordonneemsgs.adresse_electronique_type_required}">
+							<f:selectItem
+								itemLabel="#{coordonneemsgs.adresse_electronique_select_type}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeMail}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value="#{coordonneemsgs.adresse_electronique_selection_name} *" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="nameemail" required="true"
+							requiredMessage="#{plageadressemsgs.plageadresse_adresse_debut_required}"
+							style="text-align: left;width:95%"
+							value="#{coordonneeMgrBean.refAdresseElectroniqueDto.nomAdresse}"
+							label="#{coordonneemsgs.adresse_electronique_selection_name}"
+							validatorMessage="#{coordonneemsgs.adresse_electronique_invalid}">
+
+							<!-- <f:validateRegex 
+		                 pattern="#{coordonneemsgs.adresse_electronique_email_pattern}"   />
+							
+							#{coordonneeMgrBean.refAdresseElectroniqueDto.natureAdresseElectroniqueId eq  coordonneemsgs.adresse_electronique_nature_idEmail ? coordonneemsgs.adresse_electronique_email_pattern : coordonneemsgs.adresse_electronique_site_pattern}
+							#{coordonneeMgrBean.refAdresseElectroniqueDto.natureAdresseElectroniqueId eq  coordonneemsgs.adresse_electronique_nature_idEmail? '^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'}
+							 -->
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:40%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_principal}"
+							style="text-align: top" />
+					</p:column>
+					<p:column style="width:10%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refAdresseElectroniqueDto.principal}" />
+					</p:column>
+					<p:column style="width:40%">
+						<h:outputText
+							value=" #{coordonneemsgs.coordonnee_selection_liste_rouge}"
+							style="text-align: top" />
+					</p:column>
+					<p:column style="width:10%">
+						<p:selectBooleanCheckbox
+							value="#{coordonneeMgrBean.refAdresseElectroniqueDto.listeRouge}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{coordonneeMgrBean.addAdresseElectronique('dlgEmailList')}"
+						update="@(.emailOutPanel)">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						onstart="PF('blockEmailUI').block()"
+						oncomplete="PF('blockEmailUI').unblock()"
+						onclick="dlgEmailList.hide()">
+
+					</p:commandButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

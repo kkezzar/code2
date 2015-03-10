@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{stagemsgs.pnl_enregistrer_resultat_stage} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			 <ui:include
+				src="/pages/administrative/dossierEmploye/DossierEmployeSearch.xhtml" >
+				<ui:param name="nameMBean"  value="#{resultatStageMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty resultatStageMBean.stageDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{stagemsgs.pnl_enregistrer_resultat_stage}" >
+					<h:form id="form_resultat_stage_save">
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+								<ui:param name="dossierEmployeDtoParam"
+									value="#{resultatStageMBean.dossierEmployeDto}"></ui:param>
+							</ui:include>
+
+
+							<p:panelGrid id="stagePnlGrid"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+
+										<h:outputText styleClass="value" value="Stage" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.date_debut_stage} " />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{resultatStageMBean.stageDto.dateDebut}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.date_fin_stage}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{resultatStageMBean.stageDto.dateFin}">
+											<f:convertDateTime type="date"
+												pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.date_debut_reel_stage} *" />
+									</p:column>
+									<p:column>
+										<p:calendar id="date_debut_reel_stage" navigator="true"
+											required="true"
+											requiredMessage="#{stagemsgs.date_debut_reel_stage_required}"
+											value="#{resultatStageMBean.stageDto.dateDebutReelle}"></p:calendar>
+
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.date_fin_reel_stage} * " />
+									</p:column>
+									<p:column>
+										<p:calendar id="date_fin_reel_stage" navigator="true"
+											required="true"
+											requiredMessage="#{stagemsgs.date_fin_reel_stage_required}"
+											value="#{resultatStageMBean.stageDto.dateFinReelle}"></p:calendar>
+									</p:column>
+
+								</p:row>
+							</p:panelGrid>
+							<p:panelGrid id="DecisionstagePnlGrid"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+
+										<h:outputText styleClass="value" value="Décision" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.decision_stage} *" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="type" styleClass="input-large-px"
+											required="true"
+											requiredMessage="#{stagemsgs.decision_stage_required}"
+											value="#{resultatStageMBean.stageDto.nomenclatureByDecisionStageDto.id}"
+											label="#{stagemsgs.decision_stage}">
+											<p:ajax update="DecisionstagePnlGrid"
+												listener="#{resultatStageMBean.onDecisionSelected}"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()" />
+											<f:selectItem itemLabel="#{stagemsgs.decision_stage_select}"
+												itemValue="" />
+											<f:selectItems
+												value="#{resultatStageMBean.listeDecisionStage}" />
+
+										</p:selectOneMenu>
+
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{stagemsgs.motif_decision}" />
+									</p:column>
+									<p:column>
+										<p:inputText
+											value="#{resultatStageMBean.stageDto.motifDecision}"
+											styleClass="input-xlarge-px"></p:inputText>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column rendered="#{resultatStageMBean.renderedProlongation}">
+										<h:outputLabel value="#{stagemsgs.date_fin_prolongation} *" />
+									</p:column>
+									<p:column rendered="#{resultatStageMBean.renderedProlongation}">
+										<p:calendar id="date_fin_prolongation" navigator="true"
+											required="true"
+											requiredMessage="#{stagemsgs.date_fin_prolongation_required}"
+											value="#{resultatStageMBean.stageDto.dateProlongation}"></p:calendar>
+									</p:column>
+
+
+								</p:row>
+
+							</p:panelGrid>
+							<p:toolbar id="ResultatStageToolBar" styleClass="toolBarMesrs">
+								<p:toolbarGroup>
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										styleClass="ui-button-save" id="saveResultatStageBtn"
+										icon="ui-icon-disk" update=":pnl_Gerer"
+										actionListener="#{resultatStageMBean.onSave()}">
+
+										<p:confirm header="Confirmation"
+											message="#{besoinRecrutementmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+
+
+								</p:toolbarGroup>
+
+
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.bouton_annuler}"
+										immediate="true" process="@this" id="backBtn"
+										icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+										actionListener="#{resultatStageMBean.init()}">
+
+
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+</p:tab>
+	    <p:tab title="#{commonmsgs.tab_historique}" disabled="#{resultatStageMBean.dossierEmployeDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{resultatStageMBean.dossierEmployeHistory}"
+															idParamName="id"
+															idParamValue="#{resultatStageMBean.dossierEmployeDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+					
+
+
+
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{misePlaceBudgetFonctionnementMsgs.page_title_enregistrer_repartition_budget_article}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<!--  fields/buttons -->
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{enregistrerReparationBudgetArticleBean.model}"
+					paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{enregistrerReparationBudgetArticleBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="Référence">
+						<h:outputText value="#{current.reference}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Intitule">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date décision">
+						<h:outputText value="#{current.dateDecision}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant">
+						<h:outputText value="#{current.montant}" styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView id="tabview"
+					rendered="#{enregistrerReparationBudgetArticleBean.crud}">
+
+					<p:tab title="Détail décision de notification">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+
+								<p:column style="width:25%">
+									<h:outputText value="Exercice budgétaire" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.projetBudget.exerciceBudgetaire.intituleFr}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Projet de budget" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.projetBudget.description}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Etablissement" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.etablissement.llEtablissementLatin}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Réference décision" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.reference}"></h:outputText>
+								</p:column>
+								<p:column>
+									<h:outputText value="Date décision" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.dateDecision}">
+										<f:convertDateTime type="date"
+											pattern="#{applicationBean.datePattern()}" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.intituleFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_ar}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.intituleAr}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Montant" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.montant}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<!-- 	<p:row>
+								<p:column>
+									<p:commandButton value="Nouveau"
+										update=":tabview:crud_form_detail"
+										actionListener="#{enregistrerReparationBudgetArticleBean.addAction()}"></p:commandButton>
+								</p:column>
+								<p:column colspan="3">
+									<h:form>
+										<p:selectOneMenu id="listStructuresFilter"
+											styleClass="input-xx-large pull-right"
+											value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetSearchDto.id}"
+											filter="true" filterMatchMode="contains">
+											<f:selectItem itemLabel="Selectionner chapitre" itemValue="" />
+											<f:selectItems
+												value="#{enregistrerReparationBudgetArticleBean.listChapitres}" />
+											<p:ajax event="change" update="@this"
+												onstart="PF('page').block()"
+												onsuccess="PF('page').unblock()" />
+										</p:selectOneMenu>
+									</h:form>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column colspan="4">
+									<p:dataTable id="ResultSearchDataTable" var="current"
+										resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+										value="#{enregistrerReparationBudgetArticleBean.modelDetailsReparatitionBudgetDto}"
+										paginator="true" paginatorPosition="bottom"
+										emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5"
+										rowKey="#{current.id}" selectionMode="single"
+										paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+										currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+										<p:ajax event="rowSelect" immediate="true"
+											listener="#{enregistrerReparationBudgetArticleBean.onRowSelectDetailsReparationBudget}"
+											process="@this" onstart="PF('page').block()"
+											onsuccess="PF('page').unblock()"
+											update=":tabview:crud_form_detail" />
+
+										<p:column headerText="#{commonmsgs.column_numero_ligne}">
+											<h:outputText value="#{rowIndex+1}" />
+										</p:column>
+
+										<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+											<h:outputText
+												value="#{current.chapitre.code} - #{current.chapitre.intituleFr}" />
+										</p:column>
+
+										<p:column headerText="#{parametrageBudgetMsg.article}">
+											<h:outputText
+												value="#{current.article.code} - #{current.article.intituleFr}" />
+										</p:column>
+
+										<p:column headerText="#{gfcMsgs.montant}">
+											<h:outputText value="#{current.montant}"
+												styleClass="pull-right">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</p:column>
+
+										<p:columnGroup type="footer">
+											<p:row>
+												<p:column colspan="3" style="text-align:right"
+													footerText="Total" />
+												<p:column style="text-align:right">
+													<f:facet name="footer">
+														<h:outputText
+															value="#{preparationBudgetEtabBean.getTotalMontant()}"
+															styleClass="value">
+															<f:convertNumber type="currency" currencySymbol="" />
+														</h:outputText>
+													</f:facet>
+												</p:column>
+											</p:row>
+										</p:columnGroup>
+
+									</p:dataTable>
+								</p:column>
+							</p:row>
+							
+							-->
+							<!-- 
+							<p:row>
+								<p:column colspan="4">
+									<p:outputPanel id="crud_form_detail">
+										<p:tabView
+											rendered="#{enregistrerReparationBudgetArticleBean.crudDetail}">
+											<p:tab title="Detail de la demande">
+
+												<h:form id="form">
+													<p:panelGrid
+														styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+														<p:row>
+															<p:column>
+																<p:outputLabel value="#{parametrageBudgetMsg.section}"
+																	styleClass="required" />
+															</p:column>
+
+															<p:column colspan="3">
+																<p:selectOneMenu styleClass="input-xxlarge-px"
+																	value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.chapitre.idSection.id}"
+																	filter="true" filterMatchMode="contains"
+																	required="true">
+																	<f:selectItem
+																		itemLabel="#{parametrageBudgetMsg.select_section}"
+																		itemValue="" />
+																	<f:selectItems
+																		value="#{enregistrerReparationBudgetArticleBean.listSections}" />
+																	<p:ajax event="valueChange" process="@this"
+																		listener="#{enregistrerReparationBudgetArticleBean.handleSectionsSelectOneMenuChange}"
+																		update="listChapitres listArticles" />
+																</p:selectOneMenu>
+															</p:column>
+
+														</p:row>
+														<p:row>
+															<p:column>
+																<p:outputLabel value="#{parametrageBudgetMsg.chapitre}"
+																	styleClass="required" />
+															</p:column>
+
+															<p:column>
+																<p:selectOneMenu styleClass="input-xxlarge-px"
+																	value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.chapitre.id}"
+																	filter="true" filterMatchMode="contains"
+																	required="true" id="listChapitres">
+																	<f:selectItem
+																		itemLabel="#{parametrageBudgetMsg.select_chapitre}"
+																		itemValue="" />
+																	<f:selectItems
+																		value="#{enregistrerReparationBudgetArticleBean.listChapitres}" />
+																	<p:ajax process="@this"
+																		listener="#{enregistrerReparationBudgetArticleBean.handleChapitresSelectOneMenuChange}"
+																		update="listArticles" />
+																</p:selectOneMenu>
+															</p:column>
+
+															<p:column>
+																<p:outputLabel value="#{parametrageBudgetMsg.article}"
+																	styleClass="required" />
+															</p:column>
+
+															<p:column>
+																<p:selectOneMenu styleClass="input-xxlarge-px"
+																	id="listArticles" required="true"
+																	value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.article.id}"
+																	filter="true" filterMatchMode="contains">
+																	<f:selectItem
+																		itemLabel="#{parametrageBudgetMsg.select_article}"
+																		itemValue="" />
+																	<f:selectItems
+																		value="#{enregistrerReparationBudgetArticleBean.listArticles}" />
+																</p:selectOneMenu>
+															</p:column>
+														</p:row>
+
+														<p:row>
+															<p:column>
+																<p:outputLabel value="#{gfcMsgs.montant}"
+																	styleClass="required" />
+															</p:column>
+
+															<p:column colspan="3">
+																<pe:inputNumber required="true"
+																	value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.montant}"
+																	decimalPlaces="2" title="Le montant en DA" /> DA
+															</p:column>
+														</p:row>
+
+														<f:facet name="footer">
+															<p:row>
+																<p:column colspan="4">
+																	<p:commandButton
+																		value="#{commonmsgs.bouton_enregistrer}" id="saveBtn"
+																		update=":form_crud :tabview:crud_form_detail"
+																		styleClass="ui-button-save"
+																		actionListener="#{enregistrerReparationBudgetArticleBean.saveDetailRepBudgetAction}"
+																		onstart="PF('page').block()"
+																		onsuccess="PF('page').unblock()">
+																	</p:commandButton>
+
+																	<p:spacer width="5px"></p:spacer>
+
+																	<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+																		id="delBtn"
+																		update=":form_crud :tabview:crud_form_detail"
+																		disabled="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.id eq null}"
+																		styleClass="ui-button-delete-o"
+																		actionListener="#{enregistrerReparationBudgetArticleBean.deleteDetailRepBudgetAction()}"
+																		onstart="PF('page').block()"
+																		onsuccess="PF('page').unblock()">
+																		<p:confirm header="#{commonmsgs.dlg_confirmation}"
+																			message="#{commonmsgs.msg_delete_confirmation}"
+																			icon="ui-icon-alert" />
+																	</p:commandButton>
+
+																	<p:spacer width="10px"></p:spacer>
+
+																	<p:commandButton value="#{commonmsgs.bouton_retour}"
+																		id="cancelBtn" update=":tabview:crud_form_detail"
+																		process="@this"
+																		actionListener="#{enregistrerReparationBudgetArticleBean.cancelRepBudgetAction()}">
+																	</p:commandButton>
+
+																</p:column>
+															</p:row>
+														</f:facet>
+													</p:panelGrid>
+												</h:form>
+											</p:tab>
+
+										</p:tabView>
+									</p:outputPanel>
+								</p:column>
+							</p:row>
+							
+							-->
+
+							<!-- Actions -->
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="4">
+										<p:commandButton value="#{commonmsgs.bouton_valider}"
+											id="valBtn" update=":form_crud :form_search"
+											styleClass="ui-button-validate-o"
+											actionListener="#{enregistrerReparationBudgetArticleBean.validateAction()}"
+											onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+											<p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{commonmsgs.msg_validation_confirmation}"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+										<p:spacer width="10px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_retour}"
+											id="cancelBtn" update=":form_crud" process="@this"
+											immediate="true"
+											actionListener="#{enregistrerReparationBudgetArticleBean.cancelAction()}">
+										</p:commandButton>
+
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+
+					</p:tab>
+
+					<p:tab title="Budget final des recettes">
+
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							id="datatable_budget_recettes"
+							value="#{enregistrerReparationBudgetArticleBean.listDetailsReparatitionBudgetDto.get('true')}"
+							paginator="true" selectionMode="single"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:ajax event="rowSelect" immediate="true"
+								listener="#{enregistrerReparationBudgetArticleBean.onRowSelectDetailsReparationBudget}"
+								process="@this"
+								onsuccess="PF('gererRepBudgetArticleWidget').show()"
+								update=":form_rep_budget_article" />
+
+							<f:facet name="header">
+								<p:toolbar>
+									<p:toolbarGroup align="right">
+										<p:commandButton styleClass="ui-button-bleu-o"
+											title="Ajouter affectation" icon="ui-icon-plusthick"
+											ajax="true" update=":form_rep_budget_article" value="Ajouter"
+											action="#{enregistrerReparationBudgetArticleBean.addBudgetRecetteAction()}"
+											immediate="true"
+											onsuccess="PF('gererRepBudgetArticleWidget').show()"></p:commandButton>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</f:facet>
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.section}">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.article}">
+								<h:outputText
+									value="#{current.article.code} : #{current.article.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="4" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{enregistrerReparationBudgetArticleBean.getTotalMontant(true)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+
+					</p:tab>
+
+					<p:tab title="Budget final des dépenses">
+
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							id="datatable_budget_depenses"
+							value="#{enregistrerReparationBudgetArticleBean.listDetailsReparatitionBudgetDto.get('false')}"
+							paginator="true" selectionMode="single"
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:ajax event="rowSelect" immediate="true"
+								listener="#{enregistrerReparationBudgetArticleBean.onRowSelectDetailsReparationBudget}"
+								process="@this"
+								onsuccess="PF('gererRepBudgetArticleWidget').show()"
+								update=":form_rep_budget_article" />
+
+							<f:facet name="header">
+								<p:toolbar>
+									<p:toolbarGroup align="right">
+										<p:commandButton styleClass="ui-button-bleu-o"
+											title="Ajouter affectation" icon="ui-icon-plusthick"
+											ajax="true" update=":form_rep_budget_article" value="Ajouter"
+											action="#{enregistrerReparationBudgetArticleBean.addBudgetDepenseAction()}"
+											immediate="true"
+											onsuccess="PF('gererRepBudgetArticleWidget').show()"></p:commandButton>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</f:facet>
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.section}">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{parametrageBudgetMsg.article}">
+								<h:outputText
+									value="#{current.article.code} : #{current.article.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="4" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{enregistrerReparationBudgetArticleBean.getTotalMontant(false)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="DecisionBudget" scope="request" />
+							<c:set var="identifiant"
+								value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="FicheBesoins" />
+							<ui:param name="identifiant"
+								value="#{enregistrerReparationBudgetArticleBean.decisionBudgetDto.id.toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+			<!-- dialogbox -->
+			<pe:blockUI widgetVar="gererRepBudget" target="gererRepBudget">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+			<p:dialog header="Ajouter/Modifier budget final" id="gererRepBudget"
+				position="center" widgetVar="gererRepBudgetArticleWidget"
+				modal="true" resizable="true">
+				<p:outputPanel>
+					<h:form id="form_rep_budget_article">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="#{parametrageBudgetMsg.section}"
+										styleClass="required" />
+								</p:column>
+
+								<p:column>
+									<p:selectOneMenu styleClass="input-xxlarge-px"
+										value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.chapitre.idSection.id}"
+										filter="true" filterMatchMode="contains" required="true">
+										<f:selectItem
+											itemLabel="#{parametrageBudgetMsg.select_section}"
+											itemValue="" />
+										<f:selectItems
+											value="#{enregistrerReparationBudgetArticleBean.listSections}" />
+										<p:ajax event="valueChange" process="@this"
+											listener="#{enregistrerReparationBudgetArticleBean.handleSectionsSelectOneMenuChange}"
+											update="listChapitres listArticles" />
+									</p:selectOneMenu>
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:outputLabel value="#{parametrageBudgetMsg.chapitre}"
+										styleClass="required" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu styleClass="input-xxlarge-px"
+										value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.chapitre.id}"
+										filter="true" filterMatchMode="contains" required="true"
+										id="listChapitres">
+										<f:selectItem
+											itemLabel="#{parametrageBudgetMsg.select_chapitre}"
+											itemValue="" />
+										<f:selectItems
+											value="#{enregistrerReparationBudgetArticleBean.listChapitres}" />
+										<p:ajax process="@this"
+											listener="#{enregistrerReparationBudgetArticleBean.handleChapitresSelectOneMenuChange}"
+											update="listArticles" />
+									</p:selectOneMenu>
+								</p:column>
+
+							</p:row>
+							<p:row>
+
+								<p:column>
+									<p:outputLabel value="#{parametrageBudgetMsg.article}"
+										styleClass="required" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu styleClass="input-xxlarge-px"
+										id="listArticles" required="true"
+										value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.article.id}"
+										filter="true" filterMatchMode="contains">
+										<f:selectItem
+											itemLabel="#{parametrageBudgetMsg.select_article}"
+											itemValue="" />
+										<f:selectItems
+											value="#{enregistrerReparationBudgetArticleBean.listArticles}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<p:outputLabel value="#{gfcMsgs.montant}" styleClass="required" />
+								</p:column>
+								<p:column>
+									<pe:inputNumber required="true"
+										value="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.montant}"
+										decimalPlaces="2" title="Le montant en DA" /> DA
+								</p:column>
+							</p:row>
+
+							<!-- Actions -->
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="2">
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+											id="saveBtn"
+											update="form_rep_budget_article :tabview:datatable_budget_recettes :tabview:datatable_budget_depenses"
+											styleClass="ui-button-save"
+											onstart="PF('gererRepBudget').block()"
+											onsuccess="PF('gererRepBudget').unblock()"
+											actionListener="#{enregistrerReparationBudgetArticleBean.saveDetailRepBudgetAction}">
+
+										</p:commandButton>
+
+										<p:spacer width="5px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+											id="delBtn"
+											update="form_rep_budget_article :tabview:datatable_budget_recettes :tabview:datatable_budget_depenses"
+											rendered="#{enregistrerReparationBudgetArticleBean.detailsReparatitionBudgetDto.id ne null}"
+											styleClass="ui-button-delete-o" process="@this"
+											immediate="true"
+											actionListener="#{enregistrerReparationBudgetArticleBean.deleteDetailRepBudgetAction()}"
+											onsuccess="PF('gererRepBudgetArticleWidget').hide()">
+											<p:confirm header="#{commonmsgs.dlg_confirmation}"
+												message="#{commonmsgs.msg_delete_confirmation}"
+												icon="ui-icon-alert" />
+										</p:commandButton>
+
+										<p:spacer width="10px"></p:spacer>
+
+										<p:commandButton value="#{commonmsgs.bouton_fermer}"
+											id="cancelBtn"
+											update="form_rep_budget_article :tabview:datatable_budget_recettes :tabview:datatable_budget_depenses"
+											immediate="true"
+											onstart="PF('gererRepBudgetArticleWidget').hide()"
+											actionListener="#{enregistrerReparationBudgetArticleBean.cancelRepBudgetAction()}">
+										</p:commandButton>
+
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</h:form>
+				</p:outputPanel>
+			</p:dialog>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

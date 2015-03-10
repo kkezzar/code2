@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.examen.NoteEliminatoireDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.examen.NoteEliminatoire
+		</class-b>
+
+
+		<field>
+			<a>oofId</a>
+			<b>oof.id</b>
+		</field>
+
+		<field>
+			<a>periodeId</a>
+			<b>periode.id</b>
+		</field>
+
+		<field>
+			<a>rattachementMcId</a>
+			<b>examenSession.rattachementMc.id</b>
+		</field>
+
+		<field>
+			<a>rattachementMcCredit</a>
+			<b>examenSession.rattachementMc.credit</b>
+		</field>
+
+		<field>
+			<a>rattachementMcLibelle</a>
+			<b>examenSession.rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+		<field>
+			<a>planningSessionId</a>
+			<b>examenSession.planningSession.id</b>
+		</field>
+
+		<field>
+			<a>planningSessionLibelle</a>
+			<b>examenSession.planningSession.intitule</b>
+		</field>
+
+		<field>
+			<a>planningSessionType</a>
+			<b>examenSession.planningSession.ncTypeSession.libelleLongFr</b>
+		</field>
+		<field>
+			<a>examenSessionId</a>
+			<b>examenSession.id</b>
+		</field>
+
+
+	</mapping>
+
+
+</mappings>

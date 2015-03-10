@@ -1,0 +1,136 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+                   <p:panelGrid id="descriptionDossier"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{besoinRecrutementmsgs.besoin_recrutement}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{besoinRecrutementmsgs.date_ouverture} " />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.dateOuverture}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{besoinRecrutementmsgs.objet} " />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.objet}"
+											styleClass="value">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{besoinRecrutementmsgs.mode} " />
+									</p:column>
+
+									<p:column style="width:25%">
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.nomenclatureByModeRecrutementDto.libelleLongFr}"
+											styleClass="value">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputLabel value="#{besoinRecrutementmsgs.type} " />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.nomenclatureByTypeRecrutementDto.libelleLongFr}"
+											styleClass="value">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+
+								<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{besoinRecrutementmsgs.date_limit_depot} " />
+									</p:column>
+									<p:column style="width:25%">
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.dateDepot}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputLabel
+											value="#{besoinRecrutementmsgs.date_prevue_recrutement} " />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.dateRecrutement}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{besoinRecrutementmsgs.date_publiction} " />
+									</p:column>
+									<p:column>
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.datePublication}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+									</p:column>
+									<p:column rendered="#{besoinRecrutementDtoParam.cloture}">
+										<h:outputLabel
+											value="#{besoinRecrutementmsgs.date_cloture} " />
+									</p:column>
+									<p:column rendered="#{besoinRecrutementDtoParam.cloture}">
+
+										<h:outputText
+											value="#{besoinRecrutementDtoParam.dateCloture}"
+											styleClass="value">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+										</h:outputText>
+						
+					</p:column>
+									 
+								</p:row>
+
+							</p:panelGrid>
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

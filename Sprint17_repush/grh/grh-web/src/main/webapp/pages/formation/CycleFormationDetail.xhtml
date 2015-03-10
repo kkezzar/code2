@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panelGrid cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">	
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.programme}"
+										 />
+								</p:column>
+								<p:column colspan="3">
+								<h:outputText value="#{cycleFormationDtoParam.programmeFormationGrhDto.intitule}" styleClass="value"/>
+								</p:column>
+								
+								</p:row>					
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.code}"
+										 />
+								</p:column>
+								<p:column >
+									<h:outputText value="#{cycleFormationDtoParam.code}" styleClass="value"/>
+								</p:column>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.intitule}"
+										 />
+								</p:column>
+								<p:column >
+									<h:outputText value="#{cycleFormationDtoParam.intitule}" styleClass="value"/>
+								</p:column>
+								</p:row>
+							
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_debut} "
+										 />
+								</p:column>
+								<p:column >
+									<h:outputText value="#{cycleFormationDtoParam.dateDebut}" styleClass="value">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</h:outputText>
+								</p:column>
+
+
+								<p:column >
+									<h:outputLabel value="#{formationMgs.date_fin} "/>
+								</p:column>
+								<p:column >
+									<h:outputText value="#{cycleFormationDtoParam.dateFin}" styleClass="value">
+									<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</h:outputText>
+								</p:column>
+							</p:row>
+                              <p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.objectif} "
+										 />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText value="#{cycleFormationDtoParam.objectif}" styleClass="value"/>
+								</p:column>
+
+							</p:row>
+						</p:panelGrid>
+
+
+	               <br></br>					
+                      <p:dataTable var="grade" 
+							value="#{cycleFormationDtoParam.gradeCycleFormationDtos}" id="gradesTable"
+							widgetVar="gradesTable" rowKey="#{grade.id}"
+							style="margin-top:5px" resizableColumns="true" paginator="true"
+							rows="5" paginatorPosition="bottom"
+							columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+							rowIndexVar="rowIndex"
+							emptyMessage="#{formationMgs.grade_cycle_datable_no_result}">
+                        <f:facet name="header">
+                        <h:outputText  value="#{formationMgs.grade_concernes_title}" 
+										 />
+										 </f:facet>
+							
+							<p:column
+								headerText="#{formationMgs.numero}" width="3%"
+								>
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{formationMgs.grade}">
+							<h:outputText value="#{grade.gradeDto.nomenclatureDto.libelleLongFr}" styleClass="value"/>
+							</p:column>
+							<p:column headerText="#{formationMgs.nombre_candidat}">
+								<h:outputText value="#{grade.nbCandidat}" styleClass="value"/>
+							</p:column>
+							<p:column headerText="#{formationMgs.observation}">
+							<h:outputText value="#{grade.observation}" styleClass="value"/>	
+                           </p:column>
+							
+							
+						</p:dataTable>
+
+<br></br>
+<p:dataTable var="sessionFormation" value="#{cycleFormationDtoParam.sessionFormationDtos}" 
+						widgetVar="cycleSessionsTable" rowKey="#{sessionFormation.id}"
+					style="margin-top:5px" resizableColumns="true" 
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.session_datable_no_result}"> 
+                     
+						<f:facet name="header">
+							 <h:outputText  value="#{formationMgs.sessions_formation_title}" 
+										 />
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:3%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						
+                       
+						
+						    <p:column headerText="#{formationMgs.formation}" >
+							<h:outputText value="#{sessionFormation.formationCatalogueDto.intitule}"  styleClass="value">
+						
+						</h:outputText>
+						</p:column>
+					  <p:column headerText="#{formationMgs.date_debut}" >
+							<h:outputText value="#{sessionFormation.dateDebut}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+						
+						<p:column headerText="#{formationMgs.date_fin}" >
+							<h:outputText value="#{sessionFormation.dateFin}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+					</p:dataTable>
+
+
+</ui:composition>

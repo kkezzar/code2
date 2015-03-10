@@ -1,0 +1,226 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:form prependId="false" id="idvFormEdit">
+	
+		<p:panelGrid id="descriptionIdv" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText
+						value="Détail de l'individu" />
+				</p:column>
+			</p:row>
+		
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_identite} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="identifiantIdv" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.identifiant}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_civilite} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="civilite" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.civiliteLibelleLongFr}" />
+
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nom_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="nomfr" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomLatin}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nom_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="nomAr" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomArabe}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenom_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="prenomfr" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomLatin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenom_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="prenomAr" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomArabe}" />
+				</p:column>
+			</p:row>
+	
+			<p:row id="rowNe"
+				rendered="#{dossierEtudiantSearchBean.dossierEtudiant.individu.civiliteId eq individuMsgs.individu_civilite_idMme}">
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nomJeuneFille_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="nomjeunefillefr" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomJeuneFilleLatin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nomJeuneFille_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="nomjeunefillear" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomJeuneFilleArabe}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_presume}: " />
+				</p:column>
+				<p:column  styleClass="value">
+					<h:outputText value="#{individuBean.individuPresume  ?'Oui':'Non' }"
+						id="presume" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_datenaissance} " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.dateNaissance}"
+						id="datenaissance" styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_qualite}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="fonction" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.qualite}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nationalite}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="nationalite" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nationaliteLibelleLongFr}" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_SitFamiliale}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="SitFamiliale" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.situationFamilialeLibelleLongFr}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_service_national}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="servicenational" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.serviceNatLibelleLongFr}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_Groupe_Sanguin}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="GroupeSanguin" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.groupeSanguinLibelleLongFr}" />
+				</p:column>
+			</p:row>
+
+		
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText
+						value="#{individuMsgs.individu_parents}" />
+				</p:column>
+			</p:row>
+				
+
+		<!-- <header>#{individuMsgs.individu_parents}</header> -->
+		
+
+			<!-- 					
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">#{individuMsgs.individu_parents}</p:column>
+				</p:row>
+			</f:facet> 
+			-->
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenompere_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="preNompere" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomPereLatin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenompere_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="preNompereArabe" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomPereArabe}"
+						style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nommere_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="Nommere" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomMereLatin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_nommere_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="NommereArabe" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.nomMereArabe}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenommere_latin} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="preNommere" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomMereLatin}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{individuMsgs.individu_prenommere_arabe} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="preNommereArabe" styleClass="value"
+						value="#{dossierEtudiantSearchBean.dossierEtudiant.individu.prenomMereArabe}" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+</ui:composition>

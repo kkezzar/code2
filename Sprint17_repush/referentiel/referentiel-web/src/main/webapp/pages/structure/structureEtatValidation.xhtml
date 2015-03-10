@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel id="etatValidationPanel">
+		<ui:include src="/pages/structure/structureHeader.xhtml" />
+		<br></br>
+		<ui:include src="/pages/etatvalidation/etatValidation.xhtml">
+			<ui:param name="createAllow" value="#{createAllow}" />
+			<ui:param name="editAllow" value="#{editAllow}" />
+			<ui:param name="deleteAllow" value="#{deleteAllow}" />
+		</ui:include>
+	</p:panel>
+
+</ui:composition>

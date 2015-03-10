@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- TITRE PAGE -->
+	<ui:define name="pageTitleContent">#{bacSearchMsgs.bac_search_page_title}</ui:define>
+
+	<!-- CONTENU PAGE -->
+	<ui:define name="centerContent">
+		<h:form id="searchForm" style="margin:10px;">
+		<h:panelGrid style="width:100%;">
+		<p:row>
+		<p:column style="width:100%;">
+				<p:panelGrid id="gridSearch" style="width:100%;">
+				<p:row>
+						<p:column><h:outputLabel value="#{bacSearchMsgs.bac_search_panel_grid_column_etablissement}" /></p:column>
+						<p:column><h:outputLabel id="etablissementId" 	value="#{bacSearch.libelleEtab} (#{bacSearch.newEtabCode})" 	styleClass="value" /></p:column>
+						<p:column><h:outputLabel value="#{bacSearchMsgs.bac_search_panel_grid_column_total_etablissement}" /></p:column>
+						<p:column><h:outputLabel id="totalFilesId" value="#{bacSearch.totalResult}" styleClass="value" /></p:column>
+				</p:row>
+				
+				<p:row>
+						<p:column><h:outputLabel value="#{bacSearchMsgs.bac_search_panel_grid_column_total_annee_academique}" /></p:column>
+						<p:column colspan="3">
+									<p:selectOneMenu id="listAnneesID" value="#{bacSearch.year}">
+										<f:selectItems value="#{bacSearch.listYears}" var="y"	itemLabel="#{y.label}" itemValue="#{y.value}" />
+										<p:ajax listener="#{bacSearch.handleYearsChange}" 	event="valueChange" process="@this" 	
+													update="totalFilesId listFilieresBacID" />
+									</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column><h:outputLabel value="#{bacSearchMsgs.bac_search_panel_grid_column_total_filiere}" /></p:column>
+						<p:column colspan="3">
+									<p:selectOneMenu id="listFilieresBacID" 	value="#{bacSearch.filiereCode}" filter="true" filterMatchMode="startsWith">
+											<f:selectItems value="#{bacSearch.listFilieresBac}" var="f" 	
+													itemLabel="#{f.libelleNiveau2}  #{f.libelleNiveau1}  (#{f.ancienCode})" itemValue="#{f.ancienCode}" />
+									</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				
+				<p:row>
+						<p:column><h:outputLabel for="keyWordsID" value="#{bacSearchMsgs.bac_search_panel_grid_column_mots_cles}" /></p:column>
+						<p:column colspan="2"><p:inputText id="keyWordsID" binding="#{txtKeyWords}"
+										value="#{bacSearch.keyWords}" style="width:100%">
+		<!-- 								required="#{not empty param[btnSearchBound.clientId]}" -->
+		<!-- 								requiredMessage="Mots clés requis !"> -->
+										<!-- 											    <f:validateLength minimum="5" for="keyWordsID"/> -->
+								</p:inputText></p:column>
+						<p:column>
+						<p:commandButton value="#{bacSearchMsgs.bac_search_panel_grid_button_search}" id="btnSearch"
+								binding="#{btnSearchBound}" 	
+								update="@([id$=searchForm])"
+								ajax="true" icon="ui-icon-search"
+								process="@this keyWordsID listAnneesID listFilieresBacID"
+								action="#{bacSearch.search()}" 	
+								onstart="PF('blockUIWidgetSearch').block()" oncomplete="PF('blockUIWidgetSearch').unblock()"
+								style="float:left;">
+						</p:commandButton>
+						</p:column>
+				</p:row>
+				</p:panelGrid>
+				
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column>
+							<p:messages id="msg" showDetail="true" showSummary="false" 	autoUpdate="true" closable="true" />
+							<br />
+							<p:watermark for="keyWordsID" 	value="#{bacSearchMsgs.bac_search_watermark_mots_cles}" />
+				</p:column>
+				</p:row>
+				<p:row>
+				<h:column>
+				<p:outputPanel id ="outputPanelResult">
+					<p:dataGrid var="row" 
+						value="#{bacSearch.lazyResult}" 
+						columns="2" 
+						binding="#{bacSearch.gridData}"
+						rows="4" 
+						paginator="true" 
+						id="lazySearchBachelorsFileGridView"
+						currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						lazy="true"
+						emptyMessage="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_empty}"
+						rendered="#{bacSearch.showResultSearch}">
+
+						<p:ajax event="page" update="@all" process="@form"
+							listener="#{bacSearch.onPageChange}"
+							onstart="PF('blockUIWidgetPaging').block()"
+							oncomplete="PF('blockUIWidgetPaging').unblock()" />
+<!-- 							<f:facet name="header">   -->
+<!--             								#{bacSearchMsgs.bac_search_datagrid_resultat_recherche} -->
+<!--        						 	</f:facet>   -->
+						<p:panel
+							header="#{row.nomFr}  #{row.prenomFr}  -  #{row.nomAr} #{row.prenomAr}"
+							style="text-align:center;width:500;">
+							<h:panelGrid columns="3"
+								style="width:100%;height:200px; padding:0px; " cellspacing="0">
+								<p:column>
+									<p:graphicImage value="#{photoEtudiantBB.photo}"
+										rendered="#{row.photoEtudiant != null}"
+										alt="#{documentmsgs.document_photo_vide}" width="150"
+										height="200">
+										<f:param name="url" value="#{row.photoEtudiant}" />
+									</p:graphicImage>
+									<p:graphicImage value="/resources/images/boy.png"
+										rendered="#{row.photoEtudiant == null}"
+										alt="#{documentmsgs.document_photo_vide}" width="150"
+										height="200">
+									</p:graphicImage>
+								</p:column>
+								<p:column style="width:85%;">
+
+									<p:panelGrid columns="2" style="text-align:left;width:100%;">
+										<h:outputLabel value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_matricule}" />
+										<h:outputLabel id="matriculeId" value="#{row.matricule}"
+											styleClass="value" />
+
+										<h:outputLabel value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_date_naissance}" />
+										<h:outputLabel id="dateNaissanceId"
+											value="#{row.dateNaissance}" styleClass="value">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputLabel>
+
+										<h:outputLabel value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_serie_bac}" />
+										<h:outputLabel id="SerieBacId"
+											value="#{row.libelleSerieBac} #{row.refCodeSerieBac}"
+											styleClass="value" />
+
+										<h:outputLabel value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_moyenne_bac}" />
+										<h:outputLabel id="moyenneBacId" value="#{row.moyenneBac}"
+											styleClass="value" />
+
+										<h:outputLabel value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_annee}" />
+										<h:outputLabel id="anneeBacId" value="#{row.annee}"
+											styleClass="value" />
+
+										<h:outputLabel value="" />
+										<p:commandButton value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_bouton_detail_dossier}"
+											style="width:100%;"
+											action="#{bacSearch.prepareBachelorFileDetails()}"
+											process="lazySearchBachelorsFileGridView" 
+											update=":bachelorFileDetail"
+											onstart="PF('blockUIWidgetPaging').block()"
+											oncomplete="PF('blockUIWidgetPaging').unblock()" 
+											onsuccess="PF('bachelorFileDialog').show()">
+										
+											<f:setPropertyActionListener
+												target="#{bacSearch.idBachelorFolder}" value="#{row.id}" />
+
+										</p:commandButton>
+									</p:panelGrid>
+								</p:column>
+							</h:panelGrid>
+						</p:panel>
+					</p:dataGrid>
+					</p:outputPanel>
+					</h:column>
+					</p:row>
+</h:panelGrid>
+</h:form>
+
+<p:dialog header="Détail Dossier Bachelier" id="dlgDetailDossier"
+				  widgetVar="bachelorFileDialog" modal="true" resizable="false"
+				  appendTo="@(body)" style="font-size:#{sessionBean.fontSize}px">
+
+<p:outputPanel id="bachelorFileDetail">
+				<p:panel header="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_panel_infos_personnelles}" 
+				 style="margin-bottom:8px;">
+					<p:panelGrid style="text-align:left;width:100%;margin-bottom:8px;" rendered="#{not empty bacSearch.selectedRow}">
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_nom_prenom_fr}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.nomFr} #{bacSearch.selectedRow.prenomFr}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_nom_prenom_ar}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.nomAr} #{bacSearch.selectedRow.prenomAr}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_prenom_pere}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.prenomPere}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_nom_prenom_mere}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.nomPrenomMere}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_matricule}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.matricule}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_moyenne_bac}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.moyenneBac}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_annee}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.annee}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_serie_bac}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.libelleSerieBac} #{bacSearch.selectedRow.refCodeSerieBac}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_wilaya_bac}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.refCodeWilayaBac}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_date_naissance}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.dateNaissance}"
+									styleClass="value">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_wilaya_naissance}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.refCodeWilayaNaissance}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_ville_naissance}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.libelleVilleNaissance}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_adresse}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.adresseResidence}"
+									styleClass="value" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_telephone}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.telephone}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:panel>
+				<p:panel header="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_panel_affectation}" style="margin-bottom:8px;">
+					<p:panelGrid style="text-align:left;width:100%;"
+						rendered="#{not empty bacSearch.selectedRow}">
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_filiere_affectation}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.libelleFiliereAffectation} (#{bacSearch.selectedRow.refCodeFiliereAffectation})"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_note_affectation}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{bacSearch.selectedRow.noteAffectation}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{bacSearchMsgs.bac_search_datagrid_resultat_recherche_panel_detail_type_affectation}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{bacSearch.selectedRow.refCodeTypeAffectation}"
+									styleClass="value" />
+							</p:column>
+						</p:row>
+						<!--            	<p:row> -->
+						<!--  		  			<p:column><h:outputText value="Etablissement :" /></p:column> -->
+						<!--                 	<p:column><h:outputText value="#{bacSearch.selectedRow.refCodeEtablissementAffectation}" styleClass="value" /></p:column> -->
+						<!--              </p:row> -->
+					</p:panelGrid>
+				</p:panel>
+				<p:toolbar style="margin-bottom:8px;">
+					<p:toolbarGroup align="right">
+							<p:commandButton id="btnHideDialogID" value="#{bacSearchMsgs.bac_search_dialog_detail_bouton_fermer}" 	type="button" onclick="PF('bachelorFileDialog').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+</p:outputPanel>
+</p:dialog>
+
+		<pe:blockUI target="searchForm"
+			widgetVar="blockUIWidgetPaging">
+			<i class="fa fa-spinner fa-spin"></i>
+		</pe:blockUI>
+		<pe:blockUI target="searchForm"
+			widgetVar="blockUIWidgetSearch">
+			<i class="fa fa-spinner fa-spin"></i>
+		</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

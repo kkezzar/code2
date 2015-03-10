@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefVersionDocumentDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefVersionDocument
+		</class-b>
+
+		<field>
+			<a>identifiantIndividu</a>
+			<b>refIndividu.identifiant</b>
+		</field>
+		<field>
+			<a>nomFrIndividu</a>
+			<b>refIndividu.nomLatin</b>
+		</field>
+		
+		<field>
+			<a>prenomFrIndividu</a>
+			<b>refIndividu.prenomLatin</b>
+		</field>
+		
+
+		<field>
+			<a>idDocument</a>
+			<b>refDocument.id</b>			
+		</field>
+		
+		<field>
+			<a>titreDocument</a>
+			<b>refDocument.titreDocument</b>			
+		</field>
+		
+		<field>
+			<a>referenceDocument</a>
+			<b>refDocument.referenceDocument</b>			
+		</field>
+		
+		<field>
+			<a>dateDocument</a>
+			<b>refDocument.dateDocument</b>			
+		</field>
+		
+		
+		<field>
+			<a>urlDocument</a>
+			<b>refDocument.url</b>			
+		</field>
+
+		
+	</mapping>
+
+
+</mappings>

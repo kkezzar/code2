@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.UniteEnseignementDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.UniteEnseignement
+		</class-b>
+
+		<field>
+			<a>ncNatureUeLlFr</a>
+			<b>ncNatureUe.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncNatureUeLlAr</a>
+			<b>ncNatureUe.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncNatureUeLcFr</a>
+			<b>ncNatureUe.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncNatureUeLcAr</a>
+			<b>ncNatureUe.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>ncNatureUeCode</a>
+			<b>ncNatureUe.code</b>
+		</field>
+		<field>
+			<a>ncNatureUeId</a>
+			<b>ncNatureUe.id</b>
+		</field>
+
+		<field>
+			<a>ncCaractereUeLlFr</a>
+			<b>ncCaractereUe.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncCaractereUeLlAr</a>
+			<b>ncCaractereUe.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncCaractereUeLcFr</a>
+			<b>ncCaractereUe.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncCaractereUeLcAr</a>
+			<b>ncCaractereUe.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>ncCaractereUeCode</a>
+			<b>ncCaractereUe.code</b>
+		</field>
+		<field>
+			<a>ncCaractereUeId</a>
+			<b>ncCaractereUe.id</b>
+		</field>
+
+		<field>
+			<a>ncAppreciationUeLlFr</a>
+			<b>ncAppreciationUe.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncAppreciationUeLlAr</a>
+			<b>ncAppreciationUe.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncAppreciationUeLcFr</a>
+			<b>ncAppreciationUe.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncAppreciationUeLcAr</a>
+			<b>ncAppreciationUe.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>ncAppreciationUeCode</a>
+			<b>ncAppreciationUe.code</b>
+		</field>
+		<field>
+			<a>ncAppreciationUeId</a>
+			<b>ncAppreciationUe.id</b>
+		</field>
+
+
+	</mapping>
+
+</mappings>

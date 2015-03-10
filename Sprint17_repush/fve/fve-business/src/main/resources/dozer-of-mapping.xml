@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OffreFormation</class-b>
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situationEntite.id</b>
+      		</field> 
+      		<field>
+      					<a>idCycle</a>
+	  					<b>cycle.id</b>
+      		</field> 
+      		<field>
+      					<a>codeCycle</a>
+	  					<b>cycle.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleCycle</a>
+	  					<b>cycle.libelleLongLt</b>
+      		</field> 
+      	
+      		<field>
+      					<a>idEtablissement</a>
+	  					<b>refEtablissement.id</b>
+      		</field> 
+      		<field>
+      					<a>codeEtablissement</a>
+	  					<b>refEtablissement.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleEtablissement</a>
+	  					<b>refEtablissement.llEtablissementLatin</b>
+      		</field> 
+      		<field>
+      					<a>idDomaine</a>
+	  					<b>refDomaineLMD.id</b>
+      		</field> 
+      		<field>
+      					<a>codeDomaine</a>
+	  					<b>refDomaineLMD.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleDomaine</a>
+	  					<b>refDomaineLMD.llDomaine</b>
+      		</field>
+      		<field>
+      					<a>idFiliere</a>
+	  					<b>refFiliereLmd.id</b>
+      		</field>  
+      		<field>
+      					<a>codeFiliere</a>
+	  					<b>refFiliereLmd.identifiant</b>
+      		</field>  
+      			<field>
+      					<a>libelleFiliere</a>
+	  					<b>refFiliereLmd.llFiliere</b>
+      		</field>  
+      		<field>
+      					<a>idSpecialite</a>
+	  					<b>refSpecialiteLmd.id</b>
+      		</field>  
+      		 		<field>
+      					<a>codeSpecialite</a>
+	  					<b>refSpecialiteLmd.identifiant</b>
+      		</field>  
+      		 <field>
+      					<a>libelleSpecialite</a>
+	  					<b>refSpecialiteLmd.llSpecialite</b>
+      		</field>  
+      		
+      		<field>
+      					<a>idTypeFormation</a>
+	  					<b>typeFormation.id</b>
+      		</field>  
+      		 <field>
+      					<a>codeTypeFormation</a>
+	  					<b>typeFormation.code</b>
+      		</field>  
+      		 <field>
+      					<a>libelleTypeFormation</a>
+	  					<b>typeFormation.libelleLongFr</b>
+      		</field>  
+      		
+      		<field>
+      					<a>idVocation</a>
+	  					<b>vocationFormation.id</b>
+      		</field>  
+      		 <field>
+      					<a>codeVocation</a>
+	  					<b>vocationFormation.code</b>
+      		</field>  
+      		 <field>
+      					<a>libelleVocation</a>
+	  					<b>vocationFormation.libelleLongFr</b>
+      		</field>  
+      		
+      		<field>
+      					<a>idStructure</a>
+	  					<b>refStructure.id</b>
+      		</field>  
+			<field>
+      					<a>codeStructure</a>
+	  					<b>refStructure.identifiant</b>
+      		</field>  
+
+			<field>
+      					<a>libelleStructure</a>
+	  					<b>refStructure.llStructureLatin</b>
+      		</field>  
+      		<field>
+      					<a>idStructureMere</a>
+	  					<b>refStructure.refStructure.id</b>
+      		</field>  
+			<field>
+      					<a>codeStructureMere</a>
+	  					<b>refStructure.refStructure.identifiant</b>
+      		</field>  
+
+			<field>
+      					<a>libelleStructureMere</a>
+	  					<b>refStructure.refStructure.llStructureLatin</b>
+      		</field>  
+      		
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situationEntite.id</b>
+      		</field>  
+      		
+      		<field>
+      					<a>codeSituation</a>
+	  					<b>situationEntite.situation.code</b>
+      		</field>  
+      		
+      		<field>
+      					<a>libelleSituationFr</a>
+	  					<b>situationEntite.situation.libelleFr</b>
+      		</field>  
+	
+   </mapping>
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationI18nDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OffreFormationI18n</class-b>
+      		<field>
+      					<a>idOffreFormation</a>
+	  					<b>offreFormation.id</b>
+      		</field> 
+      		
+   </mapping>
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationStructureDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OffreFormationStructure</class-b>
+      		<field>
+      					<a>idOffreFormation</a>
+	  					<b>offreFormation.id</b>
+      		</field> 
+      		<field>
+      					<a>codeOffreFormation</a>
+	  					<b>offreFormation.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleOffreFormation</a>
+	  					<b>offreFormation.code</b>
+      		</field> 
+      		<field>
+      					<a>idEtablissement</a>
+	  					<b>refEtablissement.id</b>
+      		</field> 
+      		<field>
+      					<a>codeEtablissement</a>
+	  					<b>refEtablissement.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleEtablissement</a>
+	  					<b>refEtablissement.llEtablissementLatin</b>
+      		</field> 
+      		<field>
+      					<a>idStructure</a>
+	  					<b>refStructure.id</b>
+      		</field> 
+      		<field>
+      					<a>codeStructure</a>
+	  					<b>refStructure.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleStructure</a>
+	  					<b>refStructure.llStructureLatin</b>
+      		</field> 
+      		
+   </mapping>
+  <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationEquipeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OffreFormationEquipe</class-b>
+      		
+      		<field>
+      					<a>offreFormationId</a>
+	  					<b>offreFormation.id</b>
+      		</field> 
+      		<field>
+      					<a>offreFormationCode</a>
+	  					<b>offreFormation.code</b>
+      		</field> 
+      		<field>
+      					<a>offreFormationLibelleFr</a>
+	  					<b>offreFormation.libelleLongFr</b>
+      		</field> 
+   </mapping>
+  <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationEquipeMembreDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OffreFormationEquipeMembre</class-b>
+      		
+      		<field>
+      					<a>offreFormationEquipeId</a>
+	  					<b>offreFormationEquipe.id</b>
+      		</field> 
+      		<field>
+      					<a>offreFormationEquipeCode</a>
+	  					<b>offreFormationEquipe.code</b>
+      		</field> 
+      		<field>
+      					<a>offreFormationEquipeLibelle</a>
+	  					<b>offreFormationEquipe.libelleFr</b>
+      		</field> 
+   </mapping>
+
+</mappings>

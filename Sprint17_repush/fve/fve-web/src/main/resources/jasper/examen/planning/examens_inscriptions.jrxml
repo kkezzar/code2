@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="examens_inscriptions" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b2456764-d4d6-4e51-bf93-e70927d587e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="f7870ebb-7e63-4098-8d36-3408ebb0fa76">
+		<field name="numeroInscription" class="java.lang.String"/>
+		<field name="individuNomLatin" class="java.lang.String"/>
+		<field name="individuPrenomLatin" class="java.lang.String"/>
+		<field name="individuDateNaissance" class="java.util.Date"/>
+		<field name="refLieuLibelle" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\smakerri\\Desktop\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NIVEAU" class="java.lang.String"/>
+	<parameter name="INTITULE" class="java.lang.String"/>
+	<parameter name="TYPE_SESSION" class="java.lang.String"/>
+	<parameter name="DATE_DEBUT" class="java.util.Date"/>
+	<parameter name="DATE_FIN" class="java.util.Date"/>
+	<parameter name="OFFRE_FORMATION" class="java.lang.String"/>
+	<parameter name="ANNEE_ACADEMIQUE" class="java.lang.String"/>
+	<parameter name="PERIODE" class="java.lang.String"/>
+	<field name="mcLibelleFr" class="java.lang.String"/>
+	<field name="refTypeExamenLibelle" class="java.lang.String"/>
+	<field name="dateExamen" class="java.util.Date"/>
+	<field name="inscriptionExamenDtos" class="java.util.Collection"/>
+	<field name="heureDebut" class="java.util.Date"/>
+	<field name="heureFin" class="java.util.Date"/>
+	<variable name="currentDateTime" class="java.util.Date">
+		<variableExpression><![CDATA[new Date()]]></variableExpression>
+	</variable>
+	<variable name="PERIODE_NIVEAU" class="java.lang.String">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="DATE_DEBUT_DATE_FIN" class="java.lang.String">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="115" splitType="Stretch">
+			<image>
+				<reportElement uuid="f1f42168-f861-4f6a-b2af-1bba7ea561da" x="4" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="8482cbd1-53cf-40c2-a61a-1d195bd1c170" x="443" y="2" width="110" height="60"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="922c698e-cadd-4495-8e3a-1a09e216480f" x="115" y="12" width="318" height="50"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Répartition des étudiants par matière]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="58556dc5-5345-4a6b-af62-78f3442604e7" x="115" y="71" width="318" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OFFRE_FORMATION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="48fe2908-5776-44e8-bac7-9615ca086736" x="4" y="71" width="100" height="15"/>
+				<textElement>
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ANNEE_ACADEMIQUE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="c367dd82-2e62-43cc-9199-aa6cdc31bbaf" x="0" y="106" width="554" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="fa88a598-8e3d-4e73-946e-504beffaefef" x="4" y="87" width="165" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{PERIODE}+" - " + $P{NIVEAU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="040d924d-f370-4b40-9dc2-56d7e0e27bdd" x="310" y="87" width="161" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{DATE_DEBUT})+" - "+new SimpleDateFormat("dd/MM/yyyy").format($P{DATE_FIN})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="040d924d-f370-4b40-9dc2-56d7e0e27bdd" x="169" y="87" width="141" height="16"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{INTITULE} +"("+$P{TYPE_SESSION}+")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="4"/>
+	</columnHeader>
+	<detail>
+		<band height="308" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="f8b6e217-c08f-4b65-9578-6b712cfadc57" key="table 1" style="table 1" mode="Opaque" x="1" y="18" width="552" height="277"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="4ddb4317-2939-4501-8adb-5932727f7693">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{inscriptionExamenDtos})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="131" uuid="96fde2df-87e6-49f8-8670-ba1e8d4d3ed8">
+						<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="c3bc21d5-7a3a-4881-83bf-f08a1f093586" x="5" y="2" width="115" height="16"/>
+								<textElement/>
+								<text><![CDATA[N° inscription]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="56b3a90e-11b5-4c93-aa40-e9a701c99179" x="5" y="2" width="115" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{numeroInscription}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="190" uuid="6a08c764-3497-49e7-90a5-585788ad1736">
+						<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="beb464e0-c6ee-41ea-92b7-9707c3b0341e" x="5" y="2" width="111" height="16"/>
+								<textElement/>
+								<text><![CDATA[Nom et Prénom]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="781166fd-e525-49c5-86de-890dd8b7138a" x="5" y="2" width="176" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{individuNomLatin}+" " + $F{individuPrenomLatin}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="f4d3c364-f42d-4d9d-a1b3-b06e8bb04fa9">
+						<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="b7cfdb28-8fd6-4514-9bfd-6655db10fcf2" x="5" y="2" width="76" height="16"/>
+								<textElement/>
+								<text><![CDATA[Date naissance]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField pattern="dd/MM/yyyy">
+								<reportElement uuid="38ee5227-6e79-44c8-a0cc-f5cf4a136c66" x="5" y="2" width="85" height="16">
+									<printWhenExpression><![CDATA[!$F{individuDateNaissance}.equals( null )]]></printWhenExpression>
+								</reportElement>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{individuDateNaissance}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="133" uuid="8e3a93b4-3a12-4208-a709-23fc062df418">
+						<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+							<staticText>
+								<reportElement uuid="cad51eda-7955-41a9-990f-1499b267a68a" x="5" y="2" width="116" height="16"/>
+								<textElement/>
+								<text><![CDATA[Lieu]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="9dc01a07-8d34-4092-b5c7-5befce4307fb" x="5" y="2" width="121" height="16"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{refLieuLibelle}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement uuid="5228a069-dcd2-42e8-989f-92eb6740b413" x="1" y="2" width="547" height="16"/>
+				<textElement>
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mcLibelleFr}+"-" + new SimpleDateFormat("dd/MM/yyyy").format($F{dateExamen}) + "(" + new SimpleDateFormat("HH:mm").format($F{heureDebut}) + "-" + new SimpleDateFormat("HH:mm").format($F{heureFin})+")"]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement uuid="4df9df1c-8e15-4709-ade2-52dc9452a5a7" x="0" y="299" width="100" height="1"/>
+			</break>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH.mm.ss" isBlankWhenNull="true">
+				<reportElement uuid="318170f0-cbaa-4462-a86d-69e34eb7669b" x="4" y="2" width="165" height="12"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{currentDateTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2ddcf5cb-4626-4323-87a1-edadfd7c1800" x="470" y="2" width="43" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" sur"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="aab7cd8d-3024-496f-bd92-f6e9528694c0" x="513" y="2" width="40" height="12"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

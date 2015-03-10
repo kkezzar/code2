@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+     <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefEtatEquipementDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefEtatEquipement</class-b>
+     	    
+	<field>
+	<a>etatEquipementId</a>
+	    <b>nomenclatureByEtatEquipement.id</b>
+	    </field>	    
+	<field><a>etatEquipementLibelleLongFr</a>
+	    <b>nomenclatureByEtatEquipement.libelleLongFr</b>
+	    </field>
+	    
+	<field><a>etatEquipementLibelleLongAr</a>
+	    <b>nomenclatureByEtatEquipement.libelleLongAr</b>
+	    </field>
+	    
+	<field><a>etatEquipementLibelleCourtFr</a>
+	    <b>nomenclatureByEtatEquipement.libelleCourtFr</b>
+	    </field>
+	<field><a>etatEquipementLibelleCourtAr</a>
+	    <b>nomenclatureByEtatEquipement.libelleCourtAr</b>
+	    </field>
+	    
+	<field><a>etatEquipementCode</a>
+	    <b>nomenclatureByEtatEquipement.code</b>
+	    </field>	    
+   
+     
+      <!-- Equipement -->
+      <field>
+      <a>idEquipement</a>
+	  <b>refEquipement.id</b>
+      </field>
+       <field>
+      <a>designationEquipement</a>
+	  <b>refEquipement.designation</b>
+      </field>
+      
+     </mapping>
+ </mappings>

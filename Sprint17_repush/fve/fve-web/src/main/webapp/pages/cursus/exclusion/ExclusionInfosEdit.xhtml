@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" >
+
+
+	<p:outputPanel >
+	<pe:blockUI target="ExclusionFormEdit" widgetVar="ExclusionFormBlock">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}" style="white-space: nowrap;" />
+			</h:panelGrid>
+			</pe:blockUI>
+	<h:form id="ExclusionFormEdit">
+
+	
+     <br></br>
+     <p:fieldset legend="Exclusion">
+    
+    <p:panelGrid id="gererExclusion" styleClass="noBorder1">
+                        
+                      <p:row>
+                   
+					  <p:column >
+					  	<h:outputText value="#{exclusionMsgs.exclusion_date_exclusion} *" />
+					  </p:column>
+					  <p:column colspan="3">
+					     <p:calendar navigator="true"  value="#{exclusionBean.exclusionDto.dateDecision}"  
+					  			showButtonPanel="true"
+						        label="#{exclusionMsgs.exclusion_date_exclusion} *" 
+						        required="true" 
+						        requiredMessage="#{exclusionMsgs.exclusion_date_exclusion_required}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>						
+					  </p:column> 
+					   <p:column>
+							<h:outputText value="#{exclusionMsgs.exclusion_type_exclusion} *" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{exclusionBean.exclusionDto.refCodeTypeExclusion}"
+								label="#{exclusionMsgs.exclusion_type_exclusion}*" 
+								required="true"
+								requiredMessage="#{exclusionMsgs.exclusion_type_exclusion_required}">
+								
+								<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_type_exclusion}"
+										itemValue="" />
+								<f:selectItems value="#{exclusionBean.listeTypeExclusion}" />
+									<p:ajax update="matierePanel" />
+							</p:selectOneMenu>
+						</p:column>
+					 </p:row>
+					   <p:row>
+					  <p:column >
+					  	<h:outputText value="#{exclusionMsgs.date_exclusion_debut} *" />
+					  </p:column>
+					  <p:column colspan="3">
+					     <p:calendar navigator="true"  value="#{exclusionBean.exclusionDto.dateDebut}"  
+					  			showButtonPanel="true"
+						        label="#{exclusionMsgs.date_exclusion_debut} *" 
+						        required="true" 
+						        requiredMessage="#{exclusionMsgs.exclusion_date_debut_required}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>						
+					  </p:column> 
+					   <p:column >
+					  	<h:outputText value="#{exclusionMsgs.date_exclusion_fin} *" />
+					  </p:column>
+					  <p:column colspan="3">
+					     <p:calendar navigator="true"  value="#{exclusionBean.exclusionDto.dateFin}"  
+					  			showButtonPanel="true"
+						        label="#{exclusionMsgs.date_exclusion_fin} *" 
+						        required="true" 
+						        requiredMessage="#{exclusionMsgs.exclusion_date_fin_required}" 
+						        pattern="dd/MM/yyyy"  >	
+						       <f:convertDateTime pattern="dd/MM/yyyy" />
+						  </p:calendar>						
+					  </p:column> 
+					 </p:row>
+					 
+					    <p:row>
+						<p:column>
+							<h:outputText value="#{exclusionMsgs.exclusion_cause} *" />
+						</p:column>
+						<p:column colspan="3">
+							<p:inputTextarea  style="text-align: left; width:170px"
+								value="#{exclusionBean.exclusionDto.cause}"
+								label="#{exclusionMsgs.exclusion_cause}" 
+								required="true"
+								requiredMessage="#{exclusionMsgs.exclusion_cause_required}">
+							</p:inputTextarea>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{exclusionMsgs.exclusion_type_cause} *" />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{exclusionBean.exclusionDto.refCodeTypeCause}"
+								label="#{exclusionMsgs.exclusion_type_cause}*" 
+								required="true"
+								requiredMessage="#{exclusionMsgs.exclusion_type_cause_required}">
+								
+								<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_type_cause}"
+										itemValue="" />
+								<f:selectItems value="#{exclusionBean.listeTypeCause}" />
+							</p:selectOneMenu>
+						</p:column>
+						</p:row>
+		</p:panelGrid>				
+						
+	<p:outputPanel id="matierePanel"  >
+			<br></br>	
+			
+			<h:outputText value="#{exclusionMsgs.exclusion_matiere}" style="font-weight: bold;"  />
+			<hr></hr>
+			<p:panelGrid id="Matiere" styleClass="noBorder1" >
+<!-- 			rendered="#{exclusionBean.exclusionDto.refCodeTypeExclusion eq exclusionMsgs.exclusion_cause_matiere}"> -->
+		
+				     <p:row>
+						<p:column width="200">
+							<h:outputText value="#{exclusionMsgs.exclusion_matiere} " />
+						</p:column>
+						<p:column colspan="3">
+							<p:selectOneMenu style="text-align: left;width:170px"
+								value="#{exclusionBean.exclusionDto.idMc}"
+								label="#{exclusionMsgs.exclusion_matiere}" >
+								
+								<f:selectItem itemLabel="#{exclusionMsgs.exclusion_select_matiere}" itemValue="Choisir Matiere" />
+								<f:selectItems value="#{exclusionBean.listMatiere}" />
+							</p:selectOneMenu>							
+						</p:column>
+						<p:column width="200">
+							<h:outputText value="#{exclusionMsgs.exclusion_nombre_absence}" />
+						</p:column>
+						<p:column colspan="3">
+							<p:inputText  style="text-align: left; width:170px" disabled="true"
+								value="#{exclusionBean.exclusionDto.nombreAbsence}"
+								label="#{exclusionMsgs.exclusion_nombre_absence}" >
+							</p:inputText>
+						</p:column>
+				      </p:row>
+	</p:panelGrid>			
+	</p:outputPanel>				
+				
+	
+                  <p:row>
+						<p:column>
+						</p:column>
+						<p:column> 
+	
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}" id="saveBtn" update="@(.detailContentStyle)" icon="ui-icon-disk"
+				onstart="PF('ExclusionFormBlock').block()" process="ExclusionFormEdit" 	onsuccess="PF('ExclusionFormBlock').unblock()"
+				 actionListener="#{exclusionBean.saveExclu()}">
+						
+						<f:param name="exclusionId" value="#{exclusionBean.exclusionId}"></f:param>
+						</p:commandButton>
+						
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}" icon="ui-icon-cencel" id="supprimer" 
+						update="@(.detailContentStyle)" 
+				        onstart="PF('ExclusionFormBlock').block()" process="ExclusionFormEdit" 	onsuccess="PF('ExclusionFormBlock').unblock()"
+						actionListener="#{exclusionBean.delete()}">	
+					
+						<f:param name="exclusionMatiereId" value="#{exclusionBean.exclusionId}"></f:param>
+						</p:commandButton>
+						
+						
+						<p:commandButton value="#{commonmsgs.bouton_annuler}" icon="ui-icon-cencel" id="retour" 
+						update="@(.detailContentStyle)" 
+				        onstart="PF('ExclusionFormBlock').block()" process="ExclusionFormEdit" 	onsuccess="PF('ExclusionFormBlock').unblock()"
+						actionListener="#{exclusionBean.delete()}">	
+						<f:param name="exclusionMatiereId" value="#{exclusionBean.exclusionId}"></f:param>
+						</p:commandButton>
+						</p:column>
+				 </p:row>
+     </p:fieldset>
+         	
+	</h:form>
+</p:outputPanel>
+
+
+</ui:composition>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+     <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.NomenclatureDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.Nomenclature</class-b>
+      <field>
+        <a>nomenclatureDtos</a>
+	    <b>nomenclatures</b>
+	    </field>
+     
+        <field>
+        <a>idNcNames</a>
+	    <b>ncNames.id</b>
+	    </field>
+	      
+	    <field>
+        <a>ncName</a>
+	    <b>ncNames.nomNomenclature</b>
+	    </field>
+	 
+	    <field>
+        <a>description</a>
+	    <b>ncNames.description</b>
+	    </field>
+	   
+      
+      
+        <field>
+        <a>idReference</a>
+	    <b>nomenclature.id</b>
+	    </field>
+	    
+	    <field>
+        <a>descReference</a>
+	    <b>nomenclature.ncNames.description</b>
+	    </field>
+	    
+	    <field>
+        <a>libelleLongFrRef</a>
+	    <b>nomenclature.libelleLongFr</b>
+	    </field>
+	    
+	     <field>
+        <a>ncNameReference</a>
+	    <b>nomenclature.ncNames.nomNomenclature</b>
+	    </field>
+	     <field>
+        <a>idDefaultValue</a>
+	    <b>ncNames.defaultValue.id</b>
+	    </field>
+	    
+      </mapping>
+      
+    <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.NcNamesDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.NcNames</class-b>
+      <field>
+        <a>idReference</a>
+	    <b>ncNames.id</b>
+      </field>
+      <field>
+        <a>nomNomenclatureRef</a>
+	    <b>ncNames.nomNomenclature</b>
+      </field>
+      <field>
+        <a>descriptionRef</a>
+	    <b>ncNames.description</b>
+      </field>
+       <field>
+        <a>idDefaultValue</a>
+	    <b>defaultValue.id</b>
+	    </field>
+  </mapping>
+  
+  
+     
+ <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.NcHistoryDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.NcHistory</class-b>
+      <field>
+        <a>idNomenclature</a>
+	    <b>nomenclature.id</b>
+      </field>
+  </mapping>
+  
+ </mappings>

@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{congeEmployeMgs.pnl_enregistrer_demande_conge} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_demande_conge_search">
+
+
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+							process="@this" action="#{demandeCongeEmployeMBean.onNew}"
+							styleClass="ui-buttpn-bleu" update=":pnl_detail">
+
+						</p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+						<p:spacer width="10px"></p:spacer>
+						<p:inputText id="keyWordsID"
+							value="#{demandeCongeEmployeMBean.searchKeyWords}"
+							placeholder="#{commonmsgs.search_watermark_text_key_words}"
+							label="#{commonmsgs.search_label_mots_cles}" />
+
+						<p:separator />
+
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_demande_conge_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{demandeCongeEmployeMBean.onSearch}"></p:commandButton>
+						<!--  </p:panelGrid> -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+
+
+				<p:dataTable var="conge" lazy="true"
+					value="#{demandeCongeEmployeMBean.demandeCongeModel}"
+					widgetVar="congesTable" rowKey="#{conge.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{demandeCongeEmployeMBean.onDemandeCongeSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":pnl_detail" />
+
+					<f:facet name="header">
+
+					</f:facet>
+					<p:column headerText="#{congeEmployeMgs.numero}" style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column
+						sortBy="refIndividu.nomLatin"
+						headerText="#{congeEmployeMgs.employe}">
+						<h:outputText
+							value="#{conge.dossierEmployeDto.refIndividuDto.nomLatin} #{conge.dossierEmployeDto.refIndividuDto.prenomLatin}" />
+					</p:column>
+					<p:column sortBy="#{conge.dateDemande}"
+						headerText="#{congeEmployeMgs.date_demande}">
+						<h:outputText value="#{conge.dateDemande}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{conge.dateDebut}"
+						headerText="#{congeEmployeMgs.date_debut}">
+						<h:outputText value="#{conge.dateDebut}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						sortBy="#{conge.nbreJourDemande}"
+						headerText="#{congeEmployeMgs.nb_jours}">
+						<h:outputText
+							value="#{conge.nbreJourDemande}" />
+					</p:column>
+                   <p:column sortBy="#{conge.dateReprise}"
+						headerText="#{congeEmployeMgs.date_reprise}">
+						<h:outputText value="#{conge.dateReprise}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+
+			</h:form>
+
+			<!-- Fin search -->
+			<br></br>
+			
+		<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty demandeCongeEmployeMBean.congeEmployeDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{congeEmployeMgs.pnl_enregistrer_demande_conge} " >
+					<h:form id="form_demande_conge_edit">
+
+
+						
+							<p:panelGrid id="demande_mutation_editPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{congeEmployeMgs.demande_conge_title}" styleClass="value" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:25%">
+										<h:outputLabel value="#{congeEmployeMgs.employe} "
+											styleClass="required" />
+									</p:column>
+									<p:column style="width:25%">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											rendered="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto!=null}"
+											immediate="true">
+											<h:outputText
+												value="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto.refIndividuDto.nomLatin} #{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										   <p:inputText value="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto}"  required="true" requiredMessage="#{congeEmployeMgs.employe_required}" rendered="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto==null}" onclick="PF('dossierEmployeDialogSearch').show()"/>
+										<p:spacer width="10px"></p:spacer>
+										<p:commandButton id="btnAddEmploye" rendered="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto!=null}"
+											styleClass="ui-button-bleu" title="Ajouter Employé"
+											icon="ui-icon-plusthick" ajax="true" immediate="true"
+											onsuccess="PF('dossierEmployeDialogSearch').show()"></p:commandButton>
+                               
+									</p:column>
+								</p:row>
+<p:row>
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.annee} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{demandeCongeEmployeMBean.anneeGrh.libelle}"
+						styleClass="value" />
+			</p:column>
+	
+	
+			<p:column style="width:25%">
+				<h:outputLabel value="#{congeEmployeMgs.solde_conge_periode} " />
+			</p:column>
+			<p:column style="width:25%">
+				<h:outputText
+						value="#{demandeCongeEmployeMBean.congeEmployeDto.soldeConge} jour(s)"
+						styleClass="value" />
+			</p:column>
+		</p:row>
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_demande} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:calendar id="dateDemande" navigator="true" required="true"
+											requiredMessage="#{congeEmployeMgs.date_demande_required}"
+											value="#{demandeCongeEmployeMBean.congeEmployeDto.dateDemande}">
+										</p:calendar>
+									</p:column>
+								
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.objet} " />
+									</p:column>
+
+									<p:column>
+										<p:inputTextarea id="objet" styleClass="input-xlarge-px"
+											value="#{demandeCongeEmployeMBean.congeEmployeDto.objet}">
+										</p:inputTextarea>
+									</p:column>
+								</p:row>
+								
+                             <p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.type_conge} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="typeConge" required="true"
+											requiredMessage="#{congeEmployeMgs.type_conge_required}"
+											styleClass="input-xlarge-px"
+											value="#{demandeCongeEmployeMBean.congeEmployeDto.nomenclatureByTypeCongeDto.id}"
+											label="#{congeEmployeMgs.type_conge}">
+											<f:selectItem
+												itemLabel="#{congeEmployeMgs.type_conge_select}"
+												itemValue="" />
+											<f:selectItems
+												value="#{demandeCongeEmployeMBean.listeTypeConge}" />
+
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>  
+								<p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_debut} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+											<p:calendar navigator="true" value="#{demandeCongeEmployeMBean.congeEmployeDto.dateDebut}" style="width:100%"
+								label="#{congeEmployeMgs.date_debut}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{congeEmployeMgs.date_debut_required}">
+								<p:ajax event="dateSelect" update="dateReprise" listener="#{demandeCongeEmployeMBean.onDateDebutChange}" process="@this"/>
+							</p:calendar> 
+									</p:column>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.nb_jours} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+									<p:inputText value="#{demandeCongeEmployeMBean.congeEmployeDto.nbreJourDemande}" required="true" 
+								requiredMessage="#{congeEmployeMgs.nb_jours_required}">
+							<p:ajax event="blur" update="dateReprise" listener="#{demandeCongeEmployeMBean.onNbJourChange}" process="@this"/>
+								</p:inputText>
+								</p:column>
+								</p:row>
+							     <p:row>
+									<p:column>
+										<h:outputLabel value="#{congeEmployeMgs.date_reprise} "
+											styleClass="required" />
+									</p:column>
+									<p:column>
+											
+							<h:outputText id="dateReprise"
+						value="#{demandeCongeEmployeMBean.congeEmployeDto.dateReprise}"
+						styleClass="value" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+									</p:column> 
+									</p:row>    
+							</p:panelGrid>
+							<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:toolbar id="mutationToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+						id="saveMutationBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{demandeCongeEmployeMBean.onSave}" onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+
+						
+					</p:commandButton>
+						
+					
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{demandeCongeEmployeMBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+					</p:tab>
+	    <p:tab title="#{commonmsgs.tab_historique}" disabled="#{demandeCongeEmployeMBean.congeEmployeDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{demandeCongeEmployeMBean.congeEmployeHistory}"
+															idParamName="id"
+															idParamValue="#{demandeCongeEmployeMBean.congeEmployeDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+					
+					<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{demandeCongeEmployeMBean.congeEmployeDto.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+
+
+
+
+
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Fin detail -->
+		</p:outputPanel>
+		<ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{demandeCongeEmployeMBean}"></ui:param>
+			<ui:param name="updateAjax" value=":pnl_detail"></ui:param>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"></ui:param>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"></ui:param>
+
+		</ui:include>
+		
+	</ui:define>
+</ui:composition>
+</html>

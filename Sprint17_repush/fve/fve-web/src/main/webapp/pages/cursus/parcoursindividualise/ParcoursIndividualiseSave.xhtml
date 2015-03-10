@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+
+		<p:panel id="pnl_parcours_individualise_save"
+			header="#{parcoursIndividualiseMsgs.parcours_individualise_pnl_enregistrement_title}">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+					closable="true" life="5000" />
+				
+			<p:outputPanel styleClass="globalOutputPanelStyle" id="globalOutputPanel" rendered="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto!=null}">
+			<pe:blockUI target="form_parcours_individualise_save" widgetVar="parcoursIndividualiseFormBlock">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+			</pe:blockUI>	
+			<h:form id="form_parcours_individualise_save" >
+			
+				
+	<p:outputPanel styleClass="SaveOutputPanelStyle" id="saveOutputPanel" >				
+					<p:fieldset legend="#{parcoursIndividualiseMsgs.parcours_individualise_infos_etudiant}">
+	
+             <p:panelGrid   >
+               <p:row>
+            <p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_nin}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.nin}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_matricule}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.numeroMatricule}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+			
+			
+			<p:row>
+			<p:column  >	
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_nom}:" />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuNomLatin.toUpperCase()}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_nom_ar}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuNomArabe}" styleClass="labelValue"/>
+			</p:column>	
+			</p:row>
+			
+				<p:row>
+			<p:column  >			
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_prenom}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuPrenomLatin.substring(0,1).toUpperCase().concat(parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuPrenomLatin.substring(1).toLowerCase())}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_prenom_ar}: "  />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuPrenomArabe}" styleClass="labelValue"/>
+			</p:column>
+	        </p:row>
+	        
+	        <p:row>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_date_naissance}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.individuDateNaissance}" styleClass="labelValue">
+			<f:convertDateTime pattern="dd-MM-yyyy" />
+			</h:outputText>
+			</p:column>
+			
+			
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_matricule_bac}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.matriculeBac}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+	        </p:panelGrid>
+	        
+     </p:fieldset>
+     <br></br>
+     <p:fieldset legend="#{parcoursIndividualiseMsgs.parcours_individualise_infos_inscription}">
+     <p:panelGrid   >
+     <p:row>
+            <p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_anne_univeristaire}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.anneeAcademiqueCode}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+			 <p:row>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_numero_inscription}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.numeroInscription}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_offre_formation}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_domaine}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_filiere}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_niveau}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.niveauLibelleLongLt}" styleClass="labelValue"/>
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_cycle}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.cycleLibelleLongLt}" styleClass="labelValue"/>
+			</p:column>
+			<!--  
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_specialite}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}" styleClass="labelValue"/>
+			</p:column>
+			</p:row>
+			 <p:row>
+            <p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_demande}:  " />
+			</p:column>
+			<p:column >
+			<h:outputText value="#{parcoursIndividualiseSaveBean.creditsDemande} " styleClass="labelValue"/>
+			</p:column>
+			-->
+			</p:row>
+			</p:panelGrid>
+			
+     </p:fieldset>
+     <br></br>
+      <br></br>
+      <p:fieldset
+						legend="#{parcoursIndividualiseMsgs.parcours_individualise_le_parcours}"
+						>
+						<p:panelGrid style="width:100%">
+	<p:row>
+							<p:column>
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_periode}: " />
+							</p:column>
+								<p:column style="width:250px">
+
+						<p:selectOneMenu id="periodeSearch"  
+								value="#{parcoursIndividualiseSaveBean.periodeDto.id}"
+								filter="true" filterMatchMode="startsWith"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_periode}">
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_periode}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseSaveBean.periodeList}" />
+                                       <p:ajax   
+										listener="#{parcoursIndividualiseSaveBean.onPeriodeChanged}"
+										event="valueChange" update=":form_parcours_individualise_save:ResultSearchDataTable :form_parcours_individualise_save:creditsDemande :form_parcours_individualise_save:situation :form_parcours_individualise_save:creditsoutputPanelId :form_parcours_individualise_save:toolbarOutputPanelId" />
+							</p:selectOneMenu>
+					</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_demande}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText id='creditsDemande'
+										value="#{parcoursIndividualiseSaveBean.creditsDemande} "
+										styleClass="labelValue" />
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_situation}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText id='situation'
+										value="#{parcoursIndividualiseSaveBean.situation} "
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+     <p:dataTable id="ResultSearchDataTable" var="parcoursIndividualiseMatiere"
+					resizableColumns="false"
+					value="#{parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList}"
+					paginator="false" 
+					emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}"
+					rowIndexVar="rowIndex"
+					
+					style="margin:8px">
+					<!--  <f:facet name="header">
+						<h:outputText
+							value="#{parcoursIndividualiseMsgs.parcours_individualise_le_parcours} (#{parcoursIndividualiseSaveBean.situation})" />
+					</f:facet>
+					-->
+					<p:column	headerText="#{parcoursIndividualiseMsgs.parcours_individualise_numero}" style="width:2%">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+					<p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_ue}"
+						width="25%">
+						<h:outputText value="#{parcoursIndividualiseMatiere.ueLibelleFr}"
+							styleClass="labelValue">
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_mc}"
+						width="25%">
+						<h:outputText value="#{parcoursIndividualiseMatiere.mcLibelleFr}"
+							styleClass="labelValue">
+							
+						</h:outputText>
+					</p:column>
+					 <p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_credits}"
+						width="5%">
+						<h:outputText value="#{parcoursIndividualiseMatiere.mcCredits}"
+							styleClass="labelValue">
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_nature}"
+						width="13%">
+						<h:outputText value="#{parcoursIndividualiseMatiere.optionnelle==true?'Optionnelle':'Obligatoire'}"
+							styleClass="labelValue">
+						</h:outputText>
+					</p:column>
+					<p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_choix}"
+						width="5%">
+						<p:selectBooleanCheckbox  id="checkId" value="#{parcoursIndividualiseMatiere.choix}" styleClass="labelValue" rendered="#{parcoursIndividualiseMatiere.optionnelle==true}" disabled="#{parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=null and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=0 and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=31 and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=34 }">
+						<!--  <f:param name="nin" value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.nin}"></f:param>-->
+						
+						<f:attribute name="selectedRecord" value="#{parcoursIndividualiseMatiere}" />
+						<!--  <f:param name="credit" value="#{parcoursIndividualiseSaveBean.credit}" />-->
+						<p:ajax update=":form_parcours_individualise_save:creditsoutputPanelId" event="change" listener="#{parcoursIndividualiseSaveBean.onChoixChanged}"  process="@this :form_parcours_individualise_save:creditsoutputPanelId">
+						
+					   
+						</p:ajax>
+							</p:selectBooleanCheckbox>
+						
+					</p:column>
+					<p:column
+						headerText="#{parcoursIndividualiseMsgs.parcours_individualise_reamrque}"
+						width="25%">
+						<h:outputText value="#{parcoursIndividualiseMatiere.remarque}"
+							styleClass="labelValue">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+				
+			<p:outputPanel  id="creditsoutputPanelId" styleClass="creditsAtteintStyle" style="text-align:right;margin:20px">
+		
+			<p:row>
+			
+            <p:column >
+			<h:outputText value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_atteint}:  " />
+			</p:column>
+			<p:column >
+			
+			<h:outputText id="creditsAtteintId" value="#{parcoursIndividualiseSaveBean.creditsAtteint}" styleClass="labelValue" />
+			</p:column>
+			</p:row>
+		
+			</p:outputPanel>
+				<br></br>
+					
+			<p:outputPanel  id="toolbarOutputPanelId"  style="margin-top:5px">
+            <p:toolbar  style="margin-top:5px"  rendered="#{not empty parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList}" >
+				
+					<p:toolbarGroup    align="left">
+							
+					<p:commandButton value="#{commonmsgs.bouton_validate}" id="soumettreBtn"  icon="ui-icon-disk" disabled="#{parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=31 and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=34}"
+				    onstart="PF('parcoursIndividualiseFormBlock').block()"   update=":form_parcours_individualise_save:ResultSearchDataTable  :form_parcours_individualise_save:situation :form_parcours_individualise_save:toolbarOutputPanelId"
+				    oncomplete="PF('parcoursIndividualiseFormBlock').unblock()"
+				     actionListener="#{parcoursIndividualiseSaveBean.soumettreParcoursIndividualise()}" style="background-color: green; color:white;">
+						<!--  <f:param name="nin" value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.nin}"></f:param>-->
+					
+						
+						</p:commandButton>	
+						
+        			</p:toolbarGroup>
+					<p:toolbarGroup    align="right">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" id="saveBtn"  icon="ui-icon-disk" disabled="#{parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=null and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=0 and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=31 and parcoursIndividualiseSaveBean.parcoursIndividualiseMatiereList.get(0).situationId!=34}"
+				    onstart="PF('parcoursIndividualiseFormBlock').block()"  update=":form_parcours_individualise_save:ResultSearchDataTable  :form_parcours_individualise_save:situation :form_parcours_individualise_save:toolbarOutputPanelId"
+				    oncomplete="PF('parcoursIndividualiseFormBlock').unblock()"
+				     actionListener="#{parcoursIndividualiseSaveBean.saveParcoursIndividualise()}" >
+						<!--  <f:param name="nin" value="#{parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto.nin}"></f:param>-->
+												
+						</p:commandButton>
+						
+        			</p:toolbarGroup>
+		</p:toolbar>
+		</p:outputPanel>
+		</p:fieldset>
+		</p:outputPanel>
+		
+				</h:form>
+				</p:outputPanel>
+				<p:outputPanel rendered="#{empty parcoursIndividualiseSaveBean.dossierInscriptionAdministrativeDto}">
+				<h:outputText id="parcours_individualise_etudiant_msg" value="#{parcoursIndividualiseMsgs.parcours_individualise_etudiant_msg}" styleClass="labelValue" />
+				</p:outputPanel>
+		</p:panel>
+		
+
+	</ui:define>
+</ui:composition>
+</html>

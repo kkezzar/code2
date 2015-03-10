@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{examenMsgs.examen_pnl_calendrier_examens_title}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_planning_session_Consult">
+
+			<h:form id="form_planning_session_search">
+				<p:dataTable id="planningSessionDataTable" var="planning"
+					value="#{planningSessionEtudiantBean.planningSessionList}"
+					rowKey="#{planning.id}" style="margin-top:5px;"
+					resizableColumns="true" selectionMode="single" paginator="true"
+					rows="5" lazy="true" paginatorPosition="bottom"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}"
+					rowIndexVar="rowIndex">
+					<f:facet name="header">
+						<h:outputText value="Les plannings des sessions"
+							styleClass="value" />
+					</f:facet>
+					<p:ajax event="rowSelect"
+						listener="#{planningSessionEtudiantBean.onPlanningSelect}"
+						update=":pnl_planning_session_Consult_detail"
+						onstart="PF('planningSessionFormBlock').block()"
+						onsuccess="PF('planningSessionFormBlock').unblock()" />
+
+					<p:column headerText="#{examenMsgs.examen_numero}" style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column width="10%"
+						sortBy="#{planning.ncTypeSessionLibelleFr}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_type_session}" />
+						</f:facet>
+						<h:outputText value="#{planning.ncTypeSessionLibelleFr}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column width="10%"
+						sortBy="#{examenMsgs.examen_annee_academique}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_annee_academique}" />
+						</f:facet>
+						<h:outputText value="#{planning.anneeAcademiqueCode}" />
+					</p:column>
+
+					<p:column width="33%" sortBy="#{examenMsgs.examen_offre_formation}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_offre_formation}" />
+						</f:facet>
+						<h:outputText value="#{planning.offreFormationLibelleFr}" />
+					</p:column>
+
+					<p:column width="15%" sortBy="#{examenMsgs.examen_niveau}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_niveau}" />
+						</f:facet>
+						<h:outputText value="#{planning.niveauLibelleLongLt}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{examenMsgs.examen_periode}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_periode}" />
+						</f:facet>
+						<h:outputText value="#{planning.libellePeriode}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{examenMsgs.examen_date_debut}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_date_debut}" />
+						</f:facet>
+						<h:outputText value="#{planning.dateDebut}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column width="10%" sortBy="#{examenMsgs.examen_date_fin}">
+						<f:facet name="header">
+							<h:outputText value="#{examenMsgs.examen_date_fin}" />
+						</f:facet>
+						<h:outputText value="#{planning.dateFin}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+
+				</p:dataTable>
+
+			</h:form>
+
+			<br></br>
+			<p:panel id="pnl_planning_session_Consult_detail">
+
+				<h:form>
+					<p:toolbar id="examenBYDateToolBar" styleClass="toolBarMesrs"
+						style="width:100%;margin:0;">
+						<p:toolbarGroup>
+				#{examenMsgs.examen_pnl_calendrier_examens_title}		
+				</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:commandLink id="pdf" ajax="false">
+								<p:graphicImage value="/resources/images/pdf.png" />
+
+								<pe:exporter type="pdf" target="dtTbl_examens"
+									fileName="calendrierExamens" datasetPadding="10"
+									facetBackground="#FAFAFA" facetFontSize="10"
+									facetFontStyle="BOLD" fontName="Courier New" cellFontSize="10"
+									orientation="Landscape" encoding="ISO-8859-1" />
+
+							</p:commandLink>
+
+							<p:spacer width="20" />
+
+							<p:commandLink id="xls" ajax="false">
+								<p:graphicImage value="/resources/images/excel.png" />
+
+								<pe:exporter type="xlsx" target="dtTbl_examens"
+									fileName="calendrierExamens" />
+
+							</p:commandLink>
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable id="dtTbl_examens" scrollable="true"
+						value="#{planningSessionEtudiantBean.inscriptionExamenList}"
+						var="examen"
+						emptyMessage="#{examenMsgs.examen_datable_list_examnes_no_result}">
+
+
+						<f:facet name="header">
+							<h:outputText
+								value=" #{planningSessionEtudiantBean.planningSessionSearchDto.niveauLibelleLongLt} #{planningSessionEtudiantBean.planningSessionSearchDto.offreFormationLibelleFr} #{planningSessionEtudiantBean.planningSessionSearchDto.libellePeriode}"
+								styleClass="value" />
+						</f:facet>
+
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_date_examen}" />
+							</f:facet>
+							<h:outputText value="#{examen.dateExamen}" styleClass="value">
+								<f:convertDateTime type="date" pattern="EEEE, dd MMMM, yyyy" />
+							</h:outputText>
+
+						</p:column>
+						<p:column style="width:25%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_date_examen}" />
+							</f:facet>
+							<h:outputText value="#{examen.mcLibelleFr} " styleClass="value" />
+						</p:column>
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_type_examen}" />
+							</f:facet>
+							<h:outputText value="#{examen.refTypeExamenLibelle} "
+								styleClass="value" />
+						</p:column>
+
+
+						<p:column style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_heure_debut}" />
+							</f:facet>
+							<h:outputText value="#{examen.heureDebut}" styleClass="value">
+								<f:convertDateTime type="date" pattern="HH:mm" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="width:10%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_heure_fin}" />
+							</f:facet>
+							<h:outputText value="#{examen.heureFin}" styleClass="value">
+								<f:convertDateTime type="date" pattern="HH:mm" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_salle}" />
+							</f:facet>
+							<h:outputText value="#{examen.refLieuLibelle}" styleClass="value">
+							</h:outputText>
+						</p:column>
+
+						<p:column style="width:15%">
+							<f:facet name="header">
+								<h:outputText value="#{examenMsgs.examen_type_salle}" />
+							</f:facet>
+							<h:outputText value="#{examen.refLieuTypeLibelle}"
+								styleClass="value">
+
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+
+			</p:panel>
+			<!--     growl and blockUI               -->
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<pe:blockUI target="pnl_planning_session_Consult"
+				widgetVar="planningSessionFormBlock">
+				<h:panelGrid columns="2">
+					<h:graphicImage value="/resources/images/ajax-loader1.gif"
+						style="margin-right: 12px; vertical-align: middle;" />
+					<h:outputText value="#{commonmsgs.msg_wait}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

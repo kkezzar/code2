@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panel  id="infosGroupePanel">
+		
+		<h:form id="infosFromId">
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{groupemsgs.groupe_identite}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="identifiant" 
+							value="#{groupeMgrBean.refGroupeDto.identifiant}" styleClass="value"/>
+						
+					</p:column>
+				</p:row>
+				
+				<p:row>
+					<p:column>
+						<h:outputText value="#{groupemsgs.groupe_type}" />
+					</p:column>
+					<p:column>
+						<h:outputText  styleClass="value"
+							value="#{groupeMgrBean.refGroupeDto.llTypeGroupe}"
+							/>
+					</p:column>
+					
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{groupemsgs.groupe_libelle_long_latin}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="llstructLatin" styleClass="value"
+							value="#{groupeMgrBean.refGroupeDto.llGroupe}"
+							/>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{groupemsgs.groupe_libelle_long_arabe}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="llArabe" styleClass="value"
+							value="#{groupeMgrBean.refGroupeDto.llGroupeArabe}"
+						/>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{groupemsgs.groupe_libelle_court_latin}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="lcLatin" styleClass="value"
+							value="#{groupeMgrBean.refGroupeDto.lcGroupe}"
+						/>
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{groupemsgs.groupe_libelle_court_ar}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="lcAr" styleClass="value"
+							value="#{groupeMgrBean.refGroupeDto.lcGroupeArabe}:"
+						/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			
+		</h:form>
+	</p:panel>
+
+</ui:composition>

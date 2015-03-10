@@ -1,0 +1,1048 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt"
+      xmlns:eh="http://java.sun.com/jsf/composite/components"
+>
+
+ <!-- INTERFACE COMPOSANT  [ DEMANDE BUDGET RECHERCHE ] -->
+<composite:interface>
+		<composite:attribute name="managedBean" type="dz.gov.mesrs.sii.recherche.web.jsf.bean.programme.DemandeBudgetBB" required="true" shortDescription=" Your Bean"/>
+		<composite:attribute name="parentIDsToUpdate" shortDescription="Mode edition"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT [ DEMANDE BUDGET RECHERCHE ] -->          
+<composite:implementation>
+<p:panel header="#{cc.attrs.managedBean.titleDetailsDemand}"  	rendered="#{cc.attrs.managedBean.canShowDemandDetails}" style="margin-bottom:8px;">
+<p:tabView orientation="left" id="tvDemand" activeIndex="#{cc.attrs.managedBean.activeTabIndex}">
+<!--      	<p:ajax event="tabChange" process="@this"></p:ajax> -->
+		<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_identification}">
+		<h:form id="demandForm">
+				<p:panelGrid  id="panelGridProgramEdit" style="width:100%;margin-bottom:8px;">
+	  			<p:row>
+           				<p:column colspan="4" styleClass="title">#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_identification}</p:column>
+      			</p:row>
+      			<p:row>
+					<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_begin_year_label}" for="listDemandBeginYearsID"/>
+					</p:column>
+					<p:column  style="width:20%;">
+						<h:outputText value="#{cc.attrs.managedBean.currentDemand.anneeDebut}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/> 
+						<p:selectOneMenu id="listDemandBeginYearsID" 	value="#{cc.attrs.managedBean.currentDemand.anneeDebut}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_demand_begin_year_required}" 
+								rendered="#{cc.attrs.managedBean.canEditDemand}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}"  />
+								<p:ajax listener="#{cc.attrs.managedBean.handleBeginYearChange}" 
+											  event="valueChange" 
+											  process="@this listDemandEndYearsID" 
+											  update="listDemandEndYearsID listDemandProgramsID" 
+											  onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_label}" for="listDemandEndYearsID"/>
+					</p:column>
+					<p:column style="width:20%;">
+					<h:outputText value="#{cc.attrs.managedBean.currentDemand.anneeFin}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+						<p:selectOneMenu id="listDemandEndYearsID" 	value="#{cc.attrs.managedBean.currentDemand.anneeFin}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_demand_end_year_required}"
+								rendered="#{cc.attrs.managedBean.canEditDemand}">
+								<f:selectItems value="#{cc.attrs.managedBean.listEndYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+								<p:ajax listener="#{cc.attrs.managedBean.handleEndYearChange}" 
+											  event="valueChange" 
+											  process="@this listDemandBeginYearsID" 
+											  update="listDemandProgramsID" 
+											  onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+	 			<p:row>
+				<p:column style="width:20%;text-align:right;">
+					<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_program_label}" for="listDemandProgramsID"/>
+				</p:column>
+				<p:column colspan="3">
+					<h:outputText value="#{cc.attrs.managedBean.currentDemand.programmeLibelle}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+					<p:selectOneMenu id="listDemandProgramsID" 	value="#{cc.attrs.managedBean.currentDemand.programmeId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_program_required}" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								<f:selectItems value="#{cc.attrs.managedBean.listPrograms}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+					</p:selectOneMenu>
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+					<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_date_label}" for="txtDateDemand"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{cc.attrs.managedBean.currentDemand.dateDemande}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}">
+					<f:convertDateTime pattern="dd-MM-yyyy" />
+					</h:outputText>
+					<p:calendar id="txtDateDemand" value="#{cc.attrs.managedBean.currentDemand.dateDemande}"  pattern="dd/MM/yyyy" required="true"	 
+										requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_demand_date_required}" style="width:100%;" rendered="#{cc.attrs.managedBean.canEditDemand}"/>	
+				</p:column>
+				<p:column style="text-align:right;text-align:right;">	
+						<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_situation_label}" />	
+				</p:column>
+				<p:column>
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.situationLibelle}" style="#{cc.attrs.managedBean.currentDemand.situationStyle}"/>
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="vertical-align:top;text-align:right;">	<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_description_label}" />	
+						</p:column>
+						<p:column colspan="3">
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.description}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+								<p:inputTextarea value="#{cc.attrs.managedBean.currentDemand.description}"  style="width:100%;" rows="2" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="vertical-align:top;text-align:right;">	<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_connaissances_label}" />	
+						</p:column>
+						<p:column colspan="3">
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.connaissance}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+								<p:inputTextarea value="#{cc.attrs.managedBean.currentDemand.connaissance}"  style="width:100%;" rows="1" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="vertical-align:top;text-align:right;">	<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_informations_label}" />	
+						</p:column>
+						<p:column colspan="3">
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.information}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+								<p:inputTextarea value="#{cc.attrs.managedBean.currentDemand.information}"  style="width:100%;" rows="1" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="vertical-align:top;text-align:right;">	<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_network_research_label}" />	
+						</p:column>
+						<p:column colspan="3">
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.reseauRecherche}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+								<p:inputTextarea value="#{cc.attrs.managedBean.currentDemand.reseauRecherche}"  style="width:100%;" rows="1" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="vertical-align:top;text-align:right;">	<h:outputText value="#{rchBudgetMsgs.research_program_save_demand_grid_details_row_demand_end_year_network_purposes_label}" />	
+						</p:column>
+						<p:column colspan="3">
+								<h:outputText value="#{cc.attrs.managedBean.currentDemand.objectif}" styleClass="value" rendered="#{not cc.attrs.managedBean.canEditDemand}"/>
+								<p:inputTextarea value="#{cc.attrs.managedBean.currentDemand.objectif}"  style="width:100%;" rows="1" rendered="#{cc.attrs.managedBean.canEditDemand}">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				</p:panelGrid>
+				<p:toolbar style="margin-buttom:8px" rendered="#{cc.attrs.managedBean.canEditDemand}">
+				<p:toolbarGroup align="left">
+						<p:commandButton id="saveDemandButtonID" 
+							action="#{cc.attrs.managedBean.saveDemand()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this :#{cc.clientId}:tvDemand:demandForm" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand :#{cc.clientId}:msgDemand :#{cc.clientId}:demandToolbarOutputPanel"
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+				</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+				</h:form>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_activites}" disabled="#{cc.attrs.managedBean.newDemand}">
+     		<p:outputPanel id="activitiesToolbarOutputpanel" >
+				    <p:toolbar id="demandActivitiesToolBar" style="margin-bottom:8px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddActivity" 
+									action="#{cc.attrs.managedBean.prepareAddOneActivity()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":#{cc.clientId}:dlgAddActivityId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddActivity').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>	
+			
+			<p:dataTable id="activitiesDataTable" var="row"
+							value="#{cc.attrs.managedBean.listDemandActivities}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_column_label}" style="text-align:center;">
+						<h:outputText value="#{row.ncActiviteLibelle}" style="float:left;"  styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_column_year}" style="text-align:center;">
+						<h:outputText value="#{row.annee}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_column_group}" style="text-align:center;">
+						<h:outputText value="#{row.groupeLibelle}" style="float:left;" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_activities_column_description}" style="text-align:center;">
+						<h:outputText value="#{row.description}" style="float:left;" styleClass="value"/>
+				</p:column>
+					<p:column style="text-align:center;width:32px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+						<p:commandButton id="btnRemoveActivityID"  
+															action="#{cc.attrs.managedBean.removeOneActivity()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:activitiesDataTable :#{cc.clientId}:msgDemand"   
+															process="@this">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_activity_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_save_demand_dialog_activity_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandActivityId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" rendered="#{cc.attrs.managedBean.canEditDemand}">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editActivityButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{cc.attrs.managedBean.prepareEditOneActivity()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddActivity').show();"
+									update=":#{cc.clientId}:dlgAddActivityId"	>
+									<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandActivityId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_equipments}" disabled="#{cc.attrs.managedBean.newDemand}">
+     		<p:outputPanel id="equipmentsToolbarOutputpanel">
+				    <p:toolbar id="demandEquipmentsToolBar" style="margin-bottom:8px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddEquipment" 
+									action="#{cc.attrs.managedBean.prepareAddOneEquipment()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":#{cc.clientId}:dlgAddEquipmentId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddEquipment').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>	
+					<p:dataTable id="equipmentsDataTable" var="row"
+							value="#{cc.attrs.managedBean.listDemandEquipements}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+						<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_default}</f:facet>
+						<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+					
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_column_year_label}" style="text-align:center;">
+								<h:outputText value="#{row.annee}" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_column_family_label}" style="text-align:center;">
+								<h:outputText value="#{row.ncFamilleLibelle}" style="float:left;" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_column_sub_family_label}" style="text-align:center;">
+								<h:outputText value="#{row.ncSousFamilleLibelle}"  style="float:left;" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_column_quantity_label}" style="text-align:center;">
+								<h:outputText value="#{row.quantite}" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_equipments_column_amount_label}" style="text-align:center;">
+								<h:outputText value="#{row.montantEstime}" style="float:right;" styleClass="value">
+								<f:convertNumber currencySymbol="" type="currency" />
+								</h:outputText>
+						</p:column>
+						<p:column style="text-align:center;width:32px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+						<p:commandButton id="btnRemoveEquipmentID"  
+															action="#{cc.attrs.managedBean.removeOneEquipment()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:equipmentsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:recapDataTable"   
+															process="@this">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_equipment_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_save_demand_dialog_equipment_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandEquipmentId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" rendered="#{cc.attrs.managedBean.canEditDemand}">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editEquipmentButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{cc.attrs.managedBean.prepareEditOneEquipment()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddEquipment').show();"
+									update=":#{cc.clientId}:dlgAddEquipmentId"	>
+									<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandEquipmentId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+						<p:columnGroup type="footer">
+           					 <p:row>
+                					<p:column colspan="5" style="text-align:right" footerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_total_amount_label}" />
+                					<p:column style="text-align:right;">
+                					<f:facet name="footer">
+                						<h:outputText value="#{cc.attrs.managedBean.totalEquipmentsAmounts}" styleClass="value">
+                    							<f:convertNumber currencySymbol="" type="currency" />
+                						</h:outputText>
+            						</f:facet>
+                					</p:column>
+                					<p:column colspan="2" rendered="#{cc.attrs.managedBean.canEditDemand}"/>
+							</p:row>
+						</p:columnGroup>
+						
+				</p:dataTable>
+			</p:outputPanel>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_operations}" disabled="#{cc.attrs.managedBean.newDemand}">
+     		<p:outputPanel id="operationsToolbarOutputpanel">
+				    <p:toolbar id="demandOperationsToolBar" style="margin-bottom:8px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOperation" 
+									action="#{cc.attrs.managedBean.prepareAddOneOperation()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":#{cc.clientId}:dlgAddOperationId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddOperation').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>	
+					<p:dataTable id="operationsDataTable" var="row"
+							value="#{cc.attrs.managedBean.listDemandOperations}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+						<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_empty}</f:facet>
+						<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+					
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_year_label}" style="text-align:center;">
+								<h:outputText value="#{row.annee}" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_operation_label}" style="text-align:center;">
+								<h:outputText value="#{row.ncOperationLibelle}" style="float:left;" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_amount_label}" style="text-align:center;">
+								<h:outputText value="#{row.montantEstime}" style="float:right;" styleClass="value">
+								<f:convertNumber currencySymbol="" type="currency" />
+								</h:outputText>
+						</p:column>
+						<p:column style="text-align:center;width:32px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+						<p:commandButton id="btnRemoveOperationID"  
+															action="#{cc.attrs.managedBean.removeOneOperation()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:operationsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:recapDataTable"   
+															process="@this">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_operation_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_save_demand_dialog_operation_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandOperationId}" value="#{row.id}" />	
+						</p:commandButton>
+					</p:column>
+					<p:column style="width:32px" rendered="#{cc.attrs.managedBean.canEditDemand}">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editOperationButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{cc.attrs.managedBean.prepareEditOneOperation()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddOperation').show();"
+									update=":#{cc.clientId}:dlgAddOperationId"	>
+									<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandOperationId}" value="#{row.id}" />										
+							</p:commandButton>
+      				</p:column>
+					<p:columnGroup type="footer">
+           					 <p:row>
+                					<p:column colspan="3" style="text-align:right" footerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_total_amount_label}" />
+                					<p:column style="text-align:right;">
+                					<f:facet name="footer">
+                						<h:outputText value="#{cc.attrs.managedBean.totalOperationsAmounts}" styleClass="value">
+                    							<f:convertNumber currencySymbol="" type="currency" />
+                						</h:outputText>
+            						</f:facet>
+                					</p:column>
+                					<p:column colspan="2" rendered="#{cc.attrs.managedBean.canEditDemand}"/>
+							</p:row>
+					</p:columnGroup>
+						</p:dataTable>
+				</p:outputPanel>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_credits}" disabled="#{cc.attrs.managedBean.newDemand}">
+     		<p:outputPanel id="creditsToolbarOutputpanel">
+				    <p:toolbar id="creditEquipmentsToolBar" style="margin-bottom:8px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddCreditID" 
+									action="#{cc.attrs.managedBean.prepareAddOneCredit()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":#{cc.clientId}:dlgAddCreditId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddCredit').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>	
+					<p:dataTable id="creditsDataTable" var="row"
+							value="#{cc.attrs.managedBean.listDemandCredits}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+						<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_default}</f:facet>
+						<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_year_label}" style="text-align:center;">
+								<h:outputText value="#{row.annee}" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_chapter_label}" style="text-align:center;">
+								<h:outputText value="#{row.ncChapitreLibelle}" style="float:left;" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_article_label}" style="text-align:center;">
+								<h:outputText value="#{row.ncArticleLibelle}" style="float:left;" styleClass="value"/>
+						</p:column>
+						<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_amount_label}" style="text-align:center;">
+								<h:outputText value="#{row.montant}" style="float:right;" styleClass="value">
+								<f:convertNumber currencySymbol="" type="currency" />
+								</h:outputText>
+						</p:column>
+					<p:column style="text-align:center;width:32px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+						<p:commandButton id="btnRemoveCreditID"  
+															action="#{cc.attrs.managedBean.removeOneCredit()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:creditsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:recapDataTable"   
+															process="@this">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_credit_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_save_demand_dialog_credit_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandCreditId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" rendered="#{cc.attrs.managedBean.canEditDemand}">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editCreditButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{cc.attrs.managedBean.prepareEditOneCredit()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddCredit').show();"
+									update=":#{cc.clientId}:dlgAddCreditId"	>
+									<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandCreditId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+						<p:columnGroup type="footer">
+           					 <p:row>
+                					<p:column colspan="4" style="text-align:right" footerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_total_amount_label}" />
+                					<p:column style="text-align:right;" >
+                					<f:facet name="footer">
+                						<h:outputText value="#{cc.attrs.managedBean.totalCreditsAmounts}" styleClass="value">
+                    							<f:convertNumber currencySymbol="" type="currency" />
+                						</h:outputText>
+            						</f:facet>
+                					</p:column>
+                					<p:column colspan="2" rendered="#{cc.attrs.managedBean.canEditDemand}"/>
+							</p:row>
+						</p:columnGroup>
+						</p:dataTable>
+			</p:outputPanel>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_expected_results}" disabled="#{cc.attrs.managedBean.newDemand}">
+     			<p:outputPanel id="resultsToolbarOutputpanel">
+				    <p:toolbar id="demandResultsToolBar" style="margin-bottom:8px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+					<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddResult" 
+									action="#{cc.attrs.managedBean.prepareAddOneResult()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true"
+									update=":#{cc.clientId}:dlgAddResultId"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddResult').show();">
+						</p:commandButton>
+					</p:toolbarGroup>
+					</p:toolbar>	
+			
+			<p:dataTable id="resultsDataTable" var="row"
+							value="#{cc.attrs.managedBean.listDemandResultats}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_empty}"
+							rowIndexVar="rowIndex"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_result_label}" style="text-align:center;">
+						<h:outputText value="#{row.ncResultatLibelle}" style="float:left;"  styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_year_label}" style="text-align:center;">
+						<h:outputText value="#{row.annee}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_number_label}" style="text-align:center;">
+						<h:outputText value="#{row.quantite}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_observation_label}" style="text-align:center;">
+						<h:outputText value="#{row.description}" style="float:left;" styleClass="value"/>
+				</p:column>
+					<p:column style="text-align:center;width:32px;" rendered="#{cc.attrs.managedBean.canEditDemand}">
+						<p:commandButton id="btnRemoveResultID"  
+															action="#{cc.attrs.managedBean.removeOneResult()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:resultsDataTable :#{cc.clientId}:msgDemand"   
+															process="@this">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_result_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_save_demand_dialog_result_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandResultatId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" rendered="#{cc.attrs.managedBean.canEditDemand}">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+           					<p:commandButton id="editResultButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{cc.attrs.managedBean.prepareEditOneResult()}" 
+									process="@this"	
+									oncomplete="PF('dlgAddResult').show();"
+									update=":#{cc.clientId}:dlgAddResultId"	>
+									<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedDemandResultatId}" value="#{row.id}" />										
+							</p:commandButton>
+      			</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+     		</p:tab>
+     	<p:tab title="#{rchBudgetMsgs.research_program_save_demand_detail_tabview_tab_history}" disabled="#{cc.attrs.managedBean.newDemand}">
+     	<p:outputPanel id="historyOutputPanel">
+     	<eh:EntityHistoryComponent id="cmpHistoryId" list="#{cc.attrs.managedBean.demandHistory}"></eh:EntityHistoryComponent>
+     	</p:outputPanel>
+     	</p:tab>
+     </p:tabView>
+     <!--      	RECAPITULATIF -->
+     	<p:dataTable id="recapDataTable" var="row"
+							value="#{cc.attrs.managedBean.recapEntries}"
+							rowKey="#{row.key}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_recap_empty}"
+							rowIndexVar="rowIndex"
+							style="margin-bottom:8px;width:36%;">
+				<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_recap_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_recap_column_year_label}" style="text-align:center;width:100px;">
+								<h:outputText value="#{row.key}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_recap_column_total_label}" style="text-align:center;">
+						<h:outputText value="#{row.value}" style="float:right;" styleClass="value">
+								<f:convertNumber currencySymbol="" type="currency" />
+						</h:outputText>
+				</p:column>
+		</p:dataTable>
+		<p:outputPanel id="demandToolbarOutputPanel">
+		<p:toolbar  rendered="#{cc.attrs.managedBean.canSubmitDemand or cc.attrs.managedBean.canValidateDemand}">
+				<p:toolbarGroup align="left" rendered="#{cc.attrs.managedBean.canSubmitDemand and cc.attrs.managedBean.canEditDemand}">
+				<p:commandButton id="btnSubmitDemand" 
+									value="#{rchBudgetMsgs.research_program_save_demand_button_submit_demand_label}" 
+									action="#{cc.attrs.managedBean.submitDemand()}"
+									process="@this"
+									update="#{cc.attrs.parentIDsToUpdate}  :#{cc.clientId}:tvDemand :#{cc.clientId}:tvDemand:demandForm :#{cc.clientId}:msgDemand :#{cc.clientId}:demandToolbarOutputPanel"
+									icon="ui-icon-arrowreturnthick-1-w"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_result_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_submit_demand_dialog_confirm_msg}" 	icon="ui-icon-alert" />
+						</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="left" rendered="#{cc.attrs.managedBean.canValidateDemand}">
+				<p:commandButton id="btnValidateDemand" 
+									value="#{rchBudgetMsgs.research_program_save_demand_button_validate_demand_label}" 
+									action="#{cc.attrs.managedBean.validateDemand()}"
+									process="@this"
+									update="#{cc.attrs.parentIDsToUpdate}  :#{cc.clientId}:tvDemand :#{cc.clientId}:tvDemand:demandForm  :#{cc.clientId}:msgDemand :#{cc.clientId}:demandToolbarOutputPanel"
+									icon="ui-icon-check"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+								<p:confirm		header="#{rchBudgetMsgs.research_program_save_demand_dialog_result_confirm_title}"	
+														message="#{rchBudgetMsgs.research_program_validate_demand_dialog_confirm_msg}" 	icon="ui-icon-alert" />
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+		</p:outputPanel>
+     	<p:messages id="msgDemand" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+</p:panel>
+     	<!-- ACTIVITES -->
+<p:dialog  widgetVar="dlgAddActivity"  
+					appendTo="@(body)" modal="true" 
+					header="#{cc.attrs.managedBean.titleDemandActivityDialog}"
+ 					id="dlgAddActivityId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormActivity">
+	<p:messages id="msgActivityDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridActivity" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_activity_type_libelle}" for="listNcActivities"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcActivities" 	value="#{cc.attrs.managedBean.selectedDemandActivity.ncActiviteId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_activity_type_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listNcActivities}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_activity_year_libelle}" for="listActivityYearsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listActivityYearsID" 	value="#{cc.attrs.managedBean.selectedDemandActivity.annee}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_activity_year_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_activity_group_libelle}" for="listActivityGroupsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listActivityGroupsID" 	value="#{cc.attrs.managedBean.selectedDemandActivity.groupeId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_activity_group_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listGroups}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;vertical-align:top;">
+							<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_activity_description_libelle}" />	</p:column>
+						<p:column>
+								<p:inputTextarea value="#{cc.attrs.managedBean.selectedDemandActivity.description}"  style="width:100%;">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+				
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddActivityDialogID" value="#{rchBudgetMsgs.research_program_save_demand_button_close_dialog_label}" 	
+							 type="button" onclick="PF('dlgAddActivity').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneActivity" 
+							action="#{cc.attrs.managedBean.saveOneActivity()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this  :#{cc.clientId}:dlgFormActivity:panelGridActivity" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:activitiesDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:dlgFormActivity" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateActivityRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateActivityRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddActivity').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddActivity').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+<!-- RESULTATS ATTENDUS -->
+<p:dialog  widgetVar="dlgAddResult"  
+					appendTo="@(body)" modal="true" 
+					header="#{cc.attrs.managedBean.titleDemandResultatDialog}"
+ 					id="dlgAddResultId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormResult">
+	<p:messages id="msgResultDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridResult" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_result_label}" for="listNcResults"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcResults" 	value="#{cc.attrs.managedBean.selectedDemandResultat.ncResultatId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_result_result_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listNcResultats}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_year_label}" for="listResultYearsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listResultYearsID" 	value="#{cc.attrs.managedBean.selectedDemandResultat.annee}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_result_year_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_number_label}" for="resultNumberID"/>
+				</p:column>
+				<p:column>
+						  <p:inputText id="resultNumberID" value="#{cc.attrs.managedBean.selectedDemandResultat.quantite}"
+                    				required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_result_number_required}">  
+   						 </p:inputText>  
+				</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;vertical-align:top;">
+							<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_results_column_observation_label}" />	</p:column>
+						<p:column>
+								<p:inputTextarea value="#{cc.attrs.managedBean.selectedDemandResultat.description}"  style="width:100%;">
+								</p:inputTextarea>
+						</p:column>
+				</p:row>
+	</p:panelGrid>
+	<pe:keyFilter for="resultNumberID" mask="num"/>  
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddResultDialogID" value="#{rchBudgetMsgs.research_program_save_demand_button_close_dialog_label}" 	
+							 type="button" onclick="PF('dlgAddResult').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneResult" 
+							action="#{cc.attrs.managedBean.saveOneResult()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this :#{cc.clientId}:dlgFormResult:panelGridResult" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:resultsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:dlgFormResult" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateResultRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateResultRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddResult').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddResult').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<!-- EQUIPEMENTS -->
+<p:dialog  widgetVar="dlgAddEquipment"  
+					appendTo="@(body)" modal="true" 
+					header="#{cc.attrs.managedBean.titleDemandEquipmentDialog}"
+ 					id="dlgAddEquipmentId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormEquipment">
+	<p:messages id="msgEquipmentDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridEquipment" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_equipement_family_libelle}" for="listNcFamilyEquipments"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcFamilyEquipments" 	value="#{cc.attrs.managedBean.selectedDemandEquipment.ncFamilleId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_family_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listFamilyEquipments}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+									<p:ajax listener="#{cc.attrs.managedBean.handleEquipmentFamilyChange}" 
+											  event="valueChange" 
+											  process="@this" 
+											  update="listNcSubFamilyEquipments" 
+											  />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_equipement_sub_family_libelle}" for="listNcSubFamilyEquipments"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcSubFamilyEquipments" 	value="#{cc.attrs.managedBean.selectedDemandEquipment.ncSousFamilleId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_sub_family_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listSubFamilyEquipments}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_equipement_year_libelle}" for="listEquipementYearsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listEquipementYearsID" 	value="#{cc.attrs.managedBean.selectedDemandEquipment.annee}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_year_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_equipement_quantity_libelle}" for="equipmentQuantityID"/>
+				</p:column>
+				<p:column>
+						  <p:inputText id="equipmentQuantityID" value="#{cc.attrs.managedBean.selectedDemandEquipment.quantite}"
+                    				required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_quantity_required}">  
+   						 </p:inputText>  
+				</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_dialog_grid_equipement_estimated_amount_libelle}" for="equipmentAmountID"/>
+				</p:column>
+				<p:column>
+						
+						  <pe:inputNumber id="equipmentAmountID" value="#{cc.attrs.managedBean.selectedDemandEquipment.montantEstime}" symbol=" DZD"  symbolPosition="s"
+                    				validatorMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_amount_min_required}"
+                    				required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_amount_required}" style="text-align:right;">  
+        							<f:validateDoubleRange minimum="50"/>  
+   						 </pe:inputNumber>  
+				</p:column>
+				</p:row>
+				
+				</p:panelGrid>
+						 <pe:keyFilter for="equipmentQuantityID" mask="num"/>  
+				<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddEquipmentDialogID" value="#{rchBudgetMsgs.research_program_save_demand_button_close_dialog_label}" 	
+							 type="button" onclick="PF('dlgAddEquipment').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneEquipment" 
+							action="#{cc.attrs.managedBean.saveOneEquipment()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this :#{cc.clientId}:dlgFormEquipment:panelGridEquipment" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:equipmentsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:dlgFormEquipment :#{cc.clientId}:recapDataTable" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateEquipmentRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateEquipmentRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddEquipment').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddEquipment').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<!-- OPERATIONS  -->
+<p:dialog  widgetVar="dlgAddOperation"  
+					appendTo="@(body)" modal="true" 
+					header="#{cc.attrs.managedBean.titleDemandOperationDialog}"
+ 					id="dlgAddOperationId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormOperation">
+	<p:messages id="msgOperationDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridOperation" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_operation_label}" for="listNcOperations"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcOperations" 	value="#{cc.attrs.managedBean.selectedDemandOperation.ncOperationId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_operation_operation_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listNcOperations}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_year_label}" for="listOperationYearsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listOperationYearsID" 	value="#{cc.attrs.managedBean.selectedDemandOperation.annee}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_operation_year_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_operations_column_amount_label}" for="operationAmountID"/>
+				</p:column>
+				<p:column>
+						
+						  <pe:inputNumber id="operationAmountID" value="#{cc.attrs.managedBean.selectedDemandOperation.montantEstime}" symbol=" DZD"  symbolPosition="s"
+                    				validatorMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_operation_amount_min_required}"
+                    				required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_operation_amount_required}" style="text-align:right;">  
+        							<f:validateDoubleRange minimum="50"/>  
+   						 </pe:inputNumber>  
+				</p:column>
+				</p:row>
+				
+				</p:panelGrid>
+				<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddOperationDialogID" value="#{rchBudgetMsgs.research_program_save_demand_button_close_dialog_label}" 	
+							 type="button" onclick="PF('dlgAddOperation').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneOperation" 
+							action="#{cc.attrs.managedBean.saveOneOperation()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this :#{cc.clientId}:dlgFormOperation:panelGridOperation" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:operationsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:dlgFormOperation :#{cc.clientId}:recapDataTable" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateOperationRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateOperationRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddOperation').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddOperation').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<!-- CREDITS  -->
+<p:dialog  widgetVar="dlgAddCredit"  
+					appendTo="@(body)" modal="true" 
+					header="#{cc.attrs.managedBean.titleDemandCreditDialog}"
+ 					id="dlgAddCreditId" 
+ 					resizable="false"
+					style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgFormCredit">
+	<p:messages id="msgCreditDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+		<p:panelGrid  id="panelGridCredit" style="width:500px;margin-bottom:8px;">
+           		<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_chapter_label}" for="listNcChapters"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcChapters" 	value="#{cc.attrs.managedBean.selectedDemandCredit.ncChapitreId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_credit_chapter_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listChaptersCredit}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+									<p:ajax listener="#{cc.attrs.managedBean.handleChapterChange}" 
+											  event="valueChange" 
+											  process="@this" 
+											  update=":#{cc.clientId}:dlgFormCredit" 
+											  />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;width:30%;">	
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_article_label}" for="listNcArticles"/>	
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="listNcArticles" 	value="#{cc.attrs.managedBean.selectedDemandCredit.ncArticleId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_credit_article_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listArticlesCredit}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_year_label}" for="listCreditYearsID"/>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="listCreditYearsID" 	value="#{cc.attrs.managedBean.selectedDemandCredit.annee}" style="width:100%;" 
+								required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_credit_year_required}">
+								<f:selectItems value="#{cc.attrs.managedBean.listBeginYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+			
+				<p:row>
+				<p:column style="width:20%;text-align:right;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_amount_label}" for="creditAmountID"/>
+				</p:column>
+				<p:column>
+						  <pe:inputNumber id="creditAmountID" value="#{cc.attrs.managedBean.selectedDemandCredit.montant}" symbol=" DZD"  symbolPosition="s"
+                    				validatorMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_equipment_amount_min_required}"
+                    				required="true" requiredMessage="#{rchBudgetMsgs.research_program_save_demand_msg_add_credit_amount_required}" style="text-align:right;">  
+        							<f:validateDoubleRange minimum="50"/>  
+   						 </pe:inputNumber>  
+				</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:20%;text-align:right;vertical-align:top;">
+						<p:outputLabel value="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demand_credits_column_description_label}"/>
+					</p:column>
+					<p:column>
+								<p:inputTextarea value="#{cc.attrs.managedBean.selectedDemandCredit.description}"  style="width:100%;">
+								</p:inputTextarea>
+					</p:column>
+				</p:row>
+				</p:panelGrid>
+				
+				<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddCreditDialogID" value="#{rchBudgetMsgs.research_program_save_demand_button_close_dialog_label}" 	
+							 type="button" onclick="PF('dlgAddCredit').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right">
+						<p:commandButton id="btnSaveOneEquipment" 
+							action="#{cc.attrs.managedBean.saveOneCredit()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchBudgetMsgs.research_program_save_demand_button_save_demand_label}"
+							process="@this :#{cc.clientId}:dlgFormCredit:panelGridCredit" 
+							ajax="true" 
+							update="#{cc.attrs.parentIDsToUpdate} :#{cc.clientId}:tvDemand:historyOutputPanel :#{cc.clientId}:tvDemand:creditsDataTable :#{cc.clientId}:msgDemand :#{cc.clientId}:dlgFormCredit :#{cc.clientId}:recapDataTable" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();handleUpdateCreditRequest(xhr, status, args);"	>
+						</p:commandButton>
+				</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateCreditRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddCredit').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddCredit').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+</composite:implementation>
+</html>

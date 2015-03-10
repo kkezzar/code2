@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_configuration}" style="border:0;">
+			<h:form id="searchForm">
+
+
+
+				<p:toolbar>
+					<p:toolbarGroup align="left" rendered="#{parametreEtabDroitBean.readAllow}">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="false"
+							icon="ui-icon-document" action="#{parametreEtabSearchBean.toNew}">
+							<f:param name="searchValue"
+								value="#{parametreEtabSearchBean.searchValue}" />
+							<f:param name="idfEtab" value="#{parametreEtabSearchBean.idfEtab}" />	
+						</p:commandButton>
+						
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="configurationData"
+								fileName="listeDesconfiguration" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right" rendered="#{parametreEtabDroitBean.readAllow}">
+					
+						<p:focus for="searchInput" />
+						<p:panelGrid styleClass="noBorder1">
+						<p:row>
+						<p:column>
+						<p:inputText value="#{parametreEtabSearchBean.searchValue}"
+							id="searchInput" 
+							style="width:200px" binding="#{searchValue}" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						</p:column>
+						<p:column>	
+						<p:selectOneMenu id="etablissement"
+							value="#{parametreEtabSearchBean.idfEtab}" filter="true"
+							filterMatchMode="contains"
+							
+							label="#{parametragemsgs.parametrage_configuration_etablissement}">
+							<f:selectItem
+								itemLabel="#{parametragemsgs.parametrage_configuration_general}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefEtablissementDto}" />
+						</p:selectOneMenu>
+						</p:column>
+						<p:column>
+						<p:commandButton rendered="#{parametreEtabDroitBean.readAllow}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							actionListener="#{parametreEtabSearchBean.findGeneric(searchValue.value)}" />
+							</p:column>
+						<p:separator />
+						</p:row>
+                     </p:panelGrid>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br />
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<br />
+				<p:dataTable resizableColumns="true" id="configurationsData"
+					editable="true"
+					rendered="#{parametreEtabSearchBean.listRefParametreEtabDto!=null}"
+					value="#{parametreEtabSearchBean.listRefParametreEtabDto}"
+					var="current" paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue"
+						value="#{parametreEtabSearchBean.searchValue}" />
+					<f:param name="idfEtab" value="#{parametreEtabSearchBean.idfEtab}" />
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="configurationsData"
+						process="configurationsData" />
+					<p:ajax event="rowEdit" update="configurationsData"
+						process="configurationsData"
+						listener="#{parametreEtabSearchBean.onEdit}" />
+					<p:ajax event="rowEditCancel" update="configurationsData" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{parametragemsgs.parametrage_configuration_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.key}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration_key}" />
+						</f:facet>
+						<h:outputText value="#{current.key}" />
+					</p:column>
+
+					<p:column sortBy="#{current.description}" width="20%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{parametragemsgs.parametrage_configuration_description}" />
+						</f:facet>
+						<h:outputText value="#{current.description}" />
+					</p:column>
+
+					<p:column sortBy="#{current.value}" width="10%" headerText="#{parametragemsgs.parametrage_configuration_value}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{current.value}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{current.value}"
+									label="#{parametragemsgs.parametrage_value}"
+									style="text-align: left; width:100%" required="true"
+									requiredMessage="#{parametragemsgs.parametrage_value_required}">
+									<f:param name="searchValue"
+										value="#{parametreEtabSearchBean.searchValue}" />
+
+								</p:inputText>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:6%" rendered="#{parametreEtabDroitBean.editAllow}">
+						<p:rowEditor />
+					</p:column>
+					<p:column style="width:10%" exportable="false" rendered="#{parametreEtabDroitBean.deleteAllow}">
+						<p:commandButton id="removeButton" process="@this"
+							actionListener="#{parametreEtabSearchBean.delete(current)}"
+							
+							update="configurationsData" icon="ui-icon-trash"
+							upadate="configurationsData" title="#{commonmsgs.button_delete}">
+
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="searchValue"
+								value="#{parametreEtabSearchBean.searchValue}" />
+							<f:param name="idfEtab"
+								value="#{parametreEtabSearchBean.idfEtab}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

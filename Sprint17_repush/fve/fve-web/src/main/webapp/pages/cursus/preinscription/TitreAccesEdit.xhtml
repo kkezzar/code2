@@ -1,0 +1,189 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+			<p:panelGrid id="panelEditTitreAccess" rendered="#{!preinscriptionSearchMBean.tabTitreAccesDisabled}">
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Numéro" for="numeroTitre"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="numeroTitre" style="width:100%;text-align:left"
+							required="true"
+							requiredMessage="Le numéro du titre est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.numeroTitreAcces}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.numeroTitreAcces}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Type" for="typeTitre"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="typeTitre" 
+							required="true"
+							requiredMessage="Le type du titre est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.refCodeTypeTitre}"
+							style="width:100%;text-align:left"
+							label="type titre"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Type--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.typeTitreAcces}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.typeTitreLibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Moyenne" for="moyenne"/>
+					</p:column>
+					<p:column style="width:250px">
+						<pe:inputNumber id="moyenne" style="width:100%;text-align:left"
+							required="true"
+							requiredMessage="La moyenne est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.moyenne}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.moyenne}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Mention" for="mention"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="mention" 
+							required="true"
+							requiredMessage="La mention du titre d'accés est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.refCodeMention}"
+							style="width:100%;text-align:left"
+							label="civilité"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Mention--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.mentions}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.mentionLibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Première langue étranger" for="premiereLangue"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="premiereLangue" 
+							required="true"
+							requiredMessage="La première langue étrangère est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.refCodeLangueEtrangere1}"
+							style="width:100%;text-align:left"
+							label="Première langue"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Première langue--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.langues1}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.langueEtrangere1LibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Deuxième langue étranger" for="deuxiemeLangue"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="deuxiemeLangue" 
+							required="true"
+							requiredMessage="La deuxième langue étrangère est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.refCodeLangueEtrangere2}"
+							style="width:100%;text-align:left"
+							label="Deuxième langue"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Première langue--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.langues2}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.langueEtrangere2LibelleLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Etablissement d'obtention" for="etablissementObtention"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="etablissementObtention" style="width:100%;text-align:left" 
+							required="true"
+							requiredMessage="L'établissement d'obtention est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.etablissementObtentionFr}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"/>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.etablissementObtentionFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:outputLabel value="Spécialité" for="specialite"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="specialite" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.refCodeSpecialite}"
+							style="width:100%;text-align:left"
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							label="specialité">
+							<f:selectItem
+								itemLabel="--Spécialité--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.titreAccesSpecialites}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.libelleFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Pays" for="paysObtention"/>
+					</p:column>
+					<p:column style="width:250px">
+						<p:selectOneMenu id="paysObtention" 
+							required="true"
+							requiredMessage="Le pays d'obtention est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.paysId}"
+							style="width:100%;text-align:left"
+							label="pays obtention"
+							rendered="#{preinscriptionSearchMBean.editionMode}">
+							<f:selectItem
+								itemLabel="--Pays d'obtention--"/>
+							<f:selectItems value="#{preinscriptionSearchMBean.paysObtentions}" />
+						</p:selectOneMenu>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.libellePaysObtentionLongFr}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:250px">
+						<p:outputLabel value="Année" for="anneeObtention" />
+					</p:column>
+					<p:column style="width:250px">
+						<p:inputText id="anneeObtention" style="width:100%;text-align:left"
+							required="true"
+							requiredMessage="L'année d'obtention est obligatoire"
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.anneeObtention}" 
+							rendered="#{preinscriptionSearchMBean.editionMode}"
+							>
+						</p:inputText>
+						<h:outputText style="width:100%;text-align:left" 
+							value="#{preinscriptionSearchMBean.dto.titreAccesDto.anneeObtention}" 
+							rendered="#{!preinscriptionSearchMBean.editionMode}"/>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+</ui:composition>
+

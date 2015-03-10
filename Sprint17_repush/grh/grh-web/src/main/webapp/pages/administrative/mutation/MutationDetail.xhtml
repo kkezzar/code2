@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:outputPanel rendered="#{mutationDtoParam.necessiteService!=true}">
+                            <ui:include 
+							src="/pages/administrative/mutation/ResultatMutationDetail.xhtml">
+							<ui:param name="mutationDtoParam"
+								value="#{mutationDtoParam}"></ui:param>
+						</ui:include>
+						</p:outputPanel>
+						<p:outputPanel  rendered="#{mutationDtoParam.necessiteService}">	
+						<ui:include
+							src="/pages/administrative/mutation/DecisionMutationDetail.xhtml">
+							<ui:param name="mutationDtoParam"
+								value="#{mutationDtoParam}"></ui:param>
+						</ui:include>
+						</p:outputPanel>	
+
+
+<p:dialog position="center" appendTo="@(body)" header="Employé"
+						 widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{mutationDtoParam.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

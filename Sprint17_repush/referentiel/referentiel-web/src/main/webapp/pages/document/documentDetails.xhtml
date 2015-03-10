@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel header="#{commonmsgs.menu_documents}" style="border:0;">
+
+			<p:tabView effect="#{tabBean.effect}" effectDuration="normal"
+				id="documentTabViewID">
+
+				<p:tab id="infos" title="#{documentmsgs.document_infos}">
+
+					<p:panelGrid style="width:100%">
+						<p:row>
+							<p:column style="vertical-align: top;">
+								<p:panelGrid id="descriptionGrid" styleClass=" " style="width:100%">
+									<p:row>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_identifiant}" />
+										</p:column>
+										<p:column colspan="">
+											<h:outputText id="identifDoc" style="text-align: left"
+												value="#{documentEditBean.refDocumentDto.identifiant}"
+												
+												>
+											</h:outputText>
+										</p:column>
+										<p:column style="text-align: center" colspan="2">
+										 <h:form>
+											<p:commandButton id="downfile"
+												icon="ui-icon-arrowthickstop-1-s"
+												value=" #{documentmsgs.document_telecharger_document} " 
+												ajax="false"
+												rendered="#{not empty documentEditBean.refDocumentDto.url}">
+
+												<p:fileDownload value="#{documentEditBean.file}" />
+
+												<f:param name="searchValue"
+													value="#{documentEditBean.searchValue}" />
+												<f:param name="idfDoc"
+													value="#{documentEditBean.refDocumentDto.id}" />
+												<f:param name="searchAdv"
+													value="#{documentEditBean.searchAdv}" />
+												<f:param name="searchListNomenclat"
+													value="#{documentSearchBean.searchListNomenclat}" />
+											</p:commandButton>
+											</h:form>
+										</p:column>
+									</p:row>
+									<br />	<br />	
+									<p:row>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_titre}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="titreDoc"
+												value="#{documentEditBean.refDocumentDto.titreDocument}"
+												style="font-weight: bold;" />
+										</p:column>
+
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_reference}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="referenceDoc"
+												value="#{documentEditBean.refDocumentDto.referenceDocument}"
+												style="font-weight: bold;" />
+
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_type_document}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="typeDocument" style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.typeDocumentLibelleLongFr} " />
+
+										</p:column>
+
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_classement}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="classDocument" style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.classementLibelleLongFr} " />
+
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{documentmsgs.document_langue_document}:" />
+										</p:column>
+										<p:column>
+											<h:outputText style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.langueLibelleLongFr}" />
+										</p:column>
+
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_date_document}:" />
+										</p:column>
+										<p:column>
+											<h:outputText style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.dateDocument}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{documentmsgs.document_nature_document}:" />
+										</p:column>
+										<p:column>
+											<h:outputText style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.natureDocumentLibelleLongFr}" />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{documentmsgs.document_objet_document}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="objetDoc" style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.objetDocument}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_date_creation}:" />
+										</p:column>
+										<p:column>
+
+											<h:outputText id="dateCreation" style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.dateCreation}">
+
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+
+									<p:row>
+
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_description}:" />
+										</p:column>
+										<p:column colspan="3">
+											<h:outputText id="descriptionDoc" style="font-weight: bold;"
+												value="#{documentEditBean.refDocumentDto.description}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<br />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{documentmsgs.document_infos_document_lie}" />
+										</p:column>
+
+										<p:column>
+											<h:outputText id="titreDocLie"
+												value="#{documentEditBean.refDocumentDto.titreParentDocument}"
+												style="font-weight: bold;" />
+
+										</p:column>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_reference}:" />
+										</p:column>
+										<p:column>
+											<h:outputText id="referenceDocLie"
+												value="#{documentEditBean.refDocumentDto.referenceParentDocument}"
+												style="font-weight: bold;" />
+
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText value="#{documentmsgs.document_mots_cles}:" />
+										</p:column>
+										<p:column>
+											<p:autoComplete
+												value="#{documentEditBean.nomenclatureDtoList}"
+												id="selectmotscles" forceSelection="true"
+												completeMethod="#{motCleConverter.completeMotCle}"
+												var="motCleDto" multiple="true"
+												itemLabel="#{motCleDto.libelleLongFr}"
+												itemValue="#{motCleDto.id}" converter="#{motCleConverter}"
+												label="#{documentmsgs.document_mots_cles}"
+												styleClass="myautocomp" disabled="true">
+
+												<f:param name="searchValue"
+													value="#{documentEditBean.searchValue}" />
+												<f:param name="idfDoc"
+													value="#{documentEditBean.refDocumentDto.id}" />
+												<f:param name="searchAdv"
+													value="#{documentEditBean.searchAdv}" />
+												<f:param name="searchListNomenclat"
+													value="#{documentSearchBean.searchListNomenclat}" />
+
+											</p:autoComplete>
+
+										</p:column>
+
+									</p:row>
+							
+									<p:row>
+										<p:column colspan="4" style="text-align:left;">
+											<p:commandButton value="#{commonmsgs.button_return}"
+												icon="ui-icon-arrowreturnthick-1-w"
+												action="#{documentEditBean.back}" process="@this">
+												<f:param name="searchValue"
+													value="#{documentEditBean.searchValue}" />
+												<f:param name="searchAdv"
+													value="#{documentEditBean.searchAdv}" />
+												<f:param name="searchListNomenclat"
+													value="#{documentSearchBean.searchListNomenclat}" />
+											</p:commandButton>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+							</p:column>
+
+							<!-- document versions -->
+							<p:column style="width:28%;vertical-align: top;" rendered="#{not empty documentEditBean.idfDoc}">
+
+								<ui:include src="/pages/document/documentVersions.xhtml">
+
+									<ui:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+									<ui:param name="searchValue"
+										value="#{documentEditBean.searchValue}" />
+									<ui:param name="searchAdv"
+										value="#{documentEditBean.searchAdv}" />
+									<ui:param name="searchListNomenclat"
+										value="#{documentSearchBean.searchListNomenclat}" />
+									<ui:param name="idfEntity" value="#{documentEditBean.idfDoc}" />
+
+									<ui:param name="createAllow" value="false" />
+									<ui:param name="editAllow" value="false" />
+									<ui:param name="deleteAllow" value="false" />
+								</ui:include>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+				</p:tab>
+
+				<c:forEach var="tabItem" items="#{documentDroitBean.listActions}" varStatus="status">
+					<p:tab title="#{tabItem.nomFonction}">
+						<ui:include src="#{tabItem.urlFonction}">
+							<ui:param name="createAllow" value="false" />
+							<ui:param name="editAllow" value="false" />
+							<ui:param name="deleteAllow" value="false" />
+							<ui:param name="idfDoc" value="#{documentEditBean.idfDoc}" />
+							<ui:param name="searchValue"
+								value="#{documentEditBean.searchValue}" />
+							<ui:param name="searchAdv" value="#{documentEditBean.searchAdv}" />
+						</ui:include>
+					</p:tab>
+				</c:forEach>
+
+			</p:tabView>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+
+
+</html>

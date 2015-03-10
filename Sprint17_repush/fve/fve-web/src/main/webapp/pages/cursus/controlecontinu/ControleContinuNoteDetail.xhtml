@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:dataTable id="noteDataTable" var="row" styleClass="detailStyle"
+		rendered="#{controleContinuBean.noteEvalList != null}"
+		value="#{controleContinuBean.noteEvalList}" widgetVar="noteDataTable"
+		resizableColumns="true"
+		filteredValue="#{controleContinuBean.filtredNoteEval}"
+		emptyMessage="#{evalControleContinuMsgs.eval_controle_continu_data_table_seacrh_result_no_result}"
+		rowIndexVar="rowIndex">
+		<p:ajax event="sort" update="noteDataTable"
+			onstart="PF('globalWidget').block()"
+			onsuccess="PF('globalWidget').unblock()"
+			process="@(.groupepedagogiquePanel)" />
+		<f:facet name="header">
+			<p:column exportable="false">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+							immediate="true">
+							<p:graphicImage name="/images/pdf.png" />
+							<pe:exporter type="pdf" target="noteDataTable"
+								facetBackground="#AAFFBB" datasetPadding="10"
+								fileName="#{controleContinuBean.exportFileName}"
+								orientation="Landscape" encoding="ISO-8859-1" />
+						</h:commandLink>
+						<p:spacer width="20" />
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+							immediate="true">
+							<p:graphicImage name="/images/excel.png" />
+							<pe:exporter type="xlsx" target="noteDataTable"
+								fileName="#{controleContinuBean.exportFileName}" />
+						</h:commandLink>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_search_all}" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('noteDataTable').filter()" style="width:150px"
+							placeholder="#{evalControleContinuMsgs.eval_controle_continu_data_table_search_key}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+			</p:column>
+		</f:facet>
+		<p:column exportable="false"
+			headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_column_index}"
+			style="width:5%">
+			<h:outputText value="#{rowIndex+1}" />
+		</p:column>
+		<p:column width="10%" sortBy="#{row.numeroMatricule}"
+			filterStyle="display:none" filterBy="#{row.numeroMatricule}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_matricule}" />
+			</f:facet>
+			<h:outputText value="#{row.numeroMatricule}" />
+		</p:column>
+
+		<p:column width="15%" sortBy="#{row.etudiantNomLatin}"
+			filterStyle="display:none" filterBy="#{row.etudiantNomLatin}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_nom}" />
+			</f:facet>
+			<h:outputText value="#{row.etudiantNomLatin}" />
+		</p:column>
+
+		<p:column width="15%" sortBy="#{row.etudiantPrenomLatin}"
+			filterStyle="display:none" filterBy="#{row.etudiantPrenomLatin}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_prenom}" />
+			</f:facet>
+			<h:outputText value="#{row.etudiantPrenomLatin}" />
+		</p:column>
+
+		<p:column width="15%" sortBy="#{row.etudiantDateNaissance}"
+			style="text-align:center" filterBy="#{row.etudiantDateNaissance}"
+			filterStyle="display:none" filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_date_naissance}" />
+			</f:facet>
+			<h:outputText value="#{row.etudiantDateNaissance}">
+				<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+			</h:outputText>
+		</p:column>
+		<p:column style="width:10%;text-align:center" sortBy="#{row.note}"
+			filterStyle="display:none"
+			filterBy="#{row.note}" filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_note}" />
+			</f:facet>
+			<h:outputText rendered="#{!row.absent}" id="note"
+				value="#{utilBean.formatNote(row.note)}">
+			</h:outputText>
+			<h:outputText rendered="#{row.absent}"
+				style="font-style: italic;font-weight:bold"
+				value="#{evalControleContinuMsgs.eval_controle_continu_etudiant_absent}" />
+		</p:column>
+
+		<!-- 		<p:column style="width:10%" sortBy="#{row.absent}" -->
+		<!-- 			filterStyle="display:none" filterBy="#{row.absent}" -->
+		<!-- 			filterMatchMode="contains"> -->
+		<!-- 			<f:facet name="header"> -->
+		<!-- 				<h:outputText -->
+		<!-- 					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_absent}" /> -->
+		<!-- 			</f:facet> -->
+		<!-- 			<h:outputText value="#{row.absent?'Oui':'Non'}" /> -->
+		<!-- 		</p:column> -->
+
+		<p:column style="width:30%" sortBy="#{row.observation}"
+			filterStyle="display:none" filterBy="#{row.observation}"
+			filterMatchMode="contains">
+			<f:facet name="header">
+				<h:outputText
+					value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_obervation}" />
+			</f:facet>
+			<h:outputText value="#{row.observation}" />
+
+
+		</p:column>
+
+	</p:dataTable>
+
+</ui:composition>
+

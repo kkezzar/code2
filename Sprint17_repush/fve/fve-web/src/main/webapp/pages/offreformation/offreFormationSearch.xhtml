@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:composition template="/template/centertemplate.xhtml">
+
+	<ui:define name="centerContent">
+	
+		<br></br>			
+			<h:form>	
+			<p:messages id="messages" /> 	
+			<br/>
+			<p:inputText value="#{oFSearchBBean.oFManagerBean.paramSearch}"  dir="auto" size="100"> </p:inputText>
+			  
+			  <p:commandButton action="#{oFSearchBBean.oFManagerBean.search}" ajax="yes" update="OffresData" value="Rechercher"></p:commandButton>
+			 
+			  <p:commandButton id="modalDialogButton"  ajax="yes" value="Recherche Avancée" onclick="PF('dialogSearchAvance').show();"  type="Button"/>  
+			
+		<br/><br/>
+				
+				<p:dataTable resizableColumns="true" id="OffresData"
+					value="#{oFSearchBBean.oFManagerBean.parcoursTypeList}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					sortMode="multiple"
+					emptyMessage="Aucun résultat..." rows="4" 				
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+					>	
+				
+					
+					<p:column sortBy="offreFormationDto.libelleFr" headerText="Intitulé Offre">						
+						<h:outputText value="#{current.offreFormationDto.libelleFr}" />
+					</p:column>
+					
+					<p:column sortBy="offreFormationDto.specialiteDto.filiereDto.domaineFormationDto.libelleFr" headerText="Domaine">
+							<h:outputText value="#{current.offreFormationDto.specialiteDto.filiereDto.domaineFormationDto.libelleFr}" />
+					</p:column>
+					
+					<p:column sortBy="offreFormationDto.specialiteDto.libelleFr"  headerText="Spécialité">
+							<h:outputText value="#{current.offreFormationDto.specialiteDto.libelleFr}" />
+					</p:column>					
+					
+					<p:column headerText="Début Habilitation">						
+						<h:outputText value="#{current.offreFormationDto.dateDebutHabilitation}" >
+						 <f:convertDateTime pattern="dd/MM/yyyy"/>  
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="offreFormationDto.vocationDto.libelleFr" headerText="Vocation">
+						<h:outputText value="#{current.offreFormationDto.vocationDto.libelleFr}" />
+					</p:column>
+					
+					<p:column sortBy="offreFormationDto.cycleDto.libelleFr" headerText="Cycle">
+						<h:outputText value="#{current.offreFormationDto.cycleDto.libelleFr}" />
+					</p:column>
+					
+					<p:column headerText="Etablissement">
+						<h:outputText value="#{current.offreFormationDto.etablissementDto.llEtabAr}" />
+					</p:column>
+					
+				</p:dataTable>		
+					
+			
+			
+			<p:dialog id="modalDialog" header="Recherche Avancée..." widgetVar="dialogSearchAvance" modal="true" height="100" >  
+    			<h:outputText value="Page de recherche avancée d'une offre de formation" />  
+    			
+    		 	<p:selectOneMenu>  
+		            <f:selectItem itemLabel="Select One" itemValue="" />  
+		            <f:selectItems value="#{oFSearchBBean.oFManagerBean.etablissementList}"  var="etab" itemLabel="#{etab.llEtabFr}"/>  
+		       	</p:selectOneMenu>  
+		       	
+			</p:dialog> 		
+		
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>	
+
+

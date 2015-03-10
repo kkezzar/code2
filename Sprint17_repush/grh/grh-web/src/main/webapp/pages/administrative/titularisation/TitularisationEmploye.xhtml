@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{titularisationMgs.pnl_enregistrer_titualrisation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+          <ui:include
+				src="/pages/administrative/dossierEmploye/DossierEmployeSearch.xhtml" >
+				<ui:param name="nameMBean"  value="#{titularisationEmployeMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty titularisationEmployeMBean.dossierEmployeDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{titularisationMgs.pnl_enregistrer_titualrisation}" >
+					<h:form id="form_titularisation_save">
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+								<ui:param name="dossierEmployeDtoParam"
+									value="#{titularisationEmployeMBean.dossierEmployeDto}"></ui:param>
+							</ui:include>
+
+
+							<p:panelGrid id="TitularisationPnlGrid" 
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText styleClass="value"
+							value="#{titularisationMgs.titularisation_employe_title}" />
+					</p:column>
+					
+				</p:row>
+				<p:row>
+				<p:column style="width:25%" >
+						<p:outputLabel value="#{stagemsgs.date_fin_stage} "></p:outputLabel>
+					</p:column>
+						<p:column  style="width:25%">
+				    <h:outputText styleClass="value"
+							value="#{titularisationEmployeMBean.stageDto.dateFinReelle}" >
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+						</p:row>
+				<p:row>
+				<p:column style="width:25%" >
+						<p:outputLabel value="#{titularisationMgs.date_titularisation} *"></p:outputLabel>
+					</p:column>
+						<p:column  style="width:25%">
+				<p:calendar id="dateTitularisation" navigator="true" required="" requiredMessage="#{titularisationMgs.date_titularisation_required}"
+							value="#{titularisationEmployeMBean.dossierEmployeDto.dateTitularisation}">
+						</p:calendar>
+						</p:column>
+						</p:row>
+								<p:row >
+								<p:column style="width:25%" >
+						<p:outputLabel value="#{titularisationMgs.corps} *"></p:outputLabel>
+					</p:column>
+					<p:column  style="width:25%">
+						<p:selectOneMenu id="corps"    filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{titularisationMgs.corps_required}"
+							value="#{titularisationEmployeMBean.carriereDto.corpsDto.id}"
+							label="#{titularisationMgs.corps}">
+							<p:ajax update="grade categorie echelon indice"  partialSubmit="true"  
+										listener="#{titularisationEmployeMBean.onCorpsSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{titularisationMgs.corps_select}"
+								itemValue="" />
+							<f:selectItems value="#{titularisationEmployeMBean.listeCorps}" />
+                                 
+						</p:selectOneMenu>
+					</p:column>
+					
+								
+								</p:row>
+				
+				<p:row>
+					<p:column  style="width:25%">
+						<p:outputLabel value="#{titularisationMgs.grade} *"></p:outputLabel>
+					</p:column>
+					<p:column style="width:25%" >
+						<p:selectOneMenu id="grade"  filter="true" filterMatchMode="contains" styleClass="input-xlarge-px"
+						 required="true" requiredMessage="#{titularisationMgs.grade_required}"
+							value="#{titularisationEmployeMBean.carriereDto.gradeDto.id}"
+							label="#{titularisationMgs.grade}">
+							<p:ajax update="categorie echelon indice"  partialSubmit="true"
+										listener="#{titularisationEmployeMBean.onGradeSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{titularisationMgs.grade_select}"
+								itemValue="" />
+							<f:selectItems value="#{titularisationEmployeMBean.listeGrade}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				
+					<p:column  style="width:25%">
+						<p:outputLabel value="#{titularisationMgs.categorie}"></p:outputLabel>
+					</p:column>
+					<p:column style="width:25%" >
+						<h:outputText  id="categorie" value="#{titularisationEmployeMBean.carriereDto.categorieProfessionnelleDto.nomenclatureByCategorieDto.libelleLongFr}"  styleClass="value" />
+					</p:column>
+					</p:row>
+					<p:row>
+					<p:column  >
+						<p:outputLabel value="#{titularisationMgs.echelon} *"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<p:selectOneMenu id="echelon"  filter="true" filterMatchMode="contains" styleClass="input-large-px"
+						 required="true" requiredMessage="#{titularisationMgs.echelon_required}"
+							value="#{titularisationEmployeMBean.carriereDto.grilleIndiciaireDto.id}"
+							label="#{titularisationMgs.echelon}">
+							<p:ajax update="indice"  partialSubmit="true"
+										listener="#{titularisationEmployeMBean.onGrilleIndiciareSelected}" 
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+							<f:selectItem
+								itemLabel="#{titularisationMgs.echelon_select}"
+								itemValue="" />
+							<f:selectItems value="#{titularisationEmployeMBean.listeGrilleIndiciaire}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				
+					<p:column  >
+						<p:outputLabel value="#{titularisationMgs.indice}"></p:outputLabel>
+					</p:column>
+					<p:column  >
+						<h:outputText  id="indice" value="#{titularisationEmployeMBean.carriereDto.indice}"  styleClass="value" />
+					</p:column>
+					</p:row>
+				
+								
+							</p:panelGrid>
+							
+							<p:toolbar id="TitularisationToolBar" styleClass="toolBarMesrs">
+								<p:toolbarGroup>
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										styleClass="ui-button-save" id="saveTitularisationBtn"
+										icon="ui-icon-disk" update=":pnl_Gerer"
+										actionListener="#{titularisationEmployeMBean.onSave()}">
+
+										<p:confirm header="Confirmation"
+											message="#{besoinRecrutementmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+
+
+								</p:toolbarGroup>
+
+
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.bouton_annuler}"
+										immediate="true" process="@this" id="backBtn"
+										icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+										actionListener="#{titularisationEmployeMBean.init()}">
+
+
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+
+</p:tab>
+	    <p:tab title="#{commonmsgs.tab_historique}" disabled="#{titularisationEmployeMBean.dossierEmployeDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{titularisationEmployeMBean.dossierEmployeHistory}"
+															idParamName="id"
+															idParamValue="#{titularisationEmployeMBean.dossierEmployeDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+
+
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

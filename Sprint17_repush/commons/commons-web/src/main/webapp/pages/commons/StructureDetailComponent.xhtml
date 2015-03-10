@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:panelGrid
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_identite}" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText value="#{refStructureDtoParam.identifiant}"
+					styleClass="value" />
+
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_type_structure_fr}" />
+			</p:column>
+			<p:column colspan="3">
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.typeLibelleLongFr} " />
+
+			</p:column>
+
+		</p:row>
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_libelle}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.llStructureLatin}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_libelle_court}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.lcStructureLatin}" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+
+
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_libelle_arabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.llStructureArabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_libelle_court_ar}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.lcStructureArabe}" />
+			</p:column>
+		</p:row>
+
+
+
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_date_creation}" />
+			</p:column>
+			<p:column>
+
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.dateCreation}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_decret} " />
+			</p:column>
+			<p:column>
+				<h:outputText id="decret" styleClass="value"
+					value="#{refStructureDtoParam.decret}" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_forme_juridique_fr}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.formeJuridiqueLibelleLongFr}" />
+			</p:column>
+
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_statut_fr}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value"
+					value="#{refStructureDtoParam.statusLibelleLongFr}" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_nis}" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" value="#{refStructureDtoParam.nis}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_nif}:" />
+			</p:column>
+			<p:column>
+				<h:outputText styleClass="value" value="#{refStructureDtoParam.nif}" />
+			</p:column>
+		</p:row>
+
+		<p:row>
+			<p:column>
+				<h:outputText value="#{structuremsgs.structure_nss}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="nss" styleClass="value"
+					value="#{refStructureDtoParam.nss}" />
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+
+
+
+</ui:composition>

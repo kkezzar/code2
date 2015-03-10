@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<!-- 	<p:fieldset -->
+	<!-- 		legend="#{reportingMsgs.reporting_statistique_bachelier_inscription_agent}" -->
+	<!-- 		styleClass="mesrsFieldset"> -->
+	<p:toolbar styleClass="toolBarMesrs">
+		<p:toolbarGroup align="left">
+			<p:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+				ajax="false" disabled="#{bachelierReportBean.anneeId == null}">
+				<p:graphicImage name="/images/pdf.png" />
+
+				<pe:exporter type="pdf" target="statAccordion:agentDataTable"
+					facetBackground="#AAFFBB" datasetPadding="10"
+					fileName="#{bachelierReportBean.agentFileName}"
+					orientation="Landscape" encoding="ISO-8859-1" subTable="true" />
+				<f:param name="dateDebutId"
+					value="#{bachelierReportBean.dateDebutId}" />
+				<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+				<f:param name="loadStat" value="true" />
+				<f:param name="groupeId" value="#{bachelierReportBean.groupeId}" />
+				<f:param name="evenmentId" value="#{bachelierReportBean.evenmentId}" />
+				<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+			</p:commandLink>
+			<p:spacer width="20" />
+			<p:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+				ajax="false" disabled="#{bachelierReportBean.anneeId == null}">
+				<p:graphicImage name="/images/excel.png" />
+				<pe:exporter type="xlsx" target="statAccordion:agentDataTable"
+					subTable="true" fileName="#{bachelierReportBean.agentFileName}" />
+				<f:param name="dateDebutId"
+					value="#{bachelierReportBean.dateDebutId}" />
+				<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+				<f:param name="loadStat" value="true" />
+				<f:param name="groupeId" value="#{bachelierReportBean.groupeId}" />
+				<f:param name="evenmentId" value="#{bachelierReportBean.evenmentId}" />
+				<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+			</p:commandLink>
+		</p:toolbarGroup>
+	</p:toolbar>
+
+	<p:accordionPanel multiple="false" activeIndex="0" id="statAccordion">
+		<p:tab
+			title="#{reportingMsgs.reporting_statistique_par_agent_tab_info_title}">
+			<p:dataTable id="agentDataTable" var="row"
+				value="#{bachelierReportBean.agentList}">
+				<f:facet name="header">
+					<h:outputText
+						value="#{reportingMsgs.reporting_statistique_par_agent} (#{bachelierReportBean.header})" />
+				</f:facet>
+
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column
+							headerText="#{reportingMsgs.reporting_data_table_seacrh_result_column_matricule}" />
+						<p:column
+							headerText="#{reportingMsgs.reporting_data_table_seacrh_result_column_nom_etudiant}" />
+						<p:column
+							headerText="#{reportingMsgs.reporting_data_table_seacrh_result_column_prenom_etudiant}" />
+						<p:column
+							headerText="#{reportingMsgs.reporting_data_table_seacrh_result_column_date_action}" />
+						<p:column
+							headerText="#{reportingMsgs.reporting_data_table_seacrh_result_column_heure_action}" />
+					</p:row>
+				</p:columnGroup>
+
+				<p:subTable var="action" value="#{row.historiques}">
+					<f:facet name="header">
+						<h:outputText value="#{row.nomLtIndividu} #{row.prenomLtIndividu}"
+							style="color:green;font-weight: bold;text-align:left" />
+					</f:facet>
+
+					<p:column style="width:10%">
+						<h:outputText value=" #{action.matriculeBac}" />
+					</p:column>
+
+					<p:column style="width:30%">
+						<h:outputText value="  #{action.individuNomLatin}" />
+					</p:column>
+
+					<p:column style="width:30%">
+						<h:outputText value=" #{action.individuPrenomLatin}" />
+					</p:column>
+
+					<p:column style="width:10%;text-align:center">
+						<h:outputText value="#{action.dateAction}"
+							style="text-align:center">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:10%;text-align:center">
+						<h:outputText value="#{action.heureAction}">
+							<f:convertDateTime pattern="HH:mm:ss" timeOnly="true" />
+						</h:outputText>
+					</p:column>
+					<p:columnGroup type="footer">
+						<p:row>
+							<p:column />
+							<p:column />
+							<p:column />
+							<p:column />
+							<p:column footerText="Total: #{row.actionNumber}"
+								style="text-align:left" />
+
+						</p:row>
+					</p:columnGroup>
+
+				</p:subTable>
+			</p:dataTable>
+		</p:tab>
+
+		<p:tab
+			title="#{reportingMsgs.reporting_statistique_par_agent_tab_graph_title}">
+			<p:pieChart value="#{bachelierReportBean.agentPieChart}"
+				id="agentPieChart" style="height:450px;align:center"
+				legendPosition="ne" showDataLabels="true" diameter="400"
+				rendered="#{bachelierReportBean.agentList!=null}">
+			</p:pieChart>
+		</p:tab>
+	</p:accordionPanel>
+
+</ui:composition>

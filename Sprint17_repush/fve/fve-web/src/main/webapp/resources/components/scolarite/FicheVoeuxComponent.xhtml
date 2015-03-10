@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt"
+      	xmlns:eh="http://java.sun.com/jsf/composite/components"
+      		xmlns:scol="http://java.sun.com/jsf/composite/components/scolarite">
+
+ <!-- INTERFACE COMPOSANT  [ FICHE VOEUX ENSEIGNANT ] -->
+<composite:interface>
+		<composite:attribute name="managedBean" type="dz.gov.mesrs.sii.fve.web.jsf.bean.scolarite.chargepedagogique.FicheVoeuxBB" required="true" shortDescription=" Your Bean"/>
+		<composite:attribute name="toEdit" type="java.lang.Boolean" required="true" shortDescription="Mode edition"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT [ FICHE VOEUX ENSEIGNANT ] -->          
+<composite:implementation>
+
+<p:tabView  id="cmpTabView" style="width:100%;">
+<p:tab title="#{chargeMsgs.fiche_veoux_component_tab_detail_title}" id="tabFiche">
+<p:outputPanel id="outputPanelTabFiche">
+	<p:panelGrid id="ficheRecap" style="width:100%;margin-bottom:8px;">
+					<p:row>
+					<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_annee}" /></p:column>
+					<p:column><h:outputLabel value="#{cc.attrs.managedBean.selectedFicheVoeux.libellePeriode} #{cc.attrs.managedBean.libelleYear}" styleClass="value"/></p:column>
+			
+					<p:column style="width:15%; text-align:right;"><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_situation}" /></p:column>
+					<p:column><h:outputLabel id="txtSituation" value="#{cc.attrs.managedBean.selectedFicheVoeux.libelleSituation}" style="#{cc.attrs.managedBean.selectedFicheVoeux.styleCssSituation}"/></p:column>
+					</p:row>
+	</p:panelGrid>
+	<scol:EnseignantComponent dossierEmployeDto="#{ficheVoeuxBB.enseignantDto}"></scol:EnseignantComponent>
+	<p:dataTable id="voeuxDataTable" var="row"
+								value="#{cc.attrs.managedBean.voeux}"
+								rowKey="#{row.id}"
+								emptyMessage="#{chargeMsgs.fiche_veoux_voeux_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								rows="#{ficheVoeuxBB.maxVoeux}"  
+								expandedRow="true"
+								>
+								 <p:ajax event="rowToggle" listener="#{ficheVoeuxBB.onVoeuxRowToggle}" update="lignesVoeuDataTable"/>
+
+								<f:facet name="header">#{chargeMsgs.fiche_veoux_component_voeux_data_table_list_header}</f:facet>  
+
+								  <p:column style="width:16px" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche}">
+            									<p:rowToggler />
+        						</p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_component_voeux_data_table_column_index}" style="width:40px;text-align:center;"> 	
+													<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_component_voeux_data_table_column_priorite}"   style="width:40px;text-align:center;"> 	
+												<h:outputText value="#{row.priorite}" styleClass="value" rendered="#{not row.editable}"/> 
+												 	<p:spinner value="#{row.priorite}"  min="1"  rendered="#{row.editable}"/>
+								</p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_component_voeux_data_table_column_description}"> 	
+												<h:outputText value="#{row.description}" styleClass="value" rendered="#{not row.editable}" style="width:100%;"/>
+												<h:inputText value="#{row.description}" styleClass="value" rendered="#{row.editable}" style="width:100%;"/> 
+								</p:column>
+								<p:column style="width:32px" rendered="#{(cc.attrs.toEdit and ficheVoeuxBB.toEdit) and (ficheVoeuxBB.canSaveFiche)}">
+           									<p:commandButton id="editVoeuButtonID" 	 
+													icon="ui-icon-pencil" 
+													action="#{ficheVoeuxBB.editVoeu()}" 
+													process="@this voeuxDataTable"	
+													update="voeuxDataTable :#{cc.clientId}:cmpTabView:btnToolBar"
+													>
+											<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuId}" value="#{row.id}" />	
+												<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuIndex}" value="#{row.order}" />									
+											</p:commandButton>
+      							 </p:column>
+      							 <p:column style="width:30px" styleClass="center" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche and (not ficheVoeuxBB.toValidate)}">	
+															<p:commandButton id="btnRemoveVoeu"  
+																	action="#{cc.attrs.managedBean.removeVoeu()}" 
+																	 icon="ui-icon-trash" 
+																	ajax="true" 
+																	update="voeuxDataTable :#{cc.clientId}:cmpTabView:btnToolBar :#{cc.clientId}:btnSubmitFiche"   
+																	process="@this"
+																	>
+																	<p:confirm		header="#{chargeMsgs.fiche_veoux_confirm_title}"	 
+																	message="#{chargeMsgs.fiche_veoux_message_remove_voeu_confirmation}" 	icon="ui-icon-alert" />
+																	<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuId}" value="#{row.id}" />	
+																	<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuIndex}" value="#{row.order}" />	
+															</p:commandButton>
+								</p:column>
+<!-- 								<p:column headerText="#{chargeMsgs.fiche_veoux_component_voeux_data_table_list_header}" rendered="#{not (cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche)}"> -->
+<!-- 										<p:dataList value="#{cc.attrs.managedBean.lignesVoeux[row.order]}" var="line"  emptyMessage=""> -->
+<!-- 		            								  #{line.libelleNiveau}, #{line.libelleMc}, #{line.codeTypeAp} -->
+<!-- 		    							</p:dataList> -->
+<!-- 								</p:column> -->
+								<p:rowExpansion >
+																	<p:dataTable id="lignesVoeuDataTable" var="row1"  value="#{cc.attrs.managedBean.lignesVoeux[row.order]}"
+																							rowKey="#{row1.id}"
+																							emptyMessage="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_list_empty}"
+																							rowIndexVar="rowIndex1" 
+																							selectionMode="single"
+																							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        																					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        																					paginator="true" 
+																							rows="5" 
+																							paginatorPosition="bottom"
+																							rowsPerPageTemplate="5,10"
+																							>
+																		<f:facet name="header">#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_list_header} [#{rowIndex+1}]</f:facet>  
+																		<p:column	headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_index}" style="text-align:center;"> 	
+																															<h:outputText value="#{rowIndex1+1}" />
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_etablissement}">
+																			<h:outputText value="#{row1.libelleEtablissement}" styleClass="value"/>
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_offre_formation}">
+																			<h:outputText value="#{row1.libelleOffreFormation}" styleClass="value"/>
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_niveau}">
+																					<h:outputText value="#{row1.libelleNiveau}" styleClass="value"/>
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_periode}" style="text-align:center;">
+																					<h:outputText value="#{row1.codePeriode}" styleClass="value"/>
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_matiere}">
+																					<h:outputText value="#{row1.libelleMc}" styleClass="value"/>
+																		</p:column>
+																		<p:column headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_ap}" style="text-align:center;">
+																					<h:outputText value="#{row1.codeTypeAp}" styleClass="value"/>
+																		</p:column>
+																		<p:column style="width:32px" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche}">
+           																					<p:commandButton id="editLigneVoeuButtonID" 	 
+																										icon="ui-icon-pencil" 
+																										action="#{ficheVoeuxBB.editLigneVoeu()}" 
+																										process="@this"	
+																										oncomplete="PF('dlgAddLigneVoeu').show();"
+																										update=":#{cc.clientId}:cmpTabView:btnSaveVoeux :#{cc.clientId}:dlgForm"
+																										>
+																									<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedLigneId}" value="#{row1.id}" />										
+																									<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuId}" value="#{row.id}" />										
+																									<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedIdRattachementMc}" value="#{row1.idRattachementMc}" />			
+																									<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuIndex}" value="#{row.order}" />
+																									<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuLigneIndex}" value="#{row1.order}" />									
+																							</p:commandButton>
+      							 										</p:column>
+      							 										<p:column style="width:30px" styleClass="center" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche and (not ficheVoeuxBB.toValidate)}">	
+																							<p:commandButton id="btnRemoveLigneVoeu"  
+																										action="#{cc.attrs.managedBean.removeLigneVoeu()}" 
+																	 									icon="ui-icon-trash" 
+																										ajax="true" 
+																										update="lignesVoeuDataTable :#{cc.clientId}:btnSubmitFiche"  
+																										process="@this"
+																										>
+																										<p:confirm		header="#{chargeMsgs.fiche_veoux_confirm_title}"	 message="#{chargeMsgs.fiche_veoux_message_remove_voeu_confirmation}" 	icon="ui-icon-alert" />
+																										<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedLigneId}" value="#{row1.id}" />			
+																										<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuId}" value="#{row.id}" />		
+																										<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedIdRattachementMc}" value="#{row1.idRattachementMc}" />	
+																										<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuIndex}" value="#{row.order}" />	
+																										<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuLigneIndex}" value="#{row1.order}" />									
+																															
+																							</p:commandButton>
+																		</p:column>
+																		<p:column  headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_validee}" style="text-align:center;">
+																				<p:selectBooleanCheckbox 
+																								value="#{row1.estValidee}" 
+																								disabled="#{not (ficheVoeuxBB.toValidate and cc.attrs.toEdit and ficheVoeuxBB.toEdit)}" 
+																								style="align-text:center;">
+		        																</p:selectBooleanCheckbox>
+																		</p:column>
+					 													</p:dataTable>
+
+												<p:toolbar id="btnToolBarExpansion" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche}">
+												<p:toolbarGroup align="left">
+																<p:commandButton id="btnAddLigneVoeu" 
+																			action="#{cc.attrs.managedBean.prepareCurrentLigneVoeu()}"  
+																			icon="ui-icon-plusthick"  
+																			process="@this lignesVoeuDataTable" 
+																			ajax="true" 
+																			update="lignesVoeuDataTable @this :#{cc.clientId}:cmpTabView:btnToolBar :#{cc.clientId}:dlgForm" 
+																			disabled="#{not ficheVoeuxBB.canAddLigneVoeu}"
+																			onstart="PF('ajaxProgress').block()"  
+            																oncomplete="PF('ajaxProgress').unblock();PF('dlgAddLigneVoeu').show();"
+																			>
+																			<f:setPropertyActionListener target="#{ficheVoeuxBB.selectedVoeuIndex}" value="#{row.order}" />	
+																	</p:commandButton>
+												</p:toolbarGroup>
+												</p:toolbar>
+												<br />
+              		</p:rowExpansion>
+	
+	</p:dataTable>
+
+	<p:toolbar id="btnToolBar" rendered="#{cc.attrs.toEdit and ficheVoeuxBB.toEdit and ficheVoeuxBB.canSaveFiche}">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnAddOneVoeu" 
+									action="#{cc.attrs.managedBean.addVoeu()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true" 
+									update="voeuxDataTable @this :#{cc.clientId}:cmpTabView:btnSaveVoeux :#{cc.clientId}:dlgForm" 
+									onstart="PF('ajaxProgress').block()"  
+            						oncomplete="PF('ajaxProgress').unblock()"
+									disabled="#{not ficheVoeuxBB.canAddVoeu}">
+							</p:commandButton>
+							</p:toolbarGroup>
+							
+							<p:toolbarGroup align="right">
+							<p:commandButton id="btnSaveVoeux" 
+									value="#{chargeMsgs.fiche_veoux_component_bouton_enregistrer_voeu_libelle}" 
+									action="#{cc.attrs.managedBean.saveFicheVoeux()}"  
+									process="@this voeuxDataTable" 
+									ajax="true" 
+									icon="ui-icon-disk" 
+									update="voeuxDataTable @this  :#{cc.clientId}:cmpTabView:btnAddOneVoeu :#{cc.clientId}:btnSubmitFiche"  
+									disabled="#{not ficheVoeuxBB.canSaveFiche}"
+									onstart="PF('ajaxProgress').block()"  
+            						oncomplete="PF('ajaxProgress').unblock()" >
+							</p:commandButton>
+							</p:toolbarGroup>
+							
+</p:toolbar>
+</p:outputPanel>
+</p:tab>
+<p:tab title="#{chargeMsgs.fiche_veoux_component_tab_history_title}">
+<p:outputPanel id="outputPanelHistorique">
+  <eh:EntityHistoryComponent id="cmpHistoryId" list="#{ficheVoeuxBB.ficheHistory}"></eh:EntityHistoryComponent>
+  </p:outputPanel>
+</p:tab>
+<p:tab title="#{chargeMsgs.fiche_veoux_component_tab_params_title}">
+	<p:dataTable id="paramsDataTable" var="row"  value="#{cc.attrs.managedBean.periodeParams}"
+																							rowKey="#{row.id}"
+																							emptyMessage="#{chargeMsgs.fiche_veoux_component_params_data_table_list_empty}"
+																							rowIndexVar="rowIndex1" 
+																							selectionMode="single"
+																							>
+																							
+																		<f:facet name="header">#{chargeMsgs.fiche_veoux_component_params_data_table_list_header} #{cc.attrs.managedBean.selectedFicheVoeux.libellePeriode}   #{cc.attrs.managedBean.libelleYear}</f:facet>  
+																		<p:column	headerText="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_index}"  style="text-align:center;"> 	
+																															<h:outputText value="#{rowIndex1+1}"/>
+																		</p:column>
+<!-- 																		<p:column	headerText="#{chargeMsgs.fiche_veoux_component_params_data_table_column_code}"  style="text-align:center;"> 	 -->
+<!-- 																															<h:outputText value="#{row.code}"/> -->
+<!-- 																		</p:column> -->
+																		<p:column	headerText="#{chargeMsgs.fiche_veoux_component_params_data_table_column_libelle}"  style="text-align:center;"> 	
+																															<h:outputText value="#{row.libelle}" style="float:left;"/>
+																		</p:column>
+																		<p:column	headerText="#{chargeMsgs.fiche_veoux_component_params_data_table_column_valeur}"  style="text-align:center;"> 	
+																															<h:outputText value="#{row.valeur}"/>
+																		</p:column>
+	</p:dataTable>
+</p:tab >
+</p:tabView>
+<p:outputPanel id="toolBarPanel">
+<p:toolbar id="cmpToolBarButtons" rendered="#{(ficheVoeuxBB.toSubmit or ficheVoeuxBB.toValidate or ficheVoeuxBB.toEdit) and ficheVoeuxBB.canSaveFiche}">
+			<p:toolbarGroup align="left">
+					<p:commandButton id="btnSubmitFiche" 
+									value="#{chargeMsgs.fiche_veoux_component_bouton_submit_voeu_libelle}"  
+									ajax="true"  
+									action="#{ficheVoeuxBB.submitFicheVoeux()}" 
+									update="@form @this"  
+									process="@this :#{cc.clientId}:cmpTabView:voeuxDataTable"
+									rendered="#{ficheVoeuxBB.toSubmit and cc.attrs.toEdit}"
+									disabled="#{not ficheVoeuxBB.canSubmitFiche}"
+									onstart="PF('ajaxProgress').block()"  
+            						oncomplete="PF('ajaxProgress').unblock()">
+									<p:confirm		header="#{chargeMsgs.fiche_veoux_confirm_title}"	 message="#{chargeMsgs.fiche_veoux_message_submit_fiche_voeux_confirmation}" 	icon="ui-icon-alert" />
+					</p:commandButton>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="left">
+				<p:commandButton id="btnValidateFiche" 
+									value="#{chargeMsgs.fiche_veoux_component_bouton_valider_voeu_libelle}"  
+									ajax="true"  
+									action="#{ficheVoeuxValidate.ficheVoeuxBB.validateFicheVoeux()}" 
+									update="@form"  
+									process="@this :#{cc.clientId}:cmpTabView:voeuxDataTable"
+									rendered="#{ficheVoeuxBB.toValidate and cc.attrs.toEdit and ficheVoeuxBB.toEdit}"
+									onstart="PF('ajaxProgress').block()"  
+            						oncomplete="PF('ajaxProgress').unblock()">
+									<p:confirm		header="#{chargeMsgs.fiche_veoux_confirm_title}"	 message="#{chargeMsgs.fiche_veoux_message_validate_fiche_voeux_confirmation}" 	icon="ui-icon-alert" />
+					</p:commandButton>
+			</p:toolbarGroup>
+			
+</p:toolbar>
+</p:outputPanel>
+
+<p:dialog  widgetVar="dlgAddLigneVoeu"  appendTo="@(body)" modal="true" header="#{chargeMsgs.fiche_voeux_add_edit_ligne_voeu_title}" resizable="false">  	
+	<h:form id="dlgForm" style="font-size:11px;">
+	<p:messages id="messagesDlgAddLigneVoeu" showDetail="true" autoUpdate="true" closable="true"  showSummary="false"/>
+	<p:panelGrid columns="2" style="margin-bottom:10px;width:100%;">
+	
+			<h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_etablissement}"/>
+			<p:selectOneMenu id="listEtablissementsID" 	value="#{ficheVoeuxBB.selectedIdEtablissement}" filter="true" filterMatchMode="startsWith"
+					required="true" requiredMessage="#{chargeMsgs.fiche_veoux_component_message_etablissement_required}">
+					<f:selectItems value="#{ficheVoeuxBB.listEtablissements}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+					<p:ajax listener="#{ficheVoeuxBB.handleEtablissementChange}" 	event="valueChange" process="@this"	update="listOffresFormationID listLigneNiveauxID listLigneMcsID listLigneApsMcID"	
+					onstart="PF('ajaxProgress2').block()"  oncomplete="PF('ajaxProgress2').unblock()"/>
+			</p:selectOneMenu>
+			
+			<h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_offre_formation}"/>
+			<p:selectOneMenu id="listOffresFormationID" 	value="#{ficheVoeuxBB.selectedIdOf}" filter="true" filterMatchMode="startsWith"
+					required="true" requiredMessage="#{chargeMsgs.fiche_veoux_component_message_offre_formation_required}">
+					<f:selectItems value="#{ficheVoeuxBB.listOffresFormation}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+					<p:ajax listener="#{ficheVoeuxBB.handleOffreFormationChange}" 	event="valueChange" process="@this"	update="listLigneNiveauxID listLigneMcsID listLigneApsMcID"	/>
+			</p:selectOneMenu>
+																	
+			<h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_niveau}"/>
+			<p:selectOneMenu id="listLigneNiveauxID" 	value="#{ficheVoeuxBB.selectedNiveauId}"
+												required="true" requiredMessage="#{chargeMsgs.fiche_veoux_component_message_niveau_required}">
+					<f:selectItems value="#{ficheVoeuxBB.listNiveaux}" var="n" 	itemLabel="#{n.label}" itemValue="#{n.value}" />
+					<p:ajax listener="#{ficheVoeuxBB.handleNiveauChange}" 	event="valueChange" process="@this" update="listLigneMcsID listLigneApsMcID"/>
+			</p:selectOneMenu>
+																					
+			<h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_matiere}"/>
+			<p:selectOneMenu id="listLigneMcsID" 	value="#{ficheVoeuxBB.selectedIdRattachementMc}"
+									required="true" requiredMessage="#{chargeMsgs.fiche_veoux_component_message_matiere_required}">
+								<f:selectItems value="#{ficheVoeuxBB.listMatieresOf}" var="m" 	itemLabel="#{m.label}" itemValue="#{m.value}" />
+								<p:ajax listener="#{ficheVoeuxBB.handleMcsListChange}" 	event="valueChange" process="@this"	update="listLigneApsMcID"/>
+			</p:selectOneMenu>
+					
+			<h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_ap}"/>
+			<p:selectOneMenu id="listLigneApsMcID" 	value="#{ficheVoeuxBB.selectedIdAp}"
+			required="true" requiredMessage="#{chargeMsgs.fiche_veoux_component_message_ap_required}">
+							    <f:selectItems value="#{ficheVoeuxBB.listApsMatiere}" var="a" 	itemLabel="#{a.label}" itemValue="#{a.value}" />
+							    <p:ajax event="valueChange" process="@this"/>
+			</p:selectOneMenu>
+	
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:10px;width:100%;">
+	<p:toolbarGroup>
+							<p:commandButton id="btnHideAddLigneVoeuDialogID" value="#{chargeMsgs.fiche_veoux_component_dialog_bouton_fermer_libelle}" 	type="button" onclick="PF('dlgAddLigneVoeu').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+	</p:toolbarGroup>
+	
+		
+	<p:toolbarGroup align="right">
+			<p:commandButton id="btnAddLigneVoeu" 
+							action="#{cc.attrs.managedBean.addLigneVoeu()}"  
+							icon="ui-icon-plusthick"  
+							value = "#{chargeMsgs.fiche_veoux_component_bouton_ajouter_voeu_ligne_dlg_libelle}"
+							process="@this :#{cc.clientId}:dlgForm" 
+							ajax="true" 
+							update=":#{cc.clientId}:cmpTabView:voeuxDataTable @form" 
+							rendered="#{not ficheVoeuxBB.addOrEditDialog}"
+							oncomplete="handleUpdateLigneVoeuRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+			<p:commandButton id="btnUpdateLigneVoeu" 
+							action="#{cc.attrs.managedBean.updateLigneVoeu()}"  
+							value = "#{chargeMsgs.fiche_veoux_component_bouton_update_voeu_ligne_dlg_libelle}"
+							process="@this :#{cc.clientId}:dlgForm" 
+							ajax="true" 
+							update=":#{cc.clientId}:cmpTabView:voeuxDataTable @form" 
+							rendered="#{ficheVoeuxBB.addOrEditDialog}"
+							oncomplete="handleUpdateLigneVoeuRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateLigneVoeuRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddLigneVoeu').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+// 	           			 					PF('dlgAddLigneVoeu').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+	
+<pe:blockUI target=":#{cc.clientId}:cmpTabView" widgetVar="ajaxProgress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+<pe:blockUI target=":#{cc.clientId}:dlgForm" widgetVar="ajaxProgress2">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</composite:implementation>
+</html>

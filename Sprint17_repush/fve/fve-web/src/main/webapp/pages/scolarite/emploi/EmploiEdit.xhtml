@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{emploiMsgs.emploi_pnl_gestion_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	
+		<p:outputPanel id="pnl_emploi_Edit" style="width:1100px">
+			 <ui:include src="/pages/scolarite/emploi/EmploiSearch.xhtml" /> 
+			 <br></br>
+			<p:outputPanel id="pnl_emploi_detail_Edit">
+			<ui:include src="/pages/scolarite/emploi/EmploiInfoEdit.xhtml" />
+			<ui:include src="/pages/scolarite/emploi/EmploiInfoDetail.xhtml" />
+			<br></br>	
+			<ui:include src="/pages/scolarite/emploi/EmploiSeanceEdit.xhtml" />	
+			</p:outputPanel>	
+			<!--     growl and blockUI               -->
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<pe:blockUI target="pnl_emploi_Edit"
+				widgetVar="emploiFormBlock">
+				<h:panelGrid columns="2">
+					<h:graphicImage value="/resources/images/ajax-loader1.gif"
+						style="margin-right: 12px; vertical-align: middle;" />
+					<h:outputText value="#{commonmsgs.msg_wait}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

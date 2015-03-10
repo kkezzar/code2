@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_equipement}" style="border:0;">
+
+
+			<p:tabView effect="#{tabBean.effect}" effectDuration="normal"
+				id="equipementTabViewID">
+				<p:tab id="infos" title="#{commonmsgs.common_infos}">
+					<ui:include src="/pages/equipement/infoEquipementDetails.xhtml" />
+				</p:tab>
+				<c:forEach var="tabItem" items="#{equipementDroitBean.listActions}"
+					varStatus="status">
+					<p:tab title="#{tabItem.nomFonction}"
+						disabled="#{equipementBckBean.refEquipementDto.id==null or(!equipementBckBean.refEquipementDto.reservable and tabItem.nomFonction eq 'Réservation')}">
+						<ui:include src="#{tabItem.urlFonction}">
+							<c:set var="entity" value="equipement" scope="request" />
+							<c:set var="id" value="#{id}" scope="request" />
+							<ui:param name="createAllow" value="false" />
+							<ui:param name="editAllow" value="false" />
+							<ui:param name="deleteAllow" value="false" />
+							<ui:param name="entity" value="equipement" />
+							<ui:param name="id"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</ui:include>
+					</p:tab>
+
+				</c:forEach>
+
+				<p:tab title="#{commonmsgs.common_documents}"
+					disabled="#{equipementMgrBean.refEquipementDto.id==null or(!equipementMgrBean.refEquipementDto.reservable and tabItem.nomFonction eq 'Réservation')}">
+
+					<ui:include src="/pages/equipement/equipementDocument.xhtml">
+
+						<c:set var="entity" value="equipement" scope="request" />
+						<c:set var="identifiant" value="#{equipementBckBean.refEquipementDto.identifiant}" scope="request" />
+						<ui:param name="createAllow" value="false" />
+						<ui:param name="editAllow" value="false" />
+						<ui:param name="deleteAllow" value="false" />
+						<ui:param name="entity" value="equipement" />
+						<ui:param name="identifiant" value="#{equipementBckBean.refEquipementDto.identifiant}" />
+
+					</ui:include>
+				</p:tab>
+
+
+			</p:tabView>
+			<br></br>
+			<h:form id="equipementDetailsForm" prependId="false">
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-disk" process="@this"
+					action="#{equipementBckBean.back}">
+
+					<f:param name="searchValue"
+						value="#{equipementBckBean.searchValue}" />
+				</p:commandButton>
+
+			</h:form>
+
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_habilitation_domaine_objet}" style="border:0;">
+		<ui:include src="/pages/domaine/domaineInfo.xhtml">
+        </ui:include> 
+	 <h:form id="domaineFromId">
+      
+               <br/><br/>
+            
+            <br/>
+             
+             <p:dataTable resizableColumns="true" id="contratData"
+					value="#{domaineBckBean.listSubDomaineDto}" var="sousDomaine"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue" value="#{domaineBckBean.searchValue}"/>
+					<f:param name="idfd" value="#{domaineBckBean.idfd}"/>
+					
+                    <p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@all" process="@form" />
+					 <f:facet name="header">  
+                         <h:outputText value="#{habilitationmsgs.domaine_sub_domaine_liste}" />
+                       </f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.domaine_identifiant_table_label}" />
+						</f:facet>
+						<h:outputText value="#{sousDomaine.identifiant}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.domaine_name_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{sousDomaine.nom}" ></h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.domaine_name_arabe_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{sousDomaine.nomArabe}" ></h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.domaine_rang_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{sousDomaine.rang}" />
+					</p:column>
+					
+				</p:dataTable>
+				<br></br>            
+                 <p:column>
+			   <p:commandButton value="#{commonmsgs.button_return}"
+				     icon="ui-icon-arrowreturnthick-1-w"  process="@this" 
+                     action="#{domaineBckBean.back}" ajax="false">
+                <f:param name="searchValue" value="#{domaineBckBean.searchValue}"/>  
+                </p:commandButton> 
+            </p:column>  
+		 </h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

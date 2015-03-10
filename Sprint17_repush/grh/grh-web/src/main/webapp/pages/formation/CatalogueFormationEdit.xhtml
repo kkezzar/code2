@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{formationMgs.pnl_gerer_catalogue_formation} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_catalogue_search">
+
+
+		<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						
+<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+							process="@this" action="#{catalogueFormationMBean.onNew}"
+							styleClass="ui-buttpn-bleu" update=":pnl_detail">
+
+						</p:commandButton>
+						
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+						<p:spacer width="10px"></p:spacer>
+						<p:inputText id="keyWordsID"
+							value="#{catalogueFormationMBean.searchKeyWords}"
+							placeholder="#{commonmsgs.search_watermark_text_key_words}"
+							label="#{commonmsgs.search_label_mots_cles}" />
+
+						<p:separator />
+
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_catalogue_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{catalogueFormationMBean.onSearch}"></p:commandButton>
+						
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+
+		</h:form>
+			
+			<p:dataTable var="catalogue" value="#{catalogueFormationMBean.listeCatalogueFormation}" id="cataloguesTable"
+						widgetVar="cataloguesTable" rowKey="#{catalogue.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.catalogue_datable_no_result}">
+                      <p:ajax event="rowSelect" immediate="true"
+						listener="#{catalogueFormationMBean.onCatalogueSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":pnl_detail" />
+
+						<f:facet name="header">
+							
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+                         <p:column headerText="#{formationMgs.objet}" >
+							<h:outputText value="#{catalogue.objet}"  styleClass="value">
+						
+						</h:outputText>
+						</p:column>
+					  <p:column headerText="#{formationMgs.date_creation}" >
+							<h:outputText value="#{catalogue.dateCreation}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+						
+						
+						
+					</p:dataTable>
+			<br></br>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty catalogueFormationMBean.catalogueFormationDto}">
+					<h:form id="form_catalogue_gerer">
+						<p:panelGrid cellspacing="0" id="reponse_rdv_Pnl"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:row>
+								<p:column colspan="2" styleClass="title">
+									<h:outputText
+										value="#{formationMgs.pnl_gerer_catalogue_formation}" />
+								</p:column>
+
+							</p:row>
+							<p:row >
+								<p:column style="width:25%">
+									<h:outputLabel value="#{formationMgs.date_creation} "
+										styleClass="required" />
+								</p:column>
+								<p:column style="width:25%">
+									<p:calendar id="dateCreation" navigator="true" required="true"
+										requiredMessage="#{formationMgs.date_creation_required}"
+										value="#{catalogueFormationMBean.catalogueFormationDto.dateCreation}">
+									</p:calendar>
+								</p:column>
+								
+							</p:row>
+							<p:row>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{formationMgs.objet} "  styleClass="required"/>
+								</p:column>
+
+								<p:column style="width:25%">
+									<p:inputTextarea id="objet" styleClass="input-xlarge-px" required="true" requiredMessage="#{formationMgs.objet_required}"
+										value="#{catalogueFormationMBean.catalogueFormationDto.objet}">
+									</p:inputTextarea>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{formationMgs.statut} "
+										styleClass="required" />
+								</p:column>
+								<p:column style="width:25%">
+									<p:selectOneMenu required="true" requiredMessage="#{formationMgs.statut_required}"
+								value="#{catalogueFormationMBean.catalogueFormationDto.statut}"
+								label="#{formationMgs.statut}">
+								<f:selectItem
+									itemLabel="#{formationMgs.statut_select}"
+									itemValue="" />
+								<f:selectItem
+									itemLabel="#{formationMgs.actif}"
+									itemValue="true" />
+                                    <f:selectItem
+									itemLabel="#{formationMgs.inactif}"
+									itemValue="false" />
+							</p:selectOneMenu>
+								</p:column>
+								
+								</p:row>
+							</p:panelGrid>
+							<br></br>	
+							<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{formationMgs.formations_catalogue_title}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="formation" value="#{catalogueFormationMBean.listFormations}" id="formationsTable"
+						widgetVar="formationsTable" rowKey="#{formation.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{formationMgs.formation_datable_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddFormation" styleClass="ui-button-bleu" title="ajouter formation" icon="ui-icon-plusthick"  
+										ajax="true"
+										immediate="true" 
+										action="#{catalogueFormationMBean.onAddFormation()}"
+										oncomplete="PF('formationCatalogueDialog').show()">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{formationMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" styleClass="value" />
+						</p:column>
+
+						<p:column
+							headerText="#{formationMgs.code}">
+							<h:outputText value="#{formation.code}" styleClass="value" />
+						</p:column>
+						<p:column
+							headerText="#{formationMgs.intitule}">
+							<h:outputText value="#{formation.intitule}" styleClass="value" />
+						</p:column>
+						
+						<p:column
+							headerText="#{formationMgs.duree}">
+							<h:outputText value="#{formation.duree}" styleClass="value" />
+						</p:column>
+						
+						<p:column
+							headerText="#{formationMgs.maximum}">
+							<h:outputText value="#{formation.maximunParticipant}" styleClass="value" />
+						</p:column>
+						
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveFormation"  
+									action="#{catalogueFormationMBean.removeFormation}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="formationsTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{catalogueFormationMBean.selectedFormationIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+		<br></br>	
+						
+								<p:toolbar id="CatalogueToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save"
+						id="savesBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{catalogueFormationMBean.onSave}">
+
+						
+					</p:commandButton>
+					
+					
+					
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{catalogueFormationMBean.initDetail}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+							</h:form>
+					
+					<p:dialog position="center" appendTo="@(body)" header="Gérer les formations du catalogue" width="850px" style="font-size:11px"
+						id="formationCatalogueDialog" widgetVar="formationCatalogueDialog"
+						modal="true" resizable="false">
+						<h:form id="form_formation_gerer">
+						<p:panelGrid cellspacing="0" id="reponse_rdv_Pnl"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.code} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:inputText value="#{catalogueFormationMBean.formationCatalogueDto.code}" required="true"  requiredMessage="#{formationMgs.code_required}"></p:inputText>
+								</p:column>
+								
+							</p:row>
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.intitule} " styleClass="required"  />
+								</p:column>
+
+								<p:column >
+									<p:inputText value="#{catalogueFormationMBean.formationCatalogueDto.intitule}" required="true"  requiredMessage="#{formationMgs.intitule_required}" styleClass="input-xlarge-px"></p:inputText>
+								</p:column>
+							</p:row>
+							
+								<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.objectifs} "  styleClass="required" />
+								</p:column>
+
+								<p:column >
+									<p:inputTextarea id="objectifs" styleClass="input-xlarge-px"
+										value="#{catalogueFormationMBean.formationCatalogueDto.objectif}">
+									</p:inputTextarea>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.theme} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:selectOneMenu required="true" requiredMessage="#{formationMgs.theme_required}" styleClass="input-large"
+								value="#{catalogueFormationMBean.formationCatalogueDto.nomenclatureByThemeDto.id}"
+								label="#{formationMgs.theme}">
+								<f:selectItem
+									itemLabel="#{formationMgs.theme_select}"
+									itemValue="" />
+								<f:selectItems value="#{catalogueFormationMBean.listeNcTheme}" />
+							</p:selectOneMenu>
+								</p:column>
+								
+								</p:row>
+								<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.methode} "
+										styleClass="required" />
+								</p:column>
+								<p:column >
+									<p:selectOneMenu required="true" requiredMessage="#{formationMgs.methode_required}" styleClass="input-large"
+								value="#{catalogueFormationMBean.formationCatalogueDto.nomenclatureByMethodeDto.id}"
+								label="#{formationMgs.methode}">
+								<f:selectItem
+									itemLabel="#{formationMgs.methode_select}"
+									itemValue="" />
+								<f:selectItems value="#{catalogueFormationMBean.listeNcMethode}" />
+							</p:selectOneMenu>
+								</p:column>
+								
+								</p:row>
+								<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.duree} "  styleClass="required" />
+								</p:column>
+                            
+								<p:column >
+									 <p:inputText value="#{catalogueFormationMBean.formationCatalogueDto.duree}" required="true"  requiredMessage="#{formationMgs.duree_required}"></p:inputText>J ours
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column >
+									<h:outputLabel value="#{formationMgs.maximum} " styleClass="required"  />
+								</p:column>
+
+								<p:column >
+									<p:inputText value="#{catalogueFormationMBean.formationCatalogueDto.maximunParticipant}" required="true"  requiredMessage="#{formationMgs.maximum_required}"></p:inputText>
+								</p:column>
+							</p:row>
+							
+						
+							</p:panelGrid>
+							
+							<p:toolbar id="FormationToolBar" styleClass="toolBarMesrs">
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												styleClass="ui-button-save"  process="@this :form_formation_gerer"
+												id="saveFormationBtn" icon="ui-icon-disk"
+												update=":form_catalogue_gerer:formationsTable"
+												action="#{catalogueFormationMBean.onSaveFormation()}" onstart="PF('page').block()" onsuccess="PF('page').unblock()" oncomplete="if (!args.validationFailed) {formationCatalogueDialog.hide()}">
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+
+
+										<p:toolbarGroup align="right">
+
+										</p:toolbarGroup>
+									</p:toolbar>
+							
+							</h:form>
+						
+						
+					</p:dialog>
+					</p:outputPanel>
+					</p:outputPanel>
+			
+		</p:outputPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

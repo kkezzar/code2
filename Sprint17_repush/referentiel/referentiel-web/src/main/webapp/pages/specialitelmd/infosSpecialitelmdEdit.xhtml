@@ -1,0 +1,158 @@
+<ui:composition 
+xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+	<h:form prependId="false">
+	
+	
+	<p:fieldset legend="Spécialité informations">
+		<p:panelGrid id="idendite" styleClass="noBorder1">
+
+			
+			
+			<p:row>
+			<p:column>
+				<h:outputText value="#{specialitelmdmsgs.specialitelmd_domaine} *" />
+				</p:column>
+				<p:column>
+				<p:selectOneMenu id="selectDomaine" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.idDomaine}" filter="true"
+								filterMatchMode="startsWith" label="#{specialitelmdmsgs.specialitelmd_domaine}" required="true"
+							    requiredMessage="#{specialitelmdmsgs.specialitelmd_domaine_required}" style="text-align: left;width:308px"    >
+								<f:selectItem itemLabel="#{parametragemsgs.parametrage_select_domaine}" itemValue="" />
+								<f:selectItems value="#{comboBckBean.listRefDomaineLMDDto}" />
+								
+								<f:param name="idDomaine" value="#{specialitelmdMgrBean.idDomain}" />
+								<f:param name="idFiliere" value="#{specialitelmdMgrBean.idFiliere}" />
+								<f:param name="searchValue" value="#{specialitelmdMgrBean.searchValue}" />
+								
+								<p:ajax listener="#{specialitelmdMgrBean.domainChanged}" event="valueChange" update="selectFiliere"  />
+								
+	
+				</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_filiere} *" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="selectFiliere" 	value="#{specialitelmdMgrBean.refSpecialiteLmdDto.idFiliere}"
+							filter="true" filterMatchMode="startsWith" label="#{specialitelmdmsgs.specialitelmd_filiere}" required="true"
+							requiredMessage="#{specialitelmdmsgs.specialitelmd_filiere_required}" style="text-align: left;width:308px">
+							<f:selectItem itemLabel="#{specialitelmdmsgs.selection_filiere}" itemValue="" />
+					<f:selectItems value="#{specialitelmdMgrBean.listFilieresdomaine}" /> <p:ajax event="valueChange"  />
+						</p:selectOneMenu>
+				</p:column>
+
+								</p:row>
+
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_identite} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="identifiant" style="text-align: left; width:300px"
+
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.identifiant}"
+						label="#{specialitelmdmsgs.specialitelmd_identite}"
+						disabled="#{specialitelmdMgrBean.updateMode}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_identite_required}">
+					</p:inputText>
+					
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcr" style="text-align: left; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.lcSpecialite}"
+						label="#{specialitelmdmsgs.specialitelmd_crlibelle}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_crlibelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_arabe_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcrArabe"
+						style="text-align: right; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.lcSpecialiteArabe}"
+						label="#{specialitelmdmsgs.specialitelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="lbelle" style="text-align: left; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.llSpecialite}"
+						label="#{specialitelmdmsgs.specialitelmd_crlibelle}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_libelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_libelle_arabe} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libelleArabe"
+						style="text-align: right; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.llSpecialiteArabe}"
+						label="#{specialitelmdmsgs.specialitelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+		
+			<p:row>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_description} *" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="description"
+						style="text-align: left; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.descriptionSpecialite}"
+						label="#{specialitelmdmsgs.specialitelmd_description}" required="true"
+						requiredMessage="#{specialitelmdmsgs.specialitelmd_description_required}">
+					</p:inputTextarea>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{specialitelmdmsgs.specialitelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="descriptionArabe"
+						style="text-align: right; width:300px"
+						value="#{specialitelmdMgrBean.refSpecialiteLmdDto.descriptionSpecialiteArabe}"
+						label="#{specialitelmdmsgs.specialitelmd_description_ar}">
+					</p:inputTextarea>
+				</p:column>
+			</p:row>
+	</p:panelGrid>
+	</p:fieldset>	
+		<br></br>
+
+					<p:commandButton value="#{commonmsgs.button_save}" icon="ui-icon-disk" action="#{specialitelmdMgrBean.saveSpecialite}" />
+	                 <p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-arrowthick-1-w" action="#{specialitelmdMgrBean.cancel}" immediate="true">
+								<f:param name="dossierEtudiantId" value="#{specialitelmdMgrBean.refSpecialiteLmdDto.id}" />
+			        </p:commandButton>
+
+	</h:form>
+
+
+</ui:composition>

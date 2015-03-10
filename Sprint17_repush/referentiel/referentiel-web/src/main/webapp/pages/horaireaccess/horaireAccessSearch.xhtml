@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_horaireAccess}" style="border:0;">
+			<h:form id="searchForm" 
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+					
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{horaireDroitBean.createAllow}"
+							icon="ui-icon-document" action="#{horaireMgrBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="horaireAccessData"
+								fileName="listeDeshoraireAccesss" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{horaireMgrBean.searchInput}"
+							id="searchInput" style="width:200px"
+							rendered="#{horaireDroitBean.readAllow}" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton onstart="PF('blockUIWidget').block()" id="searchButton"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							rendered="#{horaireDroitBean.readAllow}"
+							actionListener="#{horaireMgrBean.findGeneric}" />
+						<p:separator />
+
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="horaireAccessData"
+					rendered="#{horaireBckBean.listRefHoraireAccessDto!=null}"
+					value="#{horaireMgrBean.horaireBckBean.listRefHoraireAccessDto}"
+					var="current" paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{horaireaccesmsgs.horaireacces_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{horaireaccesmsgs.horaireacces_identifiant}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+
+					<p:column sortBy="#{current.nom}">
+						<f:facet name="header">
+							<h:outputText value="#{horaireaccesmsgs.horaireacces_nom}" />
+						</f:facet>
+						<h:outputText value="#{current.nom}" />
+					</p:column>
+
+					<p:column sortBy="#{current.heureDebut}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{horaireaccesmsgs.horaireacces_heure_debut}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.heureDebut}"
+							style="text-align: right">
+							<f:convertDateTime pattern="HH:mm" timeOnly="true" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.heureFin}">
+						<f:facet name="header">
+							<h:outputText value="#{horaireaccesmsgs.horaireacces_heure_fin}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.heureFin}"
+							style="text-align:  right">
+							<f:convertDateTime pattern="HH:mm" timeOnly="true" />
+						</h:outputText>
+					</p:column>
+
+
+
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{horaireMgrBean.toDetails}" icon="ui-icon-document"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{horaireDroitBean.readAllow}"
+							title="#{commonmsgs.button_consulter}">
+							<f:setPropertyActionListener value="#{current}"
+								target="#{horaireBckBean.refHoraireAccessDto}" />
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{horaireMgrBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{horaireDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+
+							<f:setPropertyActionListener value="#{current}"
+								target="#{horaireBckBean.refHoraireAccessDto}" />
+						</p:commandButton>
+
+						<p:commandButton id="removeButton"
+							actionListener="#{horaireMgrBean.toRemove(current)}"
+							process="@form" update="@form" icon="ui-icon-trash"
+							title="#{commonmsgs.button_delete}"
+							rendered="#{horaireDroitBean.deleteAllow}">
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="searchValue" value="#{horaireBckBean.searchValue}" />
+							<f:setPropertyActionListener value="#{current}"
+								target="#{horaireBckBean.refHoraireAccessDto}" />
+						</p:commandButton>
+
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

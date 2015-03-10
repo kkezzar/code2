@@ -1,0 +1,66 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- <ui:include src="/pages/administrative/dossierEmploye/DossierEmployeIndividuEdit.xhtml" />  -->
+	<!-- 		<p:spacer height="10px"></p:spacer> -->
+	<h:form id="form_dossier_employe_edit">
+
+
+		<p:panelGrid columns="1" cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:panelGrid id="descriptionDossier"
+				styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+				<p:row>
+					<p:column colspan="4" styleClass="title">
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_dosier_employe}" />
+					</p:column>
+					
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_matricule_employe}" />
+					</p:column>
+					<p:column >
+					<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.matricule}"    styleClass="value">					
+						</h:outputText>
+						
+					</p:column>
+                       <p:column>
+						<h:outputText
+							value="#{dossierEmployemsgs.dossier_employe_date_creation}" />
+					</p:column>
+					<p:column >
+						<h:outputText value="#{dossierEmployeBean.dossierEmployeDto.dateCreation}"    styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+				</p:row>
+
+				
+
+			</p:panelGrid>
+			<ui:include src="/pages/administrative/dossierEmploye/DossierEmployeIndividuDetail.xhtml" />
+			
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{misePlaceBudgetFonctionnementMsgs.page_title_consulter_repartitions_budget}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<!--  fields/buttons -->
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+					value="#{reparatitionsBudgetBean.model}" paginator="true"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" 
+					rowKey="#{current.id}" selectionMode="single"
+					rows="#{uiConfig['primefaces.dataTable.rows']}"
+					paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+					currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+					paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+					rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{reparatitionsBudgetBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_view" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="Projet budget">
+						<h:outputText
+							value="#{current.decisionBudget.projetBudget.description}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date visa CF">
+						<h:outputText value="#{current.dateVisaCf}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date sign. Ordonnateur">
+						<h:outputText value="#{current.dateSignatureOrdonnateur}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Date sign. Wali">
+						<h:outputText value="#{current.dateSignatureWali}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant total recettes">
+						<h:outputText value="#{current.montantTotalRecettes}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant total dépenses">
+						<h:outputText value="#{current.montantTotalDepenses}"
+							styleClass="pull-right">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Situation">
+						<h:outputText value="#{current.situation.libelleSituation}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_view">
+
+				<p:tabView id="tabview" rendered="#{reparatitionsBudgetBean.view}">
+
+					<p:tab title="Détail répartition">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+
+								<p:column style="width:25%">
+									<h:outputText value="Exercice budgétaire" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.projetBudget.exerciceBudgetaire.intituleFr}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Projet de budget" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.projetBudget.description}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Etablissement" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.etablissement.llEtablissementLatin}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText value="Réference décision" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.reference}"></h:outputText>
+								</p:column>
+								<p:column>
+									<h:outputText value="Date décision" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.intituleFr}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{parametrageBudgetMsg.intitule_ar}" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.intituleAr}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Montant" />
+								</p:column>
+								<p:column colspan="3">
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.decisionBudget.montant}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText value="Montant total recettes" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.montantTotalRecettes}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText value="Montant total dépenses" />
+								</p:column>
+								<p:column>
+									<h:outputText styleClass="value"
+										value="#{reparatitionsBudgetBean.repartitionBudgetDto.montantTotalDepenses}">
+										<f:convertNumber type="currency" currencySymbol="" />
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<!-- Actions -->
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="4">
+										<p:commandButton value="#{commonmsgs.bouton_retour}"
+											id="cancelBtn" update=":form_view" process="@this" immediate="true"
+											actionListener="#{reparatitionsBudgetBean.cancelAction()}">
+										</p:commandButton>
+
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+
+					</p:tab>
+
+					<p:tab title="Budget des recettes">
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							value="#{reparatitionsBudgetBean.listDetailsReparatitionBudgetDto.get('true')}"
+							paginator="true" 
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Section">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Chapitre">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="3" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{reparatitionsBudgetBean.getTotalMontant(true)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Budget des dépenses">
+						<p:dataTable var="current" lazy="true" rowIndexVar="rowIndex"
+							value="#{reparatitionsBudgetBean.listDetailsReparatitionBudgetDto.get('false')}"
+							paginator="true" 
+							emptyMessage="#{commonmsgs.data_table_empty_Message}"
+							rowKey="#{current.id}"
+							rows="#{uiConfig['primefaces.dataTable.rows.medium']}"
+							paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+							currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+							paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+							rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+							<p:column headerText="#{commonmsgs.column_numero_ligne}"
+								style="width:40px">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="Section">
+								<h:outputText
+									value="#{current.chapitre.idSection.code} : #{current.chapitre.idSection.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Chapitre">
+								<h:outputText
+									value="#{current.chapitre.code} : #{current.chapitre.intituleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Montant">
+								<h:outputText value="#{current.montant}" styleClass="pull-right">
+									<f:convertNumber type="currency" currencySymbol="" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="3" style="text-align:right"
+										footerText="Total" />
+
+									<p:column style="text-align:right">
+										<f:facet name="footer">
+											<h:outputText
+												value="#{reparatitionsBudgetBean.getTotalMontant(false)}"
+												styleClass="value">
+												<f:convertNumber type="currency" currencySymbol="" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="Mouvements">
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="RepartitionBudget" scope="request" />
+							<c:set var="identifiant"
+								value="#{reparatitionsBudgetBean.repartitionBudgetDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="FicheBesoins" />
+							<ui:param name="identifiant"
+								value="#{reparatitionsBudgetBean.repartitionBudgetDto.id.toString()}" />
+							<ui:param name="editionMode" value="false" />
+						</ui:include>
+					</p:tab>
+				</p:tabView>
+
+			</p:outputPanel>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

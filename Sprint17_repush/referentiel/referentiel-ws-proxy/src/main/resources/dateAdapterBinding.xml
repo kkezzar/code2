@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings version="2.1" xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc">
+
+	<jxb:globalBindings>
+		<!-- use Calendar instead of XMLGregorianCalendar -->
+		<jxb:javaType name="java.util.Date" xmlType="xs:dateTime"
+			parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseDateTime"
+			printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printDateTime" />
+
+		<jxb:javaType name="java.util.Date" xmlType="xs:date"
+			parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseDate" printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printDate" />
+
+		<jxb:javaType name="java.util.Date" xmlType="xs:time"
+			parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseTime" printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printTime" />
+
+	</jxb:globalBindings>
+</jxb:bindings>

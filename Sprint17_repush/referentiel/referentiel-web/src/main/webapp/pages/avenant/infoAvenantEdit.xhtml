@@ -1,0 +1,280 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panel style="height:600px" id="infosAvenantPanel">
+		<h:form>
+			<h:outputText value="#{avenantmsgs.avenant_description}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="noBorder1">
+				<p:row>
+
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_identite} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="identifiant" style="text-align: left"
+							value="#{avenantBean.refContratDto.identifiant}"
+							label="#{avenantmsgs.avenant_identite}"
+							 required="true"
+							requiredMessage="#{avenantmsgs.avenant_identite_required}">
+
+						</p:inputText>
+					</p:column>
+
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_objet_lt} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objetContratFr"
+							style="text-align: left; width:400px"
+							value="#{avenantBean.refContratDto.objetContratFr}"
+							label="#{avenantmsgs.avenant_objet_lt}" required="true"
+							requiredMessage="#{avenantmsgs.avenant_objet_lt_required}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_objet_ar} *" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objetContratAr"
+							style="text-align: right; width:400px"
+							value="#{avenantBean.refContratDto.objetContratAr}"
+							label="#{avenantmsgs.avenant_objet_ar}" required="true"
+							requiredMessage="#{avenantmsgs.avenant_objet_ar_required}">
+
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_contrat} *" />
+					</p:column>
+
+					<p:column>
+						<p:selectOneMenu id="identifiantcontrat"
+							value="#{avenantBean.refContratDto.idContrat}"
+							label="#{avenantmsgs.avenant_contrat}" required="true"
+							filter="true" filterMatchMode="startsWith"
+							requiredMessage="#{avenantmsgs.avenant_contrat_required}">
+							<f:selectItem itemLabel="#{avenantmsgs.avenant_select_contrat}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefContratDto}" />
+							<p:ajax listener="#{avenantBean.onChangeContrat()}"
+								update="objetcontrat" />
+						</p:selectOneMenu>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_objet_contrat}  " />
+					</p:column>
+					<p:column>
+						<p:inputText id="objetcontrat"
+							style="text-align: left; width:350px"
+							value="#{avenantBean.refContratDto.objetContratAvenantFr}"
+							disabled="true" label="#{avenantmsgs.avenant_objet_contrat}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_type_avenant} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="typeAvenant"
+							value="#{avenantBean.refContratDto.typeAvenantId}"
+							label="#{avenantmsgs.avenant_type_avenant}" required="true"
+							requiredMessage="#{avenantmsgs.avenant_type_avenant_required}">
+							<f:selectItem
+								itemLabel="#{avenantmsgs.avenant_select_type_avenant}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeAvenant}" />
+
+						</p:selectOneMenu>
+
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{avenantmsgs.avenant_reference_documentaire}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="referenceDocum" style="text-align: left"
+							value="#{avenantBean.refContratDto.referenceDocumentaire}"
+							label="#{avenantmsgs.avenant_reference_documentaire}">
+
+						</p:inputText>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+
+			<br></br>
+			<h:outputText value="#{avenantmsgs.avenant_dates}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="dates" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_debut_avenant} * " />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{avenantBean.refContratDto.dateDebutValidite}" id="debut"
+							showButtonPanel="true"
+							label="#{avenantmsgs.avenant_debut_avenant} *" required="true"
+							requiredMessage="#{avenantmsgs.avenant_debut_required}" />
+
+					</p:column>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_fin_avenant} *" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{avenantBean.refContratDto.dateFinValidite}" id="fin"
+							showButtonPanel="true"
+							label="#{avenantmsgs.avenant_fin_avenant} *" required="true"
+							requiredMessage="#{avenantmsgs.avenant_fin_required}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_duree_avenant}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="duree" style="text-align: left"
+							value="#{avenantBean.refContratDto.duree}"
+							label="#{avenantmsgs.avenant_duree_avenant}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+
+
+
+
+
+			</p:panelGrid>
+			<br></br>
+			<h:outputText
+				value="#{avenantmsgs.avenant_donnee_financiere_avenant}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="donneFinanc" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_unite_monetaire}" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="uniteMonetaire"
+							value="#{avenantBean.refContratDto.uniteMonitaireId}"
+							label="#{contratmsgs.contrat_unite_monetaire}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_select_unite_monetaire}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeUniteMonetaire}" />
+							<p:ajax listener="#{avenantBean.onChangeUnite}"
+								update="unite1,unite2,unite3" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_montant_ht_avenant}" />
+					</p:column>
+					<p:column>
+
+						<p:inputText id="montantht" style="text-align: right"
+							value="#{avenantBean.refContratDto.montantHt}"
+							label="#{avenantmsgs.avenant_montant_ht_avenant}">
+
+						</p:inputText>
+						<h:outputText id="unite1" style="font-size:9px;font-weight:bold;"
+							value="#{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" />
+
+					</p:column>
+				</p:row>
+				<p:row>
+
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_montant_tva_avenant}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="montantva" style="text-align: right"
+							value="#{avenantBean.refContratDto.montantTva}"
+							label="#{avenantmsgs.avenant_montant_tva_avenant}">
+
+						</p:inputText>
+						<h:outputText id="unite2" style="font-size:9px;font-weight:bold;"
+							value="#{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_montant_ttc_avenant}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="montanttc" style="text-align: right"
+							value="#{avenantBean.refContratDto.montantTtc}"
+							label="#{avenantmsgs.avenant_montant_ttc_avenant}">
+
+						</p:inputText>
+						<h:outputText id="unite3" style="font-size:9px;font-weight:bold;"
+							value="#{avenantBean.refContratDto.uniteMonitaireLibelleLongFr}" />
+					</p:column>
+				</p:row>
+
+			</p:panelGrid>
+
+
+
+
+			<br></br>
+			<h:outputText value="#{avenantmsgs.avenant_autre_informations}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="autreInfo" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_descipline}" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="descipline"
+							value="#{avenantBean.refContratDto.disciplineId}"
+							label="#{avenantmsgs.avenant_descipline}">
+							<f:selectItem
+								itemLabel="#{avenantmsgs.avenant_select_descipline}"
+								itemValue="#{null}" />
+							<f:selectItems value="#{comboBckBean.listeDescipline}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{avenantmsgs.avenant_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputTextarea id="observation"
+							style="text-align: left; width:350px"
+							value="#{avenantBean.refContratDto.observation}"
+							label="#{avenantmsgs.avenant_observation}">
+
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:commandButton value="#{commonmsgs.button_save}"
+				icon="ui-icon-disk" action="#{avenantBean.saveAvenant(true)}" />
+
+		</h:form>
+	</p:panel>
+
+</ui:composition>

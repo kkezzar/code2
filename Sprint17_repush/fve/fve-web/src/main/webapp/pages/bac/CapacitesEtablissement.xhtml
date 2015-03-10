@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{referentielOrientationMsgs.REF_ORIENTATION_CONSULTER_CAP_ACCUEIL}
+	</ui:define>
+	
+	<!-- contenu de la page -->
+	
+	<ui:define name="centerContent">
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+				<h:form id="form_search">
+
+					<!-- toolbar -->
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+
+							<p:selectOneMenu id="selectAnnee" 
+								value="#{capaciteEtablissementMBean.idAnneeAcademique}"
+								label="#{printMsgs.print_anne_univeristaire}">
+								<f:selectItem
+									itemLabel="#{printMsgs.print_select_annee_academique}"
+									itemValue="" />
+
+								<f:selectItems
+									value="#{capaciteEtablissementMBean.listAnneeAcademique}" />
+
+								<p:ajax
+									listener="#{capaciteEtablissementMBean.handleAnneeAcademiqueChange}"
+									event="valueChange" update=":form_view,form_search" />
+							</p:selectOneMenu>
+
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="20px"></p:spacer>
+
+					<p:dataTable id="dtTbl_accessWilaya" styleClass="diaStyle"
+						value="#{capaciteEtablissementMBean.capaciteEtabList}"
+						var="currentCapaciteEtab" rowKey="#{currentCapaciteEtab.id}"
+						resizableColumns="true" selectionMode="single" paginator="true"
+						rows="5" paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+						<p:ajax event="page" update="dtTbl_accessWilaya"
+							onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()"></p:ajax>
+
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{capaciteEtablissementMBean.onRowSelect}"
+							process="@this" onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()" update=":form_view" />
+
+						<f:facet name="header">
+							<h:outputText
+								value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_CAP_ACCUEIL}" />
+						</f:facet>
+
+						<p:column style="width:100px"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ANNEE_ACADEMIQUE}">
+							<h:outputText
+								value="#{currentCapaciteEtab.anneeAcademiquelibelle}" />
+						</p:column>
+
+						<p:column style="width:30%"
+							sortBy="#{currentCapaciteEtab.refCodeDomaine}"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}">
+							<h:outputText value="#{currentCapaciteEtab.domaineLibelleLt}" />
+						</p:column>
+
+						<p:column style="width:30%"
+							sortBy="#{currentCapaciteEtab.refCodeFiliere}"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}">
+							<h:outputText value="#{currentCapaciteEtab.filiereLibelleLt}" />
+						</p:column>
+
+						<!-- Capacite d'accueil -->
+
+						<p:column style="width:10%"
+							sortBy="#{currentCapaciteEtab.capaciteAccueil}"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_CAP_INSCRIPTION}">
+							<h:outputText value="#{currentCapaciteEtab.capaciteAccueil}" />
+						</p:column>
+
+						<!-- Capacite de transfert -->
+						<p:column style="width:10%"
+							sortBy="#{currentCapaciteEtab.capaciteTransfert}"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_CAP_TRANSFERT}">
+							<h:outputText value="#{currentCapaciteEtab.capaciteTransfert}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</h:form>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<!-- view form -->
+				<h:form id="form_view">
+					<p:panelGrid styleClass="ui-panelgrid-full-width ui-panelgrid-form-no-border ui-panelgrid-detail" 
+						rendered="#{capaciteEtablissementMBean.view}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">#{referentielOrientationMsgs.REF_ORIENTATION_DETAIL_CAP_ACCUEIL}</p:column>
+							</p:row>
+						</f:facet>
+
+						<!-- Annee acaemdique -->
+						<p:row>
+							<p:column style="width:20%">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ANNEE_ACADEMIQUE}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.anneeAcademiquelibelle}" />
+							</p:column>
+						</p:row>
+
+
+						<!-- domaine -->
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.domaineLibelleLt}" />
+							</p:column>
+						</p:row>
+
+						<!-- filiere -->
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.filiereLibelleLt}" />
+							</p:column>
+						</p:row>
+
+						<!-- Capacite d'accueil -->
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_CAP_INSCRIPTION_L}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.capaciteAccueil}" />
+							</p:column>
+						</p:row>
+
+						<!-- Capacite de transfert -->
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_CAP_TRANSFERT_L}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.capaciteTransfert}" />
+							</p:column>
+						</p:row>
+
+						<!-- priorite serie de bac -->
+						<p:row>
+							<p:column>
+
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_PRIORITES_SERIES_BAC}" />
+							</p:column>
+							<p:column>
+								<p:dataTable
+									value="#{capaciteEtablissementMBean.capaciteEtabDto.prioriteSerieBacDto}"
+									var="prioriteSerieBac"
+									emptyMessage="#{commonmsgs.data_table_empty_Message}">
+									<f:facet name="header">
+										<h:outputText
+											value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_PRIORITES}" />
+									</f:facet>
+									<p:column
+										headerText="#{referentielOrientationMsgs.REF_ORIENTATION_SERIE_BAC}">
+										<h:outputText value="#{prioriteSerieBac.serieBacLibelleLt}" />
+									</p:column>
+									<p:column
+										headerText="#{referentielOrientationMsgs.REF_ORIENTATION_PRIORITE}">
+										<h:outputText value="#{prioriteSerieBac.priorite}" />
+									</p:column>
+									<p:column
+										headerText="#{referentielOrientationMsgs.REF_ORIENTATION_MOYENNE}">
+										<h:outputText value="#{prioriteSerieBac.moyenne}" />
+									</p:column>
+
+									<p:column style="width:40px;text-align:center">
+										<p:commandButton
+											actionListener="#{capaciteEtablissementMBean.editPrioriteSerieBacAction(prioriteSerieBac)}"
+											icon="ui-icon ui-icon-document"
+											oncomplete="formCrudDialog.show()" update=":form_crud_dialog"></p:commandButton>
+									</p:column>
+
+								</p:dataTable>
+							</p:column>
+						</p:row>
+
+						<!-- Actions -->
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="2">
+									<p:commandButton icon="ui-icon-cancel" value="Retour"
+										immediate="true" update="form_view,:form_search"
+										onstart="PF('page').block()"
+										onsuccess="PF('page').unblock()"
+										action="#{capaciteEtablissementMBean.cancelCapaciteEtabAction()}"></p:commandButton>
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:panelGrid>
+
+
+				</h:form>
+
+		</p:outputPanel>
+
+		<!-- priorite crud -->
+		<p:dialog id="crud_dialog" widgetVar="formCrudDialog">
+			<h:form id="form_crud_dialog">
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_SERIE_BAC} *" />
+							</p:column>
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{capaciteEtablissementMBean.prioriteSerieBacDto.serieBacLibelleLt}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel
+								value="#{referentielOrientationMsgs.REF_ORIENTATION_PRIORITE} *" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{capaciteEtablissementMBean.prioriteSerieBacDto.priorite}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputLabel
+								value="#{referentielOrientationMsgs.REF_ORIENTATION_MOYENNE} *" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{capaciteEtablissementMBean.prioriteSerieBacDto.moyenne}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputLabel
+								value="#{referentielOrientationMsgs.REF_ORIENTATION_NOTES_ACCES}" />
+						</p:column>
+						<p:column>
+							<p:dataTable var="noteAccess"
+								value="#{capaciteEtablissementMBean.prioriteSerieBacDto.noteAccessFilieresDto}">
+								<f:facet name="header">#{referentielOrientationMsgs.REF_ORIENTATION_NOTES_ACCES_RAPPORT_MAT}</f:facet>
+
+								<p:column
+									headerText="#{referentielOrientationMsgs.REF_ORIENTATION_MATIERE}">
+									<h:outputText value="#{noteAccess.matiereLibelleLt}" />
+								</p:column>
+
+								<p:column headerText="Note" width="100px">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{noteAccess.noteAccess}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{noteAccess.noteAccess}" label="Note" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+							</p:dataTable>
+						</p:column>
+
+					</p:row>
+
+					<!-- Actions -->
+					<f:facet name="footer">
+						<p:row>
+							<p:column></p:column>
+							<p:column style="text-align: left">
+
+								<p:commandButton icon="ui-icon-arrowreturn-1-w" value="Fermer"
+									id="annulerPriorite" oncomplete="formCrudDialog.hide()"
+									update="form_crud_dialog,:form_view"
+									action="#{capaciteEtablissementMBean.cancelPrioriteSerieBacAction()}"></p:commandButton>
+							</p:column>
+						</p:row>
+					</f:facet>
+
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

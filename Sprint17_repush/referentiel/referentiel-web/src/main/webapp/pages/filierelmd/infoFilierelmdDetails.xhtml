@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<p:fieldset legend="Filière LMD informations">
+	<p:panel style="height:600px" id="infosfilierelmdPanel"  header="" >
+		<h:form id="infosFromId">
+	
+			<p:panelGrid id="descriptionfiliereLMD" styleClass="noBorder1">
+				<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_identite}" />
+				</p:column>
+				<p:column>
+				<h:outputText id="identifiantfiliere" value="#{filierelmdMgrBean.refFiliereLmdDto.identifiant}" style="font-weight: bold;" />
+					
+				</p:column>
+		
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_domaine} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="DomaineData" value="#{filierelmdMgrBean.refFiliereLmdDto.llDomaine}(#{filierelmdMgrBean.refFiliereLmdDto.identifiantDomaine})" style="font-weight: bold;" />
+				</p:column>
+				
+			</p:row>
+				
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcr" value="#{filierelmdMgrBean.refFiliereLmdDto.lcFiliere}" style="font-weight: bold;" />
+					
+				</p:column>
+           
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_arabe_cr}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libcrArabe"  value="#{filierelmdMgrBean.refFiliereLmdDto.lcFiliereArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="lbelle" value="#{filierelmdMgrBean.refFiliereLmdDto.llFiliere}" style="font-weight: bold;" />
+					
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_arabe}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="libelleArabe" value="#{filierelmdMgrBean.refFiliereLmdDto.llFiliereArabe}" style="font-weight: bold;" />
+				
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_description}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="description" 	value="#{filierelmdMgrBean.refFiliereLmdDto.descriptionFiliere}" style="font-weight: bold;" />
+					
+				</p:column>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<h:outputText id="descriptionArabe"	value="#{filierelmdMgrBean.refFiliereLmdDto.descriptionFiliereArabe}" style="font-weight: bold;" />
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_niveau_recrutement}" />
+				</p:column>
+				<p:column>
+					<h:outputText id="niveaurecrutement" 	value="#{filierelmdMgrBean.refFiliereLmdDto.niveauRecrutementCode}" style="font-weight: bold;" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_premiere_inscription} " />
+				</p:column>
+				<p:column>
+				    <h:outputText value="#{filierelmdMgrBean.refFiliereLmdDto.isPremiereInscription? 'Oui':'Non'}" style="font-weight: bold;"  />
+				</p:column>
+			</p:row>
+			
+		
+				
+
+			</p:panelGrid>
+			
+	
+		
+			
+		</h:form>
+			<br></br>
+				<br></br>
+		<h:form id="filierelmdDetailsForm" prependId="false">
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-disk" process="@this"
+					action="#{filierelmdBckBean.back}">
+
+					<f:param name="searchValue"
+						value="#{filierelmdBckBean.searchValue}" />
+				</p:commandButton>
+
+			</h:form>
+		
+	</p:panel>
+</p:fieldset>
+</ui:composition>

@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<pe:ajaxErrorHandler title="Erreur"
+		body="Le serveur a renvoyé l\'exception  {error-name} avec la description {error-message}"
+		button="Fermer" widgetVar="myAjaxErrorHandler"
+		buttonOnclick="myAjaxErrorHandler.hide()" />
+
+	<pe:ajaxErrorHandler
+		type="javax.faces.application.ViewExpiredException" button="Recharger"
+		buttonOnclick="document.location.href=document.location.href;"
+		body="En raison de l\'inactivité à la page se il vous plaît appuyez sur Recharger pour continuer."
+		title="Page web expirée" />
+
+	<pe:ajaxErrorHandler type="java.lang.IllegalStateException"
+		button="Fermer">
+		<f:facet name="title">  
+        Errer <span style="color: red;">{error-name}</span>
+		</f:facet>
+		<f:facet name="body">
+			<div>
+				<h:form>
+					<p:tabView>
+						<p:tab title="Message">
+							<h:panelGrid columns="2">
+								<h:outputText value="Message d'erreur:" />
+								<h:outputText value="{error-message}" styleClass="value" />
+								<h:outputText value="Serveur:" />
+								<h:outputText value="{error-hostname}"  styleClass="value" />
+							</h:panelGrid>
+						</p:tab>
+						
+						<p:tab title="Détail" rendered="#{applicationBean.production eq false}">
+							<div style="overflow: auto; height: 300px; width: 700px;">
+								{error-stacktrace}</div>
+						</p:tab>
+					</p:tabView>
+				</h:form>
+			</div>
+		</f:facet>
+	</pe:ajaxErrorHandler>
+</ui:composition>

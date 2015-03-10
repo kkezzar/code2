@@ -1,0 +1,188 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:panelGrid styleClass="ui-panelgrid-full-width">
+
+
+		<!--                <p:outputLabel value="#{examenMsgs.examen_type_session} "></p:outputLabel> -->
+		<!--                <h:outputText value="#{planningSessionSaveBean.planningSessionDto.ncTypeSessionLibelleFr}" styleClass="value"></h:outputText> -->
+		<!-- 					<p:outputLabel value=""></p:outputLabel> -->
+		<!--                   <p:outputLabel value=""></p:outputLabel> -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_annee_academique} "></p:outputLabel> -->
+		<!-- 					 <h:outputText value="#{planningSessionSaveBean.planningSessionDto.anneeAcademiqueCode}" styleClass="value"></h:outputText> -->
+
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_offre_formation} "></p:outputLabel> -->
+
+		<!-- 					 <h:outputText value="#{planningSessionSaveBean.planningSessionDto.offreFormationLibelleFr}" styleClass="value"></h:outputText> -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_niveau} "></p:outputLabel> -->
+		<!-- 					 <h:outputText value="#{planningSessionSaveBean.planningSessionDto.niveauLibelleLongLt}" styleClass="value"></h:outputText> -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_periode} "></p:outputLabel> -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.libellePeriode}" styleClass="value"></h:outputText> -->
+
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_numero_session} "></p:outputLabel> -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.numeroSession}" styleClass="value"></h:outputText> -->
+
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_intitule} "></p:outputLabel>				 -->
+		<!-- 					<h:outputText  id="intititule"  styleClass="value" value="#{planningSessionSaveBean.planningSessionDto.intitule}"></h:outputText> -->
+
+
+
+
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_date_debut} "></p:outputLabel> -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.dateDebut}"  styleClass="value"> <f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>	 -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_date_fin} "></p:outputLabel> -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.dateFin}" styleClass="value"> <f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>	 -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_situation} " ></p:outputLabel>		 -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.situationLibelleFr}" styleClass="value"> </h:outputText>		 -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_date_creation} " ></p:outputLabel>		 -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.dateCreation}" styleClass="value"> <f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>		 -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_date_publication} " ></p:outputLabel>		 -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.datePublication}"  styleClass="value"> <f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText> -->
+		<!-- 					<p:outputLabel value="#{examenMsgs.examen_date_cloture} " ></p:outputLabel>		 -->
+		<!-- 					<h:outputText value="#{planningSessionSaveBean.planningSessionDto.dateCloture}" styleClass="value" ><f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>		 -->
+		<p:row>
+			<p:column style="width:15%">
+
+				<p:outputLabel value="#{examenMsgs.examen_type_session}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.ncTypeSessionLibelleFr}"
+					styleClass="value" />
+			</p:column>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_annee_academique}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.anneeAcademiqueCode}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_offre_formation}" />
+			</p:column>
+			<p:column style="width:75%" colspan="3">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.offreFormationLibelleFr}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_niveau} " />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.niveauLibelleLongLt}"
+					styleClass="value" />
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_periode}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.libellePeriode}"
+					styleClass="value" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_numero_session}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.numeroSession}"
+					styleClass="value" />
+			</p:column>
+
+
+			<p:column style="width:15%">
+
+				<p:outputLabel value="#{examenMsgs.examen_intitule} " />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText id="intititule" styleClass="value"
+					value="#{planningSessionSaveBean.planningSessionDto.intitule}" />
+
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_date_debut} " />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.dateDebut}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_date_fin}" />
+			</p:column>
+			<p:column style="width:15%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.dateFin}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_situation}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.situationLibelleFr}"
+					styleClass="value">
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_date_creation}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.dateCreation}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_date_publication}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.datePublication}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:15%">
+				<p:outputLabel value="#{examenMsgs.examen_date_cloture}" />
+			</p:column>
+			<p:column style="width:35%">
+				<h:outputText
+					value="#{planningSessionSaveBean.planningSessionDto.dateCloture}"
+					styleClass="value">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+
+</ui:composition>
+

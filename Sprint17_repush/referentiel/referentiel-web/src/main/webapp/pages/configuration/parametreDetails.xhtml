@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_configuration}" style="border:0;">
+			<h:form id="infosFromId">
+
+				<p:fieldset legend="#{commonmsgs.common_configuration}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_key}:" />
+							</p:column>
+							<p:column>
+								<h:outputText id="key"
+									value="#{parametreBckBean.refParametreDto.key}"
+									style="font-weight: bold;" />
+
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_description}:" />
+							</p:column>
+							<p:column>
+								<h:outputText id="nom" style="font-weight: bold;"
+									value="#{parametreBckBean.refParametreDto.description}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_default_value}:" />
+							</p:column>
+							<p:column>
+								<h:outputText id="adressedebut" style="font-weight: bold;"
+									value="#{parametreBckBean.refParametreDto.defaultValue}">
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_configuration_general}:  "
+									 />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{parametreBckBean.refParametreDto.general?'Oui':'Non'}" style="font-weight: bold;" />
+							</p:column>
+						</p:row>
+
+					</p:panelGrid>
+				</p:fieldset>
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{parametreBckBean.back}">
+								<f:param name="searchValue"
+									value="#{parametreBckBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

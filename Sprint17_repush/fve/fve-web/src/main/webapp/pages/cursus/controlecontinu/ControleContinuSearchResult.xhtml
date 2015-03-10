@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus">
+	<p:fieldset style="width:100%"
+		legend="#{evalControleContinuMsgs.eval_controle_continu_field_search_title}"
+		toggleable="true">
+		<p:outputPanel id="panelSearch" style="width:100%">
+			<sp:SearchPeriodeComponent beanName="#{controleContinuBean}"
+				periodeListenerName="periodeChanged" editMode="true"
+				updateForm=":evalForm" />
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton rendered="#{sessionDroitBean.readAllow}"
+						value="#{commonmsgs.bouton_rechercher}" update="evalForm"
+						style="text-align:left" process="panelSearch"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{controleContinuBean.findEvalControleContinu()}"
+						icon="ui-icon-search">
+					</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right"
+					rendered="#{groupePedagogiqueManagerBean.editMode}">
+					<p:commandButton id="btnAdd" value="#{commonmsgs.bouton_nouveau}"
+						process="panelSearch" update="evalForm" style="text-align:left"
+						onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()"
+						actionListener="#{controleContinuBean.newEval}"
+						icon="ui-icon-plusthick">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+		</p:outputPanel>
+
+		<!-- 		<ui:include -->
+		<!-- 			src="/pages/cursus/controlecontinu/ControleContinuSearch.xhtml" /> -->
+		<br />
+		<p:panel rendered="#{controleContinuBean.showTable}" id="detail">
+
+			<p:dataTable id="evalDataTable" var="row" styleClass="detailStyle"
+				value="#{controleContinuBean.evalControleContinuList}"
+				widgetVar="evalDataTable" resizableColumns="true"
+				currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rows="5" rowsPerPageTemplate="5,10,15,20,25" paginator="true"
+				selectionMode="single" rowKey="#{row.id}"
+				emptyMessage="#{evalControleContinuMsgs.eval_controle_continu_data_table_seacrh_result_no_result}"
+				rowIndexVar="rowIndex">
+
+				<p:ajax event="sort" onstart="PF('globalWidget').block()"
+					onsuccess="PF('globalWidget').unblock()" />
+					<p:ajax event="page" onstart="PF('globalWidget').block()"
+					onsuccess="PF('globalWidget').unblock()" />
+				<p:ajax event="rowSelect"
+					listener="#{controleContinuBean.onRowSelect}" update=":evalForm"
+					onstart="PF('globalWidget').block()"
+					onsuccess="PF('globalWidget').unblock()" />
+				<p:column
+					headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_column_index}"
+					style="width:10%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column width="20%" sortBy="#{row.dateEvaluation}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_date_evaluation}" />
+					</f:facet>
+					<h:outputText value="#{row.dateEvaluation}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column width="20%" sortBy="#{row.gpNomAffichage}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_nom_groupe}" />
+					</f:facet>
+					<h:outputText value="#{row.gpNomAffichage}" />
+				</p:column>
+
+				<p:column width="20%" sortBy="#{row.rattachementMcUeLibelle}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_ue_libelle}" />
+					</f:facet>
+					<h:outputText value="#{row.rattachementMcUeLibelle}" />
+				</p:column>
+
+				<p:column width="20%" sortBy="#{row.rattachementMcLibelle}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_mc_libelle}" />
+					</f:facet>
+					<h:outputText value="#{row.rattachementMcLibelle}" />
+				</p:column>
+				<p:column width="20%" sortBy="#{row.refCodeTypeAp}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_ap_libelle}" />
+					</f:facet>
+					<h:outputText value="#{row.refCodeTypeAp}" />
+				</p:column>
+				<p:column width="20%" sortBy="#{row.ncTypeEvalLlFr}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_type_eval}" />
+					</f:facet>
+					<h:outputText value="#{row.ncTypeEvalLlFr}" />
+				</p:column>
+
+				<p:column width="20%" sortBy="#{row.coefficient}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_coefficient}" />
+					</f:facet>
+					<h:outputText value="#{row.coefficient}" />
+				</p:column>
+
+				<p:column width="20%" sortBy="#{row.comptablise}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_comptablise}" />
+					</f:facet>
+					<h:outputText value="#{row.comptablise ? 'Oui' : 'Non'}" />
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</p:fieldset>
+</ui:composition>
+

@@ -1,0 +1,141 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<p:outputPanel id="pnl_emploi_search" style="width:1100px">
+
+			<h:form id="form_emploi_Search">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:selectOneMenu id="annee" filter="true"
+							style="width:200px; margin-left:10px"
+							filterMatchMode="startsWith"
+							value="#{emploiSearchBean.emploiSearchDto.anneeAcademiqueId}"
+							label="#{emploiMsgs.emploi_annee_academique}">
+							<p:ajax update="form_emploi_Search "
+								onstart="PF('emploiFormBlock').block()"
+								onsuccess="PF('emploiFormBlock').unblock()"
+								listener="#{emploiSearchBean.anneeChanged}" />
+							<f:selectItem
+								itemLabel="#{emploiMsgs.emploi_annee_academique_select}"
+								itemValue="" />
+							<f:selectItems value="#{emploiSearchBean.anneeAcademiqueList}" />
+						</p:selectOneMenu>
+
+						<p:spacer width="5px"></p:spacer>
+
+						<p:selectOneMenu id="of" style="width:500px"
+							value="#{emploiSearchBean.emploiSearchDto.ouvertureOffreFormationId}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{emploiMsgs.emploi_offre_formation}">
+							<p:ajax update="form_emploi_Search "
+								onstart="PF('emploiFormBlock').block()"
+								onsuccess="PF('emploiFormBlock').unblock()"
+								listener="#{emploiSearchBean.ofChanged}" />
+							<f:selectItem
+								itemLabel="#{emploiMsgs.emploi_offre_formation_select}"
+								itemValue="" />
+							<f:selectItems value="#{emploiSearchBean.offreFormationList}" />
+
+						</p:selectOneMenu>
+
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+
+						<p:commandButton id="btnNouveau" immediate="true"
+							rendered="#{sessionDroitBean.createAllow}"
+							value="#{commonmsgs.bouton_nouveau}" update=":form_emploi_seance_edit"
+							onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{emploiBean.addEmploi}" icon="ui-icon-plusthick">
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<p:fieldset legend="#{emploiMsgs.emploi_resultat_recherche}" toggleable="true" style="width:1100px">
+					<p:dataGrid id="dtTbl_emploi"
+						value="#{emploiSearchBean.emploiList}" var="emploi"
+						rowKey="#{emploi.id}" rowIndexVar="rowIndex"
+						resizableColumns="true" selectionMode="single" paginator="true"
+						rows="2" lazy="true" paginatorPosition="bottom"
+						emptyMessage="#{emploiMsgs.emploi_datable_list_emploi_no_result}">
+
+
+						<p:panel header="Emploi #{rowIndex+1} "
+							style="text-align:center;width:250;">
+							<h:panelGrid columns="2" style="width:100%">
+								<p:graphicImage value="/resources/images/calendar-mini.png">
+								</p:graphicImage>
+
+								<h:panelGrid columns="1">
+
+									<p:columnGroup>
+										<h:outputText value="#{emploi.anneeAcademiqueCode}" />
+
+										<br></br>
+
+										<h:outputText value="#{emploi.periodeLibelleLongFr} " />
+
+										<br></br>
+
+										<h:outputText value="#{emploi.niveauLibelleLongLt}" />
+
+										<br></br>
+
+										<h:outputText value="#{emploi.offreFormationLibelleFr}" />
+
+										<br></br>
+
+
+
+										<h:outputText
+											value="#{emploi.estVerrouille? 'Verouillé' : 'Ouvert'} " />
+
+										<br></br>
+										<h:outputText value="#{emploi.dateVerrouillage}"
+											rendered="#{emploi.estVerrouille}"> 
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"  timeZone="GMT+1"/>
+										</h:outputText>
+									</p:columnGroup>
+
+									<p:commandLink  action="#{emploiBean.toEdit}"  update=":pnl_emploi_detail_Edit"
+										title="#{commonmsgs.bouton_detail}" >
+										<h:outputText styleClass="ui-icon ui-icon-pencil"
+											style="margin:0 auto;" />
+										<f:setPropertyActionListener value="#{emploi}"
+											target="#{emploiBean.emploiDto}" />
+
+									</p:commandLink>
+
+								</h:panelGrid>
+
+							</h:panelGrid>
+						</p:panel>
+
+
+
+					</p:dataGrid>
+				</p:fieldset>
+			</h:form>
+
+			
+		</p:outputPanel>
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

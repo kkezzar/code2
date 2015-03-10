@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<p:panel id="titlePage"
+				header="#{notificationSearchMsgs.editer_les_notifications}">
+				<!-- TODO search form -->
+				<h:form id="searchForm">
+					<p:toolbar>
+						<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{notificationAdminSearchMBean.searchValue}"
+							id="searchInput" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+							
+						<p:commandButton ajax="false" icon="ui-icon-search" id="searchButton"
+							action="#{notificationAdminSearchMBean.find}" />
+						<p:separator />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="20px"></p:spacer>
+
+					<p:dataTable id="resultSearchDataTable"
+							value="#{notificationAdminSearchMBean.notificationTraceDtos}"
+							var="notification" rowKey="#{notification.id}"
+							paginator="true" paginatorPosition="bottom" selectionMode="single"
+							sortMode="multiple"
+							lazy="true"
+							emptyMessage="#{notificationSearchMsgs.notification_datable_no_result}">
+							
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{notificationAdminSearchMBean.onRowSelect}"
+							process="@this" onstart="PF('allWidget').block()"
+							onsuccess="PF('allWidget').unblock()" update=":notification_detail_view"/>
+							
+						<f:facet name="header">
+							<h:outputText value="#{notificationSearchMsgs.notification_liste_title}" />
+						</f:facet>
+						<p:column headerText="#{notificationSearchMsgs.notification_num_enregistrement}">
+							<h:outputText value="#{notification.id}"/>
+						</p:column>
+						<p:column headerText="#{notificationSearchMsgs.notification_date}">
+							<h:outputText value="#{notification.dateNotification}">
+								<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{notificationSearchMsgs.notification_individu}" >
+							<h:outputText value="#{notification.destinataireRefIndividuPrenom} #{notification.destinataireRefIndividuNom}"/>
+						</p:column>
+						<p:column headerText="#{notificationSearchMsgs.notification_objet}" >
+							<h:outputText value="#{notification.objet}"/>
+						</p:column>
+						<p:column headerText="#{notificationSearchMsgs.notification_mode}" >
+							<h:outputText value="#{notification.modeNotificationDto.libelleLongFr}"/>
+						</p:column>
+					
+					</p:dataTable>
+				</h:form>
+			</p:panel>
+			<p:outputPanel id="notification_detail_view">
+			<p:tabView rendered="#{notificationAdminSearchMBean.displayNotificationDetail}" >
+				<p:tab title="#{notificationSearchMsgs.notification_detail}">
+					<p:panelGrid style="width:100%">
+						<f:facet name="header">
+		    				<h:outputText value="User Details" />
+		  				</f:facet>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_date}">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.dateNotification}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_expediteur}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.expediteur}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_destinataire}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.destinataireRefIndividuPrenom} 
+								#{notificationAdminSearchMBean.selectNotificationTraceDto.destinataireRefIndividuNom} 
+								#{notificationAdminSearchMBean.selectNotificationTraceDto.destination}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_mode}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.modeNotificationDto.libelleLongFr}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_objet}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.objet}" escape="false"/>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:250px">
+								<h:outputText value="#{notificationSearchMsgs.notification_message}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{notificationAdminSearchMBean.selectNotificationTraceDto.message}" escape="false"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:tab>
+			</p:tabView>
+		</p:outputPanel>
+		</p:outputPanel>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{preparationBudgetFonctionnementMsgs.page_title_gerer_exercices_budgetaires}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton value="Ouvrir un nouveau exercice"
+							action="#{excerciceBudgetaireBean.addAction()}"
+							update=":form_crud" process="@this"></p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{excerciceBudgetaireBean.model}"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="20"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{excerciceBudgetaireBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.annee}">
+						<h:outputText value="#{current.annee}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.intitule_fr}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.date_ouverture}">
+						<h:outputText value="#{current.dateOuverture}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{gfcMsgs.observation}">
+						<h:outputText value="#{current.observation}">
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{excerciceBudgetaireBean.crud}">
+
+					<p:tab
+						title="#{preparationBudgetFonctionnementMsgs.detail_exercice_budgetaire}">
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{preparationBudgetFonctionnementMsgs.annee_exercice}" />
+									</p:column>
+									<p:column>
+										<p:inputMask mask="9999" required="true"
+											value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.annee}"></p:inputMask>
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.date_ouverture}" />
+									</p:column>
+									<p:column>
+										<p:calendar required="true"
+											value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.dateOuverture}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.intitule_fr}" />
+									</p:column>
+									<p:column>
+										<p:inputText required="true"
+											value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.intituleFr}"
+											styleClass="input-xlarge" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="required"
+											value="#{parametrageBudgetMsg.intitule_ar}" />
+									</p:column>
+									<p:column>
+										<p:inputText required="true"
+											value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.intituleAr}"
+											styleClass="input-xlarge" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea styleClass="input-large"
+											value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}" 
+												disabled="#{excerciceBudgetaireBean.exerciceBudgetaireDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="saveBtn" update=":form_crud :form_search"
+												styleClass="ui-button-save" 
+												onstart="PF('page').block()" oncomplete="PF('page').unblock()"
+												actionListener="#{excerciceBudgetaireBean.saveOpenAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												disabled="#{excerciceBudgetaireBean.exerciceBudgetaireDto.id eq null or excerciceBudgetaireBean.exerciceBudgetaireDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="validateBtn" update=":form_crud :form_search"
+												styleClass="ui-button-validate-o" 
+												onstart="PF('page').block()" oncomplete="PF('page').unblock()"
+												actionListener="#{excerciceBudgetaireBean.validateAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="removeBtn" update=":form_crud :form_search"
+												disabled="#{excerciceBudgetaireBean.exerciceBudgetaireDto.situation.codeSituation ne gfcConstantBean.situationCreeeCode}"
+												styleClass="ui-button-delete-o" 
+												onstart="PF('page').block()" oncomplete="PF('page').unblock()"
+												actionListener="#{excerciceBudgetaireBean.deleteAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}" styleClass="pull-right"
+												id="cancelBtn" update=":form_crud" immediate="true" process="@this"
+												actionListener="#{excerciceBudgetaireBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="ExerciceBudgetaire" scope="request" />
+							<c:set var="identifiant"
+								value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.getId().toString()}"
+								scope="request" />
+							<ui:param name="entity" value="ExerciceBudgetaire" />
+							<ui:param name="identifiant"
+								value="#{excerciceBudgetaireBean.exerciceBudgetaireDto.getId().toString()}" />
+							<ui:param name="editionMode" value="true" />
+						</ui:include>
+					</p:tab>
+
+					
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

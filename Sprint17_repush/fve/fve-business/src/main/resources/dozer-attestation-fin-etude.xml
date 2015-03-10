@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+          
+          
+<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.AttestationFinEtudeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.AttestationFinEtude
+		</class-b>
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>dossierInscriptionAdministrative.id</b>
+		</field>
+			
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.id</b>
+		</field>
+
+		
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>dossierInscriptionAdministrative.anneeAcademique.id</b>
+		</field>
+		
+		<field>
+			<a>dateObtention</a>
+			<b>dateObtention</b>
+		</field>
+		
+		 <field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		
+		<field>
+			<a>bilanSessionId</a>
+			<b>bilanSession.id</b>
+		</field>
+		
+			<field>
+		    <a>individuNomArabe</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.nomArabe</b>
+        </field>
+        		<field>
+		    <a>individuNomLatin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.nomLatin</b>
+        </field>
+        <field>
+		    <a>individuPrenomArabe</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.prenomArabe</b>
+        </field>
+        		<field>
+		    <a>individuPrenomLatin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.prenomLatin</b>
+        </field>
+        
+        <field>
+		    <a>individuDateNaissance</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.dateNaissance</b>
+        </field>
+        
+            <field>
+		    <a>individuLieuNaissance</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.lieuNaissance</b>
+        </field>
+        
+             <field>
+		    <a>nin</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.individu.identifiant</b>
+        </field>
+         <field>
+		    <a>photo</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.photo</b>
+        </field>
+
+		 <field>
+			<a>offreFormationCode</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.code</b>
+		</field>
+		
+		<field>
+			<a>offreFormationLibelleAr</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.libelleLongAr</b>
+		</field>
+       
+       	<field>
+			<a>offreFormationLibelleFr</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+		
+			    	<field>
+			<a>refCodeTypeFormation</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.typeFormation.code</b>
+		</field>
+       
+       		<field>
+			<a>cycleCode</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.cycle.code</b>
+		</field>
+       
+       
+       <field>
+			<a>cycleLibelleLongLt</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.cycle.libelleLongLt</b>
+		</field>
+       
+        <field>
+			<a>cycleLibelleLongAr</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.cycle.libelleLongAr</b>
+		</field>
+		
+		   <field>
+			<a>refCodeDomaine</a>           
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.offreFormation.refDomaineLMD.identifiant</b>
+		</field>
+		
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.AttestationFinEtudeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-b>
+		<field>
+			<a>numeroInscription</a>
+			<b>numeroInscription</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademiqueId</b>
+		</field>
+		
+		<field>
+			<a>dossierId</a>
+			<b>dossierId</b>
+		</field>
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiantId</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>numeroMatricule</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormationId</b>
+		</field>
+	</mapping>
+
+	   <mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.AttestationFinEtudeDto</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.AnneeAcademiqueDto</class-b>
+
+        <field>
+			<a>anneeAcademiqueId</a>
+			<b>id</b>
+		</field>
+		 <field>
+			<a>anneeAcademiqueCode</a>
+			<b>code</b>
+		</field>
+
+	</mapping>
+	
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.AttestationFinEtudeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.examen.BilanSessionDto
+		</class-b>
+		<field>
+			<a>bilanSessionDeliberationSessionId</a>
+			<b>DeliberationSessionId</b>
+		</field>
+		<field>
+			<a>bilanSessionDossierInscriptionAdministrativeId</a>
+			<b>DossierInscriptionAdministrativeId</b>
+		</field>
+	    <field>
+			<a>bilanSessionTypeDecisionId</a>
+			<b>TypeDecisionId</b>
+		</field>
+		  <field>
+			<a>bilanSessionAnneeAcademiqueId</a>
+			<b>AnneeAcademiqueId</b>
+		</field>
+		
+			</mapping>
+	
+	
+</mappings>

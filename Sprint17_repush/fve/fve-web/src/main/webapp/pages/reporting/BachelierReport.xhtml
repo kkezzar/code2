@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="centerContent">
+		<h:form id="bachelierReportForm">
+
+			<pe:blockUI target="bachelierReportForm" widgetVar="reportWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+				<p:panel header="#{reportingMsgs.reporting_panel_title}">
+			<p:toolbar styleClass="toolBarMesrs" id="toolbar">
+				<p:toolbarGroup align="left">
+					<p:panelGrid styleClass="rowStyle">
+						<p:row>
+							<p:column style="width:120px">
+								<p:outputLabel
+									value="#{reportingMsgs.reporting_annee_academique}" for="annee" />
+							</p:column>
+							<p:column style="width:120px">
+								<p:selectOneMenu id="annee" style="width:100%;text-align:left" filter="true"
+									filterMatchMode="startsWith"
+									value="#{bachelierReportBean.anneeId}" required="true"
+									requiredMessage="#{reportingMsgs.reporting_annee_academique_required}"
+									label="#{reportingMsgs.reporting_annee_academique}">
+									<p:ajax update="toolbar" onstart="PF('reportWidget').block()"
+										onsuccess="PF('reportWidget').unblock()"
+										listener="#{bachelierReportBean.anneeChanged}" />
+									<f:selectItem
+										itemLabel="#{reportingMsgs.reporting_annee_academique_select}"
+										itemValue="" />
+									<f:selectItems
+										value="#{bachelierReportBean.anneeAcademiqueList}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column style="width:120px">
+								<p:outputLabel value="#{reportingMsgs.reporting_evenement}"
+									for="evenement" />
+							</p:column>
+							<p:column style="width:200px"
+								rendered="#{bachelierReportBean.refEvenementItemList.size() != 1}">
+								<p:selectOneMenu id="evenement" style="width:100%;text-align:left"
+									filter="true" filterMatchMode="startsWith"
+									value="#{bachelierReportBean.idEvenement}" required="true"
+									requiredMessage="#{reportingMsgs.reporting_evenement_required}"
+									label="#{reportingMsgs.reporting_evenement}">
+									<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+									<p:ajax update="toolbar" onstart="PF('reportWidget').block()"
+										onsuccess="PF('reportWidget').unblock()"
+										listener="#{bachelierReportBean.evenementChanged}" />
+									<f:selectItem
+										itemLabel="#{reportingMsgs.reporting_evenement_select}"
+										itemValue="" />
+									<f:selectItems
+										value="#{bachelierReportBean.refEvenementItemList}" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column id="object" style="width:200px"
+								rendered="#{bachelierReportBean.refEvenementItemList.size() == 1}">
+								<h:outputText value="#{bachelierReportBean.evenementObject}" />
+							</p:column>
+							
+							<p:column>
+								<p:outputLabel value="#{reportingMsgs.reporting_groupe}"
+									for="groupe" />
+							</p:column>
+							
+							<p:column style="width:120px"
+								rendered="#{bachelierReportBean.refGroupeItemList.size() != 1}">
+								<p:selectOneMenu id="groupe" style="width:100%;text-align:left"
+									value="#{bachelierReportBean.idGroupe}" required="false"
+									requiredMessage="#{reportingMsgs.reporting_groupe_required}"
+									filter="true" filterMatchMode="startsWith"
+									label="#{reportingMsgs.reporting_groupe}">
+
+									<f:param name="evenmentId"
+										value="#{bachelierReportBean.evenmentId}" />
+									<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+									<p:ajax update="toolbar" onstart="PF('reportWidget').block()"
+										onsuccess="PF('reportWidget').unblock()"
+										listener="#{bachelierReportBean.groupeChanged}" />
+									<f:selectItem
+										itemLabel="#{reportingMsgs.reporting_groupe_select}"
+										itemValue="" />
+									<f:selectItems value="#{bachelierReportBean.refGroupeItemList}"
+										 />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column id="llGroupe" style="width:200px"
+								rendered="#{bachelierReportBean.refGroupeItemList.size() == 1}">
+								<h:outputText value="#{bachelierReportBean.llGroupe}" />
+							</p:column>
+							</p:row>
+							<p:row>
+							<p:column style="width:120px">
+								<p:outputLabel value="#{reportingMsgs.reporting_date_debut}"
+									for="dateDebut" />
+							</p:column>
+							<p:column style="width:120px">
+								<p:selectOneMenu id="dateDebut" style="width:100%;text-align:left"
+									filter="true" filterMatchMode="startsWith"
+									value="#{bachelierReportBean.idDateDebut}"
+									converter="#{bachelierReportBean}"
+									valueChangeListener="#{bachelierReportBean.dateDebutChanged}"
+									label="#{reportingMsgs.reporting_date_debut}">
+									
+									
+									<f:selectItems value="#{bachelierReportBean.jourItemList}" />
+
+								</p:selectOneMenu>
+							</p:column>
+							<p:column style="width:100px">
+								<p:outputLabel value="#{reportingMsgs.reporting_date_fin}"
+									for="dateFin" />
+							</p:column>
+							<p:column style="width:100px">
+								<p:selectOneMenu id="dateFin" style="width:100%;text-align:left" filter="true"
+									filterMatchMode="startsWith"
+									converter="#{bachelierReportBean}"
+									value="#{bachelierReportBean.idDateFin}"
+									valueChangeListener="#{bachelierReportBean.dateFinChanged}"
+									label="#{reportingMsgs.reporting_date_fin}">
+									
+									
+									<f:selectItems value="#{bachelierReportBean.jourItemList}" />
+								</p:selectOneMenu>
+							</p:column>
+							
+							
+							<p:column colspan="2">
+								<p:commandButton action="#{bachelierReportBean.loadReporting()}"
+									update="bachelierReportForm" process="bachelierReportForm"
+									onstart="PF('reportWidget').block()"
+									onsuccess="PF('reportWidget').unblock()"
+									value="#{reportingMsgs.reporting_charger_button}">
+									<f:param name="dateDebutId" value="#{bachelierReportBean.dateDebutId}" />
+									<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+<!-- 									<f:param name="loadStat" value="true" /> -->
+									<f:param name="groupeId"
+										value="#{bachelierReportBean.groupeId}" />
+									<f:param name="evenmentId"
+										value="#{bachelierReportBean.evenmentId}" />
+									<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+			<p:tabView style="padding:0px">
+
+
+				<p:tab id="importation"
+					title="#{reportingMsgs.reporting_statistique_importation}">
+					<ui:include src="/pages/reporting/ImportationReport.xhtml"></ui:include>
+				</p:tab>
+				<p:tab id="domaine"
+					title="#{reportingMsgs.reporting_statistique_domaine}">
+					<ui:include src="/pages/reporting/DomaineReport.xhtml"></ui:include>
+				</p:tab>
+				<p:tab id="agent"
+					title="#{reportingMsgs.reporting_statistique_agent}">
+					<ui:include src="/pages/reporting/AgentReport.xhtml"></ui:include>
+				</p:tab>
+			</p:tabView>
+
+</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

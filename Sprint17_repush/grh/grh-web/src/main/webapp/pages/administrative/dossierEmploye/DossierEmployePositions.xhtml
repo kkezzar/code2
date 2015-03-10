@@ -1,0 +1,98 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_dossier_employe_position">
+
+
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{dossierEmployemsgs.dossier_employe_positions}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable id="positionsTable" var="position" 
+						value="#{dossierEmployeBean.listPositions}" 
+						widgetVar="positionsTable" 
+						style="margin-top:5px" resizableColumns="true" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						selectionMode="single"
+						rowKey="#{position.id}"
+						
+						emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_position_no_result}">
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{dossierEmployeBean.onPositionSelected}" process="@this"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"  
+							oncomplete="PF('demandeDetailDialog').show()"
+							update=":tabViewEdit:demandeDetailDialog"/>
+						
+						<p:column
+							headerText="#{dossierEmployemsgs.dossier_employe_numero}"
+							style="width:3%">
+							<h:outputText value="#{rowIndex+1}" styleClass="value" />
+						</p:column>
+						<p:column headerText="${positionMgs.label_position}" styleClass="value" >
+							<h:outputText value="#{position.nomenclatureByPositionDto.libelleLongFr}" />
+						</p:column>
+						<p:column headerText="${positionMgs.label_date_debut}">
+							<h:outputText value="#{position.dateDebut}" styleClass="value" >
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="${positionMgs.label_date_fin}">
+							<h:outputText value="#{position.dateFin}" styleClass="value" >
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+					</p:dataTable>		
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+	<p:dialog position="center" appendTo="@(body)" header="#{positionMgs.label_position}"
+				id="demandeDetailDialog" widgetVar="demandeDetailDialog"
+				modal="true" resizable="false">
+					<ui:include
+						src="/pages/position/DemandeDetail.xhtml">
+							<ui:param name="dto" value="#{dossierEmployeBean.positionDto}"/>
+					</ui:include>
+			</p:dialog>
+
+
+
+
+
+</ui:composition>
+
+
+
+</ui:composition>
+

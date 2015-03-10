@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components"
+	xmlns:rch="http://java.sun.com/jsf/composite/components/rch">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchBudgetMsgs.research_program_save_demand_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+<p:outputPanel id="mainOutPutPanel">
+<h:form id="mainForm">
+	<!-- RECHERCHE DEMANDES BUDGET -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchDemandsID" 
+						  searchKeyWords="#{demandeBudgetManageBB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{demandeBudgetManageBB.searchDemands()}"
+						  searchAdvancedMethodName="#{demandeBudgetManageBB.searchDemands()}"
+						  toUpdateOnSearch=":mainForm:demandsDataTable :demandOutPutPanelDetails"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  textWatermark="#{rchBudgetMsgs.research_program_save_demand_search_text_key_words}">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddDemand" 
+									value="#{rchBudgetMsgs.research_program_save_demand_button_add_demand_label}" 
+									action="#{demandeBudgetManageBB.addNewDemand()}"
+									process="@this"
+									update=":demandOutPutPanelDetails"
+									icon="ui-icon-plusthick"
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+						</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<br />
+	<!-- LISTE DEMANDES BUDGET -->
+	<p:dataTable id="demandsDataTable" var="row"
+							value="#{demandeBudgetManageBB.demandeBudgetBB.listDemands}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{demandeBudgetManageBB.selectedDemand}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{demandeBudgetManageBB.onDemandRowSelect}" update=":demandOutPutPanelDetails"	
+								onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_demand_date}" style="text-align:center;">
+						<h:outputText value="#{row.dateDemande}" styleClass="value">
+						<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_label}" style="text-align:center;">
+						<h:outputText value="#{row.programmeLibelle}" style="float:left;" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_begin_year}" style="text-align:center;">
+						<h:outputText value="#{row.anneeDebut}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_end_year}" style="text-align:center;">
+						<h:outputText value="#{row.anneeFin}" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_aim}" style="text-align:center;">
+						<h:outputText value="#{row.objectif}" style="float:left;" styleClass="value"/>
+				</p:column>
+				<p:column headerText="#{rchBudgetMsgs.research_program_save_demand_datatable_list_demands_column_program_situation}" style="text-align:center;">
+						<h:outputText value="#{row.situationLibelle}" style="#{row.situationStyle}"/>
+				</p:column>
+		</p:dataTable>
+	</h:form>
+	<!-- DETAILS DE LA DEMANDE BUDGET SELECTIONNEE -->
+	<p:outputPanel id="demandOutPutPanelDetails">
+				<rch:DemandeBudgetComponent managedBean="#{demandeBB}"
+				parentIDsToUpdate=":mainForm:demandsDataTable"></rch:DemandeBudgetComponent>
+	</p:outputPanel>
+	
+</p:outputPanel>
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<pe:blockUI target="mainOutPutPanel" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

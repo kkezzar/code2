@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation"
+	xmlns:scol="http://java.sun.com/jsf/composite/components/scolarite"
+     xmlns:eh="http://java.sun.com/jsf/composite/components"
+      >
+<ui:composition template="/templates/fullPageLayout.xhtml">
+<ui:define name="title"></ui:define>
+
+<ui:define name="pageTitleContent">
+		#{chargeMsgs.services_faits_panel_page_manage_title}
+</ui:define>
+<ui:define name="centerContent">
+<h:form id="mainForm">
+	
+<h:panelGrid id="gridServicesFaits"  style="margin-bottom:5px; width:100%;">
+<p:row>
+<p:column>
+<p:panelGrid id="gridCriteriaSelection" style="margin-bottom:10px;width:100%;">
+					<p:row >
+	        		<p:column style="width:15%;text-align:right;" >
+	        		<h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_annee_academique}" />
+	        		</p:column>
+					<p:column>
+							   <p:selectOneMenu id="listAnneesID" 	value="#{servicesFaitsBB.selectedIdYear}" style="width:150px" >
+												<f:selectItems value="#{servicesFaitsBB.listYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+												<p:ajax listener="#{servicesFaitsBB.handleYearChange}" 	event="valueChange" process="@this"  update="ouputPanelDetailEnseignant" 
+													onstart="PF('ajaxProgress').block()"  oncomplete="PF('ajaxProgress').unblock()"/>
+							</p:selectOneMenu>
+					</p:column>
+			
+					<p:column style="width:15%;text-align:right;" ><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periodicite}" /></p:column>
+					<p:column style="width:250px;">
+							<p:selectOneMenu id="listPeriodiciteID" 	value="#{servicesFaitsBB.selectedPeriodiciteCode}" style="width:150px" >
+										<f:selectItems value="#{servicesFaitsBB.listPeriodicites}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+										<p:ajax listener="#{servicesFaitsBB.handlePeriodiciteChange}" 	event="valueChange" process="@this listPeriodesID" update="listPeriodesID ouputPanelDetailEnseignant" />
+							</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%;text-align:right;" ><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periode}" /></p:column>
+					<p:column style="width:250px;">
+							<p:selectOneMenu id="listPeriodesID" 	value="#{servicesFaitsBB.selectedPeriode}" style="width:150px" >
+										<f:selectItems value="#{servicesFaitsBB.listPeriodesParPeriodicite}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+										<p:ajax listener="#{ficheVoeuxBB.handlePeriodeChange}" 	event="valueChange" process="@this listAnneesID" update="ouputPanelDetailEnseignant" 
+										/>
+							</p:selectOneMenu>
+					</p:column>
+					</p:row>
+			</p:panelGrid>		
+	
+</p:column>
+</p:row>
+<p:row>
+<p:column>
+	<p:panelGrid style="width:100%;margin-bottom:10px;">			
+					<p:row>
+	        		<p:column style="width:15%;text-align:right;" >
+	        		<h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_search_enseignant}" />
+	        		</p:column>
+					<p:column>
+					<p:autoComplete id="itemTip" value="#{servicesFaitsBB.selectedDossierEmploye}" completeMethod="#{servicesFaitsBB.completeSearchEnseignant}" minQueryLength="3"
+                        var="dto" itemLabel="#{dto.displayName}" itemValue="#{dto}" converter="#{servicesFaitsBB.employeeConverter}" forceSelection="true" 
+                        size="40">
+                        
+                         <f:facet name="itemtip">
+                    	 <p:panelGrid>
+                    			<f:facet name="header">Fiche Enseignant</f:facet>
+                    			<p:row>
+                    			<p:column  style="width:160px;"><h:outputText value="#{chargeMsgs.enseignant_component_outputtext_nom_prenom_fr}" /></p:column>
+                    			<p:column><h:outputText value="#{dto.displayName}" style="text-align:right;color:#336699;"/></p:column>
+                    			</p:row>
+                    			<p:row>
+                    			<p:column><h:outputText value="#{chargeMsgs.enseignant_component_outputtext_nom_prenom_ar}" /></p:column>
+                    			<p:column><h:outputText value="#{dto.individuNomArabe} #{dto.individuPrenomArabe}" style="text-align:right;color:#336699;"/></p:column>
+                    			</p:row>
+                    			<p:row>
+                    			<p:column><h:outputText value="#{chargeMsgs.enseignant_component_outputtext_matricule}" /></p:column>
+                    			<p:column><h:outputText value="#{dto.matricule}" style="text-align:right;color:#336699;"/></p:column>
+                    			</p:row>
+                    				<p:row>
+                    			<p:column><h:outputText value="#{chargeMsgs.enseignant_component_outputtext_date_affiliation}" /></p:column>
+                    			<p:column><h:outputText value="#{dto.dateAffiliation}" style="text-align:right;color:#336699;">
+                    			<f:convertDateTime pattern="dd-MM-yyyy" />
+                    			</h:outputText></p:column>
+                    			</p:row>
+               			 </p:panelGrid>
+              			 </f:facet>
+              			  <p:ajax event="itemSelect" listener="#{servicesFaitsBB.onItemSelect}" update="ouputPanelDetailEnseignant"
+													onstart="PF('ajaxProgress').block()"  oncomplete="PF('ajaxProgress').unblock()"/>
+                        </p:autoComplete>
+					</p:column>
+					</p:row>
+		</p:panelGrid>
+			<p:watermark for="itemTip" value="#{chargeMsgs.services_faits_watermark_search_enseignant}" id="watermarkTxtSearch" />
+</p:column>
+</p:row>
+
+<p:row>
+<p:column>
+<p:outputPanel id="ouputPanelDetailEnseignant">
+<p:panel id="panelDetailEnseignant" header="#{chargeMsgs.services_faits_panel_header_detail}" rendered="#{servicesFaitsBB.canShowDetails}">
+<scol:EnseignantComponent dossierEmployeDto="#{servicesFaitsBB.enseignantDto}"></scol:EnseignantComponent>
+
+<p:panelGrid style="margin-bottom:10px;margin-top:10px;width:100%;" rendered="false">
+					<p:row>
+	        		<p:column>
+	        		<h:outputLabel value="#{chargeMsgs.services_faits_outputtext_label_charge}" />
+	        		</p:column>
+					<p:column>
+							   <p:selectOneMenu id="listChargesID" 	value="#{servicesFaitsBB.selectedChargePedagogiqueId}" style="width:100%;" >
+							   					<f:selectItem itemLabel="#{chargeMsgs.services_faits_outputtext_label_charges_list_default}" itemValue="" noSelectionOption="true"/>
+												<f:selectItems value="#{servicesFaitsBB.selectedFicheServicesChargesPedagogiques}" var="c"  itemValue="#{c.id}"
+													itemLabel="#{c.niveauLibelle} - #{c.matiereLibelle} - #{c.apLibelle} - #{c.apCodeType} - #{c.groupePedagogiqueLibelle}" />
+												<p:ajax listener="#{servicesFaitsBB.handleChargesChange}" 	event="valueChange" process="@this"  update="ouputPanelDetailEnseignant" 
+													onstart="PF('ajaxProgress').block()"  oncomplete="PF('ajaxProgress').unblock()"/>
+							</p:selectOneMenu>
+					</p:column>
+					</p:row>
+</p:panelGrid>
+
+<p:dataTable id="chargesPedagogiquesDataTable" var="row"
+															value="#{servicesFaitsBB.selectedFicheServicesChargesPedagogiques}"
+															rowKey="#{row.id}"
+															emptyMessage="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_list_empty}"
+															rowIndexVar="rowIndex" 
+															selection="#{servicesFaitsBB.selectedChargePedagogique}"
+															selectionMode="single"
+															currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        													paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        													paginator="true" 
+															rows="5" 
+															paginatorPosition="bottom"
+															rowsPerPageTemplate="5,10,15"
+															>
+					<p:ajax event="rowSelect" listener="#{servicesFaitsBB.onChargesEnseignementRowSelect}" update=":mainForm:ouputPanelServicesFaits"  
+								 onstart="PF('ajaxProgress').block()"  oncomplete="PF('ajaxProgress').unblock()"/>  
+					<f:facet name="header">#{chargeMsgs.services_faits_outputtext_label_charges_list_default}</f:facet>
+					<p:column	headerText=""  style="text-align:center;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+					
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_etablissement}"	style="text-align:left;font-size:10;">	
+										<h:outputText value="#{row.libelleEtablissement}" style="float:left;color:#336699;"/>
+					</p:column>
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_offre_formation}"	style="text-align:left;font-size:10;">	
+										<h:outputText value="#{row.offreFormationLibelle}" style="float:left;color:#336699;"/>
+					</p:column>
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_niveau}" style="text-align:center;">	
+										<h:outputText value="#{row.niveauCode}" style="color:#336699;"/>
+					</p:column>
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_periode}" 	style="text-align:center;" rendered="false">
+										<h:outputText value="#{row.libellePeriode}" style="color:#336699;"/>
+					</p:column>
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_matiere}" 	 style="text-align:left;"> 
+										<h:outputText value="#{row.matiereLibelle}" style="color:#336699;"/>
+					</p:column>
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_mode_enseignement}" style="text-align:center;" rendered="false">
+									  <h:outputText value="#{row.typeEnseignement}" style="float:left;color:#336699;"/>
+					</p:column>
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_ap_code}" style="text-align:left;" rendered="false"> 
+									  <h:outputText value="#{row.apLibelle}" style="color:#336699;"/> 
+					</p:column>
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_ap_type}" style="text-align:center;"> 	
+										<h:outputText value="#{row.apCodeType}"  style="float:center;color:#336699;"/> 
+					</p:column>
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_groupe}">	
+										<h:outputText value="#{row.groupePedagogiqueLibelle}" style="float:left;color:#336699;"/>
+					</p:column>
+					<p:column headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_effectif_groupe}" style="text-align:center;" rendered="false">	
+										<h:outputText value="#{row.effectifGroupeAp}" style="float:center;color:#336699;"/>
+					</p:column>
+
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_volume_horaire}" style="text-align:center;">
+										<h:outputText value="#{servicesFaitsBB.getConvertVH(row.volumeHoraireAp)}" style="float:right;color:#336699;"/>
+					</p:column>
+					<p:column	headerText="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_volume_horaire_previsionnel}" style="text-align:center;">
+										<h:outputText value="#{servicesFaitsBB.getConvertVH(row.volumeHoraireAp*servicesFaitsBB.paramValNBS)}" style="float:right;color:#336699;"/>
+					</p:column>
+</p:dataTable>
+<p:outputPanel id="ouputPanelServicesFaits">
+<p:dataTable id="servicesfaitsDataTable" var="row"
+															value="#{servicesFaitsBB.selectedServicesFaits}"
+															rowKey="#{row.id}"
+															emptyMessage="#{chargeMsgs.services_faits_enseignant_data_table_list_empty}"
+															rowIndexVar="rowIndex" 
+															currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        													paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        													paginator="true" 
+															rows="5" 
+															paginatorPosition="bottom"
+															rowsPerPageTemplate="5,10,15"
+															rendered="#{servicesFaitsBB.canShowServicesFaitsCharge}">
+												<p:ajax event="rowSelect" listener="#{servicesFaitsBB.onChargesEnseignementRowSelect}"/>  
+												<f:facet name="header">#{chargeMsgs.services_faits_enseignant_data_table_list_header} : 
+												#{servicesFaitsBB.selectedChargePedagogique.offreFormationLibelle.toUpperCase()} 
+												#{servicesFaitsBB.selectedChargePedagogique.niveauLibelle}  
+												#{servicesFaitsBB.selectedChargePedagogique.matiereLibelle.toUpperCase()}   
+												#{servicesFaitsBB.selectedChargePedagogique.apCodeType}   
+												#{servicesFaitsBB.selectedChargePedagogique.groupePedagogiqueLibelle}</f:facet>  
+												<p:column	headerText="" style="width:20px" styleClass="center"> 	<h:outputText value="#{rowIndex+1}" styleClass="center"/> </p:column>
+											
+												<p:column	headerText="#{chargeMsgs.services_faits_data_table_column_type_seance}" style="text-align:left;" sortBy="#{row.seanceTypeLibelleFr}">
+															<h:outputText value="#{row.seanceTypeLibelleFr}" style="color:#336699;"/>
+												</p:column>
+												<p:column	headerText="#{chargeMsgs.services_faits_data_table_column_situation}" style="text-align:center;" sortBy="#{row.libelleSituation}">
+															<h:outputText value="#{row.libelleSituation}" style="#{row.styleCssSituation}"/>
+												</p:column>
+												<p:column	headerText="#{chargeMsgs.services_faits_data_table_column_nb_presences}" style="text-align:center;">
+															<h:outputText value="#{row.nbEtudiantsPresents}" style="color:#336699;"/>
+												</p:column>
+							
+												<p:column	headerText="#{chargeMsgs.services_faits_data_table_column_date}" style="text-align:center;" sortBy="#{row.dateSeance}"> 
+													<h:outputText value="#{row.dateSeance}" style="color:#336699;">
+													<f:convertDateTime  pattern="dd/MM/yyyy"/>
+													</h:outputText> 
+												</p:column>
+												<p:column	headerText="#{chargeMsgs.services_faits_data_table_column_heure_debut}" style="text-align:center;" sortBy="#{row.heureDebutSeance}"> 	
+													<h:outputText value="#{row.heureDebutSeance}"  style="color:#336699;">
+													<f:convertDateTime  pattern="HH:mm"/>
+													</h:outputText> 
+												</p:column>
+												<p:column headerText="#{chargeMsgs.services_faits_data_table_column_heure_fin}" style="text-align:center;">	
+														<h:outputText value="#{row.heureFinSeance}" style="color:#336699;">
+														<f:convertDateTime  pattern="HH:mm"/>
+														</h:outputText>
+												</p:column>
+												<p:column headerText="#{chargeMsgs.services_faits_data_table_column_duree}" style="text-align:right;">	
+													<h:outputText value="#{servicesFaitsBB.getConvertVH(row.dureeSeance)}" style="color:#336699;"/>
+												</p:column>
+												<p:column style="width:32px" >
+           																					<p:commandButton id="editServiceFaitButtonID" 	 
+																										icon="ui-icon-pencil" 
+																										action="#{servicesFaitsBB.editServiceFait()}" 
+																										process="@this"	
+																										oncomplete="PF('dlgAddServiceFait').show();"
+																										update=":dlgForm"
+																										>
+																									<f:setPropertyActionListener target="#{servicesFaitsBB.selectedServiceFaitId}" value="#{row.id}" />										
+																							</p:commandButton>
+      							 				</p:column>
+      							 					<p:columnGroup type="footer">
+           														 <p:row>
+                															<p:column colspan="7" style="text-align:right" footerText="#{chargeMsgs.services_faits_data_table_group_row_total_vh}" />
+               																 <p:column footerText="#{servicesFaitsBB.getConvertVH(servicesFaitsBB.totalVHServicesFaitsCharge)}"  style="text-align:right;font-weight:bold; color:#336699;"/>
+               																 <p:column colspan="1"/>
+<!--                																 <p:column footerText="#{ficheServicesBB.getConvertVH(ficheServicesBB.totalVHNormalCM)}"  style="text-align:right;font-weight:bold; color:#336699;"/> -->
+<!--                																 <p:column footerText="#{ficheServicesBB.getConvertVH(ficheServicesBB.totalVHNormalTP)}"  style="text-align:right;font-weight:bold; color:#336699;"/> -->
+<!--                																 <p:column footerText="#{ficheServicesBB.getConvertVH(ficheServicesBB.totalVHNormalPeriodeTD)}"  style="text-align:right;font-weight:bold; color:#336699;"/> -->
+<!--                																 <p:column footerText="#{ficheServicesBB.getConvertVH(ficheServicesBB.totalVHNormalPeriodeCM)}"  style="text-align:right;font-weight:bold; color:#336699;"/> -->
+<!--                																 <p:column footerText="#{ficheServicesBB.getConvertVH(ficheServicesBB.totalVHNormalPeriodeTP)}"  style="text-align:right;font-weight:bold; color:#336699;"/> -->
+            													</p:row>
+            										</p:columnGroup>
+												</p:dataTable>
+												
+					<p:toolbar id="servicesFaitToolBar" rendered="#{servicesFaitsBB.canShowServicesFaitsCharge}">
+						<p:toolbarGroup align="left">
+						<p:commandButton id="btnAddOneService" 
+									action="#{servicesFaitsBB.prepareCurrentServiceFait}"  
+									icon="ui-icon-plusthick"  
+									value="#{chargeMsgs.services_faits_bouton_ajouter_service_fait_libelle}"
+									process="@this" 
+									ajax="true" 
+									update=":dlgForm"
+									disabled="#{not servicesFaitsBB.canAddServicefait}" 
+									oncomplete="PF('dlgAddServiceFait').show();">
+							</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>	
+</p:outputPanel>
+</p:panel>
+</p:outputPanel>
+</p:column>
+</p:row>
+</h:panelGrid>
+<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+<br/>
+</h:form>
+
+<p:dialog  widgetVar="dlgAddServiceFait"  appendTo="@(body)" modal="true" header="#{chargeMsgs.services_faits_add_edit_service_fait_title}" 
+style="font-size:#{sessionBean.fontSize}px">  	
+	<h:form id="dlgForm">
+	<p:messages id="messagesDlgAddServiceFait" showDetail="true" autoUpdate="true" closable="true"  showSummary="false"/>
+	<p:panelGrid  id="gridDialog" style="margin-bottom:8px;">
+	
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_etablissement}" /></p:column>
+	<p:column><h:outputText value="#{servicesFaitsBB.selectedChargePedagogique.libelleEtablissement}" styleClass="value"/> </p:column>
+	</p:row>
+	
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_offre_formation} - #{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_niveau}" /></p:column>
+	<p:column><h:outputText value="#{servicesFaitsBB.selectedChargePedagogique.offreFormationLibelle} - #{servicesFaitsBB.selectedChargePedagogique.niveauLibelle}" styleClass="value"/> </p:column>
+	</p:row>
+
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_matiere} - #{chargeMsgs.fiche_veoux_component_lignes_voeu_data_table_column_ap}"/></p:column>
+	<p:column><h:outputText value="#{servicesFaitsBB.selectedChargePedagogique.matiereLibelle} - #{servicesFaitsBB.selectedChargePedagogique.apCodeType}" styleClass="value"/></p:column>
+	 </p:row>
+	 <p:row>
+	<p:column><h:outputText value="#{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_groupe} - #{chargeMsgs.fiche_services_chrages_enseignement_data_validate_table_column_volume_horaire} "/></p:column>
+	<p:column><h:outputText value="#{servicesFaitsBB.selectedChargePedagogique.groupePedagogiqueLibelle} - #{servicesFaitsBB.getConvertVH(servicesFaitsBB.selectedChargePedagogique.volumeHoraireAp)}" styleClass="value"/> </p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_type_seance}"/></p:column>
+	<p:column><p:selectOneMenu id="listTypesSeancesID" 	value="#{servicesFaitsBB.selectedServiceFait.seanceTypeId}" style="width:100%;" 
+														requiredMessage="#{chargeMsgs.service_fait_message_type_seance_required}">
+												<f:selectItems value="#{servicesFaitsBB.listTypeSeanceServiceFait}" var="t"  itemValue="#{t.value}"	itemLabel="#{t.label}" />
+	</p:selectOneMenu></p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_situation}"/></p:column>
+	<p:column><p:selectOneMenu id="listStatutSeancesID" 	value="#{servicesFaitsBB.selectedServiceFait.idSituation}" style="width:100%;" 
+							requiredMessage="#{chargeMsgs.service_fait_message_statut_seance_required}">
+												<f:selectItems value="#{servicesFaitsBB.listSituationsServiceFait}" var="t"  itemValue="#{t.value}" itemLabel="#{t.label}" />
+	</p:selectOneMenu></p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_date}"/></p:column>
+	<p:column><p:calendar value="#{servicesFaitsBB.selectedServiceFait.dateSeance}"  pattern="dd/MM/yyyy" required="true" 
+												requiredMessage="#{chargeMsgs.service_fait_message_date_required}"/></p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_heure_debut}"/></p:column>
+	<p:column> <p:calendar value="#{servicesFaitsBB.selectedServiceFait.heureDebutSeance}" pattern="HH:mm" 
+													required="true"  requiredMessage="#{chargeMsgs.service_fait_message_heure_debut_required}"/></p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_heure_fin}"/></p:column>
+	<p:column><p:calendar value="#{servicesFaitsBB.selectedServiceFait.heureFinSeance}" pattern="HH:mm" 
+												required="true"  requiredMessage="#{chargeMsgs.service_fait_message_heure_fin_required}"/></p:column>
+	</p:row>
+
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_nb_presences}"/></p:column>
+	<p:column><p:inputText id="nbPresencesId" value="#{servicesFaitsBB.selectedServiceFait.nbEtudiantsPresents}" style="margin-bottom:10px;"/>
+	<p:slider for="nbPresencesId" minValue="1" maxValue="200"/></p:column>
+	</p:row>
+	<p:row>
+	<p:column><h:outputText value="#{chargeMsgs.services_faits_dialog_grid_observation}"/></p:column>
+	<p:column><p:inputTextarea value="#{servicesFaitsBB.selectedServiceFait.observation}" style="width:100%;"/></p:column>
+	</p:row>
+	
+	</p:panelGrid>
+	
+	<p:toolbar style="margin-bottom:8px;">
+	<p:toolbarGroup>
+							<p:commandButton id="btnHideAddServiceFaitDialogID" value="#{chargeMsgs.fiche_veoux_component_dialog_bouton_fermer_libelle}" 	type="button" onclick="PF('dlgAddServiceFait').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+	</p:toolbarGroup>
+		
+	<p:toolbarGroup align="right" >
+			<p:commandButton id="btnAddServiceFait" 
+							action="#{servicesFaitsBB.saveServiceFait()}"  
+							icon="ui-icon-plusthick"  
+							value = "#{chargeMsgs.fiche_veoux_component_bouton_ajouter_voeu_ligne_dlg_libelle}"
+							process="@this :dlgForm" 
+							ajax="true" 
+							update=":mainForm:servicesfaitsDataTable @form" 
+							rendered="#{not servicesFaitsBB.addOrEditDialog}"
+							oncomplete="handleUpdateServiceFaitRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+			<p:commandButton id="btnUpdateLigneVoeu" 
+							action="#{servicesFaitsBB.saveServiceFait()}"  
+							value = "#{chargeMsgs.fiche_veoux_component_bouton_update_voeu_ligne_dlg_libelle}"
+							process="@this :dlgForm" 
+							ajax="true" 
+							update=":mainForm:servicesfaitsDataTable @form" 
+							rendered="#{servicesFaitsBB.addOrEditDialog}"
+							oncomplete="handleUpdateServiceFaitRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	</h:form>
+		<script type="text/javascript">
+   								 function handleUpdateServiceFaitRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddServiceFait').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddServiceFait').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+
+<pe:blockUI target=":mainForm:ouputPanelDetailEnseignant" widgetVar="ajaxProgress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+</ui:define>
+</ui:composition>
+</html>

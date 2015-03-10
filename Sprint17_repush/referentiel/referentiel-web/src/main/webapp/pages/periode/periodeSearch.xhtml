@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_periode}" style="border:0;">
+			<h:form id="searchForm" 
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							rendered="#{periodeDroitBean.createAllow}"
+							icon="ui-icon-document" action="#{periodeSearchBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="periodeAccessData"
+								fileName="listeDesperiodeAccesss" />
+						</p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right"
+						rendered="#{periodeDroitBean.readAllow}">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{periodeSearchBean.searchValue}"
+							id="searchInput" binding="#{searchValue}" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton update=":searchForm" id="searchButton"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" icon="ui-icon-search"
+							actionListener="#{periodeSearchBean.findGeneric(searchValue.value)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+						</p:commandButton>
+						<p:separator />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="periodeAccessData"
+					rendered="#{periodeSearchBean.listRefPeriodeDto!=null}"
+					value="#{periodeSearchBean.listRefPeriodeDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue"
+						value="#{periodeSearchBean.searchValue}" />
+					<p:ajax event="page" />
+					<p:ajax event="sort" />
+					<f:facet name="header">
+						<h:outputText value="#{periodemsgs.periode_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}" width="25%">
+						<f:facet name="header">
+							<h:outputText value="#{periodemsgs.periode_identifiant}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+
+					<p:column sortBy="#{current.nom}" width="25%">
+						<f:facet name="header">
+							<h:outputText value="#{periodemsgs.periode_nom}" />
+						</f:facet>
+						<h:outputText value="#{current.nom}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateDebut}" width="8%">
+						<f:facet name="header">
+							<h:outputText value="#{periodemsgs.periode_date_debut}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.dateDebut}"
+							style="text-align: right">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.dateFin}" width="8%">
+						<f:facet name="header">
+							<h:outputText value="#{periodemsgs.periode_date_fin}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.dateFin}"
+							style="text-align:  right">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.periodique}" width="8%">
+						<f:facet name="header">
+							<h:outputText value="#{periodemsgs.periode_periodique}">
+							</h:outputText>
+						</f:facet>
+						<h:outputText value="#{current.periodique?'Oui':'Non'}"
+							style="text-align:  right">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column exportable="false"
+						rendered="#{periodeDroitBean.readAllow or periodeDroitBean.editAllow or periodeDroitBean.deleteAllow}">
+						<p:commandButton id="readButton"
+							action="#{periodeSearchBean.toDetails}" icon="ui-icon-document"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{periodeDroitBean.readAllow}"
+							title="#{commonmsgs.button_consulter}">
+							<f:param name="searchValue"
+								value="#{periodeSearchBean.searchValue}" />
+							<f:param name="idp" value="#{current.id}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton"
+							action="#{periodeSearchBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{periodeDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:param name="searchValue"
+								value="#{periodeSearchBean.searchValue}" />
+							<f:param name="idp" value="#{current.id}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="removeButton"
+							actionListener="#{periodeSearchBean.toRemove(current)}"
+							process="@form" update="periodeAccessData" icon="ui-icon-trash"
+							title="#{commonmsgs.button_delete}"
+							rendered="#{periodeDroitBean.deleteAllow}">
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+							<f:param name="searchValue"
+								value="#{periodeSearchBean.searchValue}" />
+
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

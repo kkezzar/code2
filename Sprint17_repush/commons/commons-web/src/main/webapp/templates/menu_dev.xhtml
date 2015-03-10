@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+ 	<p:menu toggleable="true" style="width:400px" >
+        <p:submenu label="#{commonmsgs.menu_parametrage}"  icon="ui-icon-disk"  >
+            <p:menuitem value="#{commonmsgs.menu_affectation_nomemnclatures}"  actionListener="#{menuBean.delete}"  rendered="true"   />
+            <p:menuitem value="#{commonmsgs.menu_programme_nationaux}" actionListener="#{menuBean.delete}"   />
+            <p:menuitem value="#{commonmsgs.menu_gestion_regies}" actionListener="#{menuBean.delete}"   />
+            <p:menuitem value="#{commonmsgs.menu_intervenant_budget}" actionListener="#{menuBean.delete}"   />
+            <p:menuitem value="#{commonmsgs.menu_comptes_tresor_fonds}" actionListener="#{menuBean.delete}"   />
+       
+        </p:submenu>
+        
+       
+       	 <p:submenu label="#{commonmsgs.menu_preparation_budget}" >
+                    
+             <p:menuitem value="#{commonmsgs.menu_preparation_budget_central}" actionListener="#{menuBean.delete}"   />
+           	 <p:menuitem value="#{commonmsgs.menu_preparation_budget_etablissement}" actionListener="#{menuBean.delete}"   />
+        
+           </p:submenu>
+           
+       		  <p:submenu label="#{commonmsgs.menu_miseenplace_budget}" icon="ui-icon-home">
+           		<p:menuitem value="#{commonmsgs.menu_miseenplace_budget_central}" actionListener="#{menuBean.delete}"   />
+           		<p:menuitem value="#{commonmsgs.menu_miseenplace_budget_etablissement}" actionListener="#{menuBean.delete}"   />
+        	 </p:submenu>
+ 
+    </p:menu>
+	
+</ui:composition>

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	>
+
+
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		 <p:panel header="#{commonmsgs.menu_plageAdresse}"  style="border:0;" >
+		<h:form id="infosFromId">
+		
+			 <p:fieldset legend="#{commonmsgs.common_plageadresse}"> 
+			<p:panelGrid id="description" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{plageadressemsgs.plageadresse_identifiant}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="identifiant" 
+							value="#{plageadresseMgrBean.refPlageAdresseDto.identifiant}" style="font-weight: bold;"/>
+						
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{plageadressemsgs.plageadresse_nom}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="nom" style="font-weight: bold;"
+							value="#{plageadresseMgrBean.refPlageAdresseDto.nom}"
+							/>
+					</p:column>
+                    </p:row>
+                    <p:row>
+					<p:column>
+						<h:outputText value="#{plageadressemsgs.plageadresse_adresse_debut}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="adressedebut" style="font-weight: bold;"
+							value="#{plageadresseMgrBean.refPlageAdresseDto.adresseDebut}">
+							 <f:convertDateTime pattern="HH:mm" timeOnly="true"/>  
+							</h:outputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{plageadressemsgs.plageadresse_adresse_fin}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="adressefin" style="font-weight: bold;" value="#{plageadresseMgrBean.refPlageAdresseDto.adresseFin}" >
+						 </h:outputText>
+					</p:column>	
+				</p:row>
+			</p:panelGrid>
+			 </p:fieldset>
+			  <br></br>
+              <p:panelGrid id="panelButton" styleClass="noBorder1"> 
+			<p:row> 
+             <p:column>
+          	 <p:commandButton value="#{commonmsgs.button_return}"
+			  icon="ui-icon-disk"  process="@this"  action="#{plageadresseBckBean.back}">
+             <f:param name="searchValue" value="#{plageadresseBckBean.searchValue}"/>  
+             </p:commandButton> 
+             </p:column> 
+            </p:row>
+            </p:panelGrid>
+			
+		</h:form>
+	</p:panel>
+		  
+	</ui:define>
+</ui:composition>
+</html>

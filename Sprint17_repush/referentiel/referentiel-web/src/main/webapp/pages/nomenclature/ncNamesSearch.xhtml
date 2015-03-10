@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_nomenclature_list}"
+			style="border:0;">
+
+			<h:form id="searchForm"
+			  		onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+		
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{ncNamesDroitBean.createAllow}"
+							icon="ui-icon-document" action="#{ncNamesSearchBckBean.toNew}">
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="nomenclatureData"
+								fileName="listeDesNomenclature" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText binding="#{searchValue}" id="searchInput"
+							value="#{ncNamesSearchBckBean.searchValue}"
+							rendered="#{ncNamesDroitBean.readAllow}" style="width:200px">
+							<p:watermark for="searchInput"
+								value="#{commonmsgs.watermark_find_generic}" />
+						</p:inputText>
+						<p:commandButton onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm" id="searchButton"
+							ajax="true" icon="ui-icon-search"
+							rendered="#{ncNamesDroitBean.readAllow}"
+							actionListener="#{ncNamesSearchBckBean.findGeneric(searchValue.value)}">
+							<f:param name="searchValue" value="#{searchValue.value}"></f:param>
+						</p:commandButton>
+						<p:separator />
+
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="contratData"
+					rendered="#{ncNamesSearchBckBean.listNcNamesDto!=null}"
+					value="#{ncNamesSearchBckBean.listNcNamesDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue" value="#{searchValue.value}" />
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@all" process="@form" />
+					<p:column sortBy="#{current.nomNomenclature}">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_list_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{current.nomNomenclature}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.description}">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_list_description}" />
+						</f:facet>
+
+						<h:outputText value="#{current.description}" />
+					</p:column>
+					<p:column sortBy="#{current.nomNomenclatureRef}">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_reference}" />
+						</f:facet>
+
+						<h:outputText value="#{current.nomNomenclatureRef}" />
+					</p:column>
+
+					<p:column sortBy="#{current.descriptionRef}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{nomenclaturemsgs.nc_reference_description}" />
+						</f:facet>
+
+						<h:outputText value="#{current.descriptionRef}" />
+					</p:column>
+
+					<p:column style="width:8%" exportable="false">
+
+						<p:commandButton id="modifyButton"
+							action="#{ncNamesSearchBckBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{ncNamesDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:param name="idNc" value="#{current.id}" />
+							<f:param name="searchValue" value="#{searchValue.value}" />
+						</p:commandButton>
+						<p:commandButton id="removeButton" icon="ui-icon-trash"
+							title="#{commonmsgs.button_delete}"
+							rendered="#{ncNamesDroitBean.deleteAllow}"
+							actionListener="#{ncNamesSearchBckBean.delete(current)}"
+							process="@form" update="@form">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

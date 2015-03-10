@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<br></br>
+
+		<p:fieldset id="contratFieldSet"
+			legend="#{commonmsgs.menu_nomenclature_objet}">
+			<h:form id="searchForm">
+				<p:toolbar>
+
+
+					<p:toolbarGroup align="right" rendered="#{ncDroitBean.readAllow}">
+						<p:selectOneMenu id="idReference"
+							value="#{ncSearchBckBean.idNomenclature}" filter="true"
+							filterMatchMode="startsWith" rendered="#{ncDroitBean.readAllow}"
+							label="#{ncSearchBckBean.nomNomenclature}">
+							<f:param name="idNc" value="#{ncSearchBckBean.idNomenclature}" />
+							<f:selectItem
+								itemLabel="#{nomenclaturemsgs.nc_list_select_nomenclature}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listNc}" />
+							<p:ajax listener="#{ncSearchBckBean.ncChanged}"
+								onstart="PF('blockUIWidget').block()"
+								oncomplete="PF('blockUIWidget').unblock()" update="ncData" />
+						</p:selectOneMenu>
+						
+						<p:commandButton onstart="PF('blockUIWidget').block()" 
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							rendered="false"
+							actionListener="#{ncSearchBckBean.findGeneric}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br></br>
+
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="ncData"
+					value="#{ncSearchBckBean.listNomenclatureDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="idNc" value="#{ncSearchBckBean.idNomenclature}" />
+					<p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@all" process="@form" />
+					<f:facet name="header">
+						<h:outputText value="#{nomenclaturemsgs.nc_liste}       " />
+						<p:commandButton id="newButton" action="toNew"
+							icon="ui-icon-plusthick" title="#{commonmsgs.button_new}"
+							rendered="#{ncDroitBean.createAllow}">
+							<f:param name="idNc" value="#{ncSearchBckBean.idNomenclature}" />
+						</p:commandButton>
+					</f:facet>
+					<p:column sortBy="#{current.code}" width="5%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_code}" />
+						</f:facet>
+						<h:outputText value="#{current.code}" />
+					</p:column>
+					<p:column sortBy="#{current.libelleLongFr}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_libelle_long_fr}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleLongFr}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.libelleCourtFr}" width="15%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_libelle_court_fr}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleCourtFr}" />
+					</p:column>
+					<p:column sortBy="#{current.libelleLongAr}" width="20%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_libelle_long_ar}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleLongAr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.libelleCourtAr}" width="15%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_libelle_court_ar}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleCourtAr}"></h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.status}" width="5%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_item_staus}" />
+						</f:facet>
+
+						<h:outputText value="#{current.status?'Actif':'Inactif'}"></h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.libelleLongFrRef}" width="10%">
+						<f:facet name="header">
+							<h:outputText value="#{nomenclaturemsgs.nc_libelle_long_ref}" />
+						</f:facet>
+
+						<h:outputText value="#{current.libelleLongFrRef}"></h:outputText>
+					</p:column>
+
+					<p:column style="width:10%" exportable="false">
+						<p:commandButton id="readButton"
+							action="#{ncSearchBckBean.toDetails}" icon="ui-icon-document"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{ncDroitBean.readAllow}"
+							title="#{commonmsgs.button_consulter}">
+							<f:param name="idNc" value="#{current.idNcNames}" />
+							<f:param name="idItem" value="#{current.id}" />
+						</p:commandButton>
+						<p:commandButton id="modifyButton"
+							action="#{ncSearchBckBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{ncDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+							<f:param name="idNc" value="#{current.idNcNames}" />
+							<f:param name="idItem" value="#{current.id}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>
+</html>

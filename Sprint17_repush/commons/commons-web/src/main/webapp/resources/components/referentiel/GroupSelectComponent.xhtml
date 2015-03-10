@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+<!-- INTERFACE COMPOSANT -->
+<composite:interface>
+<composite:attribute name="id" required="true"/>
+<composite:attribute name="searchGroupMethod" method-signature="void searchGroup()" required="true"/>
+<composite:attribute name="searchGroupKeyWord" required="true"/>
+<composite:attribute name="beanName"  required="true"/>
+<composite:attribute name="selectRowListenerName"  required="true"/>
+<composite:attribute name="listData"  required="true"/>
+<composite:attribute name="selectedRow"  required="true"/>
+<composite:attribute name="toUpdate"  required="false"/>
+<composite:attribute name="dialogIdToHide"  required="false"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT -->
+<composite:implementation>
+<p:outputPanel id="#{cc.attrs.id}_outputPanel">
+	<p:toolbar style="margin-buttom:8px;width:100%;">
+		<p:toolbarGroup    align="left" >
+						<h:outputLabel for="#{cc.attrs.id}_keyWordsID" value="#{cmpGroupMsgs.group_select_component_search_key_words_label}" 	 /> 	<p:separator />
+						<p:inputText id="#{cc.attrs.id}_keyWordsID" 
+											required="true"
+											value="#{cc.attrs.searchGroupKeyWord}"  
+											style="width:300px;">
+						</p:inputText>
+						<p:separator />
+						<p:commandButton value="#{cmpGroupMsgs.group_select_component_button_search_label}"  	
+												id="#{cc.attrs.id}_btnSearch"
+												update="#{cc.attrs.id}_outputPanel"  ajax="true" 	
+												icon="ui-icon-search"  
+												process="@this #{cc.attrs.id}_keyWordsID"
+												action="#{cc.attrs.searchGroupMethod}" 
+												onstart="PF('#{cc.attrs.id}_ajaxprogress').block()"  oncomplete="PF('#{cc.attrs.id}_ajaxprogress').unblock()">
+						</p:commandButton>
+		</p:toolbarGroup>
+	</p:toolbar>
+	<p:dataTable id="#{cc.attrs.id}_dataTable" var="row"
+								value="#{cc.attrs.listData}"
+								rowKey="#{row.id}"
+								emptyMessage="#{cmpGroupMsgs.group_select_component_datatable_list_groups_empty}"
+								rowIndexVar="rowIndex"
+								selection="#{cc.attrs.selectedRow}"
+								selectionMode="single"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        						paginator="true" 
+								rows="5" 
+								paginatorPosition="bottom"
+								rowsPerPageTemplate="5,10"
+								style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{cc.attrs.beanName[cc.attrs.selectRowListenerName]}" update="#{cc.attrs.toUpdate}" oncomplete="PF('#{cc.attrs.dialogIdToHide}').hide();"/>  
+				<f:facet name="header">#{cmpGroupMsgs.group_select_component_datatable_list_groups_list}</f:facet>
+				<p:column	headerText="" style="text-align:center;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{cmpGroupMsgs.group_select_component_datatable_list_groups_column_libelle_fr}" style="text-align:left;">
+							<h:outputText value="#{row.llGroupe}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{cmpGroupMsgs.group_select_component_datatable_list_groups_column_libelle_fr}" style="text-align:left;">
+							<h:outputText value="#{row.llGroupeArabe}" style="color:#336699;"/>
+				</p:column>
+					<p:column headerText="#{cmpGroupMsgs.group_select_component_datatable_list_groups_column_type}" style="text-align:left;">
+							<h:outputText value="#{row.llTypeGroupe}" style="color:#336699;"/>
+				</p:column>
+	  </p:dataTable>
+</p:outputPanel>
+<pe:blockUI target="#{cc.attrs.id}_outputPanel" widgetVar="#{cc.attrs.id}_ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</composite:implementation>
+</html>

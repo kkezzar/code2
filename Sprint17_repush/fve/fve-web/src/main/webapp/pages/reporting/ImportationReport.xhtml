@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:fieldset
+		legend="#{reportingMsgs.reporting_statistique_bachelier_domaine}"
+		styleClass="mesrsFieldset">
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+					disabled="#{bachelierReportBean.anneeId == null}">
+					<p:graphicImage name="/images/pdf.png" />
+
+					<pe:exporter type="pdf" target="bachelierReportDataTable"
+						facetBackground="#AAFFBB" datasetPadding="10"
+						fileName="#{bachelierReportBean.importFileName}"
+						orientation="Landscape" encoding="ISO-8859-1" />
+					<f:param name="dateDebutId"
+						value="#{bachelierReportBean.dateDebutId}" />
+					<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+					<f:param name="loadStat" value="true" />
+					<f:param name="groupeId" value="#{bachelierReportBean.groupeId}" />
+					<f:param name="evenmentId"
+						value="#{bachelierReportBean.evenmentId}" />
+					<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+				</h:commandLink>
+				<p:spacer width="20" />
+				<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+					disabled="#{bachelierReportBean.anneeId == null}">
+					<p:graphicImage name="/images/excel.png" />
+					<pe:exporter type="xlsx" target="bachelierReportDataTable"
+						fileName="#{bachelierReportBean.importFileName}" />
+					<f:param name="dateDebutId"
+						value="#{bachelierReportBean.dateDebutId}" />
+					<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+					<f:param name="loadStat" value="true" />
+					<f:param name="groupeId" value="#{bachelierReportBean.groupeId}" />
+					<f:param name="evenmentId"
+						value="#{bachelierReportBean.evenmentId}" />
+					<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+				</h:commandLink>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+		<p:dataTable id="bachelierReportDataTable"
+			value="#{bachelierReportBean.reportImportList}"
+			resizableColumns="true" var="row"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			paginator="true" rows="5" lazy="true" paginatorPosition="bottom"
+			emptyMessage="#{reportingMsgs.reporting_data_table_seacrh_result_no_result}"
+			style="margin:8px" rowIndexVar="rowIndex">
+
+			<f:param name="dateDebutId"
+				value="#{bachelierReportBean.dateDebutId}" />
+			<f:param name="dateFinId" value="#{bachelierReportBean.dateFinId}" />
+			<f:param name="loadStat" value="true" />
+			<f:param name="groupeId" value="#{bachelierReportBean.groupeId}" />
+			<f:param name="evenmentId" value="#{bachelierReportBean.evenmentId}" />
+			<f:param name="anneeId" value="#{bachelierReportBean.anneeId}" />
+			<p:ajax event="page" update="bachelierReportDataTable"
+				onstart="PF('reportWidget').block()"
+				onsuccess="PF('reportWidget').unblock()"
+				process="bachelierReportDataTable" />
+			<p:ajax event="sort" update="bachelierReportDataTable"
+				onstart="PF('reportWidget').block()"
+				onsuccess="PF('reportWidget').unblock()"
+				process="bachelierReportDataTable" />
+			<f:facet name="header">
+				<h:outputText
+					value="#{reportingMsgs.reporting_statistique_par_importation} (#{bachelierReportBean.header})" />
+			</f:facet>
+			<p:column style="width:5%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{reportingMsgs.reporting_data_table_seacrh_result_column_index}" />
+				</f:facet>
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+
+			<p:column styleClass="textOnLeft" style="width:10%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{reportingMsgs.reporting_data_table_seacrh_result_column_domaine_filiere_code}" />
+				</f:facet>
+				<h:outputText value="#{row.codeDomaineFiliere}" />
+			</p:column>
+
+
+			<p:column styleClass="textOnLeft" style="width:55%">
+				<f:facet name="header">
+					<h:outputText
+						value="#{reportingMsgs.reporting_data_table_seacrh_result_column_domaine_filiere_fr}" />
+				</f:facet>
+				<h:outputText value="#{row.domaineFiliere}" />
+			</p:column>
+
+			<p:column style="width:30%;text-align:center">
+				<f:facet name="header">
+					<h:outputText
+						value="#{reportingMsgs.reporting_data_table_seacrh_result_column_nombre_fr}" />
+				</f:facet>
+				<h:outputText value="#{row.nbrBachelier}" />
+			</p:column>
+			<f:facet name="footer">
+
+				<h:outputText
+					value="Total : #{bachelierReportBean.reportImportList.size()}" />
+			</f:facet>
+
+		</p:dataTable>
+		<br />
+	</p:fieldset>
+	<p:pieChart value="#{bachelierReportBean.importPieChart}"
+		id="importPieChart" style="height:450px" legendPosition="ne"
+		showDataLabels="true" diameter="400"
+		rendered="#{bachelierReportBean.reportImportList!=null}">
+	</p:pieChart>
+
+
+
+</ui:composition>

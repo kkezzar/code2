@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+   <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantFicheVoeuxDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantFicheVoeux</class-b>
+      		<field>
+      					<a>idEnseignant</a>
+	  					<b>enseignant.id</b>
+      		</field> 
+      		<field>
+      					<a>matriculeEnseignant</a>
+	  					<b>enseignant.matricule</b>
+      		</field> 
+      		<field>
+      					<a>nomEnseignant</a>
+	  					<b>enseignant.refIndividu.nomLatin</b>
+      		</field> 
+      		<field>
+      					<a>prenomEnseignant</a>
+	  					<b>enseignant.refIndividu.prenomLatin</b>
+      		</field> 
+      		<field>
+      					<a>idAnneeAcademique</a>
+	  					<b>anneeAcademique.id</b>
+      		</field> 
+      			<field>
+      					<a>premiereAnneeAcademique</a>
+	  					<b>anneeAcademique.premiereAnnee</b>
+      		</field> 
+      			<field>
+      					<a>deuxiemeAnneeAcademique</a>
+	  					<b>anneeAcademique.deuxiemeAnnee</b>
+      		</field> 
+      	
+      		<field>
+      					<a>idPeriode</a>
+	  					<b>periode.id</b>
+      		</field> 
+      		<field>
+      					<a>codePeriode</a>
+	  					<b>periode.code</b>
+      		</field> 
+      		<field>
+      					<a>libellePeriode</a>
+	  					<b>periode.libelleLongFr</b>
+      		</field> 
+      		<field>
+      					<a>idPeriodicite</a>
+	  					<b>periode.nomenclature.id</b>
+      		</field> 
+      		<field>
+      					<a>codePeriodicite</a>
+	  					<b>periode.nomenclature.code</b>
+      		</field> 
+      		<field>
+      					<a>libellePeriodicite</a>
+	  					<b>periode.nomenclature.libelleLongFr</b>
+      		</field> 
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situation.id</b>
+      		</field> 
+      		
+      		<field>
+      					<a>libelleSituation</a>
+	  					<b>situation.situation.libelleFr</b>
+      		</field> 
+      		
+      		<field>
+      					<a>styleCssSituation</a>
+	  					<b>situation.situation.styleCss</b>
+      		</field> 
+      		
+      		<field>
+      					<a>idEtablissement</a>
+	  					<b>refEtablissement.id</b>
+      		</field> 
+      		<field>
+      					<a>codeEtablissement</a>
+	  					<b>refEtablissement.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleEtablissement</a>
+	  					<b>refEtablissement.llEtablissementLatin</b>
+      		</field> 
+   </mapping>
+   
+   <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantVoeuDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantVoeu</class-b>
+      		<field>
+      					<a>idFicheVoeux</a>
+	  					<b>enseignantFicheVoeux.id</b>
+      		</field> 
+  
+    </mapping>
+   <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantVoeuLigneDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantVoeuLigne</class-b>
+      		<field>
+      					<a>idEnseignantVoeu</a>
+	  					<b>enseignantVoeu.id</b>
+      		</field> 
+      		<field>
+      					<a>idNiveau</a>
+	  					<b>niveau.id</b>
+      		</field> 
+  
+      		<field>
+      					<a>codeNiveau</a>
+	  					<b>niveau.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleNiveau</a>
+	  					<b>niveau.libelleLongLt</b>
+      		</field> 
+      		<field>
+      					<a>idPeriode</a>
+	  					<b>periode.id</b>
+      		</field> 
+  
+      		<field>
+      					<a>codePeriode</a>
+	  					<b>periode.code</b>
+      		</field> 
+      		<field>
+      					<a>libellePeriode</a>
+	  					<b>periode.libelleLongLt</b>
+      		</field> 
+      		<field>
+      					<a>idRattachementMc</a>
+	  					<b>rattachementMc.id</b>
+      		</field> 
+      		<field>
+      					<a>idAp</a>
+	  					<b>ap.id</b>
+      		</field> 
+      		<field>
+      					<a>codeAp</a>
+	  					<b>ap.code</b>
+      		</field> 
+      		<field>
+      					<a>codeTypeAp</a>
+	  					<b>ap.ncTypeAp.code</b>
+      		</field> 
+      		<field>
+      					<a>typeEnseignement</a>
+	  					<b>ap.ncModeEnseignementAp.code</b>
+      		</field> 
+  
+  			<field>
+      					<a>idOffreFormation</a>
+	  					<b>ouvertureOffreFormation.id</b>
+      		</field> 
+      		<field>
+      					<a>codeOffreFormation</a>
+	  					<b>ouvertureOffreFormation.offreFormation.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleOffreFormation</a>
+	  					<b>ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+      		</field> 
+      		<field>
+      					<a>idEtablissement</a>
+	  					<b>ouvertureOffreFormation.offreFormation.refEtablissement.id</b>
+      		</field> 
+      		<field>
+      					<a>codeEtablissement</a>
+	  					<b>ouvertureOffreFormation.offreFormation.refEtablissement.identifiant</b>
+      		</field> 
+      		<field>
+      					<a>libelleEtablissement</a>
+	  					<b>ouvertureOffreFormation.offreFormation.refEtablissement.llEtablissementLatin</b>
+      		</field> 
+    </mapping>
+    
+    <mapping map-null="false">
+   			<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantVoeuLigneDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.RattachementMcDto</class-b>
+      		
+      		<field>
+      					<a>libelleMc</a>
+	  					<b>mcLibelleFr</b>
+      		</field> 
+      		
+    </mapping>
+       		
+    <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantFicheServicesDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantFicheServices</class-b>
+      		<field>
+      					<a>ficheVoeuxId</a>
+	  					<b>enseignantFicheVoeux.id</b>
+      		</field> 
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situation.id</b>
+      		</field> 
+      		<field>
+      					<a>libelleSituation</a>
+	  					<b>situation.situation.libelleFr</b>
+      		</field> 
+      		
+      		<field>
+      					<a>styleCssSituation</a>
+	  					<b>situation.situation.styleCss</b>
+      		</field> 
+    </mapping>
+    <mapping map-null="false">
+   <class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantChargePedagogiqueDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantChargePedagogique</class-b>
+      		<field>
+      					<a>ficheServiceId</a>
+	  					<b>enseignantFicheServices.id</b>
+      		</field> 
+      		<field>
+      					<a>voeuLigneId</a>
+	  					<b>enseignantVoeuLigne.id</b>
+      		</field> 
+      		<field>
+      					<a>groupePedagogiqueId</a>
+	  					<b>groupePedagogique.id</b>
+      		</field> 
+      		<field>
+      					<a>groupePedagogiqueLibelle</a>
+	  					<b>groupePedagogique.nomAffichage</b>
+      		</field> 
+      		<field>
+      					<a>idSituation</a>
+	  					<b>situation.id</b>
+      		</field> 
+      	
+    </mapping>
+      <mapping map-null="false">
+     		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantChargePedagogiqueDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantVoeuLigneDto</class-b>
+ 
+ 					<field>
+      					<a>matiereId</a>
+	  					<b>idRattachementMc</b>
+      				</field> 
+ 					<field>
+      					<a>matiereLibelle</a>
+	  					<b>libelleMc</b>
+      				</field> 
+      				
+      				<field>
+      					<a>apId</a>
+	  					<b>idAp</b>
+      				</field> 
+      				
+      				<field>
+      					<a>apCodeType</a>
+	  					<b>codeTypeAp</b>
+      				</field> 
+      				<field>
+      					<a>apLibelle</a>
+	  					<b>codeAp</b>
+      				</field> 
+      				<field>
+      					<a>typeEnseignement</a>
+	  					<b>typeEnseignement</b>
+      				</field> 
+      				
+      				<field>
+      					<a>matiereLibelle</a>
+	  					<b>libelleMc</b>
+      				</field> 
+      				
+      				<field>
+      					<a>niveauId</a>
+	  					<b>idNiveau</b>
+      				</field> 
+      				<field>
+      					<a>niveauCode</a>
+	  					<b>codeNiveau</b>
+      				</field> 
+      				<field>
+      					<a>niveauLibelle</a>
+	  					<b>libelleNiveau</b>
+      				</field> 
+ 
+ 					 <field>
+      					<a>offreFormationId</a>
+	  					<b>idOffreFormation</b>
+      				</field> 
+      				<field>
+      					<a>offreFormationCode</a>
+	  					<b>codeOffreFormation</b>
+      				</field> 
+      				<field>
+      					<a>offreFormationLibelle</a>
+	  					<b>libelleOffreFormation</b>
+      				</field>
+	</mapping>
+     <mapping map-null="false">
+   					<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantFicheServicesDto</class-a>
+      				<class-b>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantFicheVoeuxDto</class-b>
+      				
+      				<field>
+      					<a>ficheVoeuxEnseignantId</a>
+	  					<b>idEnseignant</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxNomEnseignant</a>
+	  					<b>nomEnseignant</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxPrenomEnseignant</a>
+	  					<b>prenomEnseignant</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxAnneeId</a>
+	  					<b>idAnneeAcademique</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxPremiereAnnee</a>
+	  					<b>premiereAnneeAcademique</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxDeuxiemeAnnee</a>
+	  					<b>deuxiemeAnneeAcademique</b>
+      				</field> 
+ 
+      				<field>
+      					<a>ficheVoeuxPeriodeId</a>
+	  					<b>idPeriode</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxPeriodeCode</a>
+	  					<b>codePeriode</b>
+      				</field> 
+      				<field>
+      					<a>ficheVoeuxPeriodeLibelle</a>
+	  					<b>libellePeriode</b>
+      				</field> 
+      		      	
+    </mapping>
+    
+       <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantServiceFaitDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.EnseignantServiceFait</class-b>
+      		<field>
+      					<a>seanceTypeId</a>
+	  					<b>typeSeance.id</b>
+      		</field> 
+      		<field>
+      					<a>seanceTypeCode</a>
+	  					<b>typeSeance.code</b>
+      		</field> 
+      		<field>
+      					<a>seanceTypeLibelleFr</a>
+	  					<b>typeSeance.libelleFr</b>
+      		</field> 
+      		<field>
+      					<a>chargeId</a>
+	  					<b>enseignantChargePedagogique.id</b>
+      		</field> 
+      		<field>
+      					<a>idSituation</a>
+      					
+      					
+	  					<b>situation.id</b>
+      		</field> 
+    </mapping>
+       <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantServiceFaitDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EnseignantChargePedagogiqueDto</class-b>
+      		<field>
+      					<a>chargeId</a>
+	  					<b>id</b>
+      		</field> 
+      		<field>
+      					<a>chargeGroupePedagogiqueId</a>
+	  					<b>groupePedagogiqueId</b>
+      		</field> 
+      		<field>
+      					<a>chargeGroupePedagogiqueLibelle</a>
+	  					<b>groupePedagogiqueLibelle</b>
+      		</field> 
+      		<field>
+      					<a>chargeMatiereId</a>
+	  					<b>matiereId</b>
+      		</field> 
+      		<field>
+      					<a>chargeMatiereLibelle</a>
+	  					<b>matiereLibelle</b>
+      		</field> 
+      		<field>
+      					<a>chargeNiveauId</a>
+	  					<b>niveauId</b>
+      		</field> 
+      		<field>
+      					<a>chargeNiveauCode</a>
+	  					<b>niveauCode</b>
+      		</field> 
+      		<field>
+      					<a>chargeNiveauLibelle</a>
+	  					<b>niveauLibelle</b>
+      		</field> 
+      		<field>
+      					<a>chargePeriodeId</a>
+	  					<b>idPeriode</b>
+      		</field> 
+      		<field>
+      					<a>chargePeriodeCode</a>
+	  					<b>codePeriode</b>
+      		</field> 
+      		<field>
+      					<a>chargePeriodeLibelle</a>
+	  					<b>libellePeriode</b>
+      		</field> 
+      		<field>
+      					<a>chargeApId</a>
+	  					<b>apId</b>
+      		</field> 
+      		<field>
+      					<a>chargeApCodeType</a>
+	  					<b>apCodeType</b>
+      		</field> 
+      		<field>
+      					<a>chargeApLibelle</a>
+	  					<b>apLibelle</b>
+      		</field> 
+      		<field>
+      					<a>chargeTypeEnseignement</a>
+	  					<b>typeEnseignement</b>
+      		</field> 
+      		
+    </mapping>
+    
+     <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.DossierEmployeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.DossierEmploye</class-b>
+      		
+      		<field>
+      					<a>individuCivilite</a>
+	  					<b>refIndividu.nomenclatureByCivilite.code</b>
+      		</field>
+      		<field>
+      					<a>individuNomLatin</a>
+	  					<b>refIndividu.nomLatin</b>
+      		</field>
+      		<field>
+      					<a>individuPrenomLatin</a>
+	  					<b>refIndividu.prenomLatin</b>
+      		</field>
+      		<field>
+      					<a>individuNomArabe</a>
+	  					<b>refIndividu.nomArabe</b>
+      		</field>
+      		<field>
+      					<a>individuPrenomArabe</a>
+	  					<b>refIndividu.prenomArabe</b>
+      		</field>
+      		<field>
+      					<a>individuDateNaissance</a>
+	  					<b>refIndividu.dateNaissance</b>
+      		</field>
+      		
+      		<field>
+      					<a>individuSituationFamilialeLibelleLongFr</a>
+	  					<b>refIndividu.nomenclatureBySituationFamiliale.libelleLongFr</b>
+      		</field>
+      		<field>
+      					<a>individuLieuNaissance</a>
+	  					<b>refIndividu.lieuNaissance</b>
+      		</field>
+      		
+     </mapping>
+
+</mappings>

@@ -1,0 +1,136 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	 <h:form>
+   <p:panel style="height:600px" id="infosEquipementPanel">  
+   
+             <p:fieldset legend="Equipement informations">
+               <p:panelGrid id="idendite" styleClass="noBorder1"> 
+                  <p:row >
+						<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_identite} *" />
+						</p:column>
+						<p:column>
+						<p:inputText id="identifiant" style="text-align: left; width:300px"
+						value="#{equipementMgrBean.refEquipementDto.identifiant}"
+						label="#{equipementmsgs.equipement_identite}"
+						required="true" 
+                        requiredMessage="#{equipementmsgs.equipement_identite_required}">
+						</p:inputText>
+						</p:column> 
+                 </p:row>
+                 
+                 <p:row >
+						<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_code}*" />
+						</p:column>
+						<p:column>
+						<p:inputText id="code" style="text-align: left; width:300px"
+						value="#{equipementMgrBean.refEquipementDto.code}"
+						label="#{equipementmsgs.equipement_code}" required="true" 
+                        requiredMessage="#{equipementmsgs.equipement_code_required}">
+						</p:inputText>
+						</p:column> 
+					  </p:row>
+                 
+                      <p:row >	
+						<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_libelle}* " />
+						</p:column>
+						<p:column>
+						<p:inputText id="designation" style="text-align: left; width:300px"
+						value="#{equipementMgrBean.refEquipementDto.designation}"
+						label="#{equipementmsgs.equipement_libelle}" required="true" 
+                        requiredMessage="#{equipementmsgs.equipement_libelle_required}">
+						</p:inputText>
+						</p:column> 
+                 </p:row>
+                 
+                 <p:row >
+                 <p:column>
+						<h:outputText value="#{equipementmsgs.equipement_famille_equipement} *" />
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="famille" 
+						value="#{equipementMgrBean.refEquipementDto.familleequipementId}"
+						label="#{equipementmsgs.equipement_famille_equipement}" required="true" 
+                        requiredMessage="#{equipementmsgs.equipement_famille_required}">
+						<f:selectItem
+						itemLabel="#{equipementmsgs.selection_famille_equipement}"
+						itemValue="" />
+						<f:selectItems value="#{comboBckBean.listFamillequipement}" />
+						</p:selectOneMenu>	
+				</p:column> 
+						
+                 </p:row>
+                  <p:row >
+						 <p:column>
+						<h:outputText value="#{equipementmsgs.equipement_sous_famille_equipement} *" />
+						</p:column>
+						<p:column>
+						<p:selectOneMenu id="sousfamille" 
+						value="#{equipementMgrBean.refEquipementDto.sousfamilleequipementId}"
+						label="#{equipementmsgs.equipement_sous_famille_equipement}" required="true" 
+                        requiredMessage="#{equipementmsgs.equipement_sous_famille_required}">
+						<f:selectItem
+						itemLabel="#{equipementmsgs.selection_sous_famille_equipement}"
+						itemValue="" />
+						<f:selectItems value="#{comboBckBean.listSousFamillequipement}" />
+						</p:selectOneMenu>	
+				</p:column> 
+                   </p:row>
+                
+            
+                   <p:row>
+						<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_reference} " />
+						</p:column>
+						<p:column>
+						<p:inputMask id="reference" style="text-align: left; width:125px" 
+						value="#{equipementMgrBean.refEquipementDto.referenceexterne}"
+						label="#{equipementmsgs.equipement_reference}" />
+												
+						</p:column> 
+					</p:row>
+                  <p:row>
+                 <p:column width="100px">
+							<h:outputText value="#{equipementmsgs.equipement_datemdisp} *" />
+						</p:column> 
+						<p:column >
+							<p:calendar navigator="true"  value="#{equipementMgrBean.refEquipementDto.dateMiseDispo}" id="dateDebut" showButtonPanel="true" required="true"  width="100px"
+							label="#{equipementmsgs.equipement_datemdisp}"  requiredMessage="#{equipementmsgs.equipement_date_med_required}">
+							</p:calendar>
+							</p:column>
+							
+                   </p:row>
+                   <p:row> 
+                   <p:column>
+                   </p:column>
+                   <p:column>
+				   <p:selectBooleanCheckbox value="#{equipementMgrBean.refEquipementDto.reservable}" >	
+				   </p:selectBooleanCheckbox> 
+				   <h:outputText value=" #{equipementmsgs.equipement_reservable}" style="text-align: top"/>
+				   </p:column> 
+                   </p:row>
+                   <p:row> 
+			
+             <p:column>
+              <br></br>
+            <p:commandButton value="#{commonmsgs.button_save} "
+			icon="ui-icon-disk"  
+            action="#{equipementMgrBean.saveEquipement()}" /> 
+            </p:column> 
+    
+            </p:row>
+            </p:panelGrid>
+             </p:fieldset>
+
+        
+  
+            </p:panel>  
+              </h:form>
+
+</ui:composition>

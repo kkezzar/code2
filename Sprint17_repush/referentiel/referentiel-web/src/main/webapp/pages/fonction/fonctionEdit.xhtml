@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel header="#{commonmsgs.menu_habilitation_fonction_objet}"
+			style="border:0;">
+
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+			<h:form id="fonctionFromId">
+				<ui:include src="/pages/module/moduleInfo.xhtml" />
+				<br />
+				<br />
+
+				<p:panelGrid id="domaineListId" styleClass="ui-panelgrid-full-width">
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{habilitationmsgs.fonction_module_name_label} *" />
+						</p:column>
+						<p:column style="width:85%">
+							<p:selectOneMenu id="listDomaine" filter="true"
+								filterMatchMode="contains" style="text-align: left;width:100%"
+								value="#{fonctionBckBean.refFonctionDto.idModule}"
+								label="#{habilitationmsgs.fonction_name_infobull}"
+								required="true"
+								valueChangeListener="#{fonctionBckBean.nameModuleChanged}"
+								requiredMessage="#{habilitationmsgs.fonction_module_name_required}">
+
+								<f:selectItem
+									itemLabel="#{habilitationmsgs.fonction_module_name_select}"
+									itemValue="" />
+								<f:selectItems value="#{fonctionBckBean.listModule}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<!--  
+				</p:panelGrid>
+
+				<p:panelGrid id="editfonctionDescription" styleClass="noBorder1">
+                -->
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{habilitationmsgs.fonction_identifiant_label} " />
+						</p:column>
+						<p:column style="width:85%">
+							<h:outputText
+								value="#{fonctionBckBean.refFonctionDto.identifiant}"
+								styleClass="value" />
+
+
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_name_label} *" />
+						</p:column>
+						<p:column style="width:85%">
+							<p:inputText id="name" style="text-align: left;width:98%"
+								value="#{fonctionBckBean.refFonctionDto.nom}"
+								label="#{habilitationmsgs.fonction_name_infobull}"
+								required="true"
+								valueChangeListener="#{fonctionBckBean.nameFonctionChanged}"
+								disabled="false"
+								requiredMessage="#{habilitationmsgs.fonction_name_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText
+								value="#{habilitationmsgs.fonction_name_arabe_label} *" />
+						</p:column>
+						<p:column style="width:85%">
+							<p:inputText id="nameArabe" style="text-align: left;width:98%"
+								value="#{fonctionBckBean.refFonctionDto.nomArabe}"
+								label="#{habilitationmsgs.fonction_name_arabe_infobull}"
+								required="true"
+								valueChangeListener="#{fonctionBckBean.nameArabeFonctionChanged}"
+								disabled="false"
+								requiredMessage="#{habilitationmsgs.fonction_name_arabe_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_rang_label} " />
+						</p:column>
+						<p:column style="width:85%">
+							<h:outputText id="rang" style="text-align: left"
+								value="#{fonctionBckBean.refFonctionDto.rang}              ">
+							</h:outputText>
+							<p:commandButton id="editRangFonction" icon="ui-icon-suitcase"
+								label="#{habilitationmsgs.fonction_change_rang_label}"
+								rendered="#{fonctionBckBean.refFonctionDto.identifiant!=null}">
+								<f:param name="idfct" value="#{fonctionBckBean.idfct}" />
+								<f:param name="idfm" value="#{fonctionBckBean.idfm}" />
+								<f:param name="searchValue"
+									value="#{fonctionBckBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_periode_label} " />
+						</p:column>
+						<p:column style="width:85%">
+							<p:selectOneMenu id="periodeId"
+								style="text-align: left;width:100%"
+								value="#{fonctionBckBean.refFonctionDto.idPeriode}"
+								valueChangeListener="#{fonctionBckBean.periodeChanged}"
+								label="#{habilitationmsgs.fonction_periode_label}">
+								<f:selectItem
+									itemLabel="#{habilitationmsgs.fonction_select_periode}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listePeriode}" />
+							</p:selectOneMenu>
+
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_url_label}" />
+						</p:column>
+						<p:column style="width:85%">
+							<!-- 							<p:selectOneMenu id="listUrl" filter="true" -->
+							<!-- 								style="text-align: left" -->
+							<!-- 								filterMatchMode="startsWith" -->
+							<!-- 								value="#{fonctionBckBean.refFonctionDto.url}" -->
+							<!-- 								label="#{habilitationmsgs.fonction_url_infobull}" -->
+							<!-- 								valueChangeListener="#{fonctionBckBean.urlFonctionChanged}"> -->
+
+							<!-- 								<f:selectItem -->
+							<!-- 									itemLabel="#{habilitationmsgs.fonction_url_select}" -->
+							<!-- 									itemValue="" /> -->
+							<!-- 								<f:selectItems value="#{fonctionBckBean.urlList}" /> -->
+
+							<!-- 							</p:selectOneMenu> -->
+							<p:inputText id="listUrl" style="text-align: left;width:98%"
+								value="#{fonctionBckBean.refFonctionDto.url}"
+								label="fonction_url_infobull" required="true"
+								valueChangeListener="#{fonctionBckBean.urlFonctionChanged}"
+								disabled="false"
+								requiredMessage="#{habilitationmsgs.fonction_url_required}">
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_ancre_aide_label} " />
+						</p:column>
+						<p:column style="width:85%">
+							<p:inputText value="#{fonctionBckBean.refFonctionDto.helpAnchor}" valueChangeListener="#{fonctionBckBean.onAnotherValueChange}"/>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<br></br>
+				<p:overlayPanel id="rangPanel" for="editRangFonction"
+					widgetVar="rangDlg" hideEffect="fade" dismissable="false"
+					rendered="#{fonctionBckBean.listFonctionDto!=null}">
+					<p:panel header="#{habilitationmsgs.fonction_gestion_rang}">
+						<p:orderList value="#{fonctionBckBean.listFonctionDto}"
+							var="currentFonction" styleClass="smallList"
+							itemValue="#{currentFonction}" converter="#{fonctionBckBean}"
+							controlsLocation="right" id="orderListFonction"
+							moveBottomLabel="#{commonmsgs.move_bottom_label}"
+							moveTopLabel="#{commonmsgs.move_top_label}"
+							moveDownLabel="#{commonmsgs.move_down_label}"
+							moveUpLabel="#{commonmsgs.move_up_label}">
+							<f:facet name="caption">
+								<h:outputText value="#{habilitationmsgs.fonction_liste}" />
+							</f:facet>
+							<p:column style="width:40%">
+								<h:outputText dir="ltr" value="#{currentFonction.identifiant}" />
+							</p:column>
+							<p:column style="width:60%">
+								<h:outputText dir="ltr" value="#{currentFonction.nom}" />
+							</p:column>
+
+						</p:orderList>
+						<p:toolbar id="footerDomaine">
+							<p:toolbarGroup align="left">
+								<p:commandButton value="#{commonmsgs.button_save}"
+									icon="ui-icon-disk" onsuccess="PF('rangDlg').hide()"
+									action="#{fonctionBckBean.saveRang}" update="@form"
+									process="@form">
+									<f:param name="idfct" value="#{fonctionBckBean.idfct}" />
+									<f:param name="idfm" value="#{fonctionBckBean.idfm}" />
+									<f:param name="searchValue"
+										value="#{fonctionBckBean.searchValue}" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="#{commonmsgs.button_cancel}"
+									icon="ui-icon-arrowreturnthick-1-w" process="@this"
+									onsuccess="PF('rangDlg').hide()">
+									<f:param name="idfct" value="#{fonctionBckBean.idfct}" />
+									<f:param name="idfm" value="#{fonctionBckBean.idfm}" />
+									<f:param name="searchValue"
+										value="#{fonctionBckBean.searchValue}" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+						</p:toolbar>
+
+					</p:panel>
+				</p:overlayPanel>
+				<br />
+				<br />
+				<p:toolbar id="footerfonction">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" process="@form"
+							actionListener="#{fonctionBckBean.saveFonction}" update="@form">
+							<f:param name="idfct" value="#{fonctionBckBean.idfct}" />
+							<f:param name="idfm" value="#{fonctionBckBean.idfm}" />
+							<f:param name="searchValue" value="#{searchValue.value}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.button_return}"
+							icon="ui-icon-arrowreturnthick-1-w" process="@this"
+							immediate="true" action="#{fonctionBckBean.back}" ajax="false">
+							<f:param name="idfct" value="#{fonctionBckBean.idfct}" />
+							<f:param name="idfm" value="#{fonctionBckBean.idfm}" />
+							<f:param name="searchValue"
+								value="#{fonctionBckBean.searchValue}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>.
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

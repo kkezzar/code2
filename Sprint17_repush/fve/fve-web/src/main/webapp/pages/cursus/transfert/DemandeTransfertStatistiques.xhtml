@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{dossierTransfertMsgs.dossier_transfert_statistiques}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<!-- toolbar -->
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:selectOneMenu id="selectAnnee" style="margin:5px 5px 0px 5px;"
+							value="#{dossierTransfertStatistiquesMBean.idAnneeAcademique}"
+							label="#{printMsgs.print_anne_univeristaire}">
+							<f:selectItem
+								itemLabel="#{printMsgs.print_select_annee_academique}"
+								itemValue="" />
+							<f:selectItems
+								value="#{dossierTransfertStatistiquesMBean.listAnneeAcademique}" />
+
+							<p:ajax onstart="PF('allWidget').block()"
+								onsuccess="PF('allWidget').unblock()"
+								listener="#{dossierTransfertStatistiquesMBean.handleAnneeAcademiqueChange}"
+								event="valueChange" update="form_search" />
+						</p:selectOneMenu>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="30px"></p:spacer>
+
+				<p:tabView>
+					<p:tab
+						title="#{dossierTransfertMsgs.dossier_transfert_datable_stats_par_domaine_filiere}">
+						<p:dataTable id="ResultSearchDataTable"
+							value="#{dossierTransfertStatistiquesMBean.transfertsInternesDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" selectionMode="single" rows="20"
+							sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<!-- 						<p:ajax event="rowSelect" immediate="true"
+							listener="#{dossierTransfertStatistiquesMBean.onRowSelect}"
+							process="@this" onstart="PF('allWidget').block()"
+							onsuccess="PF('allWidget').unblock()" update=":form_view" /> -->
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transferts_internes_domaine_filiere}" />
+							</f:facet>
+
+							<!-- Domaine -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+								width="20%" sortBy="#{transfert.refCodeDomaineDemande}">
+
+								<h:outputText value="#{transfert.libelleDomaineDemandeFr}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Filiere -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}"
+								width="20%" sortBy="#{transfert.refCodeFiliereDemandee}">
+
+								<h:outputText value="#{transfert.libelleFiliereDemandeeFr}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Capacité du transfert -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_capacite_transfert}"
+								width="10%" sortBy="#{transfert.capaciteTransfert}">
+
+								<h:outputText value="#{transfert.capaciteTransfert}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="12%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes acceptees -->
+							<!--
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+							width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+							<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+							</h:outputText>
+						</p:column>
+						-->
+							<!-- Nombre de demandes refusees -->
+							<!--
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+							width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+							<h:outputText value="#{transfert.nbrDemandesRejetees}">
+							</h:outputText>
+						</p:column>
+						-->
+
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="15%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de cas excepetionnels -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_cas_exceptionnels}"
+								width="22%" sortBy="#{transfert.nbrCasExceptionnels}">
+								<h:outputText value="#{transfert.nbrCasExceptionnels}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer height="30px"></p:spacer>
+
+						<p:dataTable id="ResultSearchDataTableTransfertsExternes"
+							value="#{dossierTransfertStatistiquesMBean.transfertsExternesDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" selectionMode="single" rows="20"
+							sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transfert_externes_domaine_filiere}" />
+							</f:facet>
+
+							<!-- Domaine -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+								width="20%" sortBy="#{transfert.refCodeDomaineDemande}">
+
+								<h:outputText value="#{transfert.libelleDomaineDemandeFr}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Filiere -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}"
+								width="20%" sortBy="#{transfert.refCodeFiliereDemandee}">
+
+								<h:outputText value="#{transfert.libelleFiliereDemandeeFr}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Capacité du transfert -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_capacite_transfert}"
+								width="10%" sortBy="#{transfert.capaciteTransfert}">
+
+								<h:outputText value="#{transfert.capaciteTransfert}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="12%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes acceptees -->
+							<!-- 
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+							width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+							<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+							</h:outputText>
+						</p:column>
+						-->
+
+							<!-- Nombre de demandes refusees -->
+							<!-- 
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+							width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+							<h:outputText value="#{transfert.nbrDemandesRejetees}">
+							</h:outputText>
+						</p:column>
+						-->
+
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="15%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+
+							<!-- Nombre de cas excepetionnels -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_cas_exceptionnels}"
+								width="22%" sortBy="#{transfert.nbrCasExceptionnels}">
+								<h:outputText value="#{transfert.nbrCasExceptionnels}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer height="30px"></p:spacer>
+
+					</p:tab>
+
+					<p:tab
+						title="#{dossierTransfertMsgs.dossier_transfert_datable_stats_par_bachelier}">
+						<!-- Transferts internes par type bachelier (nouveau / ancien) -->
+						<p:dataTable id="ResultSearchDataTableTransfertsInternesBachelier"
+							value="#{dossierTransfertStatistiquesMBean.transfertsInternesBachelierDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" rows="20" sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transferts_internes_bachelier}" />
+							</f:facet>
+
+							<!-- type bachelier -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_bachelier}"
+								width="15%" sortBy="#{transfert.nouveauBachelier}">
+
+								<h:outputText value="#{transfert.nouveauBachelierLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="15%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes acceptees 
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+									width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+									<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+									</h:outputText>
+								</p:column>
+								-->
+							<!-- Nombre de demandes refusees
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+									width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+									<h:outputText value="#{transfert.nbrDemandesRejetees}">
+									</h:outputText>
+								</p:column>
+								 -->
+
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="15%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de cas excepetionnels -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_cas_exceptionnels}"
+								width="20%" sortBy="#{transfert.nbrCasExceptionnels}">
+								<h:outputText value="#{transfert.nbrCasExceptionnels}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer height="30px"></p:spacer>
+
+						<!-- Transferts externes par type bachelier (nouveau / ancien) -->
+						<p:dataTable id="ResultSearchDataTableTransfertsExternesBachelier"
+							value="#{dossierTransfertStatistiquesMBean.transfertsExternesBachelierDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" rows="20" sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transfert_externes_bachelier}" />
+							</f:facet>
+
+							<!-- type bachelier -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_bachelier}"
+								width="15%" sortBy="#{transfert.nouveauBachelier}">
+								<h:outputText value="#{transfert.nouveauBachelierLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="15%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes acceptees
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+									width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+									<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+									</h:outputText>
+								</p:column>
+								 -->
+
+							<!-- Nombre de demandes refusees 
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+									width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+									<h:outputText value="#{transfert.nbrDemandesRejetees}">
+									</h:outputText>
+								</p:column>
+								-->
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="15%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de cas excepetionnels -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_cas_exceptionnels}"
+								width="20%" sortBy="#{transfert.nbrCasExceptionnels}">
+								<h:outputText value="#{transfert.nbrCasExceptionnels}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer height="30px"></p:spacer>
+
+						<p:dataTable
+							id="ResultSearchDataTableTransfertsSortantesAccordees"
+							value="#{dossierTransfertStatistiquesMBean.transfertsExternesSortantesBachelierDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" selectionMode="single" rows="8"
+							sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transfert_sortantes_bachelier}" />
+							</f:facet>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="10%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="15%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer height="30px"></p:spacer>
+					</p:tab>
+
+					<p:tab
+						title="#{dossierTransfertMsgs.dossier_transfert_datable_stats_par_type_transfert}">
+						<p:dataTable id="ResultSearchDataTableTypesTransferts"
+							value="#{dossierTransfertStatistiquesMBean.transfertsTypesTransfertsDtos}"
+							var="transfert" rowKey="#{transfert.id}" paginator="true"
+							paginatorPosition="bottom" selectionMode="single" rows="8"
+							sortMode="multiple"
+							emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+							<f:facet name="header">
+								<h:outputText
+									value="#{dossierTransfertMsgs.dossier_transfert_datable_stats_transfert_types}" />
+							</f:facet>
+
+							<!-- Type -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_type_transfert}"
+								width="20%" sortBy="#{transfert.refCodeTypeTransfert}">
+
+								<h:outputText value="#{transfert.refCodeTypeTransfertLibelleFr}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_enregistrees}"
+								width="10%" sortBy="#{transfert.nbrTotalDemandes}">
+								<h:outputText value="#{transfert.nbrTotalDemandes}">
+								</h:outputText>
+							</p:column>
+
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_traitees}"
+								width="10%" sortBy="#{transfert.nbrDemandesTraitees}">
+								<h:outputText value="#{transfert.nbrDemandesTraitees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de demandes acceptees 
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_acceptees}"
+									width="10%" sortBy="#{transfert.nbrDemandesAcceptees}">
+									<h:outputText value="#{transfert.nbrDemandesAcceptees}">
+									</h:outputText>
+								</p:column>
+								-->
+							<!-- Nombre de demandes refusees -
+								<p:column
+									headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_refusees}"
+									width="10%" sortBy="#{transfert.nbrDemandesRejetees}">
+									<h:outputText value="#{transfert.nbrDemandesRejetees}">
+									</h:outputText>
+								</p:column>
+								-->
+
+							<!-- Nombre de demandes accordées -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_demandes_accordees}"
+								width="20%" sortBy="#{transfert.nbrDemandesAccordees}">
+								<h:outputText value="#{transfert.nbrDemandesAccordees}">
+								</h:outputText>
+							</p:column>
+
+							<!-- Nombre de cas excepetionnels -->
+							<p:column
+								headerText="#{dossierTransfertMsgs.dossier_transfert_nbr_cas_exceptionnels}"
+								width="10%" sortBy="#{transfert.nbrCasExceptionnels}">
+								<h:outputText value="#{transfert.nbrCasExceptionnels}">
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="pageTitleContent">
+		#{postesupmsgs.page_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel" >
+<h:panelGrid style="width:100%;">
+				<p:row>
+					<p:column>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton 
+							action="#{posteSuperieurMBean.onNew}"
+							styleClass="ui-buttop-bleu"
+							value="#{commonmsgs.bouton_nouveau}"
+							update=":form_view_poste_sup"
+							onstart="PF('page').block()" 
+							oncomplete="PF('page').unblock()"/>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<h:outputLabel for="keyWordsID"
+							value="#{commonmsgs.search_label_mots_cles}"
+							style="font-size:11px" />
+						<p:separator />
+						<p:inputText id="keyWordsID"
+							value="#{posteSuperieurMBean.searchKeyWords}" 
+							label="#{commonmsgs.search_label_mots_cles}" />
+						<p:watermark for="keyWordsID" value="Saisissez un mot clé" />
+						<p:separator />
+						<p:commandButton 
+							id="btnSearch" update="@([id$=resultSearchDataTable])"
+							styleClass="ui-button-bleu"
+							ajax="true" icon="ui-icon-search" process="@this keyWordsID"
+							action="#{posteSuperieurMBean.onSearch()}"
+							onstart="PF('page').block()"
+							oncomplete="PF('page').unblock()" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				</h:form>
+				</p:column>
+				</p:row>
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="resultSearchDataTable"
+					value="#{posteSuperieurMBean.posteSuperieureDtos}" var="postSup"
+					paginator="true" rowKey="#{postSup.id}" rowIndexVar="rowIndex"
+					paginatorPosition="bottom" selectionMode="single" lazy="true"
+					rows="10" emptyMessage="#{grhmsgs.statuts_no_result}">
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{posteSuperieurMBean.onPosteSuperieurSelected}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_view_poste_sup" />
+					<f:facet name="header">
+						<h:outputText value="#{postesupmsgs.poste_sup_list}" />
+					</f:facet>
+					<p:column headerText="N°">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.poste_superieur}">
+						<h:outputText
+							value="#{postSup.typePosteSuperieurDto.libelleLongFr}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.categorie}">
+						<h:outputText
+							value="#{postSup.categorieProfessionnelleDto.nomenclatureByCategorieDto.libelleLongFr}" />
+					</p:column>
+					<p:column headerText="#{grhmsgs.indice}">
+						<h:outputText value="#{postSup.bonificationIndiciaire}" />
+					</p:column>
+				</p:dataTable>
+
+			<p:spacer height="20px"></p:spacer>
+
+
+			<h:form id="form_view_poste_sup">
+				<p:panel rendered="#{posteSuperieurMBean.posteSuperieureDto != null}"
+					header="#{postesupmsgs.add_poste_sup}">
+							<p:panelGrid columns="4" styleClass="ui-panelgrid-full-width">
+							
+								<h:outputLabel value="#{grhmsgs.grh_statut}" styleClass="required" />
+								<p:selectOneMenu id="statut" label="#{grhmsgs.grh_statut}"
+									value="#{posteSuperieurMBean.selectedStatutId}"
+									styleClass="labelValue" required="true"
+									requiredMessage="#{grademsgs.statut_required}">
+									<p:ajax update=":form_view_poste_sup"
+										listener="#{posteSuperieurMBean.onStatutSelected()}"
+										onstart="PF('page').block()" onsuccess="PF('page').unblock()" />
+									<f:selectItem itemLabel="--#{grhmsgs.grh_statut}--" />
+									<f:selectItems value="#{posteSuperieurMBean.statuts}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{grhmsgs.grh_corps}" styleClass="required" />
+								<p:selectOneMenu id="corps" label="#{grhmsgs.grh_corps}"
+									value="#{posteSuperieurMBean.posteSuperieureDto.corpsDto.id}"
+									styleClass="labelValue" required="true"
+									requiredMessage="#{grademsgs.corps_required}"
+									disabled="#{posteSuperieurMBean.corps == null}">
+									<f:selectItem itemLabel="--#{grhmsgs.grh_corps}--" />
+									<f:selectItems value="#{posteSuperieurMBean.corps}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{grhmsgs.poste_superieur}" styleClass="required" />
+								<p:selectOneMenu id="postSup" label="#{grhmsgs.grh_grade}"
+									value="#{posteSuperieurMBean.posteSuperieureDto.typePosteSuperieurDto.id}"
+									styleClass="labelValue" required="true"
+									requiredMessage="#{postesupmsgs.post_sup_required}">
+									<f:selectItem itemLabel="--#{grhmsgs.poste_superieur}--" />
+									<f:selectItems value="#{posteSuperieurMBean.posteSuperieurTypes}" />
+								</p:selectOneMenu>
+								
+								<h:outputLabel value="#{grhmsgs.categorie}" styleClass="required"/>
+								<p:selectOneMenu id="categorie" label="#{grhmsgs.categorie}"
+									value="#{posteSuperieurMBean.posteSuperieureDto.categorieProfessionnelleDto.id}"
+									styleClass="labelValue" required="true"
+									requiredMessage="#{postesupmsgs.categorie_required}">
+									<f:selectItem itemLabel="--#{grhmsgs.categorie}--" />
+									<f:selectItems value="#{posteSuperieurMBean.categorieSuperieures}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{postesupmsgs.bonification_indiciaire}" styleClass="required" />
+								<h:inputText id="bonificationIndiciaire" styleClass="labelValue"
+									value="#{posteSuperieurMBean.posteSuperieureDto.bonificationIndiciaire}"
+									label="#{grhmsgs.grh_grade}" 
+									required="true"
+									requiredMessage="#{postesupmsgs.bonification_indiciaire_required}"/>
+
+							</p:panelGrid>
+					<p:toolbar id="corpsToolBar" styleClass="toolBarMesrs">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+								id="saveBtn" icon="ui-icon-disk"
+								onstart="PF('page').block()"
+								oncomplete="PF('page').unblock()"
+								actionListener="#{posteSuperieurMBean.onSave}"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_poste_sup])">
+							</p:commandButton>
+							<span class="ui-separator"> <span
+								class="ui-icon ui-icon-grip-dotted-vertical" />
+							</span>
+							<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+								id="deleteBtn" icon="ui-icon-disk"
+								onstart="PF('page').block()"
+								oncomplete="PF('page').unblock()"
+								actionListener="#{posteSuperieurMBean.onDelete}"
+								styleClass="ui-button-delete-o"
+								update="@([id$=outputPanel])"
+								process="@([id$=form_view_poste_sup])"
+								rendered="#{posteSuperieurMBean.posteSuperieureDto.id != null}">
+							</p:commandButton>
+						</p:toolbarGroup>
+
+					</p:toolbar>
+
+
+				</p:panel>
+
+			</h:form>
+</h:panelGrid>
+
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

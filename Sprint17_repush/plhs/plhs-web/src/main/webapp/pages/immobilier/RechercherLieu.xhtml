@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		 RECHERCHER LIEU
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_lieu_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+						<p:inputText value="#{lieuMBean.searchDto.identifiant}" placeholder="Identifiant"/>
+						<p:spacer width="5px"></p:spacer>
+						<p:inputText value="#{lieuMBean.searchDto.designation}" placeholder="Identifiant"/>
+						<p:spacer width="5px"></p:spacer>
+						<p:selectOneMenu value="#{lieuMBean.searchDto.typelieuId}">
+							<f:selectItem itemLabel="Type"/>
+							<f:selectItems value="#{lieuMBean.typeList}"/>
+						</p:selectOneMenu>
+							
+						<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu" process="form_lieu_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{lieuMBean.onSearch()}"/>
+		
+					</p:toolbarGroup>
+				</p:toolbar>
+			</h:form>
+			<p:dataTable var="lieu" lazy="true"
+					value="#{lieuMBean.dtos}"
+					widgetVar="lieuDataTable" rowKey="#{lieu.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="Auncun lieu enregistre">
+					
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{lieu.designation}" headerText="Designation">
+						<h:outputText value="#{lieu.designation}"/>
+					</p:column>
+					<p:column sortBy="#{lieu.typelieuLibelleLongFr}" 
+						headerText="Type">
+						<h:outputText value="#{lieu.typelieuLibelleLongFr}"/>
+					</p:column>
+					<p:column sortBy="#{lieu.description}" headerText="Description">
+						<h:outputText value="#{lieu.description}"/>
+					</p:column>
+				</p:dataTable>
+	
+		</p:outputPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

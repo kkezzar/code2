@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+	<h:form prependId="false">
+	<p:fieldset legend="Domaine informations">
+		<p:panelGrid id="idendite" styleClass="noBorder1">
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_identite} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="identifiant" style="text-align: left; width:300px"
+
+						value="#{domainelmdMgrBean.refDomaineLMDDto.identifiant}"
+						label="#{domainelmdmsgs.domainelmd_identite}"
+						disabled="#{domainelmdMgrBean.updateMode}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_identite_required}">
+					</p:inputText>
+					
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcr" style="text-align: left; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.lcDomaine}"
+						label="#{domainelmdmsgs.domainelmd_crlibelle}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_crlibelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_arabe_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcrArabe"
+						style="text-align: right; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.lcDomaineArabe}"
+						label="#{domainelmdmsgs.domainelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="lbelle" style="text-align: left; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.llDomaine}"
+						label="#{domainelmdmsgs.domainelmd_crlibelle}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_libelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_libelle_arabe} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libelleArabe"
+						style="text-align: right; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.llDomaineArabe}"
+						label="#{domainelmdmsgs.domainelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+		
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_description} *" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="description"
+						style="text-align: left; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.description}"
+						label="#{domainelmdmsgs.domainelmd_description}" required="true"
+						requiredMessage="#{domainelmdmsgs.domainelmd_description_required}">
+					</p:inputTextarea>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="descriptionArabe"
+						style="text-align: right; width:300px"
+						value="#{domainelmdMgrBean.refDomaineLMDDto.descriptionArabe}"
+						label="#{domainelmdmsgs.domainelmd_description_ar}">
+					</p:inputTextarea>
+				</p:column>
+			</p:row>
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_niveau_recrutement}" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="niveaurecrutement"
+							style="text-align: left;width:170px"
+							value="#{domainelmdMgrBean.refDomaineLMDDto.niveauRecrutementId}"
+							label="#{domainelmdmsgs.domainelmd_niveau_recrutement}" >
+							<f:selectItem itemLabel="#{domainelmdmsgs.domainelmd_niveau_recrutement}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeNiveauRecrutement}" />
+						</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_premiere_inscription} " />
+				</p:column>
+				<p:column>
+				          <p:selectBooleanCheckbox value="#{domainelmdMgrBean.refDomaineLMDDto.isPremiereInscription}" id="ispremiereinscription">
+				          </p:selectBooleanCheckbox>
+				</p:column>
+			</p:row>
+		
+			
+		
+		</p:panelGrid>
+	</p:fieldset>	
+		<br></br>
+
+					<p:commandButton value="#{commonmsgs.button_save}"
+						icon="ui-icon-disk" action="#{domainelmdMgrBean.saveDomaine}"  />
+
+				<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-arrowthick-1-w" action="#{domainelmdMgrBean.cancel}" immediate="true">
+								<f:param name="dossierEtudiantId" value="#{domainelmdMgrBean.refDomaineLMDDto.id}" />
+			    </p:commandButton>
+
+	</h:form>
+
+
+</ui:composition>

@@ -1,0 +1,1088 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{ReservationEquipementMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+	<p:fieldset>
+		<ui:include src="/pages/equipement/equipementHeader.xhtml" />
+	</p:fieldset>
+	<br></br>
+	<p:fieldset legend="Equipementreservations">
+		<h:form id="ReservationFromId" prependId="false">
+
+			<br></br>
+			<p:dataTable resizableColumns="true" id="ReservationEquipementData"
+				styleClass="equiReserStyle"
+				value="#{ReservationEquipementMgrBean.listRefLieuDto}" var="current"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_reservationquipement_lieu}      " />
+					<p:commandButton id="addLieuButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{reservationEquipCrudBean.createAllow}"
+						onclick="PF('dlgLieuList').show()">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.designationLieu}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_lieu}" />
+					</f:facet>
+					<h:outputText value="#{current.designationLieu}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatinResponsable}" width="100">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.nomLatinResponsable} #{current.prenomLatinResponsable}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{reservationEquipCrudBean.deleteAllow or reservationEquipCrudBean.createAllow or reservationEquipCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeLieuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{ReservationEquipementMgrBean.deleteLieu(current)}"
+						process="@(.equiReserStyle)"
+						rendered="#{reservationEquipCrudBean.deleteAllow}"
+						update="@(.equiReserStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<f:param name="id"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:commandButton id="validreservation" process="@(.equiReserStyle)"
+						icon="ui-icon-check" title="#{commonmsgs.button_validreserv}"
+						rendered="#{reservationEquipCrudBean.createAllow}"
+						action="equipementEtatValidationReservation.xhtml">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="id" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="objetr" value="#{current.objet}" />
+						<f:param name="lieur" value="#{current.designationLieu}" />
+						<f:param name="entitiname" value="lieu" />
+						<f:param name="createAllow"
+							value="#{reservationEquipCrudBean.createAllow}" />
+						<f:param name="editAllow"
+							value="#{reservationEquipCrudBean.editAllow}" />
+						<f:param name="deleteAllow"
+							value="#{reservationEquipCrudBean.deleteAllow}" />
+					</p:commandButton>
+
+					<p:commandButton id="updateLieuButton" ajax="true"
+						icon="ui-icon-pencil"
+						rendered="#{reservationEquipCrudBean.editAllow}"
+						process="@(.equiReserStyle)" update="@(.equiReserStyle)"
+						onclick="PF('dlgLieuList').show()">
+						<f:param name="id" value="#{ReservationEquipementMgrBean.idr}" />
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<br></br>
+			<p:dataTable id="reservationStructureData"
+				styleClass="equiStrReserStyle" paginator="true"
+				paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{ReservationEquipementMgrBean.listRefStructureDto}"
+				var="current">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_reservation_structure_titre }      " />
+					<p:commandButton id="addStructureButton" ajax="true"
+						icon="ui-icon-plusthick" onclick="PF('dlgStructureList').show()"
+						rendered="#{reservationEquipCrudBean.createAllow}">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="20">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llStructureLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_structure}" />
+					</f:facet>
+					<h:outputText value="#{current.llStructureLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatinResponsable}" width="100">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.nomLatinResponsable} #{current.prenomLatinResponsable}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="150">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{reservationEquipCrudBean.deleteAllow or reservationEquipCrudBean.createAllow or reservationEquipCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+						actionListener="#{ReservationEquipementMgrBean.deleteStructure(current)}"
+						process="@(.equiStrReserStyle)" update="@(.equiStrReserStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:commandButton id="validreservationstr"
+						process="@(.equiStrReserStyle)" icon="ui-icon-check"
+						title="#{commonmsgs.button_validreserv}"
+						rendered="#{reservationEquipCrudBean.createAllow}"
+						action="equipementEtatValidationReservation.xhtml">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="objetr" value="#{current.objet}" />
+						<f:param name="lieur" value="#{current.llStructureLatin}" />
+						<f:param name="entitiname" value="Structure" />
+
+					</p:commandButton>
+
+					<p:commandButton id="updateStrButton"
+						rendered="#{reservationEquipCrudBean.editAllow}"
+						icon="ui-icon-pencil" process="@(.equiStrReserStyle)"
+						update="@(.equiStrReserStyle)"
+						onclick="PF('dlgStructureList').show()">
+
+						<f:param name="id" value="#{ReservationEquipementMgrBean.idr}" />
+
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<br></br>
+			<p:dataTable resizableColumns="true" id="reservationGroupeData"
+				styleClass="equiGrpReserStyle"
+				value="#{ReservationEquipementMgrBean.listRefGroupeDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_reservation_groupe}      " />
+					<p:commandButton id="addGroupeButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{reservationEquipCrudBean.createAllow}"
+						onclick="PF('dlgGroupeList').show()">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llGroupe}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_groupe}" />
+					</f:facet>
+					<h:outputText value="#{current.llGroupe}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatinResponsable}" width="100">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}" />
+					</f:facet>
+					<h:outputText
+						value="#{current.nomLatinResponsable} #{current.prenomLatinResponsable}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{reservationEquipCrudBean.deleteAllow or reservationEquipCrudBean.createAllow or reservationEquipCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						rendered="#{reservationEquipCrudBean.deleteAllow}"
+						actionListener="#{ReservationEquipementMgrBean.deleteGroupe(current)}"
+						process="@(.equiGrpReserStyle)" update="@(.equiGrpReserStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="validreservationgrp"
+						process="@(.equiGrpReserStyle)" icon="ui-icon-check"
+						title="#{commonmsgs.button_validreserv}"
+						rendered="#{reservationEquipCrudBean.createAllow}"
+						action="equipementEtatValidationReservation.xhtml">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="id" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="objetr" value="#{current.objet}" />
+						<f:param name="lieur" value="#{current.llGroupe}" />
+						<f:param name="entitiname" value="Groupe" />
+					</p:commandButton>
+
+					<p:commandButton id="updateGroupeButton" ajax="true"
+						icon="ui-icon-pencil"
+						rendered="#{reservationEquipCrudBean.editAllow}"
+						process="@(.equiGrpReserStyle)" update="@(.equiGrpReserStyle)"
+						onclick="PF('dlgGroupeList').show()">
+						<f:param name="id" value="#{ReservationEquipementMgrBean.idr}" />
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<br></br>
+
+			<p:dataTable resizableColumns="true" id="reservationIndividuData"
+				styleClass="equiIdvReserStyle"
+				value="#{ReservationEquipementMgrBean.listRefIndividuDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<f:param name="id" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_reservation_individu}      " />
+					<p:commandButton id="addIndividuButton" icon="ui-icon-plusthick"
+						rendered="#{reservationEquipCrudBean.createAllow}" actionListener="#{ReservationEquipementMgrBean.activerRecherche()}"
+						onclick="PF('dlgIndividuList').show()">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="40">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_individu_name} " />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin} #{current.prenomLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.objet}" width="200">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}" />
+					</f:facet>
+					<h:outputText value="#{current.objet}" />
+				</p:column>
+
+				<p:column sortBy="#{current.dateDebut}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="80">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:8%"
+					rendered="#{reservationEquipCrudBean.deleteAllow or reservationEquipCrudBean.createAllow or reservationEquipCrudBean.editAllow}"
+					width="80">
+					<p:commandButton id="removeIndividuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						rendered="#{reservationEquipCrudBean.deleteAllow}"
+						actionListener="#{ReservationEquipementMgrBean.deleteIndividu(current)}"
+						process="@(.equiIdvReserStyle)" update="@(.equiIdvReserStyle)">
+						<f:param name="id"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="validreservationInd"
+						process="@(.equiIdvReserStyle)" icon="ui-icon-check"
+						title="#{commonmsgs.button_validreserv}"
+						action="equipementEtatValidationReservation.xhtml"
+						rendered="#{reservationEquipCrudBean.createAllow}">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="objetr" value="#{current.objet}" />
+						<f:param name="lieur" value="#{current.nomLatin}" />
+						<f:param name="entitiname" value="Individu" />
+					</p:commandButton>
+
+					<p:commandButton id="updateIndividuButton" ajax="true"
+						icon="ui-icon-pencil"
+						rendered="#{reservationEquipCrudBean.editAllow}"
+						process="@(.equiIdvReserStyle)" update="@(.equiIdvReserStyle)"
+						onclick="PF('dlgIndividuList').show()">
+						<f:param name="id" value="#{ReservationEquipementMgrBean.idr}" />
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</p:fieldset>
+
+
+	<p:dialog header="#{equipementmsgs.lieu_list_ajout}" appendTo="@(body)"
+		modal="true" widgetVar="dlgLieuList" resizable="false" width="700"
+		draggable="true">
+		<h:form id="listLieuResevationForm">
+			<p:panelGrid id="descriptionLieu" styleClass="noBorder1">
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_selection_lieu}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="ReservationLieuData"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idLieu}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservationquipement_lieu}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_lieu_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_lieu}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefLieuDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objet" style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.objet}"
+							label="#{equipementmsgs.equipement_reservation_objet}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_objet_required}">
+						</p:inputText>
+
+
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}*" />
+					</p:column>
+					<p:column>
+
+						<p:selectOneMenu id="Responsablereservation"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idResponsable}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservation_responsable}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_responsable_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_responsable}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefIndividuDto}" />
+
+						</p:selectOneMenu>
+
+
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateDebut}"
+							id="datedebutlieu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutlieu" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureDebut}"
+							id="heuredebutlieu" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_debut}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_debut_recired}">
+							<f:ajax render="heuredebutlieu" event="change" />
+						</p:calendar>
+						<p:tooltip for="heuredebutlieu"
+							value="Veuillez saisir lheure de début" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateFin}"
+							id="datefinlieu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefinlieu" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureFin}"
+							id="heurefinlieu" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_fin}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_fin_recired}">
+							<f:ajax render="heurefinlieu" event="change" />
+						</p:calendar>
+						<p:tooltip for="heurefinlieu"
+							value="Veuillez saisir lheure de fin" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_observation}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="observation"
+							style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.observation}"
+							label="#{equipementmsgs.equipement_observation}">
+						</p:inputText>
+
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<br></br>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{ReservationEquipementMgrBean.addLieu()}"
+							update="@(.equiReserStyle)" oncomplete="dlgLieuList.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" oncomplete="dlgLieuList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog header="#{structuremsgs.structure_list_ajout}"
+		appendTo="@(body)" modal="true" widgetVar="dlgStructureList"
+		resizable="false" width="700" draggable="true">
+		<h:form id="listStructureReservationForm">
+			<p:panelGrid id="descriptionStr" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_selection_strucuture}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="ReservationStructureData"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idStructure}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_affectationequipement_structure}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_structure_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_strucuture}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objet2" style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.objet}"
+							label="#{equipementmsgs.equipement_reservation_objet}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_objet_required}">
+						</p:inputText>
+
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}*" />
+					</p:column>
+					<p:column>
+
+						<p:selectOneMenu id="Responsablereservation"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idResponsable}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservation_responsable}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_responsable_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_responsable}"
+								itemValue="" />
+							<f:selectItems value="#{OccupationEquipementMgrBean.listIndividuDto}" />
+
+						</p:selectOneMenu>
+
+
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateDebut}"
+							id="datedebutstr" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutstr" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureDebut}"
+							id="heuredebutstr" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_debut}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_debut_recired}">
+							<f:ajax render="heuredebutstr" event="change" />
+						</p:calendar>
+						<p:tooltip for="heuredebutstr"
+							value="Veuillez saisir lheure de début" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateFin}"
+							id="datefinstr" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefinstr" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureFin}"
+							id="heurefinstr" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_fin}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_fin_recired}">
+							<f:ajax render="heurefinstr" event="change" />
+						</p:calendar>
+						<p:tooltip for="heurefinstr" value="Veuillez saisir lheure de fin"
+							showEffect="fade" hideEffect="fade" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_observation}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="observationstr"
+							style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.observation}"
+							label="#{equipementmsgs.equipement_observation}">
+						</p:inputText>
+
+
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<br></br>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{ReservationEquipementMgrBean.addStructure()}"
+							update="@(.equiStrReserStyle)"
+							oncomplete="dlgStructureList.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" oncomplete="dlgStructureList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog header="#{groupemsgs.groupe_list_ajout}" appendTo="@(body)"
+		modal="true" widgetVar="dlgGroupeList" resizable="false" width="700"
+		draggable="true">
+		<h:form id="listGroupeReservationForm">
+			<p:panelGrid id="descriptionGroupe" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_selection_groupe}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="ReservationGroupeData"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservation_groupe}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_groupe_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objet3" style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.objet}"
+							label="#{equipementmsgs.equipement_reservation_objet}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_objet_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_responsable}*" />
+					</p:column>
+					<p:column>
+
+						<p:selectOneMenu id="Responsablereservation"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idResponsable}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservation_responsable}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_responsable_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_responsable}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefIndividuDto}" />
+
+						</p:selectOneMenu>
+
+
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateDebut}"
+							id="datedebutgroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutgroupe" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureDebut}"
+							id="heuredebutgroupe" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_debut}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_debut_recired}">
+							<f:ajax render="heuredebutgroupe" event="change" />
+						</p:calendar>
+						<p:tooltip for="heuredebutgroupe"
+							value="Veuillez saisir lheure de début" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateFin}"
+							id="datefingroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefingroupe" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureFin}"
+							id="heurefingroupe" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_fin}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_fin_recired}">
+							<f:ajax render="heurefingroupe" event="change" />
+						</p:calendar>
+						<p:tooltip for="heurefingroupe"
+							value="Veuillez saisir lheure de fin" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_observation}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="observationgroupe"
+							style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.observation}"
+							label="#{equipementmsgs.equipement_observation}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<br></br>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{ReservationEquipementMgrBean.addGroupe()}"
+							update="@(.equiGrpReserStyle)" oncomplete="dlgGroupeList.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" oncomplete="dlgGroupeList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog header="#{individumsgs.individu_list_ajout}"
+		widgetVar="dlgIndividuList" resizable="false" width="700"
+		appendTo="@(body)" modal="true" draggable="true">
+		<h:form id="listIndividuReservationForm">
+			<p:panelGrid id="descriptionIndividu" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_selection_individu}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="ReservationIndividuData"
+							value="#{ReservationEquipementMgrBean.refReservationDto.idIndividu}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_reservation_individu}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_individu_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_individu}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefIndividuDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_reservation_objet}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="objet3" style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.objet}"
+							label="#{equipementmsgs.equipement_reservation_objet}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_reservation_objet_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateDebut}"
+							id="datedebutgroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutgroupe" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureDebut}"
+							id="heuredebutgroupe" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_debut}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_debut_recired}">
+							<f:ajax render="heuredebutgroupe" event="change" />
+						</p:calendar>
+						<p:tooltip for="heuredebutgroupe"
+							value="Veuillez saisir lheure de début" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.dateFin}"
+							id="datefingroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefingroupe" event="change" />
+						</p:calendar>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_heure_fin}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{ReservationEquipementMgrBean.refReservationDto.heureFin}"
+							id="heurefingroupe" style="width:40px" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_heure_fin}" required="true"
+							pattern="HH:mm" timeOnly="true"
+							requiredMessage="#{equipementmsgs.equipement_heure_fin_recired}">
+							<f:ajax render="heurefingroupe" event="change" />
+						</p:calendar>
+						<p:tooltip for="heurefingroupe"
+							value="Veuillez saisir lheure de fin" showEffect="fade"
+							hideEffect="fade" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_observation}*" />
+					</p:column>
+					<p:column>
+						<p:inputText id="observationgroupe"
+							style="text-align: left; width:300px"
+							value="#{ReservationEquipementMgrBean.refReservationDto.observation}"
+							label="#{equipementmsgs.equipement_observation}">
+						</p:inputText>
+
+
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<br></br>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{ReservationEquipementMgrBean.addIndividu()}"
+							update="@(.equiIdvReserStyle)"
+							oncomplete="dlgIndividuList.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" oncomplete="dlgIndividuList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

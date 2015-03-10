@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="pageTitleContent">
+		#{uniteEnseignementMsgs.unite_enseignement_filed_page_title}
+	</ui:define>
+	<ui:define name="centerContent">
+		<pe:blockUI target="form_ueSearch" widgetVar="blockUIWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<h:form id="form_ueSearch">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+			<p:fieldset id="fldst_search"
+				style="margin-bottom:5px; text-align:right">
+				<p:toolbar styleClass="toolBarMesrs" id="searchToolBar">
+					<p:toolbarGroup align="left">
+						<h:outputText
+							value="#{uniteEnseignementMsgs.unite_enseignement_search_full_tex_search_keyword}"/>
+						<p:separator />
+						<p:inputText id="it_fullTextSearchKeyword"
+							binding="#{fullTextSearchKeyword}" style="width:250px"
+							value="#{ueBB.fullTextSearchKeyword}" />
+
+						<p:separator />
+						<p:commandButton value="#{commonmsgs.bouton_rechercher}"
+							icon="ui-icon-search" update="form_ueSearch"
+							actionListener="#{ueBB.searchFullText}" process="searchToolBar"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+						</p:commandButton>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}" process="@this"
+							onstart="PF('blockUIWidget').block()" update="form_ueSearch"
+							onsuccess="PF('blockUIWidget').unblock()"
+							actionListener="#{ueBB.createNewUe}" icon="ui-icon-plusthick" />
+					</p:toolbarGroup>
+				</p:toolbar>
+			</p:fieldset>
+
+			<p:outputPanel id="resultPanel">
+				<p:dataTable id="dtTbl_ue" value="#{ueBB.ueList}" var="currentUe"
+					rowKey="#{currentUe.id}" selectionMode="single" paginator="true"
+					paginatorPosition="bottom" style="margin-top:5px" rows="10"
+					rowIndexVar="rowIndex" rowsPerPageTemplate="5,10,15"
+					rendered="#{ueBB.ueList != null}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PageLinks} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords}) "
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="page" onstart="PF('blockUIWidget').block()"
+						onsuccess="PF('blockUIWidget').unblock()" />
+					<p:ajax event="rowSelect" listener="#{ueBB.onRowSelect}"
+						update=":form_ueSearch" onstart="PF('blockUIWidget').block()"
+						onsuccess="PF('blockUIWidget').unblock()" />
+
+					<p:ajax event="sort" update="dtTbl_ue"
+						onstart="PF('blockUIWidget').block()"
+						onsuccess="PF('blockUIWidget').unblock()" />
+					<p:column exportable="false"
+						headerText="#{uniteEnseignementMsgs.unite_enseignement_data_table_column_index}"
+						style="width:5%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column style="width:10%" sortBy="#{currentUe.code}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{uniteEnseignementMsgs.unite_enseignement_search_code}" />
+						</f:facet>
+						<h:outputText value="#{currentUe.code}" />
+					</p:column>
+					<p:column style="width:30%" sortBy="#{currentUe.libelleFr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{uniteEnseignementMsgs.unite_enseignement_search_libelle_fr}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.libelleFr}" />
+					</p:column>
+					<p:column style="width:30%" sortBy="#{currentUe.libelleAr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{uniteEnseignementMsgs.unite_enseignement_search_libelle_ar}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.libelleAr}" />
+					</p:column>
+
+					<p:column style="width:25%" sortBy="#{currentUe.ncNatureUeLlFr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{uniteEnseignementMsgs.unite_enseignement_search_nature_ue}" />
+						</f:facet>
+
+						<h:outputText value="#{currentUe.ncNatureUeLlFr}" />
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+
+			<br />
+
+			<p:outputPanel id="mcDetail" rendered="#{ueBB.showDetail}">
+				<ui:include src="/pages/offreformation/ue/UeEdit.xhtml" />
+			</p:outputPanel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

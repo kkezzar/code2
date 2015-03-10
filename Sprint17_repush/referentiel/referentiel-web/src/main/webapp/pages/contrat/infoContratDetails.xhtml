@@ -1,0 +1,162 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+    <p:panel >  
+     <h:form>
+               <h:outputText value="#{contratmsgs.contrat_description}" style="font-weight: bold;" /> 
+                <hr></hr>
+               <p:panelGrid id="description" styleClass="noBorder1"> 
+                 <p:row >
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_identite}:  " />
+							</p:column>
+							 <p:column>
+							<h:outputText value="#{contratBckBean.refContratDto.identifiant}" style="font-weight: bold;"/>
+						</p:column> 
+                 </p:row>
+                 <p:row >
+                 <p:column>
+							<h:outputText value="#{contratmsgs.contrat_objet_lt}:  " />
+						       </p:column>
+							 <p:column>
+							<h:outputText value="#{contratBckBean.refContratDto.objetContratFr}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						  <p:row >
+                 <p:column>
+							<h:outputText value="#{contratmsgs.contrat_objet_ar}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.objetContratAr}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						<p:row >
+                        <p:column>
+						<h:outputText value="#{contratmsgs.contrat_nature_contrat}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.natureLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+						<h:outputText value="#{contratmsgs.contrat_reference_documentaire}:  "/>
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.referenceDocumentaire}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+                 </p:panelGrid>
+                 <br></br>
+                 <h:outputText value="#{contratmsgs.contrat_gestionnaire}" style="font-weight: bold;"/> 
+                <hr></hr>
+               <p:panelGrid id="gestionnaire" styleClass="noBorder1"> 
+                 <p:row >
+
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_structure}:  " />
+						      </p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.llStructureLatin}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_etablissement}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.llEtablissementLatin}" style="font-weight: bold;"/>
+						</p:column> 
+                 </p:row>
+                 </p:panelGrid>
+                 <br></br>
+                 <h:outputText value="#{contratmsgs.contrat_dates}" style="font-weight: bold;" /> 
+                <hr></hr>
+               <p:panelGrid id="dates" styleClass="noBorder1"> 
+                 <p:row >
+
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_debut}:  " />
+						    </p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.dateDebutValidite}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_fin}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.dateFinValidite}" style="font-weight: bold;">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText></p:column>
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_duree}:  " />
+						 </p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.duree}"/>
+						</p:column>
+						<p:column>
+						    <h:outputText value="#{contratmsgs.contrat_reconductible}:  " style="text-align: top"/>
+							</p:column>
+							 <p:column>
+							<p:selectBooleanCheckbox value="#{contratBckBean.refContratDto.reconductible}" disabled="true" /> 
+						</p:column>  
+						
+                 </p:row>
+                 </p:panelGrid>
+                 <br></br>
+                 <h:outputText value="#{contratmsgs.contrat_donnee_financiere}" style="font-weight: bold;" /> 
+                <hr></hr>
+                 <p:panelGrid id="donneFinanc" styleClass="noBorder1"> 
+                 <p:row >
+                        <p:column>
+							<h:outputText value="#{contratmsgs.contrat_unite_monetaire}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.uniteMonitaireLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_montant_ht}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.montantHt}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						<p:row>
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_montant_tva}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.montantTva}" style="font-weight: bold;"/>
+						</p:column> 
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_montant_ttc}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.montantTtc}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						</p:panelGrid>
+						<br></br>
+                  <h:outputText value="#{contratmsgs.contrat_autre_informations}" style="font-weight: bold;"/> 
+                <hr></hr>
+                 <p:panelGrid id="autreInfo" styleClass="noBorder1"> 
+                 <p:row >
+                        <p:column>
+							<h:outputText value="#{contratmsgs.contrat_descipline}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratBckBean.refContratDto.disciplineLibelleLongFr}" style="font-weight: bold;"/>
+						</p:column>
+						</p:row> 
+						<p:row>
+						<p:column>
+							<h:outputText value="#{contratmsgs.contrat_observation}:  " />
+						</p:column>
+							 <p:column>
+						<h:outputText value="#{contratmsgs.contrat_observation}" style="font-weight: bold;"/>
+						</p:column> 
+						</p:row>
+						</p:panelGrid>
+						<br></br>
+		</h:form>				
+            </p:panel>  
+</ui:composition>

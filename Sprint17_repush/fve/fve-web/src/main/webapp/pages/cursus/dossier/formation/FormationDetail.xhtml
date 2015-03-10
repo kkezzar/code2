@@ -1,0 +1,231 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+		
+
+	<p:fieldset legend="#{formationMsgs.formation_liste_formations_obtenus}" >
+			
+		<h:form id="resultListFormationForm" >
+		 
+			<p:dataTable resizableColumns="true" id="listeFormationsData"
+			value="#{formationBean.listeFormationDto}" var="current"
+			paginator="true" paginatorPosition="bottom" 
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+			<f:param name="releveId" value="#{formationBean.releveId}"/> 
+			<f:param name="dossierEtudiantId" value="#{formationBean.dossierEtudiantId}"/>
+
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@this" process="@this" />
+
+			<f:facet name="header">
+				<h:outputText value="#{formationMsgs.formation_list_formations}    " />
+			</f:facet>
+
+			<p:column sortBy="#{current.libelleFr}" >
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_intitule_formation_fr}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.libelleAr}" >
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_intitule_formation_ar}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleAr}" />
+			</p:column>
+
+			<p:column  sortBy="#{current.dateDebut}">
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_date_debut}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDebut}" >
+				   <f:convertDateTime  pattern="dd/MM/yyyy" />
+				</h:outputText>	
+			</p:column>
+		
+			<p:column sortBy="#{current.dateFin}">
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_date_fin}" />
+				</f:facet>
+				<h:outputText value="#{current.dateFin}">
+				 <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>		
+			</p:column>
+
+			<p:column style="width:5%" >
+				<f:facet name="header">
+					<h:outputText value="#{commonmsgs.data_table_action_title}" />
+				</f:facet>
+				
+				<p:commandButton id="updateFormationButton" icon="ui-icon-info"
+					title="#{commonmsgs.data_table_action_detail}" 
+					ajax="true" immediate="true"
+					update="@([id$=formationInfosForm]),@([id$=lignesReleveFormationData])"
+					actionListener="#{formationBean.openFormation(current)}">
+
+					<f:param name="dossierEtudiantId" value="#{formationBean.dossierEtudiantId}"/>
+					<f:param name="releveId" value="#{current.idReleveDeNotes}"/> 
+					<f:param name="formationId" value="#{current.id}"/> 
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+	 </h:form>
+	
+	</p:fieldset>
+	
+			<br/>
+			
+	<p:fieldset legend="#{formationMsgs.formation_details}" >
+		
+		<h:form id="formationInfosForm" >
+			<p:panelGrid>
+				 <p:row>
+						<p:column>
+							<h:outputText value="#{formationMsgs.formation_code}" />
+						</p:column>
+						<p:column>
+						  <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.code}"	/>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{formationMsgs.formation_type_formation}" />
+						</p:column>
+						<p:column>
+						 <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.typeFormationLibelleLongFr}"	/>
+						</p:column>
+					</p:row>
+					
+				 <p:row>
+					   <p:column>
+							<h:outputText value="#{formationMsgs.formation_intitule_formation_fr}" />
+						</p:column>
+						<p:column>
+						  <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.libelleFr}"	/>
+						</p:column>
+						
+						 <p:column>
+							<h:outputText value="#{formationMsgs.formation_intitule_formation_ar}" />
+						</p:column>
+						<p:column>
+						   <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.libelleAr}"	/>
+						</p:column>
+					</p:row>
+					
+				 <p:row>
+						<p:column>
+							<h:outputText value="#{formationMsgs.formation_specialite}" />
+						</p:column>
+						<p:column>
+					    	<h:outputText  style="font-weight: bold;"
+							 value="#{formationBean.formationDto.refCodeSpecialite}"	/>
+						</p:column>
+						
+				</p:row>
+						
+				<p:row>	
+						<p:column>
+							<h:outputText value="#{formationMsgs.formation_etablissement_fr}" />
+						</p:column>
+						<p:column>
+							<h:outputText style="font-weight: bold;"
+								value="#{formationBean.formationDto.oraganismeFr}"/>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{formationMsgs.formation_etablissement_ar}" />
+						</p:column>
+						<p:column>
+						   <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.oraganismeAr}"	/>
+						</p:column>
+				    </p:row>
+				    					
+				<p:row>
+				    <p:column>
+							<h:outputText value="#{formationMsgs.formation_date_debut} " />
+					 </p:column>
+					<p:column>
+					    <h:outputText  style="font-weight: bold;"
+							value="#{formationBean.formationDto.dateDebut}">
+							<f:convertDateTime  pattern="dd/MM/yyyy" />
+						 </h:outputText>
+								
+					 </p:column> 
+					 
+					 <p:column>
+							<h:outputText value="#{formationMsgs.formation_date_fin}" />
+					 </p:column>
+					<p:column>
+						 <h:outputText  style="font-weight: bold;" value="#{formationBean.formationDto.dateFin}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						 </h:outputText>
+					</p:column> 
+				 </p:row>
+			</p:panelGrid>
+	
+		 		<br/>
+		 		
+		  <p:dataTable resizableColumns="true" id="lignesReleveFormationData"
+			value="#{formationBean.listeLignesReleveNotes}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+			
+			<f:param name="releveId" value="#{formationBean.releveId}"/>
+			<f:param name="dossierEtudiantId" value="#{formationBean.dossierEtudiantId}"/>
+			<f:param name="formationId" value="#{formationBean.formationId}"/> 
+
+			<p:ajax event="page" update="lignesReleveFormationData" />
+			<p:ajax event="sort" update="lignesReleveFormationData" process="lignesReleveFormationData" />
+
+			<f:facet name="header">
+				<h:outputText value="#{formationMsgs.formation_list_notes}" />
+			</f:facet>
+
+			<p:column sortBy="#{current.libelleMatiereFr}">
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_releve_matiere_fr}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleMatiereFr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.libelleMatiereAr}">
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_releve_matiere_ar}" />
+				</f:facet>
+				<h:outputText value="#{current.libelleMatiereAr}" />
+			</p:column>
+
+			<p:column sortBy="#{current.note}"> 
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_releve_note}" />
+				</f:facet>
+				<h:outputText value="#{current.note}" />
+			</p:column>
+
+			<p:column sortBy="#{current.noteBase}">
+				<f:facet name="header">
+					<h:outputText value="#{formationMsgs.formation_releve_note_base}" />
+				</f:facet>
+				<h:outputText value="#{current.noteBase}"/>
+			</p:column>
+
+		 </p:dataTable>
+
+	   </h:form>
+	
+	</p:fieldset>
+
+</ui:composition> 	

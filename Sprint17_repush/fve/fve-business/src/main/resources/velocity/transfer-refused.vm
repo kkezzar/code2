@@ -1,0 +1,17 @@
+<html>
+	<body>
+<pre>
+${civility} ${studentName} ,
+
+Nous avons le regret de vous informer que votre demande de transfert vers la fili&egrave;re ${sector} du domaine ${askedDomain}
+en date du ${transferRequestDate} n'a pas &eacute;t&eacute; accept&eacute;e.
+	
+Nous nous tenons &agrave; votre disposition pour toute information compl&eacute;mentaire. 
+	
+</pre>
+<br/>
+<p><em>L'&eacute;quipe FVE.</em></p> 
+	
+	
+	</body>
+</html>

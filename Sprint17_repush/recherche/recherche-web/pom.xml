@@ -1,0 +1,280 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dz.gov.mesrs.sii.recherche</groupId>
+		<artifactId>recherche</artifactId>
+		<version>0.3.0-SNAPSHOT</version>
+	</parent>
+	<!-- <groupId>dz.gov.mesrs.sii.recherche.web</groupId> -->
+	<artifactId>recherche-web</artifactId>
+	<packaging>war</packaging>
+	<name>Web Recherche</name>
+	<description>Projet Web du module [Recherche]</description>
+
+	<dependencies>
+
+		<!-- Project -->
+		<dependency>
+			<groupId>dz.gov.mesrs.sii.recherche</groupId>
+			<artifactId>recherche-business</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>dz.gov.mesrs.sii.referentiel</groupId>
+			<artifactId>referentiel-business</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>dz.gov.mesrs.sii.commons</groupId>
+			<artifactId>commons-web</artifactId>
+			<classifier>classes</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>dz.gov.mesrs.sii.commons</groupId>
+			<artifactId>commons-web</artifactId>
+			<type>war</type>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-faces</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+		</dependency>
+
+		<!-- Spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-acl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>facelets-taglib-jsf20-spring-3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+
+		<!-- cas -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.opensaml</groupId>
+			<artifactId>opensaml</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- JSF -->
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+		</dependency>
+
+		<!-- Primefaces -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>resources-ckeditor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>resources-codemirror</artifactId>
+		</dependency>
+
+		<!-- Primefaces UploadFile dependency -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<!-- Apache CXF -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+
+		<!-- Apache POI -->
+		<!-- Export Excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+		<!-- Export PDF -->
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.myjeeva.poi</groupId>
+			<artifactId>excelReader</artifactId>
+		</dependency>
+
+		<!-- guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>webrecherche</finalName>
+
+		<!-- source files for filtering -->
+		<filters>
+			<filter>${basedir}/src/main/filters/${filter.name}.properties</filter>
+		</filters>
+
+		<!-- ajouter les .properties au filtre -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<!-- important! pour les fichiers i18n -->
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+
+					<overlays>
+						<overlay>
+							<groupId>dz.gov.mesrs.sii.commons</groupId>
+							<artifactId>commons-web</artifactId>
+							<excludes>
+								<exclude>META-INF/**</exclude>
+								<exclude>WEB-INF/lib/*.jar</exclude>
+								<!-- <exclude>resources/**</exclude> -->
+							</excludes>
+						</overlay>
+					</overlays>
+
+					<failonmissingwebxml>true</failonmissingwebxml>
+					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+					<webresources>
+						<webresource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<includes>
+								<include>web.xml</include>
+							</includes>
+							<targetpath>WEB-INF</targetpath>
+							<filtering>true</filtering>
+						</webresource>
+					</webresources>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,404 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:outputPanel id="compteEditInfo" styleClass="compteInfoStyle">
+		<pe:blockUI target="compteEditInfo" widgetVar="compteWidget">
+			<h:graphicImage value="/images/ajax-loader1.gif"
+				style="vertical-align: middle;" />
+		</pe:blockUI>
+
+		<p:fieldset legend="#{comptemsgs.compte_compte}">
+			<p:panelGrid styleClass="ui-panelgrid-full-width">
+				<p:row rendered="#{compteMgrBean.admin}">
+					<p:column colspan="4">
+						<h:outputText value=" #{comptemsgs.compte_admin_seulement}"
+							styleClass="value" />
+					</p:column>
+				</p:row>
+				<p:row rendered="#{compteMgrBean.showEtabList}">
+					<p:column style="width:15%">
+						<p:outputLabel for="etab"
+							value="#{comptemsgs.compte_etablissement}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectOneMenu id="etab" style="text-align: left;width:100%"
+							required="true"
+							requiredMessage="#{comptemsgs.compte_etablissement_required}"
+							valueChangeListener="#{compteMgrBean.etabChanged}"
+							styleClass="etabStyle" filter="true" filterMatchMode="contains"
+							value="#{compteMgrBean.idEtab}"
+							label="#{comptemsgs.compte_etablissement}">
+							<f:param name="id" value="#{compteMgrBean.id}" />
+							<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+							<p:ajax listener="#{compteMgrBean.etabChanged}" event="change"
+								onstart="PF('compteWidget').block()" process="@this"
+								update="@(.compteInfoStyle)"
+								onsuccess="PF('compteWidget').unblock()" />
+							<f:selectItem
+								itemLabel="#{comptemsgs.compte_select_etablissement}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefEtablissementDto}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_selection_individu} *" />
+					</p:column>
+					<!-- 					<p:column> -->
+					<!-- 						<p:autoComplete value="#{compteMgrBean.refIndividuDto}" -->
+					<!-- 							id="selectIndividu" -->
+					<!-- 							completeMethod="#{individuCompteConverter.completIndividu}" -->
+					<!-- 							var="individuDto" -->
+					<!-- 							itemLabel="#{individuDto.nomLatin} #{individuDto.prenomLatin}" -->
+					<!-- 							itemValue="#{individuDto.id}" -->
+					<!-- 							converter="#{individuCompteConverter}" forceSelection="true" -->
+					<!-- 							label="#{affectationmsgs.affectation_selection_individu}" -->
+					<!-- 							required="true" -->
+					<!-- 							requiredMessage="#{comptemsgs.compte_individu_required}" -->
+					<!-- 							disabled="#{compteMgrBean.updateMode}" /> -->
+					<!-- 					</p:column> -->
+					<p:column style="width:35%">
+						<p:inputText
+							rendered="#{compteMgrBean.refIndividuDto.nomLatin == null}"
+							value="#{compteMgrBean.refIndividuDto.nomLatin}"
+							id="selectIndividu" required="true"
+							requiredMessage="#{comptemsgs.compte_individu_required}"
+							readonly="true">
+
+						</p:inputText>
+						<h:outputText styleClass="value"
+							rendered="#{compteMgrBean.refIndividuDto.nomLatin != null}"
+							value="#{compteMgrBean.refIndividuDto.nomLatin} #{compteMgrBean.refIndividuDto.prenomLatin}">
+
+						</h:outputText>
+						<h:outputText value="   " />
+
+						<p:commandButton icon="ui-icon-search" process="@this"
+							rendered="#{compteMgrBean.refCompteDto.idCompte == null}"
+							disabled="#{compteMgrBean.etabId==null and compteMgrBean.showEtabList}"
+							action="#{compteMgrBean.showIndividuList}"
+							update="@(.dialogStyle)" onstart="PF('compteWidget').block()"
+							onsuccess="PF('compteWidget').unblock()"
+							oncomplete="PF('individuWidget').show();">
+							<f:param name="id" value="#{compteMgrBean.id}" />
+							<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+						</p:commandButton>
+
+
+					</p:column>
+
+					<p:column style="width:15%"
+						rendered="#{compteMgrBean.refCompteDto.nomUtilisateur != null}">
+						<h:outputText value="#{comptemsgs.compte_nom_user} *" />
+					</p:column>
+					<p:column style="width:35%"
+						rendered="#{compteMgrBean.refCompteDto.nomUtilisateur != null}">
+						<h:outputText id="nomUser"
+							styleClass="value"
+							value="#{compteMgrBean.refCompteDto.nomUtilisateur}">
+						</h:outputText>
+
+					</p:column>
+				</p:row>
+				<p:row rendered="#{!compteMgrBean.updateMode}">
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_password} *" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:password id="passwordUser" style="text-align: left;width:98%"
+							value="#{compteMgrBean.refCompteDto.motPasse}"
+							label="#{comptemsgs.compte_password}"
+							required="#{!compteMgrBean.updateMode}"
+							requiredMessage="#{comptemsgs.compte_password_required}"
+							validatorMessage="#{comptemsgs.compte_password_error}"
+							maxlength="20">
+							<f:validateLength minimum="6" maximum="14" for="passwordUser"></f:validateLength>
+
+						</p:password>
+
+
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_confirmer_password} *" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:password id="confpasswordUser"
+							style="text-align: left;width:98%"
+							value="#{compteMgrBean.refCompteDto.confirmationMotPasse}"
+							label="#{comptemsgs.compte_confirmer_password}"
+							required="#{!compteMgrBean.updateMode}"
+							requiredMessage="#{comptemsgs.compte_confirmer_password_required}"
+							feedback="false" maxlength="20">
+
+						</p:password>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_date_debut} *" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:calendar navigator="true"
+							value="#{compteMgrBean.refCompteDto.dateDebut}" id="dateDebut"
+							showButtonPanel="true" label="#{comptemsgs.compte_date_debut}"
+							required="true"
+							requiredMessage="#{comptemsgs.compte_date_debut_required}" />
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_date_fin} " />
+					</p:column>
+					<p:column style="width:35%">
+						<p:calendar navigator="true"
+							value="#{compteMgrBean.refCompteDto.dateFin}" id="dateFin"
+							showButtonPanel="true" label="#{comptemsgs.compte_date_fin}"
+							required="false"
+							requiredMessage="#{comptemsgs.compte_date_fin_required}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_plage_adresse_ip}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="plageAdrsIp"
+							style="text-align: left;width:100%"
+							value="#{compteMgrBean.refCompteDto.plageAdresseId}"
+							label="#{comptemsgs.compte_plage_adresse_ip}">
+							<f:selectItem itemLabel="#{comptemsgs.compte_select_plage_ip}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listePlageAdresse}" />
+						</p:selectOneMenu>
+
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{comptemsgs.compte_horaire_acces}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="horraireAcces"
+							style="text-align: left;width:100%"
+							value="#{compteMgrBean.refCompteDto.horaireAccessId}"
+							label="#{comptemsgs.compte_horaire_acces}">
+							<f:selectItem
+								itemLabel="#{comptemsgs.compte_select_horaire_acces}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeHoraireAcces}" />
+						</p:selectOneMenu>
+
+					</p:column>
+				</p:row>
+				<p:row rendered="#{!compteMgrBean.admin}">
+					<p:column style="width:15%">
+						<h:outputText value=" #{comptemsgs.compte_admin}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectBooleanCheckbox
+							value="#{compteMgrBean.refCompteDto.admin}">
+						</p:selectBooleanCheckbox>
+
+					</p:column>
+				</p:row>
+
+				<p:row rendered="#{!compteMgrBean.updateMode}">
+					<p:column style="width:15%">
+						<h:outputText
+							value=" #{comptemsgs.compte_user_doit_changer_password}" />
+					</p:column>
+					<p:column colspan="3">
+						<p:selectBooleanCheckbox
+							value="#{compteMgrBean.refCompteDto.changementMotPasse}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value=" #{comptemsgs.compte_user_droit_jour_ferie}" />
+					</p:column>
+					<p:column colspan="3">
+
+						<p:selectBooleanCheckbox
+							value="#{compteMgrBean.refCompteDto.accessJourFerie}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</p:fieldset>
+		<br></br>
+		<p:toolbar id="MenuGrid">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.button_save}"
+					icon="ui-icon-disk" process="@form" update="@form"
+					onstart="PF('compteWidget').block()"
+					oncomplete="PF('compteWidget').unblock()"
+					action="#{compteMgrBean.saveCompte()}">
+					<f:param name="id" value="#{compteMgrBean.id}" />
+					<f:param name="individuId" value="#{compteMgrBean.individuId}" />
+					<f:param name="individuNom" value="#{compteMgrBean.individuNom}" />
+					<f:param name="individuPrenom"
+						value="#{compteMgrBean.individuPrenom}" />
+					<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+				</p:commandButton>
+			</p:toolbarGroup>
+
+			<p:toolbarGroup align="right">
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-arrowreturnthik-1-w" process="@form" immediate="true"
+					action="#{compteMgrBean.toSearch}">
+				</p:commandButton>
+			</p:toolbarGroup>
+
+		</p:toolbar>
+
+
+
+	</p:outputPanel>
+	<p:dialog header="#{comptemsgs.compte_individu_title}"
+		resizable="false" styleClass="dialogStyle" id="individuWidget"
+		width="920" widgetVar="individuWidget" modal="true" appendTo="@(body)">
+		<h:form id="individuForm" prependId="false">
+			<p:messages id="msg" showSummary="true" closable="true" />
+			<pe:blockUI target="individuForm" widgetVar="iWidget">
+				<h:graphicImage value="/images/ajax-loader1.gif"
+					style="vertical-align: middle;" />
+			</pe:blockUI>
+			<p:panelGrid styleClass="ui-panelgrid-full-width" id="searchPanel">
+				<p:row>
+
+					<p:column>
+						<p:outputLabel value="#{comptemsgs.compte_individu_nom}"
+							for="searchNom" />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{compteMgrBean.searchNom}" required="true"
+							id="searchNom"
+							requiredMessage="#{comptemsgs.compte_individu_nom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:outputLabel value="#{comptemsgs.compte_individu_prenom}"
+							for="searchPrenom" />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{compteMgrBean.searchPrenom}" required="true"
+							id="searchPrenom"
+							requiredMessage="#{comptemsgs.compte_individu_prenom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_search}"
+							id="searchBtn" onstart="PF('iWidget').block()"
+							onsuccess="PF('iWidget').unblock()" icon="ui-icon-search"
+							process="@(.dialogStyle)" update="individuDataTable, msg"
+							actionListener="#{compteMgrBean.loadIndividuList()}">
+							<f:param name="load" value="true" />
+							<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:dataTable id="individuDataTable" resizableColumns="true" var="row"
+				value="#{compteMgrBean.listRefIndividuDto}" scrollable="true"
+				scrollHeight="150"
+				filteredValue="#{compteMgrBean.filtredLlistIndividu}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{comptemsgs.compte_individu_seacrh_no_result}"
+				style="margin:8px;width:900px" rowIndexVar="rowIndex">
+				<f:param name="load" value="true" />
+				<f:param name="searchNom" value="#{compteMgrBean.searchNom}" />
+				<f:param name="searchPrenom" value="#{compteMgrBean.searchPrenom}" />
+				<f:param name="id" value="#{compteMgrBean.id}" />
+				<f:param name="individuId" value="#{compteMgrBean.individuId}" />
+				<f:param name="individuNom" value="#{compteMgrBean.individuNom}" />
+				<f:param name="individuPrenom"
+					value="#{compteMgrBean.individuPrenom}" />
+				<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+				<p:ajax event="page" update="individuDataTable"
+					onstart="PF('iWidget').block()" onsuccess="PF('iWidget').unblock()" />
+				<p:ajax event="filter" update="individuDataTable"
+					onstart="PF('iWidget').block()" onsuccess="PF('iWidget').unblock()" />
+				<p:ajax event="sort" update="individuDataTable"
+					process="individuDataTable" onstart="PF('iWidget').block()"
+					onsuccess="PF('iWidget').unblock()" />
+
+				<p:column styleClass="textOnLeft" sortBy="#{row.identifiant}"
+					width="10%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_identifiant}" />
+					</f:facet>
+					<h:outputText value="#{row.identifiant}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{row.nomLatin}"
+					width="20%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_nom_latin}" />
+					</f:facet>
+					<h:outputText value="#{row.nomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{row.prenomLatin}"
+					width="20%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_prenom_latin}" />
+					</f:facet>
+					<h:outputText value="#{row.prenomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{row.nomArabe}"
+					width="10%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_nom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{row.nomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{row.prenomArabe}"
+					width="10%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_prenom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{row.prenomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{row.dateNaissance}"
+					width="20%">
+					<f:facet name="header">
+						<h:outputText
+							value="#{comptemsgs.compte_data_table_individu_date_naissance}" />
+
+					</f:facet>
+					<h:outputText value="#{row.dateNaissance}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column width="10%">
+					<p:commandButton value="#{commonmsgs.button_selectionner}"
+						process="individuDataTable" update="@(.compteInfoStyle)"
+						actionListener="#{compteMgrBean.selectedIndividu(row)}"
+						onstart="PF('compteWidget').block()"
+						oncomplete="PF('compteWidget').unblock()"
+						onclick="PF('individuWidget').hide();">
+						<f:param name="load" value="true" />
+						<f:param name="id" value="#{compteMgrBean.id}" />
+						<f:param name="individuId" value="#{compteMgrBean.individuId}" />
+						<f:param name="individuNom" value="#{compteMgrBean.individuNom}" />
+						<f:param name="individuPrenom"
+							value="#{compteMgrBean.individuPrenom}" />
+						<f:param name="etabId" value="#{compteMgrBean.etabId}" />
+						<f:param name="searchNom" value="#{compteMgrBean.searchNom}" />
+						<f:param name="searchPrenom" value="#{compteMgrBean.searchPrenom}" />
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+	</p:dialog>
+</ui:composition>
+
+

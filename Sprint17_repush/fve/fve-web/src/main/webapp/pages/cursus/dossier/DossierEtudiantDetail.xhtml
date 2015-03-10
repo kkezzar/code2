@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<ui:define name="pageTitleContent">
+		#{dossierEtudiantBean.dossierEtudiantId ==null ? dossierEtudiantMsgs.dossier_etudiant_nouveau_dossier_title : dossierEtudiantMsgs.dossier_etudiant_gerer_dossier_title}
+	</ui:define>
+
+
+	<ui:define name="centerContent">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<!-- 			<center>
+				<ui:include src="/pages/cursus/dossier/DossierEtudiantHeader.xhtml" />
+			</center>
+			<br /> -->
+
+			<div class="row"
+				style="border: 1px solid #E2E2E2; box-shadow: 0px 1px 1px #ECECEC; background-color: #F5F5F5; padding: 10px 0px;">
+				<div class="col-lg-3">
+					<p:graphicImage id="nomphotoViewDetail"
+						value="http://www.cdstyle.be/wp-content/uploads/2014/09/user.gif"
+						ajax="true" height="180"
+						style="padding:0px; text-align:center;margin-left:30px;border: 5px solid #FFF;"
+						width="180" alt="#{documentmsgs.document_photo_vide}">
+
+						<f:param name="url" value="#{photoBean.url}" />
+						<f:param name="dossierEtudiantId"
+							value="#{photoBean.dossierEtudiantId}" />
+					</p:graphicImage>
+				</div>
+				<div class="col-lg-9">
+					<h1 class="pull-right">
+						Matricule: <span class="txt-color-green">#{dossierEtudiantBean.dossierEtudiantDto.numeroMatricule}</span>
+					</h1>
+					<h1>
+						#{individuBean.individuDto.nomLatin} <span class="semi-bold">
+							#{individuBean.individuDto.prenomLatin}</span>
+					</h1>
+
+					<h1>
+						#{individuBean.individuDto.nomArabe} <span style="">#{individuBean.individuDto.prenomArabe}</span>
+					</h1>
+
+					<h4>
+						Né le
+						<h:outputText value="#{individuBean.individuDto.dateNaissance}"
+							styleClass="labelValue">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+						à
+						<h:outputText value="#{individuBean.individuDto.lieuNaissance}"
+							styleClass="labelValue" />
+					</h4>
+
+					<h4>
+						<strong>Matricule BAC: <span class="txt-color-green">
+								#{dossierEtudiantBean.dossierEtudiantDto.dossierBachelierMatricule}</span></strong>
+					</h4>
+
+				</div>
+			</div>
+
+			<p:tabView orientation="left">
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_etudiant_title}">
+					<ui:include src="/pages/cursus/individu/IndividuDetail.xhtml" />
+				</p:tab>
+
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_dossier_title}">
+					<ui:include
+						src="/pages/cursus/dossier/DossierEtudiantInfoDetail.xhtml" />
+				</p:tab>
+
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_titreacces_title}">
+					<ui:include
+						src="/pages/cursus/dossier/titreacces/TitreAccessDetail.xhtml" />
+				</p:tab>
+
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_diplome_title}">
+					<ui:include src="/pages/cursus/dossier/diplome/DiplomeDetail.xhtml" />
+
+				</p:tab>
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_formation_title}">
+					<ui:include
+						src="/pages/cursus/dossier/formation/FormationDetail.xhtml" />
+				</p:tab>
+				<!-- 				<p:tab -->
+				<!-- 					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_inscription_title}"> -->
+
+				<!-- 				</p:tab> -->
+				<!-- 				<p:tab -->
+				<!-- 					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_bourse_title}"> -->
+				<!-- 				</p:tab> -->
+
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_besoin_special_title}">
+					<ui:include
+						src="/pages/cursus/dossier/handicap/HandicapDetail.xhtml" />
+				</p:tab>
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_situation_sportive_title}">
+					<ui:include src="/pages/cursus/dossier/sportif/SportifDetail.xhtml" />
+
+				</p:tab>
+				<!-- 				<p:tab -->
+				<!-- 					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_vie_culturelle_title}"> -->
+
+				<!-- 				</p:tab> -->
+
+				<p:tab
+					title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_document_title}">
+
+					<p:panel>
+						<ui:include src="/pages/document/DossierEtudiantDocument.xhtml">
+							<c:set var="entity" value="DossierEtudiant" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierEtudiantBean.dossierEtudiantId} "
+								scope="request" />
+							<ui:param name="entity" value="DossierEtudiant" />
+							<ui:param name="identifiant"
+								value="#{dossierEtudiantBean.dossierEtudiantId}" />
+							<ui:param name="editionMode" value="false" />
+						</ui:include>
+					</p:panel>
+				</p:tab>
+
+			</p:tabView>
+
+	</ui:define>
+</ui:composition>
+</html>

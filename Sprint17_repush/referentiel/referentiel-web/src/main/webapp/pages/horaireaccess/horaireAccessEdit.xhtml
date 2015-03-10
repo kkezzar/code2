@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_horaireAccess}" style="border:0;">
+			<h:form id="horaireEditForm">
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:fieldset legend="#{commonmsgs.common_horaire}">
+					<p:panelGrid id="description" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{horaireaccesmsgs.horaireacces_identifiant} *" />
+							</p:column>
+							<p:column>
+								<p:inputText id="identifiant"
+									style="text-align: left;font-weight: bold"
+									value="#{horaireMgrBean.refHoraireAccessDto.identifiant}"
+									label="#{horaireaccesmsgs.horaireacces_identifiant}"
+									readonly="true"
+									requiredMessage="#{horaireaccesmsgs.horaireacces_identite_required}">
+								</p:inputText>
+								<p:tooltip for="identifiant"
+									value="Veuillez saisir l'identifiant" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{horaireaccesmsgs.horaireacces_nom} " />
+							</p:column>
+							<p:column>
+								<p:inputText id="nom" style="text-align: left"
+									value="#{horaireMgrBean.refHoraireAccessDto.nom}"
+									label="#{horaireaccesmsgs.horaireacces_nom}">
+								</p:inputText>
+								<p:tooltip for="identifiant"
+									value="Veuillez saisir le nom d'horaire" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{horaireaccesmsgs.horaireacces_heure_debut} *" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" id="heuredebut" style="width:40px"
+									value="#{horaireMgrBean.refHoraireAccessDto.heureDebut}"
+									label="#{horaireaccesmsgs.horaireacces_heure_debut}"
+									required="true" pattern="HH:mm" timeOnly="true"
+									requiredMessage="#{horaireaccesmsgs.horaireacces_heure_debut_required}">
+								</p:calendar>
+								<p:tooltip for="heuredebut"
+									value="Veuillez saisir lheure de début" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText
+									value="#{horaireaccesmsgs.horaireacces_heure_fin} *" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" id="heurefin" style="width:40px"
+									value="#{horaireMgrBean.refHoraireAccessDto.heureFin}"
+									label="#{horaireaccesmsgs.horaireacces_heure_fin}"
+									required="true" pattern="HH:mm" timeOnly="true"
+									requiredMessage="#{horaireaccesmsgs.horaireacces_heure_fin_required}">
+								</p:calendar>
+
+								<p:tooltip for="heurefin"
+									value="#{horaireaccesmsgs.horaireacces_selectionez_heuredefin}"
+									showEffect="fade" hideEffect="fade" />
+							</p:column>
+						</p:row>
+
+
+
+
+					</p:panelGrid>
+				</p:fieldset>
+
+				<br></br>
+				<p:panelGrid id="panelButton" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_save}" update="horaireEditForm"
+								icon="ui-icon-disk" actionListener="#{horaireMgrBean.toSave}" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-disk" process="@this"
+								action="#{horaireBckBean.back}">
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_cancel_modification_confirmation}"
+									icon="ui-icon-alert" />
+								<f:param name="searchValue"
+									value="#{horaireBckBean.searchValue}" />
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

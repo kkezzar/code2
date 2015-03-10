@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAdresseDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefCoordonnee
+		</class-b>
+		<field>
+			<a>idIndividu</a>
+			<b>refIndividu.id</b>
+		</field>
+		<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+		<field>
+			<a>idLieu</a>
+			<b>refLieu.id</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAdresseDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefAdresse
+		</class-b>
+
+		<field>
+			<a>paysId</a>
+			<b>nomenclatureByPays.id</b>
+		</field>
+		<field>
+			<a>paysLibelleLongFr</a>
+			<b>nomenclatureByPays.libelleLongFr</b>
+		</field>
+		<field>
+			<a>paysLibelleLongAr</a>
+			<b>nomenclatureByPays.libelleLongAr</b>
+		</field>
+		<field>
+			<a>paysLibelleCourtFr</a>
+			<b>nomenclatureByPays.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>paysLibelleCourtAr</a>
+			<b>nomenclatureByPays.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>paysCode</a>
+			<b>nomenclatureByPays.code</b>
+		</field>
+
+		<field>
+			<a>dairaId</a>
+			<b>nomenclatureByDaira.id</b>
+		</field>
+		<field>
+			<a>dairaLibelleLongFr</a>
+			<b>nomenclatureByDaira.libelleLongFr</b>
+		</field>
+		<field>
+			<a>dairaLibelleLongAr</a>
+			<b>nomenclatureByDaira.libelleLongAr</b>
+		</field>
+		<field>
+			<a>dairaLibelleCourtFr</a>
+			<b>nomenclatureByDaira.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>dairaLibelleCourtAr</a>
+			<b>nomenclatureByDaira.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>dairaCode</a>
+			<b>nomenclatureByDaira.code</b>
+		</field>
+
+		<field>
+			<a>communeId</a>
+			<b>nomenclatureByCommune.id</b>
+		</field>
+		<field>
+			<a>communeLibelleLongFr</a>
+			<b>nomenclatureByCommune.libelleLongFr</b>
+		</field>
+		<field>
+			<a>communeLibelleLongAr</a>
+			<b>nomenclatureByCommune.libelleLongAr</b>
+		</field>
+		<field>
+			<a>communeLibelleCourtFr</a>
+			<b>nomenclatureByCommune.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>communeLibelleCourtAr</a>
+			<b>nomenclatureByCommune.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>communeCode</a>
+			<b>nomenclatureByCommune.code</b>
+		</field>
+
+		<field>
+			<a>wilayaId</a>
+			<b>nomenclatureByWilaya.id</b>
+		</field>
+		<field>
+			<a>wilayaLibelleLongFr</a>
+			<b>nomenclatureByWilaya.libelleLongFr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleLongAr</a>
+			<b>nomenclatureByWilaya.libelleLongAr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleCourtFr</a>
+			<b>nomenclatureByWilaya.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleCourtAr</a>
+			<b>nomenclatureByWilaya.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>wilayaCode</a>
+			<b>nomenclatureByWilaya.code</b>
+		</field>
+
+		<field>
+			<a>typeAdresseId</a>
+			<b>nomenclatureByTypeAdresse.id</b>
+		</field>
+		<field>
+			<a>typeAdresseLibelleLongFr</a>
+			<b>nomenclatureByTypeAdresse.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeAdresseLibelleLongAr</a>
+			<b>nomenclatureByTypeAdresse.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeAdresseLibelleCourtFr</a>
+			<b>nomenclatureByTypeAdresse.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeAdresseLibelleCourtAr</a>
+			<b>nomenclatureByTypeAdresse.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeAdresseCode</a>
+			<b>nomenclatureByTypeAdresse.code</b>
+		</field>
+
+
+
+	</mapping>
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefTelephoneDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefCoordonnee
+		</class-b>
+		<field>
+			<a>idIndividu</a>
+			<b>refIndividu.id</b>
+		</field>
+		<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+		<field>
+			<a>idLieu</a>
+			<b>refLieu.id</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefTelephoneDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefTelephone
+		</class-b>
+
+		<field>
+			<a>natureTelephoneId</a>
+			<b>nomenclatureByNatureTelephone.id</b>
+		</field>
+		<field>
+			<a>natureTelephoneLibelleLongFr</a>
+			<b>nomenclatureByNatureTelephone.libelleLongFr</b>
+		</field>
+		<field>
+			<a>natureTelephoneLibelleLongAr</a>
+			<b>nomenclatureByNatureTelephone.libelleLongAr</b>
+		</field>
+		<field>
+			<a>natureTelephoneLibelleCourtFr</a>
+			<b>nomenclatureByNatureTelephone.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>natureTelephoneLibelleCourtAr</a>
+			<b>nomenclatureByNatureTelephone.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>natureTelephoneCode</a>
+			<b>nomenclatureByNatureTelephone.code</b>
+		</field>
+
+		<field>
+			<a>typeTelephoneId</a>
+			<b>nomenclatureByTypeTelephone.id</b>
+		</field>
+		<field>
+			<a>typeTelephoneLibelleLongFr</a>
+			<b>nomenclatureByTypeTelephone.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeTelephoneLibelleLongAr</a>
+			<b>nomenclatureByTypeTelephone.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeTelephoneLibelleCourtFr</a>
+			<b>nomenclatureByTypeTelephone.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeTelephoneLibelleCourtAr</a>
+			<b>nomenclatureByTypeTelephone.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeTelephoneCode</a>
+			<b>nomenclatureByTypeTelephone.code</b>
+		</field>
+
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAdresseElectroniqueDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefCoordonnee
+		</class-b>
+		<field>
+			<a>idIndividu</a>
+			<b>refIndividu.id</b>
+		</field>
+		<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+		<field>
+			<a>idLieu</a>
+			<b>refLieu.id</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAdresseElectroniqueDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefAdresseElectronique
+		</class-b>
+
+		<field>
+			<a>typeAdresseElectroniqueId</a>
+			<b>nomenclatureByTypeAdresseElectronique.id</b>
+		</field>
+		<field>
+			<a>typeAdresseElectroniqueLibelleLongFr</a>
+			<b>nomenclatureByTypeAdresseElectronique.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeAdresseElectroniqueLibelleLongAr</a>
+			<b>nomenclatureByTypeAdresseElectronique.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeAdresseElectroniqueLibelleCourtFr</a>
+			<b>nomenclatureByTypeAdresseElectronique.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeAdresseElectroniqueLibelleCourtAr</a>
+			<b>nomenclatureByTypeAdresseElectronique.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeAdresseElectroniqueCode</a>
+			<b>nomenclatureByTypeAdresseElectronique.code</b>
+		</field>
+
+		<field>
+			<a>natureAdresseElectroniqueId</a>
+			<b>nomenclatureByNatureAdresseElectronique.id</b>
+		</field>
+		<field>
+			<a>natureAdresseElectroniqueLibelleLongFr</a>
+			<b>nomenclatureByNatureAdresseElectronique.libelleLongFr</b>
+		</field>
+		<field>
+			<a>natureAdresseElectroniqueLibelleLongAr</a>
+			<b>nomenclatureByNatureAdresseElectronique.libelleLongAr</b>
+		</field>
+		<field>
+			<a>natureAdresseElectroniqueLibelleCourtFr</a>
+			<b>nomenclatureByNatureAdresseElectronique.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>natureAdresseElectroniqueLibelleCourtAr</a>
+			<b>nomenclatureByNatureAdresseElectronique.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>natureAdresseElectroniqueCode</a>
+			<b>nomenclatureByNatureAdresseElectronique.code</b>
+		</field>
+
+	</mapping>
+</mappings>

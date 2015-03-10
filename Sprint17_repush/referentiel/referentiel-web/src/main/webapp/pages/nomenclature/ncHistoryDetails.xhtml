@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:inputHidden value="#{ncHistoryMgrBean.params(idNomecnlature)}" />
+
+	<h:outputText value="#{nomenclaturemsgs.nc_history_titile}:"
+		style="font-weight: bold;" />
+	<hr></hr>
+
+	<h:form id="historyFromId">
+
+		<br></br>
+		<p:dataTable id="historyData" paginator="true"
+			paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="3"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{ncHistoryMgrBean.listNcHistoryDto}" var="current">
+
+			<p:column sortBy="#{current.nomAttribut}">
+				<f:facet name="header">
+					<h:outputText value="#{nomenclaturemsgs.nc_history_attribut}" />
+				</f:facet>
+				<h:outputText value="#{current.nomAttribut}" />
+			</p:column>
+			<p:column sortBy="#{current.dateMaj}">
+				<f:facet name="header">
+					<h:outputText value="#{nomenclaturemsgs.nc_history_date_update}" />
+				</f:facet>
+				<h:outputText value="#{current.dateMaj}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+						timeZone="GMT+1" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{current.valeurAncienne}">
+				<f:facet name="header">
+					<h:outputText value="#{nomenclaturemsgs.nc_history_old_value}" />
+				</f:facet>
+				<h:outputText value="#{current.valeurAncienne}" />
+			</p:column>
+		</p:dataTable>
+
+
+	</h:form>
+
+
+</ui:composition>

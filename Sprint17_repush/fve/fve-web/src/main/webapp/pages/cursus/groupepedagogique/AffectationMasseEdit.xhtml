@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sp="http://java.sun.com/jsf/composite/components/cursus">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+	#{groupePedagogiqueMsgs.groupepedagogique_affectation_masse_title}
+	</ui:define>
+	<ui:define name="centerContent">
+		<p:growl id="msgs" showDetail="true" autoUpdate="true"
+			showSummary="false" closable="true" life="5000" />
+		<p:panel id="panelGlobal">
+			<pe:blockUI target="groupepedagogiqueForm" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<h:form id="groupepedagogiqueForm">
+
+				<sp:SearchGroupePedagogiqueComponent
+					beanName="#{affectationMasseBean}"
+					groupeListenerName="groupePedagogiqueChanged" editMode="true"
+					updateForm=":groupepedagogiqueForm">
+				</sp:SearchGroupePedagogiqueComponent>
+				<br />
+				<p:toolbar id="planningSearchToolBar">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch"
+							value="#{commonmsgs.bouton_rechercher}"
+							update="groupepedagogiqueForm" process="groupepedagogiqueForm"
+							style=" text-align:left" onstart="PF('globalWidget').block()"
+							onsuccess="PF('globalWidget').unblock()"
+							actionListener="#{affectationMasseBean.findEtudiant()}"
+							icon="ui-icon-search">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br />
+				<p:outputPanel id="editGroupe" styleClass="editStyle"
+					rendered="#{affectationMasseBean.showDetail}">
+					<ui:include
+						src="/pages/cursus/groupepedagogique/AffectationMasse.xhtml" />
+				</p:outputPanel>
+			</h:form>
+
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

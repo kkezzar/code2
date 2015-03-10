@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<br></br>
+
+		<p:fieldset id="habModuleFieldSet"
+			legend="#{commonmsgs.menu_habilitation_module_objet}">
+			<h:form id="searchForm" 
+					onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+		
+				<p:toolbar>
+
+
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{moduleDroitBean.createAllow}" icon="ui-icon-document"
+							action="#{moduleSearchBckBean.toNew}">
+							<f:param name="searchValue"
+								value="#{moduleSearchBckBean.searchValue}" />
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="moduleData"
+								fileName="listeDesmodules" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText binding="#{searchValue}"
+							value="#{moduleSearchBckBean.searchValue}" id="searchInput"
+							rendered="#{moduleDroitBean.readAllow}" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+						<p:commandButton onstart="PF('blockUIWidget').block()" id="searchButton"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							rendered="#{moduleDroitBean.readAllow}"
+							actionListener="#{moduleSearchBckBean.findGeneric(searchValue.value)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+				<br></br>
+
+
+				<p:treeTable resizableColumns="true" id="modulesData"
+					value="#{moduleSearchBckBean.root}" var="current"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}"
+					scrollable="true">
+
+					<f:facet name="header">
+						<h:outputText value="#{habilitationmsgs.module_liste}       " />
+					</f:facet>
+
+					<p:column style="width:60%">
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.module_name_table_label}" />
+						</f:facet>
+						<h:outputText value="#{current.nom}" />
+					</p:column>
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.module_rang_table_label}" />
+						</f:facet>
+						<h:panelGroup rendered="#{current.parent}">
+							<div style="text-align: left;">
+								<h:outputText value="#{current.rang}" />
+							</div>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{!current.parent}">
+							<div style="text-align: right;">
+								<h:outputText value="#{current.rang}" />
+							</div>
+						</h:panelGroup>
+					</p:column>
+					<p:column style="width:30%">
+						<p:commandButton id="_readButton"
+							action="#{moduleSearchBckBean.toDetails}" icon="ui-icon-document"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_consulter}"
+							rendered="#{!current.parent and (moduleDroitBean.readAllow)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="idfm" value="#{current.identifiant}" />
+							<f:param name="idfDomaine" value="#{current.identifiantDomaine}" />
+						</p:commandButton>
+
+
+						<p:commandButton id="modifyButton"
+							action="#{moduleSearchBckBean.toEdit}" icon="ui-icon-pencil"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_update}"
+							rendered="#{!current.parent and (moduleDroitBean.editAllow)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="idfm" value="#{current.identifiant}" />
+							<f:param name="idfDomaine" value="#{current.identifiantDomaine}" />
+
+						</p:commandButton>
+
+						<p:commandButton id="addFonctionButton"
+							action="#{moduleSearchBckBean.toNewFonction}" icon="ui-icon-plus"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_new}"
+							rendered="#{!current.parent and (moduleDroitBean.createAllow)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="idfm" value="#{current.identifiant}" />
+						</p:commandButton>
+						<p:tooltip for="addFonctionButton"
+							value="#{habilitationmsgs.msg_tooltip_add_fonction}"
+							showEffect="slide" hideEffect="slide" />
+
+
+						<p:commandButton id="addModuleButton"
+							action="#{moduleSearchBckBean.toNew}" icon="ui-icon-plus"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							title="#{commonmsgs.button_new}"
+							rendered="#{current.parent and (moduleDroitBean.createAllow)}">
+							<f:param name="searchValue" value="#{searchValue.value}" />
+							<f:param name="idfDomaine" value="#{current.identifiant}" />
+						</p:commandButton>
+						<p:tooltip for="addModuleButton"
+							value="#{habilitationmsgs.msg_tooltip_add_module}"
+							showEffect="slide" hideEffect="slide" />
+					</p:column>
+					<f:param name="searchValue" value="#{searchValue.value}" />
+					
+				</p:treeTable>
+			</h:form>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>
+</html>

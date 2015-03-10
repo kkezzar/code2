@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.EmploiDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.Emploi
+		</class-b>
+
+
+		<!-- private OuvertureOffreFormation ouvertureOffreFormation -->
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationId</a>
+			<b>ouvertureOffreFormation.offreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>ouvertureOffreFormation.offreFormation.code</b>
+		</field>
+        <field>
+			<a>offreFormationLibelleFr</a>
+			<b>ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>ouvertureOffreFormation.refEtablissement.identifiant</b>
+		</field>
+		
+		<!-- private Niveau niveau -->
+		<field>
+			<a>niveauId</a>
+			<b>niveau.id</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>niveau.code</b>
+		</field>
+		<field>
+			<a>niveauLibelleLongLt</a>
+			<b>niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>niveau.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>niveau.cycle.code</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>niveau.cycle.libelleLongLt</b>
+		</field>
+
+		<!-- AnneeAcademique anneeAcademique -->
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>anneeAcademique.code</b>
+		</field>
+		
+		<field>
+			<a>periodiciteId</a>
+			<b>nomenclatureByIdNcPeriodicite.id</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongFr</a>
+			<b>nomenclatureByIdNcPeriodicite.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongAr</a>
+			<b>nomenclatureByIdNcPeriodicite.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodiciteCode</a>
+			<b>nomenclatureByIdNcPeriodicite.code</b>
+		</field>
+
+
+		<field>
+			<a>periodeId</a>
+			<b>nomenclatureByIdNcPeriode.id</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongFr</a>
+			<b>nomenclatureByIdNcPeriode.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongAr</a>
+			<b>nomenclatureByIdNcPeriode.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodeCode</a>
+			<b>nomenclatureByIdNcPeriode.code</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.SeanceEmploiDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.CelluleHoraire
+		</class-b>	
+		<field>
+			<a>celluleHoraireId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>plageHoraireId</a>
+			<b>plageHoraire.id</b>
+		</field>
+		<field>
+			<a>plageHoraireCode</a>
+			<b>plageHoraire.code</b>
+		</field>
+        <field>
+			<a>plageHoraireNumero</a>
+			<b>plageHoraire.numero</b>
+		</field>
+		<field>
+			<a>plageHoraireLibelleFr</a>
+			<b>plageHoraire.libelleFr</b>
+		</field>
+		
+		
+		<field>
+			<a>plageHoraireLibelleAr</a>
+			<b>plageHoraire.libelleAr</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureDebut</a>
+			<b>plageHoraire.heureDebut</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureFin</a>
+			<b>plageHoraire.heureFin</b>
+		</field>
+		<field>
+			<a>jourId</a>
+			<b>jour.id</b>
+		</field>
+		<field>
+			<a>jourCode</a>
+			<b>jour.code</b>
+		</field>
+		<field>
+			<a>jourLibelleFr</a>
+			<b>jour.libelleFr</b>
+		</field>
+
+		
+		<field>
+			<a>jourLibelleAr</a>
+			<b>jour.libelleAr</b>
+		</field>
+		
+		
+		
+		
+		
+	</mapping>
+	<mapping map-null="false" >
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.scolarite.SeanceEmploiDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.scolarite.SeanceEmploi
+		</class-b>	
+<!-- private Emploi emploi -->
+        <field>
+			<a>emploiId</a>
+			<b>emploi.id</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>emploi.ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationId</a>
+			<b>emploi.ouvertureOffreFormation.offreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>emploi.ouvertureOffreFormation.offreFormation.code</b>
+		</field>
+        <field>
+			<a>offreFormationLibelleFr</a>
+			<b>emploi.ouvertureOffreFormation.offreFormation.libelleLongFr</b>
+		</field>
+		<field>
+			<a>niveauId</a>
+			<b>emploi.niveau.id</b>
+		</field>
+		<field>
+			<a>niveauCode</a>
+			<b>emploi.niveau.code</b>
+		</field>
+		<field>
+			<a>niveauLibelleLongLt</a>
+			<b>emploi.niveau.libelleLongLt</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>emploi.niveau.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>emploi.niveau.cycle.code</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>emploi.niveau.cycle.libelleLongLt</b>
+		</field>
+
+		
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>emploi.anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>emploi.anneeAcademique.code</b>
+		</field>
+		
+		<field>
+			<a>periodiciteId</a>
+			<b>emploi.nomenclatureByIdNcPeriodicite.id</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongFr</a>
+			<b>emploi.nomenclatureByIdNcPeriodicite.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodiciteLibelleLongAr</a>
+			<b>emploi.nomenclatureByIdNcPeriodicite.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodiciteCode</a>
+			<b>emploi.nomenclatureByIdNcPeriodicite.code</b>
+		</field>
+
+
+		<field>
+			<a>periodeId</a>
+			<b>emploi.nomenclatureByIdNcPeriode.id</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongFr</a>
+			<b>emploi.nomenclatureByIdNcPeriode.libelleLongFr</b>
+		</field>
+		<field>
+			<a>periodeLibelleLongAr</a>
+			<b>emploi.nomenclatureByIdNcPeriode.libelleLongAr</b>
+		</field>
+
+		<field>
+			<a>periodeCode</a>
+			<b>emploi.nomenclatureByIdNcPeriode.code</b>
+		</field>
+		
+		<!-- affectationLieuStructure  -->
+		<field>
+			<a>affectationLieuStructureId</a>
+			<b>affectationLieuStructure.id</b>
+		</field>
+		<field>
+			<a>celluleHoraireId</a>
+			<b>affectationLieuStructure.celluleHoraire.id</b>
+		</field>
+		<field>
+			<a>plageHoraireId</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.id</b>
+		</field>
+		<field>
+			<a>plageHoraireCode</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.code</b>
+		</field>
+        <field>
+			<a>plageHoraireNumero</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.numero</b>
+		</field>
+		<field>
+			<a>plageHoraireLibelleFr</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.libelleFr</b>
+		</field>
+		
+		
+		<field>
+			<a>plageHoraireLibelleAr</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.libelleAr</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureDebut</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.heureDebut</b>
+		</field>
+		<field>
+			<a>plageHoraireHeureFin</a>
+			<b>affectationLieuStructure.celluleHoraire.plageHoraire.heureFin</b>
+		</field>
+		<field>
+			<a>jourId</a>
+			<b>affectationLieuStructure.celluleHoraire.jour.id</b>
+		</field>
+		<field>
+			<a>jourCode</a>
+			<b>affectationLieuStructure.celluleHoraire.jour.code</b>
+		</field>
+		<field>
+			<a>jourLibelleFr</a>
+			<b>affectationLieuStructure.celluleHoraire.jour.libelleFr</b>
+		</field>
+
+		
+		<field>
+			<a>jourLibelleAr</a>
+			<b>affectationLieuStructure.celluleHoraire.jour.libelleAr</b>
+		</field>
+		<field>
+			<a>refStructureId</a>
+			<b>affectationLieuStructure.refStructure.id</b>
+		</field>
+		<field>
+			<a>refStructureTypeId</a>
+			<b>affectationLieuStructure.refStructure.nomenclatureByTypeStructure.id</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>affectationLieuStructure.refStructure.llStructureArabe</b>
+		</field>
+
+		<field>
+			<a>llStructureLatin</a>
+			<b>affectationLieuStructure.refStructure.llStructureLatin</b>
+		</field>
+		<field>
+			<a>refStructureTypeLibelle</a>
+			<b>affectationLieuStructure.refStructure.nomenclatureByTypeStructure.libelleLongFr</b>
+		</field>
+
+		<field>
+			<a>refLieuId</a>
+			<b>affectationLieuStructure.refLieu.id</b>
+		</field>
+
+		<field>
+			<a>refLieuDesignation</a>
+			<b>affectationLieuStructure.refLieu.designation</b>
+		</field>
+		<field>
+			<a>refLieudesignationArabe</a>
+			<b>affectationLieuStructure.refLieu.designationArabe</b>
+		</field>
+		<field>
+			<a>refLieuTypeId</a>
+			<b>affectationLieuStructure.refLieu.nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelleLongFr</a>
+			<b>affectationLieuStructure.refLieu.nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>refLieuTypeLibelleLongAr</a>
+			<b>affectationLieuStructure.refLieu.nomenclatureByTypeLieu.libelleLongAr</b>
+		</field>
+		<field>
+			<a>refLieuTypelieuCode</a>
+			<b>affectationLieuStructure.refLieu.nomenclatureByTypeLieu.code</b>
+		</field>
+		<!-- associationGroupePedagogique -->
+		<field>
+			<a>associationGroupePedagogiqueId</a>
+			<b>associationGroupePedagogique.id</b>
+		</field>
+		<field>
+			<a>groupePedagogiqueId</a>
+			<b>associationGroupePedagogique.groupePedagogique.id</b>
+		</field>
+
+		<field>
+			<a>groupePedagogiqueNom</a>
+			<b>associationGroupePedagogique.groupePedagogique.nomAffichage</b>
+		</field>	
+		<field>
+			<a>refCodeTypeAp</a>
+			<b>associationGroupePedagogique.ap.ncTypeAp.code</b>
+		</field>
+
+		<field>
+			<a>rattachementMcId</a>
+			<b>associationGroupePedagogique.rattachementMc.id</b>
+		</field>
+		<field>
+			<a>rattachementMcMcId</a>
+			<b>associationGroupePedagogique.rattachementMc.matiereConstitutive.id</b>
+		</field>
+		<field>
+			<a>rattachementMcMcCode</a>
+			<b>associationGroupePedagogique.rattachementMc.matiereConstitutive.code</b>
+		</field>
+		<field>
+			<a>rattachementMcMcLibelleFr</a>
+			<b>associationGroupePedagogique.rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+		
+		
+		
+		
+		
+		
+
+		
+
+		
+		
+		
+		
+		
+		</mapping>
+		
+</mappings>

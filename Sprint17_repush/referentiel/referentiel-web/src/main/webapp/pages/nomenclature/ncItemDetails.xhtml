@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panel style="height:600px" id="infosNcPanel">
+		<ui:include src="/pages/nomenclature/ncInfo.xhtml" />
+		<h:form id="infosNcFromId">
+			<br></br>
+			<h:outputText value="#{nomenclaturemsgs.nc_description}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="editDescription" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_ll_fr_libelle}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{ncBckBean.nomenclatureDto.libelleLongFr}"
+							style="font-weight: bold;" />
+					</p:column>
+
+
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_lc_fr_libelle}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{ncBckBean.nomenclatureDto.libelleCourtFr}"
+							style="font-weight: bold;" />
+					</p:column>
+
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_ll_ar_libelle}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{ncBckBean.nomenclatureDto.libelleLongAr}"
+							style="font-weight: bold;" />
+					</p:column>
+
+
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_lc_ar_libelle}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{ncBckBean.nomenclatureDto.libelleCourtAr}"
+							style="font-weight: bold;" />
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_staus}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{ncBckBean.nomenclatureDto.status?'Actif':'Inactif'}"
+							style="font-weight: bold;" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{nomenclaturemsgs.nc_item_default}:  " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{ncBckBean.nomenclatureDto.defaultValue?'Oui':'Non'}"
+							style="font-weight: bold;" />
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{ncBckBean.nomenclatureDto.ncNameReference} " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{ncBckBean.nomenclatureDto.libelleLongFrRef}"
+							style="font-weight: bold;" />
+					</p:column>
+
+				</p:row>
+
+
+			</p:panelGrid>
+
+		</h:form>
+		<br />
+		<ui:include src="/pages/nomenclature/ncHistoryDetails.xhtml">
+			<ui:param name="idNomecnlature"
+				value="#{ncBckBean.nomenclatureDto.id}" />
+		</ui:include>
+		<br></br>
+		<p:panelGrid id="editDescription" styleClass="noBorder1">
+			<p:row>
+				<p:column>
+					<p:commandButton value="#{commonmsgs.button_return}"
+						icon="ui-icon-disk" process="@this" action="#{ncBckBean.back}">
+						<f:param name="idNc" value="#{ncBckBean.idNc}" />
+					</p:commandButton>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:panel>
+
+</ui:composition>

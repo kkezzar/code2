@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView" listener="true" />
+	</f:view>
+
+
+	<p:fieldset >
+		<ui:include src="/pages/filierelmd/filierelmdHeader.xhtml" />
+	</p:fieldset>
+	
+    <p:fieldset legend="Affectation">
+	<br></br>
+	<h:form id="affectationFromId" prependId="false">
+
+		
+<p:dataTable id="affectationetablissement" paginator="true"
+			paginatorPosition="bottom" styleClass="affectationStyle"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="15"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectationfilierelmdetabMgrBean.listRefEtablissementDto}" var="current" >
+		
+
+			<f:param name="id" value="#{filierelmdBckBean.refFiliereLmdDto.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.affectationStyle)" process="@(.affectationStyle)" />
+			<f:facet name="header">
+				<h:outputText value="#{filierelmdmsgs.filierelmd_affectation }      " />
+				<p:commandButton id="addButton" ajax="true" icon="ui-icon-plusthick" onclick="PF('dlgList').show()" rendered="true">
+					<f:param name="id" value="#{filierelmdBckBean.refFiliereLmdDto.id}" />
+				</p:commandButton>
+			</f:facet>
+	
+	       
+			<p:column sortBy="#{current.identifiantEtablissement}"  width="30">
+				<f:facet name="header">
+					<h:outputText value="#{filierelmdmsgs.filierelmd_affectation_etablissement_idendite}" />
+				</f:facet>
+				<h:outputText value="#{current.identifiantEtablissement}" />
+			</p:column>
+			<p:column sortBy="#{current.llEtablissementLatin}"  width="120">
+				<f:facet name="header">
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_etab}" />
+				</f:facet>
+				<h:outputText value="#{current.llEtablissementLatin}" />
+			</p:column>
+<!-- 			<p:column sortBy="#{current.llGroupe}"  width="120"> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 					<h:outputText value="#{filierelmdmsgs.filierelmd_groupe}" /> -->
+<!-- 				</f:facet> -->
+<!-- 				<h:outputText value="#{current.llGroupe}" /> -->
+<!-- 			</p:column> -->
+	
+			<p:column sortBy="#{current.date}" width="50">
+				<f:facet name="header">
+					<h:outputText value="#{filierelmdmsgs.filierelmd_date_affectation}" />
+				</f:facet>
+				<h:outputText value="#{current.date}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			
+			<p:column sortBy="#{current.numArrete}" width="30">
+				<f:facet name="header">
+					<h:outputText value="#{filierelmdmsgs.filierelmd_affectation_num_arrerte}" />
+				</f:facet>
+				<h:outputText value="#{current.numArrete}" />
+			</p:column>
+			
+		<p:column style="width:8%" rendered="true" width="20">
+				<p:commandButton id="removeButton" icon="ui-icon-trash" actionListener="#{affectationfilierelmdetabMgrBean.deleteEtablissement(current)}"
+					process="@(.affectationStyle)" update="@(.affectationStyle)">
+					<f:param name="id" value="#{filierelmdBckBean.refFiliereLmdDto.id}" />
+					<p:confirm header="Confirmation" message="#{commonmsgs.msg_delete_confirmation}" icon="ui-icon-alert" />
+		</p:commandButton>
+			
+	       
+<!-- 		 <p:commandButton id="updateButton" icon="ui-icon-pencil" title="#{commonmsgs.button_update}"  -->
+<!-- 							process="@(.strReser)" rendered="true" action="infoAffectationEtablissementEdit.xhtml"   -->
+<!-- 							onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()" > -->
+<!-- 					       <f:param name="idr" value="#{current.id}" /> -->
+<!-- 					       <f:param name="entitiname" value="Affectation établissement" /> -->
+<!-- 					       <f:setPropertyActionListener value="#{current}" target="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto}" /> -->
+<!-- 					       </p:commandButton>	 -->
+                              
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+<p:dialog header="#{filierelmdmsgs.etablissement_list_ajout}" widgetVar="dlgList" resizable="false" width="350" appendTo="@(body)" modal="true" draggable="true">
+		<h:form id="listetablissementaffectesForm" prependId="false">
+			<p:panelGrid id="descriptionaffectation" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{filierelmdmsgs.filierelmd_etablissement} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="etablissementselect"
+						    style="text-align: left;width:200px"
+							value="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto.idEtablissement}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{filierelmdmsgs.filierelmd_etablissement}" required="true"
+							requiredMessage="#{filierelmdmsgs.filierelmd_etablissement_required}">
+							<f:selectItem itemLabel="#{filierelmdmsgs.filierelmd_affectation_selection_etablissement}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefEtablissementDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				
+				   <p:row>
+				   <p:column>
+						<h:outputText value="#{filierelmdmsgs.filierelmd_affectation_date}*" />
+				   </p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto.date}"
+							id="dateaffectation" showButtonPanel="true"
+							label="#{filierelmdmsgs.filierelmd_affectation_date}" required="true"
+							requiredMessage="#{filierelmdmsgs.filierelmd_affectation_date_recired}">
+						</p:calendar>
+					</p:column>
+				</p:row>
+<!-- 	            <p:row > -->
+<!-- 				<p:column> -->
+<!-- 					<h:outputText value="#{filierelmdmsgs.filierelmd_equipe}" /> -->
+<!-- 				</p:column> -->
+<!-- 				<p:column> -->
+<!-- 					<p:selectOneMenu id="selectGroupeData" -->
+<!-- 							value="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto.idGroupe}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{filierelmdmsgs.filierelmd_groupe}" > -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{filierelmdmsgs.selection_groupe_filierelmd}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+<!-- 				</p:column> -->
+<!-- 				</p:row> -->
+
+
+
+                    <p:row>
+					<p:column>
+						<h:outputText
+							value="#{filierelmdmsgs.filierelmd_affectation_num_arrerte}" />
+					</p:column>
+					<p:column>
+					<p:inputText id="numarretaffectation" style="text-align: left;width:200px" value="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto.numArrete}"
+						label="#{filierelmdmsgs.filierelmd_affectation_num_arrerte}">
+					</p:inputText>
+				   </p:column>
+				</p:row>
+                 <p:row>
+					<p:column>
+						<h:outputText
+							value="#{filierelmdmsgs.filierelmd_affectation_observation}" />
+					</p:column>
+					<p:column>
+					<p:inputTextarea id="observationaffectation" style="text-align: left;width:200px" value="#{affectationfilierelmdetabMgrBean.refAffectFiliereLmdEtabDto.observation}"
+						label="#{filierelmdmsgs.filierelmd_affectation_observation}">
+					</p:inputTextarea>
+				   </p:column>
+				</p:row>
+				</p:panelGrid>
+				<br></br>
+				<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					
+					
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{affectationfilierelmdetabMgrBean.addEtablissement()}"
+							update="@(.affectationStyle)" oncomplete="dlgList.hide()">
+							<f:param name="id" value="#{filierelmdBckBean.refFiliereLmdDto.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}" immediate="true"
+							icon="ui-icon-close" oncomplete="dlgList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	</p:fieldset>
+	<h:form>  
+			<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-disk" process="@this" action="#{filierelmdBckBean.back}">
+					
+					<f:param name="searchValue" value="#{filierelmdBckBean.searchValue}" />
+			</p:commandButton>
+	</h:form>
+</ui:composition>

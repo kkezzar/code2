@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<ui:composition template="/template/basicLayout.xhtml">
+	<ui:define name="centerContent">
+		<p:layout>
+                 <p:layoutUnit id="left" position="west" size="240" resizable="true" closable="true" collapsible="true"  minSize="200">
+                    <ui:insert name="left_optpan">
+                    	<ui:include src="left_optpan.xhtml"/>
+                    </ui:insert>
+                </p:layoutUnit> 
+                <p:layoutUnit id="center" position="center">
+                    <ui:insert name="main">
+						<ui:include src="main.xhtml" />
+					</ui:insert>
+                </p:layoutUnit>
+		</p:layout>
+	</ui:define>
+</ui:composition>
+</html>
+

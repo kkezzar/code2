@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{candidatEmployemsgs.pn_installation_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/besoinRecrutement/BesoinRecrutementSearch.xhtml" >
+				<ui:param name="renderedNouveau"  value="false"></ui:param>
+				<ui:param name="nameMBean"  value="#{candidatEmployeInstallationMBean}"></ui:param>
+				<ui:param name="updateAjax"  value=":pnl_detail"></ui:param>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty candidatEmployeInstallationMBean.besoinRecrutementDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{candidatEmployemsgs.pn_installation_title}" >
+					<h:form id="form_candidat_employe_installation">
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<ui:include
+				src="/pages/administrative/besoinRecrutement/BesoinRecrutementDetail.xhtml" >
+				
+				<ui:param name="besoinRecrutementDtoParam"  value="#{candidatEmployeInstallationMBean.besoinRecrutementDto}"></ui:param>
+				</ui:include>
+							
+							
+
+							<p:panelGrid id="postesPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column styleClass="title" colspan="4">
+										<h:outputText
+											value="#{candidatEmployemsgs.installation_detail_title}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable var="candidat"
+											value="#{candidatEmployeInstallationMBean.listCandidatEmployeDtos}"
+											id="candidatsTable" widgetVar="candidatsTable"
+											rowKey="#{candidat.id}" style="margin-top:5px; "
+											resizableColumns="true" paginator="true" rows="5"
+											paginatorPosition="bottom"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+											rowIndexVar="rowIndex" selectionMode="single"
+											emptyMessage="#{candidatEmployemsgs.datable_list_candidat_no_result}">
+											<p:ajax event="rowSelect"
+												listener="#{candidatEmployeInstallationMBean.onCandidatSelect}"
+												process="@this" update=":pnl_installation"
+												oncomplete="PF('installationCandidatDialog').show()" />
+
+											<f:facet name="header">
+
+											</f:facet>
+											<p:column headerText="#{besoinRecrutementmsgs.numero}"
+												style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{individumsgs.individu_nom_latin}"
+												sortBy="#{candidat.refIndividuDto.nomLatin}"
+												style="width:15%">
+												<h:outputText value="#{candidat.refIndividuDto.nomLatin}"
+													style="width:100%">
+												</h:outputText>
+
+											</p:column>
+											<p:column headerText="#{individumsgs.individu_prenom_latin}"
+												sortBy="#{candidat.refIndividuDto.prenomLatin}"
+												style="width:15%">
+												<h:outputText value="#{candidat.refIndividuDto.prenomLatin}"
+													style="width:100%">
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_depot_dossier}"
+												sortBy="#{candidat.dateDepot}" style="width:15%">
+												<h:outputText value="#{candidat.dateDepot}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+
+											</p:column>
+											<p:column headerText="#{candidatEmployemsgs.poste_demande}"
+												sortBy="#{candidat.detailRecrutementDto.reference}"
+												style="width:15%">
+												<h:outputText
+													value="#{candidat.detailRecrutementDto.reference}"
+													style="width:100%"></h:outputText>
+
+											</p:column>
+
+											<p:column headerText="#{candidatEmployemsgs.admis}"
+												sortBy="#{candidat.admis}" style="width:8%">
+												<h:outputText value="#{candidat.admis?'Oui':'Non'}"
+													style="width:100%"></h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_decision}"
+												sortBy="#{candidat.dateDecesion}" style="width:15%">
+												<h:outputText value="#{candidat.dateDecesion}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											
+											<p:column headerText="#{candidatEmployemsgs.installe}"
+												sortBy="#{candidat.installe}" style="width:8%">
+												<h:outputText value="#{candidat.installe?'Oui':'Non'}"
+													style="width:100%"></h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_signature_pv_installation}"
+												sortBy="#{candidat.dateSignature}" style="width:15%">
+												<h:outputText value="#{candidat.dateSignature}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column
+												headerText="#{candidatEmployemsgs.date_installation}"
+												sortBy="#{candidat.dateInstallation}" style="width:15%">
+												<h:outputText value="#{candidat.dateInstallation}"
+													style="width:100%">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</p:column>
+
+								</p:row>
+
+
+							</p:panelGrid>
+							<p:toolbar id="DecisionToolBar" styleClass="toolBarMesrs">
+								<p:toolbarGroup>
+									<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+										styleClass="ui-button-save" id="saveCandidatsBtn"
+										icon="ui-icon-disk" update=":tabView:form_candidat_employe_installation"
+										actionListener="#{candidatEmployeInstallationMBean.onSave}">
+
+										<p:confirm header="Confirmation"
+											message="#{besoinRecrutementmsgs.save_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+                  <p:commandButton value="#{commonmsgs.bouton_envoyer}" disabled="#{ empty candidatEmployeInstallationMBean.besoinRecrutementDto}"
+						id="sendsaveCandidatsBtn" icon="ui-icon-extlink" update=":pnl_Gerer"
+						actionListener="#{candidatEmployeInstallationMBean.onSend}"  >
+
+						<p:confirm header="Confirmation"
+							message="#{besoinRecrutementmsgs.save_confirm_msg}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+
+								</p:toolbarGroup>
+
+
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.bouton_retour}"
+										immediate="true" process="@this" id="backBtn"
+										icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+										actionListener="#{candidatEmployeInstallationMBean.init()}">
+
+
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+						</p:panelGrid>
+					</h:form>
+</p:tab>
+	<p:tab title="#{commonmsgs.tab_historique}" disabled="#{candidatEmployeInstallationMBean.besoinRecrutementDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{candidatEmployeInstallationMBean.besoinRecrutementHistory}"
+															idParamName="id"
+															idParamValue="#{candidatEmployeInstallationMBean.besoinRecrutementDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+					<p:dialog header="#{candidatEmployemsgs.pn_installation_title}"  appendTo="@(body)"
+						position="center" id="installationCandidatDialog"
+						widgetVar="installationCandidatDialog" modal="true" 
+						 resizable="false" >
+						<p:outputPanel id="pnl_installation" style="width:800px">
+							<h:form id="form_decision_candidat">
+								<p:panelGrid columns="1" cellspacing="0"
+									styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<ui:include
+				src="/pages/common/IndividuMinDetailComponent.xhtml" >
+				<ui:param name="title"  value="Candidat"></ui:param>
+				<ui:param name="refIndividuDtoParam"  value="#{candidatEmployeInstallationMBean.candidatEmployeDto.refIndividuDto}"></ui:param>
+				</ui:include>
+									<p:panelGrid id="installationPnlGrid"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+
+												<h:outputText styleClass="value" value="Sélection" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.retenu}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.retenu?'Oui':'Non' }" />
+
+											</p:column>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_selection}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateSelection}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_convocation}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateConvocation}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.classement}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.classement}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="Décision" />
+											</p:column>
+										</p:row>
+										<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{candidatEmployemsgs.poste_recrutement}" />
+									</p:column>
+
+									<p:column>
+                                     <h:outputText value="#{candidatEmployeInstallationMBean.candidatEmployeDto.detailRecrutementDto.reference}" styleClass="value"/>
+									</p:column>								
+								</p:row>
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.admis}" />
+										</p:column>
+										<p:column style="width:25%">
+											<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.admis?'Oui':'Non' }" />
+										</p:column>
+                                         <p:column>
+										<h:outputLabel value="#{candidatEmployemsgs.date_decision}"  />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateDecesion}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{candidatEmployemsgs.date_convocation}" />
+									</p:column>
+
+									<p:column >
+                                    	<h:outputText styleClass="value"
+													value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateConvocationRec}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+
+									<p:column >
+										<h:outputLabel 
+											value="#{candidatEmployemsgs.reference_decision} " styleClass="required" />
+									</p:column>
+									<p:column >
+                                    <h:outputText styleClass="value" value="#{candidatEmployeInstallationMBean.candidatEmployeDto.referenceDecision}"  ></h:outputText>
+									</p:column>
+								</p:row>
+
+								
+									<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="#{candidatEmployemsgs.installation}" />
+											</p:column>
+										</p:row>
+										
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.installe} " styleClass="required" />
+										</p:column>
+										<p:column style="width:25%">
+											<p:selectBooleanCheckbox id="estInstalle" 
+								label="#{candidatEmployemsgs.installe}"
+								value="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}"
+								>
+								<p:ajax update="installationPnlGrid"></p:ajax>
+							</p:selectBooleanCheckbox>
+										</p:column>
+                                         <p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.date_signature_pv_installation} " styleClass="required"  />
+									</p:column>
+									<p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+										<p:calendar id="date_pv" navigator="true" required="true" requiredMessage="#{candidatEmployemsgs.date_signature_pv_installation_required}" 
+							value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateSignature}"></p:calendar>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.matricule_attribue} " styleClass="required" />
+									</p:column>
+
+									<p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+                                    <p:inputText value="#{candidatEmployeInstallationMBean.candidatEmployeDto.matricule}" required="true" requiredMessage="#{candidatEmployemsgs.matricule_attribue_required}" styleClass="input-large" ></p:inputText>
+									</p:column>
+                                      <p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.date_installation} " styleClass="required"  />
+									</p:column>
+									<p:column rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+										<p:calendar id="date_installation" navigator="true" required="true" requiredMessage="#{candidatEmployemsgs.date_installation_required}" 
+							value="#{candidatEmployeInstallationMBean.candidatEmployeDto.dateInstallation}"></p:calendar>
+									</p:column>
+									
+								</p:row>	
+									<p:row>
+					<p:column  rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+						<p:outputLabel value="#{candidatEmployemsgs.affectation} " styleClass="required"></p:outputLabel>
+					</p:column>
+					<p:column  rendered="#{candidatEmployeInstallationMBean.candidatEmployeDto.installe}">
+						<p:selectOneMenu id="affectation" style="width:100%"   filter="true" filterMatchMode="contains"
+							value="#{candidatEmployeInstallationMBean.candidatEmployeDto.refStructureDto.id}"
+							label="#{candidatEmployemsgs.affectation}">
+							
+							<f:selectItem
+								itemLabel="#{besoinRecrutementmsgs.structure_select}"
+								itemValue="" />
+							<f:selectItems value="#{candidatEmployeInstallationMBean.listeStructure}" />
+
+						</p:selectOneMenu>
+					</p:column>
+					
+				</p:row>	
+										
+									</p:panelGrid>
+									<p:toolbar id="CandidatsToolBar" styleClass="toolBarMesrs">
+										<p:toolbarGroup>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												styleClass="ui-button-save" 
+												id="saveSelectionCandidatBtn" icon="ui-icon-disk"
+												update=":tabView:form_candidat_employe_installation"
+												action="#{candidatEmployeInstallationMBean.onSaveInstallation()}" onstart="PF('page').block()" onsuccess="PF('page').unblock()" oncomplete="if (!args.validationFailed) {installationCandidatDialog.hide()}">
+											</p:commandButton>
+
+										</p:toolbarGroup>
+
+
+
+										<p:toolbarGroup align="right">
+
+										</p:toolbarGroup>
+									</p:toolbar>
+								</p:panelGrid>
+
+							</h:form>
+						</p:outputPanel>
+					</p:dialog>
+
+
+
+
+				</p:outputPanel>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

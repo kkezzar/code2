@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+   		<mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.PeriodeParamDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.PeriodeParam</class-b>
+      		<field>
+      					<a>idPeriode</a>
+	  					<b>periode.id</b>
+      		</field> 
+      		<field>
+      					<a>libellePeriode</a>
+	  					<b>periode.libelleLongLt</b>
+      		</field>
+      		 
+      		<field>
+      					<a>idAnneeAcademique</a>
+	  					<b>anneeAcademique.id</b>
+      		</field> 
+      		
+      		<field>
+      					<a>premiereAnnee</a>
+	  					<b>anneeAcademique.premiereAnnee</b>
+      		</field> 
+      		<field>
+      					<a>deuxiemeAnnee</a>
+	  					<b>anneeAcademique.deuxiemeAnnee</b>
+      		</field> 
+      		
+      		<field>
+      					<a>idTypeParam</a>
+	  					<b>paramType.id</b>
+      		</field> 
+      		<field>
+      					<a>codeTypeParam</a>
+	  					<b>paramType.code</b>
+      		</field> 
+      		<field>
+      					<a>libelleTypeParam</a>
+	  					<b>paramType.libelle</b>
+      		</field> 
+      		<field>
+      					<a>masqueTypeParam</a>
+	  					<b>paramType.masque</b>
+      		</field> 
+   		</mapping>
+   		
+</mappings>

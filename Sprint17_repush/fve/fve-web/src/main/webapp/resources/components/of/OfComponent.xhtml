@@ -1,0 +1,860 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:eh="http://java.sun.com/jsf/composite/components"
+	>
+
+<!-- INTERFACE COMPOSANT OF -->
+<composite:interface>
+	<composite:attribute name="managedBean" 	type="dz.gov.mesrs.sii.fve.web.jsf.bean.offreformation.of.OfBB" required="true" shortDescription=" my Bean" />
+	<composite:attribute name="toEdit" type="java.lang.Boolean" required="true" shortDescription=" Of - Mode edition"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT OF -->
+<composite:implementation>
+<p:tabView id="tvOffreFormation" style="margin-bottom:8px;width:100%;" >
+   				
+<!-- OFFRE DE FORMATION - DESCRIPTIF -->
+<p:tab id="tabDescriptif" title="#{ofEditMsgs.EDIT_OF_TAB1_TITLE}" >
+<h:form id="formDescriptif">
+<p:messages id="messagesOf" showDetail="true" autoUpdate="false" closable="true"  showSummary="false"/>
+<!-- DESCRIPTIF - LOCALISATION - SPECIALITE  -->
+<h:panelGrid  style="width:100%;">
+	<p:row>
+	<p:column>
+					<p:panelGrid style="width:100%;margin-bottom:8px;">
+						<f:facet name="header">
+							<p:row>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_ETABLISSEMENT_LIBELLE_FR} </p:column>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_FACULTE_LIBELLE_FR}</p:column>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_DEPARTEMENT_LIBELLE_FR}</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column  style="width:30%;">
+								<h:outputLabel value="#{cc.attrs.managedBean.libelleEtab}"  styleClass="value" />
+							</p:column>
+							<p:column  style="width:30%;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleStructureMere}" rendered="#{not cc.attrs.toEdit}" styleClass="value" />
+								<p:selectOneMenu id="listFacultesOfFrID" value="#{cc.attrs.managedBean.selectedFaculteId}" rendered="#{cc.attrs.toEdit}" style="width:250;">
+										<f:selectItems value="#{cc.attrs.managedBean.facultesOf}" var="f" 	itemLabel="#{f.label}" itemValue="#{f.value}" />
+										<p:ajax listener="#{cc.attrs.managedBean.handleFacultesListChange}" 	event="valueChange" 
+													update="listDepartementsOfFrID" 
+					   								process="@this" 	
+					 					    		onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()"/>
+								</p:selectOneMenu> 
+							</p:column>
+							<p:column  style="width:30%;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleStructure}" rendered="#{not cc.attrs.toEdit}" styleClass="value" />
+								<p:selectOneMenu id="listDepartementsOfFrID" value="#{cc.attrs.managedBean.selectedDepartementId}" rendered="#{cc.attrs.toEdit}" style="width:250;">
+									<f:selectItems value="#{cc.attrs.managedBean.departementsOf}" var="d" 	itemLabel="#{d.label}" itemValue="#{d.value}" />
+								</p:selectOneMenu> 
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+	</p:column>
+	</p:row>
+	<p:row>
+	<p:column>
+		<p:panelGrid style="width:100%;margin-bottom:8px;">
+			<f:facet name="header">
+			<p:row>
+				<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_DOMAIN_FR}</p:column>
+				<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_DEGREE_FR}</p:column>
+				<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_SPECIALITY_FR}</p:column>
+			</p:row>
+			</f:facet>
+
+			<p:row>
+			<p:column style="width:30%;">
+					<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleDomaine}" 	rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"/>
+					<p:selectOneMenu id="listDomainesFrID" 	value="#{cc.attrs.managedBean.selectedDomaineId}" rendered="#{cc.attrs.toEdit}" style="width:100%;"
+													required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_DOMAINE}" filter="true" filterMatchMode="startsWith">
+								<f:selectItems value="#{cc.attrs.managedBean.listDomaines}" var="d1" itemLabel="#{d1.label}" itemValue="#{d1.value}" />
+								<p:ajax listener="#{cc.attrs.managedBean.handleDomainesListChange}" 	event="valueChange" update="listFilieresFrID  listSpecialitesFrID" 
+					   						process="@this" 	
+					 					    onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()"/>
+								</p:selectOneMenu>
+			</p:column>
+			<p:column style="width:30%;">
+				<h:outputLabel  value="#{cc.attrs.managedBean.ofDto.libelleFiliere}" rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"/>
+				<p:selectOneMenu id="listFilieresFrID" value="#{cc.attrs.managedBean.selectedFiliereId}" rendered="#{cc.attrs.toEdit}" filter="true" filterMatchMode="startsWith" style="width:100%;">
+							<f:selectItems value="#{cc.attrs.managedBean.listFilieres}" var="f1" itemLabel="#{f1.label}" itemValue="#{f1.value}" />
+							<p:ajax listener="#{cc.attrs.managedBean.handleFilieresListChange}" event="valueChange" update="listSpecialitesFrID listDomainesFrID" 
+									   onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()"/>
+				</p:selectOneMenu>
+			</p:column>
+			<p:column style="width:30%;">
+							<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleSpecialite}" rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"/>
+							<p:selectOneMenu id="listSpecialitesFrID" value="#{cc.attrs.managedBean.selectedSpecialiteId}" 	rendered="#{cc.attrs.toEdit}" filter="true" filterMatchMode="startsWith" style="width:100%;">
+									<f:selectItems value="#{cc.attrs.managedBean.listSpecialites}" var="s1" itemLabel="#{s1.label}" itemValue="#{s1.value}" />
+							</p:selectOneMenu>
+			</p:column>
+			</p:row>
+			</p:panelGrid>
+		</p:column>
+		</p:row>
+		<p:row>
+		<p:column>
+					<p:panelGrid style="width:100%;margin-bottom:8px;">
+						<f:facet name="header">
+							<p:row>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_TYPE_FR}</p:column>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_CYCLE_FR}</p:column>
+								<p:column>#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_VOCATION_FR}</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+
+							<p:column style="width:30%;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleTypeFormation}" 	rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" />
+								<p:selectOneMenu id="listTypeFormationFrID" value="#{cc.attrs.managedBean.selectedTypeFormationId}" rendered="#{cc.attrs.toEdit}" style="width:100%;" 
+								required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TYPE_FORMATION}">
+									<f:selectItems value="#{cc.attrs.managedBean.listTypesFormation}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+									<p:ajax listener="#{cc.attrs.managedBean.handleTypesFormationListChange}" event="valueChange" update="listCyclesFrID @this" process="@this" 
+									 onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()"/>
+								</p:selectOneMenu> 
+							</p:column>
+
+							<p:column style="width:30%;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleCycle}" rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" />
+								<p:selectOneMenu id="listCyclesFrID" value="#{cc.attrs.managedBean.selectedCycleId}" rendered="#{cc.attrs.toEdit}" style="width:100%;" 
+								required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_CYCLE}">
+									<f:selectItems value="#{cc.attrs.managedBean.listCycles}" var="c" itemLabel="#{c.label}" itemValue="#{c.value}" />
+									<p:ajax listener="#{cc.attrs.managedBean.handleCyclesListChange}" event="valueChange" update="@this" process="@this" />
+								</p:selectOneMenu>
+
+							</p:column>
+
+							<p:column  style="width:30%;">
+								<h:outputLabel  value="#{cc.attrs.managedBean.ofDto.libelleVocation}" 	rendered="#{not cc.attrs.toEdit}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" />
+								<p:selectOneMenu id="listVocationsFrID" 	value="#{cc.attrs.managedBean.selectedVocationFormationId}" rendered="#{cc.attrs.toEdit}" style="width:100%;" >
+									<f:selectItems value="#{cc.attrs.managedBean.listVocations}" var="v" 	itemLabel="#{v.label}" itemValue="#{v.value}" />
+								</p:selectOneMenu>
+
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+		</p:column>
+		</p:row>
+		<p:row>
+		<p:column>
+				<!-- DESCRIPTIF - INTITULE -->
+					<p:panelGrid id="gridIntitule" style="width:100%;margin-bottom:8px;" >
+		
+						<f:facet name="header">  
+        							#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_TABLE_HEADER_LABELS_FR}
+    					</f:facet>
+									
+						<p:row>			
+						<p:column style="width:15%;"><h:outputLabel value="#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_CODE_FR}"/></p:column>
+						<p:column><h:outputLabel value="#{cc.attrs.managedBean.ofDto.code}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" /></p:column>
+						</p:row>
+						
+						<p:row>	
+						<p:column><h:outputLabel value="#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_LABEL_FR}"  for="ofIntituleFrID"/></p:column>
+						<p:column rendered="#{not cc.attrs.toEdit}" ><h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleLongFr}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"  /></p:column>
+						<p:column rendered="#{cc.attrs.toEdit}" ><p:inputText 		id="ofIntituleFrID" value="#{cc.attrs.managedBean.ofDto.libelleLongFr}"  style="text-align:left;font-weight:bold; color:#336699;width:100%;" maxlength="255"
+													required="true" 	requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_LIBELLE_FR}" /></p:column>
+						</p:row>
+													
+						<p:row>	
+						<p:column><h:outputLabel value="#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_LABEL_AR}" for="ofIntituleArID"/></p:column>
+						<p:column rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleLongAr}" 	dir="rtl" style="text-align:right;font-weight:bold; color:#336699;width:100%; float:right;" /></p:column>
+						<p:column rendered="#{cc.attrs.toEdit}"><p:inputText		 id="ofIntituleArID"  value="#{cc.attrs.managedBean.ofDto.libelleLongAr}"  dir="rtl" maxlength="255"  style="text-align:right;font-weight:bold; color:#336699;width:100%;"/></p:column>
+						</p:row>
+						
+						<p:row>	
+						<p:column><h:outputLabel value="#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_ABREV_FR}" for="ofLibelleCourtFrID"/> </p:column>
+						<p:column rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.ofDto.libelleCourtFr}"  style="text-align:left;font-weight:bold; color:#336699;width:100%;"/> </p:column>
+						<p:column rendered="#{cc.attrs.toEdit}" ><p:inputText 		id="ofLibelleCourtFrID" value="#{cc.attrs.managedBean.ofDto.libelleCourtFr}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"  maxlength="10" required="true"
+													requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_ABREV_FR}" /></p:column>
+						</p:row>
+						<p:row>		
+						<p:column><h:outputLabel value="#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_DESCRIPTION_FR}" for="ofDescFrID"/></p:column>
+						<p:column  rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.ofDto.description}" style="text-align:left;font-weight:bold; color:#336699;width:100%;"/></p:column>
+						<p:column rendered="#{cc.attrs.toEdit}"><p:inputText id="ofDescFrID" 	value="#{cc.attrs.managedBean.ofDto.description}" 	 style="text-align:left;font-weight:bold; color:#336699;width:100%;" maxlength="255" /></p:column>
+						</p:row>
+					</p:panelGrid>
+	</p:column>
+	</p:row>
+	<p:row>
+	<p:column>
+				<!-- DESCRIPTIF - DATE HABILITATION -->
+					<p:panelGrid style="width:100%;margin-bottom:8px;">
+						<f:facet name="header">
+							<p:row>
+								<p:column style="text-align:center;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_BEGIN_HABILITATION}</p:column>
+								<p:column style="text-align:center;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_END_HABILITATION}</p:column>
+								<p:column style="text-align:center;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_DESCRIPTIF_ORDER_NUMBER}</p:column>
+							</p:row>
+						</f:facet>
+
+						<p:row>
+							<p:column style="text-align:center;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.dateDebutHabilitation}" rendered="#{not cc.attrs.toEdit}" style="text-align:center;font-weight:bold; color:#336699;">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputLabel>
+								<p:calendar value="#{cc.attrs.managedBean.ofDto.dateDebutHabilitation}" id="calendarHabilitationDebutID" rendered="#{cc.attrs.toEdit}"/>
+							</p:column>
+							
+							<p:column style="text-align:center;">
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.dateFinHabilitation}" 	rendered="#{not cc.attrs.toEdit}" style="font-weight:bold; color:#336699;">
+									<f:convertDateTime pattern="dd-MM-yyyy" />
+								</h:outputLabel>
+								<p:calendar value="#{cc.attrs.managedBean.ofDto.dateFinHabilitation}"		id="calendarHabilitationFinID" rendered="#{cc.attrs.toEdit}" />
+							</p:column>
+							
+							<p:column>
+								<h:outputLabel value="#{cc.attrs.managedBean.ofDto.numeroArrete}" rendered="#{not cc.attrs.toEdit}" style="text-align:center;font-weight:bold; color:#336699;"/>
+								<p:inputText id="ofNumeroArreteID" value="#{cc.attrs.managedBean.ofDto.numeroArrete}" rendered="#{cc.attrs.toEdit}" maxlength="50" style="text-align:center;font-weight:bold; color:#336699;width:100%;"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+		</p:column>
+		</p:row>
+		<p:row>
+		<p:column>			
+				<p:toolbar style="width:100%;margin-bottom:8px;">
+				<p:toolbarGroup align="left">
+				<p:commandButton id="btnSaveID" binding="#{cc.attrs.managedBean.saveOfButton}" 	value="#{ofEditMsgs.EDIT_OF_BTN_SAVE_TAB1}" 
+												  action="#{cc.attrs.managedBean.save()}" 	ajax="true" update=":#{cc.clientId}:tvOffreFormation"  process=":#{cc.clientId}:tvOffreFormation:formDescriptif" icon="ui-icon-disk"
+												  onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()"
+					 							  rendered="#{cc.attrs.toEdit}" disabled="#{cc.attrs.managedBean.ofDto.estCompletee}" validateClient="true">
+
+				</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right" rendered="#{not cc.attrs.managedBean.ofDto.estCompletee}" >
+				<p:separator/>
+					<p:commandButton id="btnValidateID" value="#{ofEditMsgs.EDIT_OF_BTN_VALIDATE_SAVING}" 	
+													 action="#{cc.attrs.managedBean.validateSave()}"
+													 onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()" >
+											<p:confirm		header="Confirmation"	message="Voulez-vous confirmer la sauvegarde définitive  ?"	icon="ui-icon-alert" />
+					</p:commandButton>
+			</p:toolbarGroup>
+				</p:toolbar>
+	</p:column>
+	</p:row>
+	</h:panelGrid>
+			</h:form>
+		</p:tab>
+
+		<!-- OFFRE DE FORMATION - ETABLISSEMENT-STRUCTURE  -->
+		<p:tab id="tabEtablissement" title="#{ofEditMsgs.EDIT_OF_TAB9_TITLE}" disabled="#{cc.attrs.managedBean.renderTabOf()}" rendered="false">
+			
+		</p:tab>
+		<!-- OFFRE DE FORMATION - PARCOURS  -->
+		<p:tab id="tabParcours" title="#{ofEditMsgs.EDIT_OF_TAB2_TITLE}" disabled="#{cc.attrs.managedBean.renderTabOf()}">
+				<h:form id="formParcours">
+				<ui:repeat var="row" value="#{cc.attrs.managedBean.listLevels}">
+						<p:panel id="panelNiveauId" header="#{row.libelleLongLt}"  style="margin-bottom:8px; width:100%;" toggleable="true">
+								<ui:repeat var="row1" value="#{cc.attrs.managedBean.periodesNiveaux[row.id]}">
+									<p:panel  id="panelPeriodeId" legend="#{row1.libelleLongLt} :" style="margin-bottom:8px; width:100%;" toggleable="true">
+											<p:dataTable id="repartitionsDataTable" var="row2" 
+														value="#{cc.attrs.managedBean.repartitionsPeriodesNiveaux[row.id][row1.id]}"
+														rowKey="#{row2.id}" 
+														emptyMessage="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_NO_RESULT}"
+														rowIndexVar="rowIndex" 
+														selectionMode="single">
+														<f:facet name="header">#{row1.libelleLongLt}  (#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_CREDITS} = #{row1.credit})</f:facet>  
+														<p:column	headerText="" style="width:30px" styleClass="center"> 	
+																	<h:outputText value="#{rowIndex+1}" /> 
+													  </p:column>
+														<p:column	headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_CODE}" style="width:20px;">
+																	<h:outputText value="#{row2.uniteEnseignementCode}"  style="color:#336699;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_LIBELLE}">	
+																	<h:outputText value="#{row2.uniteEnseignementLibelleFr}"  style="color:#336699;float:left;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_COEFFICIENT}" style="text-align:right;">	
+																	<h:outputText value="#{row2.coefficient}" style="color:#336699;float:right;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_NOTE_OBTENTION}">	
+																	<h:outputText value="#{row2.noteObtension}" style="color:#336699;float:right;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_NOTE_BASE}">	
+																	<h:outputText value="#{row2.noteDeBase}" style="color:#336699;float:right;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_NOTE_ELIMINATOIRE}">	
+																	<h:outputText value="#{row2.noteEliminatoire}" style="color:#336699;float:right;"/>
+														</p:column>
+														<p:column headerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_COLUMN_CREDITS}">	
+																	<h:outputText value="#{row2.uniteEnseignementCredits}" style="color:#336699;float:right;"/>
+														</p:column>
+        												
+														<p:column style="width:30px" styleClass="center"  rendered="#{cc.attrs.toEdit}">	
+															<p:commandButton id="btnRemoveRepartitionUe"  
+																	action="#{cc.attrs.managedBean.removeRepartitionUe()}"  
+																	icon="ui-icon-trash" 
+																	ajax="true" 
+																	update="@([id$=panelPeriodeId])"  
+																	process="@this">
+																	<p:confirm		header="#{cycleMsgs.period_message_remove_confirm_title}"	 
+																							message="#{ofEditMsgs.OF_EDIT_DIALOG_REMOVE_UE_CONFIRMATION_MESSAGE}" 	icon="ui-icon-alert" />
+																	<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedRepartitionId}" value="#{row2.id}" />
+															
+															</p:commandButton>
+															</p:column>
+															<p:column style="width:30px" styleClass="center"  rendered="#{cc.attrs.toEdit}">	
+															<p:commandButton id="btnEditRepartitionUe"  
+																		action="#{cc.attrs.managedBean.prepareRepartitionUe()}" 	
+																		ajax="true" 
+																		update=":#{cc.clientId}:formDlgAddUe"  
+																		process="@this" 
+																		icon="ui-icon-pencil"	 
+																		onsuccess="PF('dlgAddUeParcours').show();"
+																		onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()">
+																		<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedLevelId}" value="#{row.id}" />
+																		<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedPeriodeId}" value="#{row1.id}" />
+																		<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedRepartitionId}" value="#{row2.id}" />
+															</p:commandButton>
+															</p:column>
+															
+															<p:columnGroup type="footer">
+           														 <p:row>
+                															<p:column colspan="7" style="text-align:right" footerText="#{ofEditMsgs.EDIT_OF_DATA_TABLE_REPARTITION_UE_TOTAL_CREDITS_UE}" />
+               																 <p:column footerText="#{cc.attrs.managedBean.totauxPeriodes[row1.id]}"  style="text-align:right;font-weight:bold; color:#336699;"/>
+               																 <p:column colspan="2" rendered="#{cc.attrs.toEdit}"/>
+            													</p:row>
+            												</p:columnGroup>
+												</p:dataTable>
+												<br />
+												<p:toolbar  rendered="#{cc.attrs.toEdit}" style="width:100%;margin:0;">
+												<p:toolbarGroup align="left">
+												<p:commandButton 	value="#{ofEditMsgs.EDIT_OF_BTN_REPARTITION_UE_AJOUTER_UE}"  action="#{cc.attrs.managedBean.prepareRepartitionUe()}" 
+																	
+																	ajax="true" 
+																	update=":#{cc.clientId}:formDlgAddUe"  
+																	process="@this" 
+																	icon="ui-icon-plusthick"	 
+																	onsuccess="PF('dlgAddUeParcours').show();"
+																	onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()">
+																	<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedLevelId}" value="#{row.id}" />
+																	<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedPeriodeId}" value="#{row1.id}" />
+																	<f:setPropertyActionListener target="#{cc.attrs.managedBean.selectedRepartitionId}" value="null" />
+												</p:commandButton>
+												</p:toolbarGroup>
+												</p:toolbar>
+										
+									</p:panel>		
+								</ui:repeat>				
+						</p:panel>
+				</ui:repeat>
+				</h:form>
+				
+				
+		</p:tab>
+	
+		<!-- OFFRE DE FORMATION - EQUIPE  -->
+		<p:tab id="tabEquipe" title="#{ofEditMsgs.EDIT_OF_TAB3_TITLE}" disabled="#{cc.attrs.managedBean.renderTabOf()}">
+		<h:form id="formEquipe">
+		<h:panelGrid  style="width:100%;margin-bottom:8px;">
+		<p:row>
+		<p:column>
+					<p:panel header="#{ofEditMsgs.EDIT_OF_LABEL_TAB_EQUIPE_INTITULE_TABLE_HEADER}">
+					<p:panelGrid  id="ofEquipeIntitulePanelId" style="width:100%;margin-bottom:8px;">  
+					  <p:row>
+					   <p:column style="width:15%;"><h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_CODE}"/></p:column>
+					   <p:column rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.currentTeam.code}" style="text-align:left;font-weight:bold; color:#336699;" /></p:column>
+					   <p:column rendered="#{cc.attrs.toEdit}"><p:inputText id="ofEquipeID" value="#{cc.attrs.managedBean.currentTeam.code}"  maxlength="10" required="true"
+					            		  requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_CODE}" style="text-align:left;font-weight:bold; color:#336699;"/></p:column>
+					   </p:row>	
+					    <p:row>
+					    <p:column><h:outputLabel value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_LIBELLE_FR}"/></p:column>
+					    <p:column rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.currentTeam.libelleFr}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" /></p:column>
+					    <p:column rendered="#{cc.attrs.toEdit}"><p:inputText id="ofEquipeLibelleFr" value="#{cc.attrs.managedBean.currentTeam.libelleFr}"  maxlength="255" required="true"
+					            		   requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_LABEL}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" /></p:column>
+					    </p:row>
+					    <p:row>
+					    <p:column><h:outputLabel	 value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_LIBELLE_FR_COURT}"/></p:column>
+					    <p:column  rendered="#{not cc.attrs.toEdit}"><h:outputLabel value="#{cc.attrs.managedBean.currentTeam.libelleCourtFr}" style="text-align:left;font-weight:bold; color:#336699;width:100%;" /></p:column>
+					    <p:column  rendered="#{cc.attrs.toEdit}"  >	<p:inputText id="ofEquipeLibelleCourtFr" value="#{cc.attrs.managedBean.currentTeam.libelleCourtFr}"  maxlength="150" required="true"
+					            		    requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_TEAM_SHORT_LABEL}" style="text-align:left;font-weight:bold; color:#336699; width:100%;" /></p:column>
+					    </p:row>
+			        	</p:panelGrid> 
+			        	<p:toolbar>
+						<p:toolbarGroup>
+							 <p:commandButton  value="#{ofEditMsgs.EDIT_OF_BTN_EQUIPE_MEMBRES_ENREGISTRER}"  	
+		    	        										id="btnSaveTeam"  title="#{ofEditMsgs.EDIT_OF_BTN_EQUIPE_MEMBRES_RECHERCHE}"
+																onstart="PF('ajaxProgress1').block()" oncomplete="PF('ajaxProgress1').unblock()" 
+																update=":#{cc.clientId}:tvOffreFormation:formEquipe"
+																ajax = "true"
+																process ="@this :#{cc.clientId}:tvOffreFormation:formEquipe"
+																action="#{cc.attrs.managedBean.saveTeam()}" 
+														 		icon="ui-icon-disk">
+							</p:commandButton>
+						</p:toolbarGroup>
+			</p:toolbar>
+			        	</p:panel>
+			   </p:column>
+			   </p:row>
+			<p:row>
+			<p:column>
+			
+			</p:column>
+			</p:row>
+			<p:row>
+			<p:column>
+			<p:messages id="messagesTeam" autoUpdate="true" showDetail="true" showSummary="false" closable="true" />
+			</p:column>
+			</p:row>
+			</h:panelGrid>
+		</h:form>
+		
+		<!-- OFFRE DE FORMATION - EQUIPE - MEMBRES  -->
+		<p:outputPanel id="searchMembresPanel">
+   		<p:panel id="panelOfSearchMembre" header="#{ofEditMsgs.EDIT_OF_PANEL_TAB_EQUIPE_MEMBRES_TITLE}" style="margin-top:5px; width:100%;">
+		<h:form id="formEquipeMembres">
+				
+				<!-- LISTE DES MEMBRES EQUIPE OFFRE FORMATION-->
+				<p:dataTable id="ofTeamMembersDataTable" var="row"
+									 value="#{ofBB.listOfMembers}"
+									binding="#{ofBB.membersDataTable}"
+									rowIndexVar="rowIndex"
+									emptyMessage="#{ofEditMsgs.EDIT_OF_DATA_TABLE_SEACRH_MEMBRES_LISTE_NO_RESULT}" 
+									paginatorPosition="bottom"
+									rowsPerPageTemplate="5,10,15"
+									paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									paginator="true" 
+									rows="5" 
+									lazy="true">
+									<f:facet name="header">#{ofEditMsgs.EDIT_OF_DATA_TABLE_SEACRH_MEMBRES_LISTE_RESULT}</f:facet>  
+       								<p:column	style="width:10px"  styleClass="center"><h:outputText value="#{rowIndex+1}" /></p:column>
+									<p:column   headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_CODE}" style="width:40px"  styleClass="center">
+														<h:outputText value="#{row.refCodeMembre}" />
+									</p:column>
+									<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_FR}"  styleClass="left" style="width:230px">
+														<h:outputText value="#{row.libelleFr}"  />
+									</p:column>
+									<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_NOM_PRENOM_AR}" styleClass="right" style="width:230px">
+														<h:outputText value="#{row.libelleAr}"  />
+									</p:column>
+									<p:column 	headerText="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_COL_ROLE}" styleClass="left" >
+														<h:outputText value="#{ofBB.getNomeclatureByCode('LMD_ROLE_EQUIPE_OF',row.roleMembre).libelleLongFr}"/>
+									</p:column>
+									<p:column  styleClass="center" style="width:120px"  rendered="#{cc.attrs.toEdit}">
+													<p:commandButton 
+																	id="removeMemberButtonID"
+																	update="@([id$=ofTeamMembersDataTable])" 
+																	ajax="true" process="@this"
+																	value="#{ofmsgs.OFFRE_FORMATION_EQUIPE_MEMBRES_TABLE_BTN_RETIRER}"  
+																	action="#{ofBB.removeMember(row.id)}"
+																	onstart="PF('blockUIWidgetListMembers').block()" 
+ 																	oncomplete="PF('blockUIWidgetListMembers').unblock(); PF('dlgAddMember').hide();" 
+ 																	icon="ui-icon-minusthick">
+																	<p:confirm		header="#{ofmsgs.offre_formation_confirm_dialog_header}"	 
+																	message="Voulez-vous vraiement retirer ce membre ?"	icon="ui-icon-alert" />
+																	<f:param name="keyWordsMember" value="#{txtKeyWordsMember.value}" />
+																	<f:param name="ofId" value="#{txtIdOf.value}" />
+																	<f:param name="editionMode" value="#{txtEditionMode.value}" />
+																	<f:param name="currentTeamId" value="#{txtEquipeID.value}" />
+														</p:commandButton>
+									</p:column>
+						</p:dataTable>		
+		</h:form>
+		</p:panel>
+		</p:outputPanel>
+		</p:tab>
+
+		<!-- OFFRE DE FORMATION - PARTENARIAT  -->
+		<p:tab id="tabPartenariat" title="#{ofEditMsgs.EDIT_OF_TAB4_TITLE}" disabled="#{cc.attrs.managedBean.renderTabOf()}">
+					<of:OfEquipePartenariatComponent ofDto="#{cc.attrs.managedBean.ofDto}" 		toEdit="#{cc.attrs.toEdit}"></of:OfEquipePartenariatComponent>
+		</p:tab>
+
+		<!-- OFFRE DE FORMATION - COMPLEMENT  -->
+		<p:tab id="tabComplement" title="#{ofEditMsgs.EDIT_OF_TAB5_TITLE}" 	disabled="#{cc.attrs.managedBean.renderTabOf()}">
+			<h:form>
+				<p:panelGrid cellpadding="5" styleClass="panelColumns">
+					<p:row>
+						<p:column>
+							<p:tree id="ofTreeComplementID" value="#{cc.attrs.managedBean.rootComplement}"
+								var="node" selectionMode="single">
+								<p:treeNode expandedIcon="ui-icon-folder-open"
+									collapsedIcon="ui-icon-folder-collapsed">
+									<p:commandLink ajax="true"
+										actionListener="#{cc.attrs.managedBean.onNodeSelectComplement(node)}"
+										disabled="#{node.offreFormationDetail.offreFormationDetail eq null}"
+										process="@this"
+										update="@([id$=complementEditionSide]) @([id$=hiddenDataPanel])"
+										onstart="PF('blockUIWidget2').block()"
+										onsuccess="PF('blockUIWidget2').unblock()">
+
+										<h:outputText value="#{node.offreFormationDetail.libelleFr}" />
+										<f:param name="ofId" value="#{txtIdOf.value}" />
+										<f:param name="editionMode" value="#{txtEditionMode.value}" />
+									</p:commandLink>
+
+								</p:treeNode>
+							</p:tree>
+
+						</p:column>
+						<p:column>
+							<p:panelGrid id="complementEditionSide">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText id="titleComplement"
+												value="#{cc.attrs.managedBean.selectedNodeComplement.offreFormationDetail.libelleFr}"
+												style="color: #456A8F;font-size:14px; line-height:22px;" />
+										</p:column>
+
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column>
+										<p:editor id="complementEditorID" binding="#{txtComplement}"
+											widgetVar="editorComplement"
+											value="#{cc.attrs.managedBean.currentContentComplement}" width="700"
+											height="400" />
+
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+
+										<p:commandButton id="btnSaveOfComplement"
+											actionListener="#{cc.attrs.managedBean.saveOfComplement()}"
+											icon="ui-icon-disk" ajax="true" 
+											rendered="#{cc.attrs.toEdit}" 
+											disabled="#{cc.attrs.managedBean.ofDto.estCompletee}"
+											value="#{ofEditMsgs.EDIT_OF_BTN_SAVE_TAB5}" update="@form"
+											onstart="PF('blockUIWidget2').block()"
+											onsuccess="PF('blockUIWidget2').unblock()">
+											<f:param name="currentNodeComplement"
+												value="#{txtCurrentCmpNode.value}" />
+										</p:commandButton>
+										<h:inputHidden id="currentCmpNodeTxtID"
+											binding="#{txtCurrentCmpNode}"
+											value="#{cc.attrs.managedBean.currentNodeComplement}" style="font-size:12px" />
+
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+			</h:form>
+		</p:tab>
+
+		<!-- OFFRE DE FORMATION - EVALUATION  -->
+		<p:tab id="tabEvaluation" title="#{ofEditMsgs.EDIT_OF_TAB6_TITLE}" 	disabled="#{cc.attrs.managedBean.renderTabOf()}">
+			<h:form>
+				<p:panelGrid cellpadding="5" styleClass="panelColumns">
+					<p:row>
+						<p:column>
+							<p:tree id="ofTreeEvaluationID" value="#{cc.attrs.managedBean.rootEvaluation}"
+								var="node1" selectionMode="single">
+								<p:treeNode expandedIcon="ui-icon-folder-open"
+									collapsedIcon="ui-icon-folder-collapsed">
+									<p:commandLink ajax="true"
+										actionListener="#{cc.attrs.managedBean.onNodeSelectEvaluation(node1)}"
+										disabled="#{node1.offreFormationDetail.offreFormationDetail eq null}"
+										process="@this"
+										update="@([id$=evaluationEditionSide]) @([id$=hiddenDataPanel])"
+										onstart="PF('blockUIWidget2').block()"
+										onsuccess="PF('blockUIWidget2').unblock()">
+
+										<h:outputText value="#{node1.offreFormationDetail.libelleFr}" />
+										<f:param name="ofId" value="#{txtIdOf.value}" />
+										<f:param name="editionMode" value="#{txtEditionMode.value}" />
+									</p:commandLink>
+
+								</p:treeNode>
+							</p:tree>
+
+						</p:column>
+						<p:column>
+							<p:panelGrid id="evaluationEditionSide">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText id="titleEvaluation"
+												value="#{cc.attrs.managedBean.selectedNodeEvaluation.offreFormationDetail.libelleFr}"
+												style="color: #456A8F;font-size:14px; line-height:22px;" />
+										</p:column>
+
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column>
+										<p:editor id="evaluationEditorID" binding="#{txtEvaluation}"
+											widgetVar="editorEvaluation"
+											value="#{cc.attrs.managedBean.currentContentEvaluation}" width="700"
+											height="400" />
+
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:commandButton id="btnSaveOfEvaluation"
+											actionListener="#{cc.attrs.managedBean.saveOfEvaluation()}"
+											icon="ui-icon-disk" ajax="true" 
+											rendered="#{cc.attrs.toEdit}"
+											disabled="#{cc.attrs.managedBean.ofDto.estCompletee}"
+											value="#{ofEditMsgs.EDIT_OF_BTN_SAVE_TAB6}"
+											onstart="PF('blockUIWidget2').block()"
+											onsuccess="PF('blockUIWidget2').unblock()">
+											<f:param name="currentNodeEvaluation"
+												value="#{txtCurrentEvalNode.value}" />
+										</p:commandButton>
+										<h:inputHidden id="currentEvalNodeTxtID"
+											binding="#{txtCurrentEvalNode}"
+											value="#{cc.attrs.managedBean.currentNodeEvaluation}" style="font-size:12px" />
+
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+			</h:form>
+		</p:tab>
+
+		<!-- OFFRE DE FORMATION - MOBILITE  -->
+		<p:tab id="tabMobilite" title="#{ofEditMsgs.EDIT_OF_TAB7_TITLE}" 	disabled="#{cc.attrs.managedBean.renderTabOf()}">
+			<h:form>
+				<p:panelGrid cellpadding="5" styleClass="panelColumns">
+					<p:row>
+						<p:column>
+							<p:tree id="ofTreeMobiliteID" value="#{cc.attrs.managedBean.rootMobilite}"
+								var="node2" selectionMode="single">
+								<p:treeNode expandedIcon="ui-icon-folder-open"
+									collapsedIcon="ui-icon-folder-collapsed">
+									<p:commandLink ajax="true"
+										actionListener="#{cc.attrs.managedBean.onNodeSelectMobilite(node2)}"
+										disabled="#{node2.offreFormationDetail.offreFormationDetail eq null}"
+										process="@this"
+										update="@([id$=mobiliteEditionSide]) @([id$=hiddenDataPanel])"
+										onstart="PF('blockUIWidget2').block()"
+										onsuccess="PF('blockUIWidget2').unblock()">
+
+										<h:outputText value="#{node2.offreFormationDetail.libelleFr}" />
+										<f:param name="ofId" value="#{txtIdOf.value}" />
+										<f:param name="editionMode" value="#{txtEditionMode.value}" />
+									</p:commandLink>
+
+								</p:treeNode>
+							</p:tree>
+
+						</p:column>
+						<p:column>
+							<p:panelGrid id="mobiliteEditionSide">
+								<f:facet name="header">
+									<p:row>
+										<p:column>
+											<h:outputText id="titleMobilite"
+												value="#{cc.attrs.managedBean.selectedNodeMobilite.offreFormationDetail.libelleFr}"
+												style="color: #456A8F;font-size:14px; line-height:22px;" />
+										</p:column>
+
+									</p:row>
+								</f:facet>
+								<p:row>
+									<p:column>
+										<p:editor id="mobiliteEditorID" binding="#{txtMobilite}"
+											widgetVar="editorMobilite"
+											value="#{cc.attrs.managedBean.currentContentMobilite}" width="700"
+											height="400" />
+
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:commandButton id="btnSaveOfMobilite"
+											actionListener="#{cc.attrs.managedBean.saveOfMobilite()}" icon="ui-icon-disk"
+											ajax="true" 
+											rendered="#{cc.attrs.toEdit}"
+											disabled="#{cc.attrs.managedBean.ofDto.estCompletee}"
+											value="#{ofEditMsgs.EDIT_OF_BTN_SAVE_TAB7}"
+											onstart="PF('blockUIWidget2').block()"
+											onsuccess="PF('blockUIWidget2').unblock()">
+											<f:param name="currentNodemobilite"
+												value="#{txtCurrentMobNode.value}" />
+
+										</p:commandButton>
+										<h:inputHidden id="currentMobNodeTxtID"
+											binding="#{txtCurrentMobNode}"
+											value="#{cc.attrs.managedBean.currentNodeMobilite}"/>
+
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+			</h:form>
+		</p:tab>
+
+				<!-- OFFRE DE FORMATION - DOCUMENTS  -->
+		<p:tab id="tabDocuments" title="#{ofEditMsgs.EDIT_OF_TAB8_TITLE}"
+			disabled="#{cc.attrs.managedBean.renderTabOf()}">
+			<p:panel>
+			<ui:include src="/pages/document/OffreformationDocument.xhtml">
+				<c:set var="entity" value="OffreFormation" scope="request" />
+				<c:set var="identifiant" value="#{cc.attrs.managedBean.ofDto.code}" scope="request" />
+				<ui:param name="entity" value="OffreFormation" />
+				<ui:param name="identifiant" value="#{cc.attrs.managedBean.ofDto.code}" />
+				<ui:param name="editionMode" value="#{cc.attrs.toEdit}"/>
+			</ui:include>
+		  </p:panel>
+		</p:tab>
+		
+		<!-- OFFRE DE FORMATION - HISTORIQUE  -->
+		<p:tab id="tabHistorique" title="Historique" disabled="#{cc.attrs.managedBean.renderTabOf()}">
+			  <eh:EntityHistoryComponent list="#{cc.attrs.managedBean.ofHistory}" idParamName="ofId" idParamValue="#{cc.attrs.managedBean.ofId}"></eh:EntityHistoryComponent>
+		</p:tab>	
+	</p:tabView>
+	
+	<!-- OFFRE DE FORMATION - HIDDEN HELPER FIELDS -->
+	<p:outputPanel id="hiddenDataPanel">
+		
+		<h:inputHidden id="idOfTxtID" binding="#{txtIdOf}"
+			value="#{cc.attrs.managedBean.ofId}" />
+		<h:inputHidden id="editionModeTxtID" binding="#{txtEditionMode}" 	value="#{cc.attrs.managedBean.editionMode}" />
+		<h:inputHidden id="keyWordsSearchTxtID" binding="#{txtKeyWordsSearch}" 	value="#{cc.attrs.managedBean.keyWords}" />
+		<h:inputHidden id="txtSearchModeID" binding="#{txtSearchModeSearch}" 	value="#{cc.attrs.managedBean.searchMode}" />
+		<h:inputHidden id="outcomePageTxtID" binding="#{txtOutcomePage}" 		value="#{cc.attrs.managedBean.outcomePage}" />
+	</p:outputPanel> 	
+
+<p:dialog  widgetVar="dlgAddUeParcours"  
+								appendTo="@(body)" modal="true" 
+								header="#{ofSearchMsgs.SEARCH_OF_DIALOG_ADD_UE_PARCOURS_TITLE}" style="font-size:11px;" >  	
+					<h:form id="formDlgAddUe">
+						<p:messages id="messagesDlgAddUe" showDetail="true" autoUpdate="true" closable="true"  showSummary="false"/>
+						<p:outputPanel id="panelUeRepartitionDetail">
+						<h:panelGrid id="panelGridRepartition"  style=" padding:2px; width:100%;" 	cellspacing="2 " columns="2">
+						<p:row>
+								<p:column>
+									<p:panelGrid columns="2" style=" padding:2px; width:100%;" 	cellspacing="2">
+												<h:outputLabel value="UE : "/>
+												<p:selectOneMenu id="listUEsPeriod" 
+														value="#{cc.attrs.managedBean.selectedUeId}"  
+														required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_REPARTITION_UE_UE}" 
+														filter="true" filterMatchMode="startsWith">
+														<f:selectItems value="#{cc.attrs.managedBean.availableUesPeriod}" 
+														var="ue" itemLabel="#{ue.libelleFr} (Credits = #{ue.credits})" itemValue="#{ue.id}" />
+												</p:selectOneMenu>
+									</p:panelGrid>
+									</p:column>
+							</p:row>	
+						</h:panelGrid>
+						<br />
+						<p:panelGrid style=" padding:2px; width:100%;" 	cellspacing="2">
+							<p:row>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_NIVEAU}</p:column>
+							<p:column><h:outputText value="#{cc.attrs.managedBean.selectedLevel.libelleLongLt}" styleClass="labelValue"/></p:column>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_PERIODE}</p:column>
+							<p:column><h:outputText value="#{cc.attrs.managedBean.selectedPeriod.libelleLongLt}" styleClass="labelValue"/></p:column>
+							</p:row>
+							<p:row>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_COEFFICIENT}</p:column>
+							<p:column><p:inputText id="repUeCoefficientId" value="#{cc.attrs.managedBean.selectedRepartitionUe.coefficient}" 
+											  required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_REPARTITION_UE_COEFFICIENT}"/></p:column>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_NOTE_OBTENTION}</p:column>
+							<p:column><p:inputText value="#{cc.attrs.managedBean.selectedRepartitionUe.noteObtension}" 
+											  required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_REPARTITION_UE_NOTE_OBTENTION}"/></p:column>
+							</p:row>
+							<p:row>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_NOTE_BASE}</p:column>
+							<p:column><p:inputText value="#{cc.attrs.managedBean.selectedRepartitionUe.noteDeBase}" 
+											   required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_REPARTITION_UE_NOTE_BASE}"/></p:column>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_NOTE_ELIMINATOIRE}</p:column>
+							<p:column><p:inputText value="#{cc.attrs.managedBean.selectedRepartitionUe.noteEliminatoire}" 
+											   required="true" requiredMessage="#{ofEditMsgs.EDIT_OF_REQUIRED_MSG_REPARTITION_UE_NOTE_ELIMINATOIRE}"/></p:column>
+							</p:row>
+							<p:row>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_OPTIONNELLE}</p:column>
+							<p:column><p:selectBooleanCheckbox value="#{cc.attrs.managedBean.selectedRepartitionUe.optionnelle}"/></p:column>
+							<p:column style="text-align:right;">#{ofEditMsgs.EDIT_OF_LABEL_TAB_PARCOURS_DIALOG_AJOUT_UE_A_CHOIX}</p:column>
+							<p:column><p:selectBooleanCheckbox value="#{cc.attrs.managedBean.selectedRepartitionUe.aChoix}"/></p:column>
+							</p:row>
+						</p:panelGrid>
+						</p:outputPanel>
+					
+						<br />
+						<p:toolbar>
+						<p:toolbarGroup>
+										<p:commandButton id="btnHideRepartitionDialogID" value="Annuler" 	type="button" onclick="PF('dlgAddUeParcours').hide();"  icon="ui-icon-close">
+										</p:commandButton>
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+										<p:commandButton id="btnSaveRepartitionUe" 
+																	value="#{ofEditMsgs.EDIT_OF_BTN_REPARTITION_UE_ENREGISTRER_UE}"  
+																	ajax="true" 
+																	process="@this :#{cc.clientId}:formDlgAddUe:panelGridRepartition"
+																	update=":#{cc.clientId}:tvOffreFormation:formParcours :#{cc.clientId}:formDlgAddUe" 
+																	icon="ui-icon-disk"
+																 	action="#{cc.attrs.managedBean.saveRepartitionUe}" 
+																 	oncomplete="handleSaveUeRequest(xhr, status, args)">
+										</p:commandButton>
+						</p:toolbarGroup>
+						</p:toolbar>
+						<br/>
+						
+						 <pe:keyFilter for="repUeCoefficientId" mask="num"/>
+		
+					</h:form>
+					<script type="text/javascript">
+   								 function handleSaveUeRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddUeParcours').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddUeParcours').hide();
+	       							 }
+    							}
+					</script>
+	</p:dialog>
+	<!-- OFFRE DE FORMATION - AJAX UPDATE POPUPs -->
+
+	<pe:blockUI target=":#{cc.clientId}:tvOffreFormation" 	widgetVar="ajaxProgress1" >
+		 <i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>
+
+
+	<pe:blockUI 	target="@([id$=complementEditionSide]) @([id$=evaluationEditionSide]) @([id$=mobiliteEditionSide])"
+		 widgetVar="blockUIWidget1">
+		 <i class="fa fa-spinner fa-spin"></i>
+		 </pe:blockUI>
+		
+
+	<pe:blockUI
+		target="@([id$=complementEditionSide]) @([id$=evaluationEditionSide]) @([id$=mobiliteEditionSide])"
+		widgetVar="blockUIWidget2">
+		<i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>
+
+	<pe:blockUI target="@([id$=panelLocalisation])"
+		widgetVar="blockUIWidget3">
+		<i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>
+
+	<!-- OFFRE DE FORMATION - OVERRINDING PRIMEFACES STYLES -->
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+</composite:implementation>
+
+</html>

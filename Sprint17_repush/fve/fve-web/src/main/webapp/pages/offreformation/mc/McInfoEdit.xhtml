@@ -1,0 +1,281 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<p:outputPanel styleClass="mcInfo" id="mcInfo">
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_code}"
+						for="code" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="code" value="#{mcBB.mc.code}" style="width:100%"
+						required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_code_required}"
+						size="10" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_fr}"
+						for="libelleFr" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="libelleFr" value="#{mcBB.mc.libelleFr}"
+						style="width:100%" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_fr_required}"
+						size="50" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_ar}"
+						for="libelleAr" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="libelleAr" value="#{mcBB.mc.libelleAr}"
+						required="true" style="width:100%"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_libelle_ar_required}"
+						size="50" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_fr}"
+						for="abreviationFr" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="abreviationFr" style="width:100%"
+						value="#{mcBB.mc.abreviationFr}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_fr_required}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_Ar}"
+						for="abreviationAr" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="abreviationAr" style="width:100%"
+						value="#{mcBB.mc.abreviationAr}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_abreviation_ar_required}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_description_fr}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputTextarea rows="5" cols="50" style="width:100%"
+						value="#{mcBB.mc.descriptionFr}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_description_ar}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputTextarea rows="5" cols="50" style="width:100%"
+						value="#{mcBB.mc.descriptionAr}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_mode_evaluation}"
+						for="modeEvaluation" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectOneMenu id="modeEvaluation" style="width:100%"
+						value="#{mcBB.mc.refCodeModeEvaluation}" required="true" filter="true"
+						filterMatchMode="contains"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_mode_evaluation_required}">
+						<f:selectItem
+							itemLabel="#{matiereConstitutiveMsgs.matiere_constitutive_combobox_select_mode_evaluation}"
+							itemValue="" />
+						<f:selectItems value="#{mcBB.modeEvaluationList}" />
+					</p:selectOneMenu>
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_langue}"
+						for="langue" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectOneMenu id="langue" style="width:100%" filter="true"
+						filterMatchMode="contains"
+						value="#{mcBB.mc.refCodeLangue}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_langue_required}">
+						<f:selectItem
+							itemLabel="#{matiereConstitutiveMsgs.matiere_constitutive_combobox_select_langue}"
+							itemValue="" />
+						<f:selectItems value="#{mcBB.langueList}" />
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:row>
+
+			<p:row>
+
+				<p:column style="width:25%">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_libre}" />
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:selectBooleanCheckbox value="#{mcBB.mc.libre}" />
+
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_type_mc}"
+						for="type" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectBooleanCheckbox value="#{mcBB.mc.optionnel}" id="type" />
+				</p:column>
+			</p:row>
+
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_credits}"
+						for="credits" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="credits" value="#{mcBB.mc.credits}"
+						required="true" style="width:100%"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_credits_required}"
+						size="2" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_coefficient}"
+						for="coefficient" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="coefficient" style="width:100%"
+						value="#{mcBB.mc.coefficient}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_coefficient_required}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_pres}"
+						for="volumeHorairePres" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="volumeHorairePres" style="width:100%"
+						value="#{mcBB.mc.volumeHorairePres}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_pres_required}" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_perso}"
+						for="volumeHorairePerso" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:inputText id="volumeHorairePerso" style="width:100%"
+						value="#{mcBB.mc.volumeHorairePerso}" required="true"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_volume_horaire_perso_required}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_base}"
+						for="noteBase" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="noteBase" required="true" style="width:100%"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_note_base_required}"
+						minValue="0.00" maxValue="20.00" decimalSeparator="."
+						value="#{mcBB.mc.noteBase}">
+					</pe:inputNumber>
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_obtention}"
+						for="noteObtention" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="noteObtention" required="true"
+						style="width:100%"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_note_obtention_required}"
+						minValue="0.00" maxValue="20.00" decimalSeparator="."
+						value="#{mcBB.mc.noteObtention}">
+					</pe:inputNumber>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_note_eliminatoire}"
+						for="noteEliminatoire" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber id="noteEliminatoire" required="true"
+						style="width:100%"
+						requiredMessage="#{matiereConstitutiveMsgs.matiere_constitutive_note_eliminatoire_required}"
+						minValue="0.00" maxValue="20.00" decimalSeparator="."
+						value="#{mcBB.mc.noteEliminatoire}">
+					</pe:inputNumber>
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_date_creation}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{mcBB.mc.dateCreation}" styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText
+						value="#{matiereConstitutiveMsgs.matiere_constitutive_date_modification}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{mcBB.mc.dateModification}"
+						styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+		<br />
+		<p:toolbar styleClass="toolBarMesrs">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.wizard_action_save}"
+					title="#{commonmsgs.bouton_enregistrer}"
+					onstart="PF('tabUIWidget').block()" process="mcInfo"
+					onsuccess="PF('tabUIWidget').unblock()" action="#{mcBB.saveMc()}"
+					icon="ui-icon-disk" id="saveBtn"
+					update=":form_mcSearch:pnl_mcDetail">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<!-- 			<p:spacer width="10"></p:spacer> -->
+		<!-- 			<p:commandButton value="#{commonmsgs.bouton_retour}" -->
+		<!-- 				title="#{commonmsgs.bouton_retour}" icon="ui-icon-arrowthick-1-w" -->
+		<!-- 				action="#{mcBB.cancel}" immediate="true"> -->
+		<!-- 			</p:commandButton> -->
+
+	
+	</p:outputPanel>
+
+</ui:composition>
+

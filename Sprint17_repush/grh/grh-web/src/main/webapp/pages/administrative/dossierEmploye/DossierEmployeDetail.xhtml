@@ -1,0 +1,89 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<p:panelGrid columns="1" cellspacing="0"
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+		<p:panelGrid id="descriptionDossier"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText styleClass="value"
+						value="#{dossierEmployemsgs.dossier_employe_dosier_employe}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText
+						value="#{dossierEmployemsgs.dossier_employe_matricule_employe}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dossierEmployeDtoParam.matricule}"
+						styleClass="value">
+					</h:outputText>
+
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{dossierEmployemsgs.dossier_employe_date_recrutement}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dossierEmployeDtoParam.dateInstallation}"
+						styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText
+						value="#{dossierEmployemsgs.dossier_employe_structure}" />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{dossierEmployeDtoParam.refStructureDto.llStructureLatin}"
+						styleClass="value">
+					</h:outputText>
+
+				</p:column>
+				<p:column rendered="#{dossierEmployeDtoParam.dateTitularisation!=null}">
+					<h:outputText
+						value="#{dossierEmployemsgs.dossier_employe_date_titularisation}" />
+				</p:column>
+				<p:column rendered="#{dossierEmployeDtoParam.dateTitularisation!=null}">
+					<h:outputText value="#{dossierEmployeDtoParam.dateTitularisation}"
+						styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+		<ui:include src="/pages/commons/IndividuDetailComponent.xhtml">
+			<ui:param name="title" value="Détail de l'individu"></ui:param>
+			<ui:param name="refIndividuDtoParam"
+				value="#{dossierEmployeDtoParam.refIndividuDto}"></ui:param>
+		</ui:include>
+
+	</p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

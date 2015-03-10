@@ -1,0 +1,161 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panel style="height:600px" id="infosetablissementPanel">
+		<h:form id="infosFromId">
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_identifiant}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="identifiant"
+							value="#{etablissementBckBean.refEtablissementDto.identifiant}"
+							styleClass="value" />
+
+					</p:column>
+			
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_ancien_code}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="ancienIdentifiant"
+							value="#{etablissementBckBean.refEtablissementDto.ancienCode}"
+							styleClass="value" />
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_type_etablissement_fr}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="typeetablissement" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.typeLibelleLongFr} " />
+
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_libelle_long_latin}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="llstructLatin" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.llEtablissementLatin}" />
+					</p:column>
+
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_libelle_long_arabe}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="llArabe" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.llEtablissementArabe}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_libelle_court_latin}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="lcLatin" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.lcEtablissementLatin}" />
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_libelle_court_ar}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="lcAr" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.lcEtablissementArabe}" />
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_date_creation}:" />
+					</p:column>
+					<p:column style="width:35%">
+
+						<h:outputText id="dateCreation" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.dateCreation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_decret}: " />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="decret" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.decret}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_forme_juridique_fr}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="fj" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.formeJuridiqueLibelleLongFr}" />
+					</p:column>
+
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nis}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="nis" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.nis}" />
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nif}:" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="nif" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.nif}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nss}:" />
+					</p:column>
+					<p:column colspan="3">
+						<h:outputText id="nss" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.nss}" />
+					</p:column>
+					</p:row>
+					</p:panelGrid>
+					<br/><br/><br/>
+					<p:panelGrid  styleClass="noBorder1">
+					<p:row>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_return}" immediate="true"
+							icon="ui-icon-disk" action="#{etablissementBckBean.back}">
+							<f:param name="searchValue"
+								value="#{etablissementBckBean.searchValue}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+
+		</h:form>
+	</p:panel>
+
+</ui:composition>

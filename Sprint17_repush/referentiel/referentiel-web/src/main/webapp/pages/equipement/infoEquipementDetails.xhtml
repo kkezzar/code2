@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<p:fieldset legend="Equipement informations">
+	<p:panel style="height:600px" id="infosequipementPanel"  header="" >
+		<h:form id="infosFromId">
+	
+			<p:panelGrid id="description" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+					<h:outputText value="#{equipementmsgs.equipement_identite}" />
+					</p:column>
+					<p:column>
+					<h:outputText id="identifiant" value="#{equipementMgrBean.refEquipementDto.identifiant}" style="font-weight: bold;"/>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_code}:" />
+					</p:column>
+					<p:column>
+						<h:outputText id="code" value="#{equipementMgrBean.refEquipementDto.code} "/>
+					
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_libelle}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="designation" style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.designation}"
+							/>
+					</p:column>
+
+				
+				</p:row>
+				
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_famille_equipement}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="famille" style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.familleequipementLibelleLongFr}"/>
+					</p:column>
+
+				
+				</p:row>
+				
+							
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_sous_famille_equipement}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="sousfamille" style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.sousfamilleequipementLibelleLongFr}"/>
+					</p:column>
+
+				
+				</p:row>
+				
+					<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_reference}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="reference" style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.referenceexterne}"/>
+					</p:column>
+
+				
+				</p:row>
+				
+					<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_datemdisp}" />
+					</p:column>
+					<p:column>
+						<h:outputText id="datemed" style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.dateMiseDispo}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" /></h:outputText>
+					</p:column>
+
+				
+				</p:row>
+				
+				
+					<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_reservable}" />
+					</p:column>
+					<p:column>
+						 <h:outputText style="font-weight: bold;" value="#{equipementMgrBean.refEquipementDto.reservable?'Oui':'Non'}" disabled="true">  </h:outputText> 
+					</p:column>
+
+				
+				</p:row>
+				
+				
+
+			</p:panelGrid>
+			
+	
+		
+			
+		</h:form>
+	</p:panel>
+</p:fieldset>
+</ui:composition>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+ <!-- INTERFACE COMPOSANT  [ HISTORIQUE DES SITUATIONS  ENTITE ] -->
+<composite:interface componentType="repartitionPeriode">
+		<composite:attribute name="list" type="java.util.List" required="true" shortDescription=" Historique des situations Entite"/>
+		<composite:attribute name="periodeDto" 	type="dz.gov.mesrs.sii.fve.business.model.dto.offreformation.PeriodeDto" shortDescription="Objet Periode Dto" />
+		<composite:attribute name="add" required="true"  method-signature="boolean f(java.lang.String, java.lang.String)"/> 
+		
+		</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT [ HISTORIQUE DES SITUATIONS  ENTITE ] -->          
+<composite:implementation>
+	<h:form id="myForm">	
+					<p:dataTable id="repartitionTable" 
+											value="#{cc.model}" var="row"
+											rowKey="#{row.id}"
+											rowIndexVar="rowIndex"
+											emptyMessage="Aucune repartition periode trouvee." 
+											paginatorPosition="bottom"
+											rowsPerPageTemplate="10,15"
+											paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+											paginator="true" 
+											rows="10" style="width:450px;" styleClass="left">
+											
+								<f:facet name="header">
+            									#{ofEditMsgs.EDIT_OF_DATA_TABLE_SITUATIONS_LISTE_RESULT}
+       						 	</f:facet>  
+       							<p:column	headerText="N°" style="width:20px;" styleClass="center">
+														<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+            					
+            					<p:column headerText=" Situation" style="width:200px;" styleClass="left">
+            							<h:outputText value="ssssssssss" />
+            					</p:column>
+            
+            					<p:column headerText="Date" style="width:150px;" styleClass="center">
+            							<h:outputText value="ssssssssssssssssssssssss">
+            							</h:outputText>
+            					</p:column>
+        </p:dataTable>
+          <h:commandButton value="doIt" action="#{cc.myAction}" ></h:commandButton>
+        
+		</h:form>	
+
+</composite:implementation>
+
+</html>

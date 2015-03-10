@@ -1,0 +1,68 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:outputStylesheet library="./css" name="style.css" />
+    <ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+   
+    <p:panel style="height:600px" id="etatValidationReservationPanel2" header="#{commonmsgs.menu_lieu}"   > 
+      <ui:include src="/pages/lieu/lieuHeader.xhtml"/>
+       <br></br>
+     <p:fieldset legend="Gestion etat validation reservation">
+     
+     
+      <p:panel >  
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+			<h:outputText value="#{lieumsgs.lieu_infos} : " />
+			<h:outputText value="#{situationMgrBean.entity}  " />
+			<h:outputText value="#{reservationMgrBean.entitiname}  " />
+			<h:outputText value="#{reservationMgrBean.idr}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+		<h:outputText value="#{reservationMgrBean.lieur}" style="font-weight: bold;"/>
+		</p:column>
+		<p:column>
+		<h:outputText value="#{reservationMgrBean.objetr}" style="font-weight: bold;"/>
+		</p:column> 
+		
+		
+		</p:row>
+      </p:panelGrid>          
+    </p:panel>
+     
+     <ui:include src="/pages/etatvalidation/etatValidation.xhtml">
+     <c:set var="id"  value="#{reservationMgrBean.idrev}" scope="request"/>
+       <c:set var="idf" value="#{reservationMgrBean.idrev}" scope="request"/>
+       <c:set var="entity" value="reservation" scope="request" />
+     	<ui:param name="createAllow" value="true" />
+		<ui:param name="editAllow" value="true" />
+		<ui:param name="deleteAllow" value="true" />
+		<ui:param name="entity" value="reservation" />
+		<ui:param name="idf" value="#{reservationMgrBean.idrev}" />
+		<ui:param name="id" value="#{reservationMgrBean.idrev}" />
+     </ui:include>		
+     </p:fieldset>
+    
+       </p:panel>
+    <p:row>
+ <p:column>
+             <br></br>
+			 <p:commandButton value="#{commonmsgs.button_return}"  icon="ui-icon-disk"  process="@this"  >
+			   <f:param name="editMode" value="true" /> 
+			   <f:param name="id" value="#{lieuMgrBean.refLieuDto.id}" />
+		     </p:commandButton> 
+             </p:column>
+</p:row>
+   
+   
+    </ui:define>
+    </ui:composition>
+   
+</ui:composition>

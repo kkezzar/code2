@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util">
+
+
+	<sec:http use-expressions="true" entry-point-ref="casEntryPoint">
+		<sec:intercept-url pattern="/**" access="isAuthenticated()" />
+		<!-- <sec:intercept-url pattern="/**" access="permitAll" /> -->
+		<sec:custom-filter position="CAS_FILTER" ref="casAuthenticationFilter" />
+		<!-- Handle CAS logout request from the browser (on /j_spring_security_logout): -->
+		
+		<sec:logout />
+		
+		<!-- Handle CAS logout directly from the CAS server: -->
+	<!-- <sec:custom-filter before="CAS_FILTER" ref="singleLogoutFilter" /> -->
+		 <sec:custom-filter before="CAS_FILTER" ref="requestSingleLogoutFilter" />
+	</sec:http>
+
+	<bean id="casAuthenticationFilter"
+		class="org.springframework.security.cas.web.CasAuthenticationFilter">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+	
+	  <!-- This filter handles a Single Logout Request from the CAS Server -->
+    <bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
+    <!-- This filter redirects to the CAS Server to signal Single Logout should be performed -->
+    <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <property name="filterProcessesUrl" value="/logout" />
+        <constructor-arg value="${cas.server.protocole}://${cas.server.host}/casProgres/logout"/>
+        <constructor-arg>
+            <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
+        </constructor-arg>
+    </bean>
+    
+<!-- 	<bean id="casLogoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<constructor-arg value="http://${cas.service.host}/${cas.service.uri}/logout" />
+		<constructor-arg>
+			<bean
+				class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/logout" />
+	</bean> -->
+
+	<bean id="casEntryPoint"
+		class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+		<!-- Change with your own CAS in the cloud server -->
+		<!-- <property name="loginUrl" value="https://freeeu1.casinthecloud.com/progres/login" 
+			/> -->
+
+		<property name="loginUrl" value="${cas.server.protocole}://${cas.server.host}/casProgres/login" />
+		<property name="serviceProperties" ref="serviceProperties" />
+	</bean>
+
+	<bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+		<!-- Change with your own host name -->
+		<property name="service"
+			value="http://${cas.service.host}/${cas.service.uri}/j_spring_cas_security_check" />
+	</bean>
+
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider ref="casAuthenticationProvider" />
+	</sec:authentication-manager>
+
+	<bean id="casAuthenticationProvider"
+		class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+		<!-- <property name="authenticationUserDetailsService"> <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper"> 
+			<constructor-arg ref="userService" /> </bean> </property> -->
+		<property name="authenticationUserDetailsService" ref="authenticationUserDetailsService" />
+
+		<property name="userDetailsService" ref="progresUserDetailsService" />
+		<property name="serviceProperties" ref="serviceProperties" />
+		<property name="ticketValidator">
+			<bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+				<!-- Change with your own CAS in the cloud server -->
+				<!-- <constructor-arg index="0" value="https://freeeu1.casinthecloud.com/progres/p3/" 
+					/> -->
+				<constructor-arg index="0"
+					value="${cas.server.protocole}://${cas.server.host}/casProgres/" />
+			</bean>
+		</property>
+		<property name="key" value="progres_cas_key" />
+	</bean>
+
+	<bean id="authenticationUserDetailsService"
+		class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+		<property name="userDetailsService" ref="progresUserDetailsService" />
+	</bean>
+
+	<bean id="progresUserDetailsService"
+		class="dz.gov.mesrs.sii.commons.security.userdetails.ProgresUserDetailsService">
+	</bean>
+
+	<sec:global-method-security
+		pre-post-annotations="enabled" />
+
+	<!-- <bean id="authenticationUserDetailsService" class="org.springframework.security.cas.userdetails.GrantedAuthorityFromAssertionAttributesUserDetailsService"> 
+		<constructor-arg> <array> <value>role</value> </array> </constructor-arg> 
+		</bean> <sec:user-service id="userService"> <sec:user name="jleleu" password="jleleu" 
+		authorities="ROLE_USER" /> </sec:user-service> -->
+</beans>

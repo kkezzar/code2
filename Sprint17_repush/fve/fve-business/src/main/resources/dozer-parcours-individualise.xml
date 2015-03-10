@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.ParcoursIndividualiseMatiereDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.ParcoursIndividualiseMatiere
+		</class-b>
+
+		<field>
+			<a>parcoursIndividualiseId</a>
+			<b>parcoursIndividualise.id</b>
+		</field>
+
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>parcoursIndividualise.dossierInscriptionAdministrative.id</b>
+		</field>
+
+
+
+		<field>
+			<a>dateCreation</a>
+			<b>parcoursIndividualise.dateCreation</b>
+		</field>
+
+		<field>
+			<a>situationId</a>
+			<b>parcoursIndividualise.situationEntite.id</b>
+		</field>
+      <field>
+			<a>idPeriode</a>
+			<b>parcoursIndividualise.periode.id</b>
+		</field>
+         <field>
+			<a>codePeriode</a>
+			<b>parcoursIndividualise.periode.code</b>
+		</field> 
+	 <field>
+			<a>libellePeriode</a>
+			<b>parcoursIndividualise.periode.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>rattachementMcId</a>
+			<b>rattachementMc.id</b>
+		</field>
+
+
+
+		<field>
+			<a>ueId</a>
+			<b>rattachementMc.uniteEnseignement.id</b>
+		</field>
+
+		<field>
+			<a>ueCode</a>
+			<b>rattachementMc.uniteEnseignement.code</b>
+		</field>
+
+		<field>
+			<a>ueLibelleFr</a>
+			<b>rattachementMc.uniteEnseignement.libelleFr</b>
+		</field>
+
+		<field>
+			<a>ueCredits</a>
+			<b>rattachementMc.uniteEnseignement.credits</b>
+		</field>
+
+		<field>
+			<a>mcId</a>
+			<b>rattachementMc.matiereConstitutive.id</b>
+		</field>
+
+		<field>
+			<a>mcCode</a>
+			<b>rattachementMc.matiereConstitutive.code</b>
+		</field>
+
+		<field>
+			<a>mcLibelleFr</a>
+			<b>rattachementMc.matiereConstitutive.libelleFr</b>
+		</field>
+
+		<field>
+			<a>mcCredits</a>
+			<b>rattachementMc.credit</b>
+		</field>
+
+		<field>
+			<a>coefficient</a>
+			<b>rattachementMc.coefficient</b>
+		</field>
+
+		<field>
+			<a>noteObtension</a>
+			<b>rattachementMc.noteObtension</b>
+		</field>
+
+		<field>
+			<a>noteDeBase</a>
+			<b>rattachementMc.noteDeBase</b>
+		</field>
+
+		<field>
+			<a>noteEliminatoire</a>
+			<b>rattachementMc.noteEliminatoire</b>
+		</field>
+
+		<field>
+			<a>optionnelle</a>
+			<b>rattachementMc.optionnelle</b>
+		</field>
+
+		<field>
+			<a>aChoix</a>
+			<b>rattachementMc.aChoix</b>
+		</field>
+
+
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.ParcoursIndividualiseMatiereDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.RattachementMcDto
+		</class-b>
+
+		<field>
+			<a>rattachementMcId</a>
+			<b>id</b>
+		</field>
+
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.ParcoursIndividualiseMatiereDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.ParcoursIndividualise
+		</class-b>
+
+		<field>
+			<a>parcoursIndividualiseId</a>
+			<b>id</b>
+		</field>
+
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>dossierInscriptionAdministrative.id</b>
+		</field>
+
+
+
+		<field>
+			<a>dateCreation</a>
+			<b>dateCreation</b>
+		</field>
+
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.id</b>
+		</field>
+		
+		 <field>
+			<a>idPeriode</a>
+			<b>periode.id</b>
+		</field>
+         <field>
+			<a>codePeriode</a>
+			<b>periode.code</b>
+		</field> 
+	 <field>
+			<a>libellePeriode</a>
+			<b>periode.libelleLongLt</b>
+		</field>
+	</mapping>
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.ParcoursIndividualiseDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.ParcoursIndividualise</class-b>
+		<field>
+			<a>dossierInscriptionAdministrativeId</a>
+			<b>dossierInscriptionAdministrative.id</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>dossierInscriptionAdministrative.refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>dossierInscriptionAdministrative.dossierEtudiant.numeroMatricule</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>dossierInscriptionAdministrative.ouvertureOffreFormation.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>dossierInscriptionAdministrative.anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.id</b>
+		</field>
+		<field>
+			<a>situationLibelleFr</a>
+			<b>situationEntite.situation.libelleFr</b>
+		</field>
+		<field>
+			<a>situationLibelleAr</a>
+			<b>situationEntite.situation.libelleAr</b>
+		</field>
+		 <field>
+			<a>idPeriode</a>
+			<b>periode.id</b>
+		</field>
+         <field>
+			<a>codePeriode</a>
+			<b>periode.code</b>
+		</field> 
+	 <field>
+			<a>libellePeriode</a>
+			<b>periode.libelleLongLt</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false" wildcard="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.ParcoursIndividualiseDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierInscriptionAdministrativeDto
+		</class-b>
+		<field>
+			<a>numeroInscription</a>
+			<b>numeroInscription</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademiqueId</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueCode</a>
+			<b>anneeAcademiqueCode</b>
+		</field>
+		<field>
+			<a>dossierId</a>
+			<b>dossierId</b>
+		</field>
+		<field>
+			<a>dossierEtudiantId</a>
+			<b>dossierEtudiantId</b>
+		</field>
+		<field>
+			<a>numeroMatricule</a>
+			<b>numeroMatricule</b>
+		</field>
+		<field>
+			<a>refCodeDomaine</a>
+			<b>refCodeDomaine</b>
+		</field>
+		<field>
+			<a>refCodeFiliere</a>
+			<b>refCodeFiliere</b>
+		</field>
+		<field>
+			<a>refCodeSpecialite</a>
+			<b>refCodeSpecialite</b>
+		</field>
+		<field>
+			<a>resultRefCodeDomaine</a>
+			<b>resultRefCodeDomaine</b>
+		</field>
+		<field>
+			<a>resultRefCodeFiliere</a>
+			<b>resultRefCodeFiliere</b>
+		</field>
+		<field>
+			<a>resultRefCodeSpecialite</a>
+			<b>resultRefCodeSpecialite</b>
+		</field>
+		<field>
+			<a>refLibelleDomaine</a>
+			<b>refLibelleDomaine</b>
+		</field>
+		<field>
+			<a>refLibelleFiliere</a>
+			<b>refLibelleFiliere</b>
+		</field>
+		<field>
+			<a>refLibelleSpecialite</a>
+			<b>refLibelleSpecialite</b>
+		</field>
+		<field>
+			<a>ouvertureOffreFormationId</a>
+			<b>ouvertureOffreFormationId</b>
+		</field>
+		<field>
+			<a>offreFormationId</a>
+			<b>offreFormationId</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>offreFormationCode</b>
+		</field>
+		<field>
+			<a>offreFormationLibelleFr</a>
+			<b>offreFormationLibelleFr</b>
+		</field>
+		<field>
+			<a>offreFormationLibelleAr</a>
+			<b>offreFormationLibelleAr</b>
+		</field>
+
+		<field>
+			<a>nin</a>
+			<b>nin</b>
+		</field>
+		<field>
+			<a>individuNomArabe</a>
+			<b>individuNomArabe</b>
+		</field>
+		<field>
+			<a>individuNomLatin</a>
+			<b>individuNomLatin</b>
+		</field>
+		<field>
+			<a>individuPrenomArabe</a>
+			<b>individuPrenomArabe</b>
+		</field>
+		<field>
+			<a>individuPrenomLatin</a>
+			<b>individuPrenomLatin</b>
+		</field>
+	</mapping>
+
+</mappings>

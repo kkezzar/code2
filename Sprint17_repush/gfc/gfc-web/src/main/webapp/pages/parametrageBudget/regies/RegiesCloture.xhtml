@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{parametrageBudgetMsg.page_title_cloturer_regie}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<!-- search fields -->
+						<p:inputText value="#{pr}"></p:inputText>
+						<p:separator />
+						<p:commandButton id="btnSearch" update="ResultSearchDataTable"
+							icon="ui-icon-search"
+							actionListener="#{programmesNationauxBean.searchAction()}"
+							onstart="PF('page').block()" oncomplete="PF('page').unblock()">
+						</p:commandButton>
+						<!--
+						<p:commandButton id="rechercheAvc" value="Recherche avancée" styleClass="ui-button-bleu-o" 
+							title="Recherche avancée">
+						</p:commandButton>
+						-->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{regiesBean.modelRegies}" paginator="true"
+					paginatorPosition="bottom" 	emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="5" rowIndexVar="rowIndex"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{regiesBean.onRowSelectConsult}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{referentielMsgs.gfc_referentiel_numero}">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.regie}">
+						<h:outputText value="#{current.objetFr}">
+						</h:outputText>
+					</p:column>
+
+				
+					<p:column headerText="#{parametrageBudgetMsg.type_regie}">
+						<h:outputText value="#{current.typeRegie.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{parametrageBudgetMsg.regie_date_ouverture}">
+						<h:outputText value="#{current.dateOuverture}">
+						<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					
+
+					<p:column headerText="#{parametrageBudgetMsg.regie_situation}">
+						<h:outputText value="#{current.situationEntite.codeSituation}">
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{parametrageBudgetMsg.regie_date_cloture}">
+						<h:outputText value="#{current.dateCloture}">
+						<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+		<p:outputPanel id="form_crud">
+
+					<p:tabView rendered="#{regiesBean.crud}" id="tabview">
+
+					<p:tab title="#{parametrageBudgetMsg.detail_regie}">
+
+						<h:form id="formCreation">
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+						
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.structure}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{regiesBean.regieDto.refStructure.llStructureLatin}" styleClass="value" />
+										
+									</p:column>
+										<p:column>
+										<h:outputText 
+											value="#{parametrageBudgetMsg.regie}" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText 
+											value="#{regiesBean.regieDto.objetFr}" styleClass="value"  />
+									</p:column>
+									
+								</p:row>
+									<p:row>
+									<p:column>
+										<h:outputText 
+											value="#{parametrageBudgetMsg.intitule_ar}" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText 
+											value="#{regiesBean.regieDto.objetAr}" styleClass="value"  />
+									</p:column>
+								<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.regie_date_ouverture}" />
+									</p:column>
+									<p:column >
+									<h:outputText 
+											value="#{regiesBean.regieDto.dateOuverture}" styleClass="value"  >
+										<f:convertDateTime type="date"
+											pattern="#{applicationBean.datePattern()}" />
+											</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+								<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.type_regie}" />
+									</p:column>
+									<p:column>
+										<h:outputText 
+											value="#{regiesBean.regieDto.typeRegie.libelleLongFr}" styleClass="value"  />
+									</p:column>
+									
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.regie_structure_mere}" />
+									</p:column>
+									<p:column colspan="">
+										<h:outputText  id="structureRattache"
+											value="#{regiesBean.regieDto.refStructure.llLtMotherStructure}"   styleClass="value"   />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.ordonnateur}" />
+									</p:column>
+									<p:column>
+									<h:outputText 
+											value="#{regiesBean.regieDto.ordonnateur.code}" styleClass="value"  />
+									</p:column>
+									
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.agent_comptable}" />
+									</p:column>
+									<p:column>
+											<h:outputText 
+											value="#{regiesBean.regieDto.agentComptable.code}" styleClass="value"  />
+									</p:column>
+									
+								</p:row>
+
+								<p:row>
+								<p:column>
+										<h:outputText 
+											value="#{parametrageBudgetMsg.regie_compte_depot}" />
+									</p:column>
+									<p:column colspan="">
+												<h:outputText 
+											value="#{regiesBean.regieDto.compteDepot.numero}" styleClass="value"  />
+									</p:column>
+									
+									<p:column>
+										<h:outputText 
+											value="#{parametrageBudgetMsg.regie_compteCCP}" />
+									</p:column>
+									<p:column colspan="">
+											<p:column>
+											<h:outputText 
+											value="#{regiesBean.regieDto.compteCcp.numero}" styleClass="value"  />
+									</p:column>
+									</p:column>
+								
+								</p:row>
+							
+								<!-- Actions -->
+								
+							</p:panelGrid>
+								<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" >
+								<p:row>
+								
+								<p:column>
+										<h:outputText
+											value="#{parametrageBudgetMsg.regie_chapitre_article}" />
+									
+										<p:dataTable var="currentAff" id="affectationTableRegie"
+											value="#{regiesBean.regieDto.affectationRegieChapitreArticles}"
+											editable="true" rowIndexVar="rowIndexAff"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+											<f:facet name="header">
+												
+											</f:facet>
+											<p:column headerText="#{referentielMsgs.gfc_referentiel_numero}">
+												<h:outputText value="#{rowIndexAff+1}" />
+												</p:column>
+											<p:column headerText="#{parametrageBudgetMsg.section}">
+												<h:outputText
+													value="#{currentAff.affectationEtabChapitreArticle.chapitre.idSection.intituleFr}" />
+											</p:column>
+											<p:column headerText="#{parametrageBudgetMsg.chapitre}">
+												<h:outputText
+													value="#{currentAff.affectationEtabChapitreArticle.chapitre.intituleFr}" />
+											</p:column>
+											<p:column headerText="#{parametrageBudgetMsg.article}">
+												<h:outputText
+													value="#{currentAff.affectationEtabChapitreArticle.article.intituleFr}" />
+											</p:column>
+											<p:column
+												headerText="#{parametrageBudgetMsg.plafond}">
+												<h:outputText value="#{currentAff.plafond}" />
+											</p:column>
+											
+											
+										</p:dataTable>
+									</p:column>
+								</p:row>
+								
+							<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_cloturer}"
+												id="closingBtn" update=":form_crud :form_search" 
+												actionListener="#{regiesBean.closingAction()}">
+											</p:commandButton>
+										
+											<p:spacer width="5px"></p:spacer>
+												<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												actionListener="#{regiesBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+				</p:tabView>								
+
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

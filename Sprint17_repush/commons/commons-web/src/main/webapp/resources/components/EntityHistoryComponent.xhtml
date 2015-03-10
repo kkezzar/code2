@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+<!-- INTERFACE COMPOSANT  [ HISTORIQUE DES SITUATIONS  ENTITE ] -->
+<composite:interface componentType="dynamicList">
+	<composite:attribute name="list" type="java.util.List" required="true" shortDescription=" Historique des situations Entite" />
+	<composite:attribute name="idParamName" type="java.lang.String" shortDescription="Nom du param Id Entite" />
+	<composite:attribute name="idParamValue" type="java.lang.String"  shortDescription="Valeur du param Id Entite" />
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT [ HISTORIQUE DES SITUATIONS  ENTITE ] -->
+<composite:implementation>
+	<h:form id="myForm" style="font-size:#{sessionBean.fontSize}px">
+		<p:tabView id="tvSituationComponent" dynamic="true" 
+			orientation="left">
+			
+			<p:tab title="#{cmpSituationMsgs.situtation_history_component_situations_tab_table}" >
+				<f:facet name="title">
+					<i class="fa fa-table"></i>
+					<h:outputText value=" #{cmpSituationMsgs.situtation_history_component_situations_tab_table}" />
+				</f:facet>
+			
+				<p:dataTable id="entityHistoryTable" 
+					 	value="#{cc.model}"
+						var="row"
+						rowKey="#{row.id}"
+					 	rowIndexVar="rowIndex"
+						emptyMessage="#{cmpSituationMsgs.situtation_history_component_datatable_list_situations_empty}"
+						paginatorPosition="bottom" 
+						rowsPerPageTemplate="10,15"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" 
+						rows="10">
+					<f:facet name="header">#{cmpSituationMsgs.situtation_history_component_datatable_list_situations_default}</f:facet>
+					<p:column headerText="" style="text-align:center;">
+								<h:outputText value="#{cc.modelSize - rowIndex}" />
+					</p:column>
+					<p:column headerText="#{cmpSituationMsgs.situtation_history_component_datatable_list_situations_column_situation}">
+								<h:outputText value="#{row.libelleSituation}" style="#{row.styleCssSituation}"/>
+					</p:column>
+					<p:column headerText="#{cmpSituationMsgs.situtation_history_component_datatable_list_situations_column_date}" style="text-align:center;">
+						<h:outputText value="#{row.dateSituation}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{cmpSituationMsgs.situtation_history_component_datatable_list_situations_column_user}">
+								<h:outputText value="#{row.prenomUtilisateur} #{row.nomUtilisateur}"/>
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="#{cmpSituationMsgs.situtation_history_component_situations_tab_chrono}">
+				<f:facet name="title">
+					<i class="fa fa-sliders"></i>
+					<h:outputText value=" #{cmpSituationMsgs.situtation_history_component_situations_tab_chrono}" />
+				</f:facet>
+				<pe:timeline value="#{cc.modelTimeline}" selectable="true" zoomable="true" moveable="true"/>
+			</p:tab>
+			
+		</p:tabView>
+	
+	</h:form>
+</composite:implementation>
+
+</html>

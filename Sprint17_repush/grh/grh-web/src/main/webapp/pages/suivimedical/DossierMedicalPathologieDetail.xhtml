@@ -1,0 +1,59 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{suiviMedicalMgs.pathologies_title}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="pathologie" value="#{dossierMedicalMBean.listPathologies}" id="pathologiesTable"
+						widgetVar="pathologiesTable" rowKey="#{pathologie.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{suiviMedicalMgs.pathologie_datable_no_result}">
+
+						<f:facet name="header">
+							
+						</f:facet>
+						<p:column
+							headerText="#{suiviMedicalMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column
+							headerText="#{suiviMedicalMgs.pathologie}">
+							<h:outputText value="#{pathologie.nomenclatureDto.libelleLongFr}"  styleClass="value"/>
+						</p:column>
+						
+						<p:column headerText="#{suiviMedicalMgs.date_survenue}">
+							<h:outputText value="#{pathologie.dateSurvenue}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+						</p:dataTable>
+						</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+	
+
+
+
+</ui:composition>
+

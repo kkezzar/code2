@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of" >
+	<ui:define name="centerContent">
+	<h:form id="form_demandeValidate">
+	<p:panel id="pnl_demandeValidate" header="#{demandeHabilitationMsgs.demande_habilitation_valider_title}">
+	<ui:include src="/pages/habilitation/demandes/DemandeHabDetail.xhtml">
+						</ui:include>
+	<p:accordionPanel multiple="false" activeIndex="0">  
+    <p:tab title="#{histActiontMsgs.action_hist_datatable_title}">
+     <ui:include src="/pages/common/ActionHistComponent.xhtml">
+						</ui:include>
+    </p:tab> 
+    </p:accordionPanel>						
+    <br></br>
+    <!-- VALIDATION DEMANDE HABILITATION - Avis et commentaire  -->
+   <p:panel  >
+  
+	<p:panelGrid  columns="2" style="width:815px"
+						columnClasses="oneCol, twoCol">
+
+						<f:facet name="header">  
+        							#{demandeHabilitationMsgs.demande_habilitation_avis_commentaire_title}
+    						</f:facet>
+    						<h:outputText value="#{commonmsgs.bpm_activite}" />
+    						 <h:outputText value="#{demandeHabBean.mapEtapeI18n['fr'].libelle}" styleClass="labelValue" />
+    						 <h:outputText value="#{commonmsgs.bpm_role}" />
+    						  <h:outputText value="#{demandeHabBean.mapRoleI18n['fr'].libelle}" styleClass="labelValue" />
+						<h:outputText value="#{demandeHabilitationMsgs.demande_habilitation_avis} * " />
+					      <p:selectOneMenu id="avisId"
+							value="#{demandeHabBean.tacheActionDto.actionId}"
+							
+							label="#{demandeHabilitationMsgs.demande_habilitation_avis}" required="true"
+							requiredMessage="#{demandeHabilitationMsgs.demande_habilitation_avis_required}">
+							<f:selectItem
+								itemLabel="#{demandeHabilitationMsgs.demande_habilitation_select_avis}"
+								itemValue="" />
+							<f:selectItems value="#{demandeHabBean.listeActionByEtape}" />
+
+						</p:selectOneMenu>
+						
+					
+						<h:outputText
+							value="#{demandeHabilitationMsgs.demande_habilitation_commentaire}" />
+					
+						<h:inputTextarea id="commentaire" value="#{demandeHabBean.tacheActionDto.commentaire}"  style="width:400px" />
+		</p:panelGrid>
+			<!-- VALIDATION DEMANDE HABILITATION - TOOLBAR BUTTONS  -->
+	</p:panel>
+		<p:toolbar  style="margin-top:5px"  >
+				
+					<p:toolbarGroup    align="left">
+								<p:commandButton value="#{commonmsgs.bouton_retour}" action="goBack"  immediate="true" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+										
+        						</p:commandButton>  
+        			</p:toolbarGroup>
+					
+					<p:toolbarGroup  align="right">
+					           <p:separator />
+        						
+        						<p:commandButton  id="btnValiderID" value="#{commonmsgs.bouton_valider}"  action="#{demandeHabBean.execute}"  onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+        						<f:param name="ofId" value="#{ofBB.ofId}" />
+        						<f:param name="demandeId" value="#{demandeHabBean.demandeId}" />
+        						<f:param name="etapeCode" value="#{demandeHabBean.etapeCode}" />
+        						<f:param name="entityCode" value="#{actionHistBean.entityCode}" />
+        						<f:param name="entityInstanceId" value="#{actionHistBean.entityInstanceId}" />
+        						</p:commandButton>
+					</p:toolbarGroup>
+					
+		</p:toolbar>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>	
+			</p:panel>
+		
+		 <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>

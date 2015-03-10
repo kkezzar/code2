@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<br></br>
+	<h:form id="form" dir="#{localeBean.dir}">
+
+		<p:growl id="growl" showDetail="true" />
+
+		<p:outputPanel styleClass="ui-messages-warn"
+			rendered="#{loginBean.msgPassword !=null}" style="text-align:center;"
+			layout="block">
+			<h:outputText value="#{loginBean.msgPassword}       " />
+			<h:outputLink
+				value="#{facesContext.externalContext.request.contextPath}/pages/compte/passwordUpdate.xhtml"
+				style="color: #006DCC;">#{commonmsgs.menu_password}</h:outputLink>
+		</p:outputPanel>
+		<br></br>
+		<p:panelGrid id="langue" styleClass="noBorder1">
+					<p:row>
+		<p:column>
+							<h:outputText value="#{commonmsgs.langue}:" />
+						</p:column>
+						<p:column>
+							
+							<p:selectOneMenu id="selectLangue"
+								value="#{localeBean.idLanguage}" filter="true"
+								filterMatchMode="startsWith"
+								label="#{parametragemsgs.parametrage_langue}">
+								<f:selectItem
+									itemLabel="#{parametragemsgs.parametrage_select_langue}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listLangue}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:commandButton id="changeLangue"
+							onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+								value="#{commonmsgs.button_appliquer}" update="@all"
+								action="#{localeBean.changeLangue}">
+				         </p:commandButton>
+						</p:column>
+						</p:row>
+						</p:panelGrid>
+						
+		<br></br>
+		<p:dataTable id="affectationTable"  value="#{menuBean.listAffectation}" paginator="true" rows="15" 
+			     rendered="#{menuBean.listAffectation!=null and menuBean.listAffectation.size() > 1}" selectionMode="single"
+                 selection="#{menuBean.selectedAffectation}" var="current"
+                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" 
+				 rowKey="#{current.id}"> 
+				 <p:ajax event="rowSelect" 
+				 onstart="PF('blockUIWidget').block()" oncomplete="PF('blockUIWidget').unblock()"
+							listener="#{menuBean.affectationChanged}" update="@(form)" /> 
+                 <f:facet name="header">  
+            <h:outputText value="#{permissionmsgs.permission_affectation} :" />
+            </f:facet>
+             
+             <p:column headerText="#{affectationmsgs.affectation_entite}" style="width:10%">  
+                <h:outputText rendered="#{current.idGroupe!=null}" value="#{affectationmsgs.affectation_groupe}"/>
+                <h:outputText rendered="#{current.idStructure!=null}" value="#{affectationmsgs.affectation_structure}"/>
+            </p:column>  
+             <p:column headerText="#{affectationmsgs.affectation_libelle_court_latin}" style="width:15%">
+                <h:outputText rendered="#{current.idGroupe!=null}" value="#{current.lcGroupe}"/>
+                <h:outputText rendered="#{current.idStructure!=null}" value="#{current.lcStructureLatin}"/>
+            </p:column> 
+             <p:column headerText="#{affectationmsgs.affectation_libelle_long_latin}" style="width:15%">
+                <h:outputText rendered="#{current.idGroupe!=null}" value="#{current.llGroupe}"/>
+                <h:outputText rendered="#{current.idStructure!=null}" value="#{current.llStructureLatin}"/>
+            </p:column>
+            <p:column headerText="#{affectationmsgs.affectation_role_libelle_latin}" style="width:15%">  
+                <h:outputText value="#{current.roleLibelleLongFr}" />
+            </p:column>
+             <p:column headerText="#{affectationmsgs.affectation_libelle_court_arabe}" style="width:15%">  
+                <h:outputText rendered="#{current.idGroupe!=null}" value="#{current.lcGroupeArabe}"/>
+                <h:outputText rendered="#{current.idStructure!=null}" value="#{current.lcStructureArabe}"/>
+            </p:column>
+            <p:column headerText="#{affectationmsgs.affectation_libelle_long_arabe}" style="width:15%">  
+                <h:outputText rendered="#{current.idGroupe!=null}" value="#{current.llGroupeArabe}"/>
+                <h:outputText rendered="#{current.idStructure!=null}" value="#{current.llStructureArabe}"/>
+            </p:column>
+            
+            <p:column headerText="#{affectationmsgs.affectation_role_libelle_arabe}" style="width:15%">  
+                <h:outputText value="#{current.roleLibelleLongAr}" />
+            </p:column>
+            </p:dataTable>
+		
+		<!--  
+    <p:dashboard id="board" model="#{dashboardBean.model}">  
+        <p:ajax event="reorder" listener="#{dashboardBean.handleReorder}" update="growl" />  
+     
+    <p:panel id="individus" header="" > 
+    <h:outputLink id="tindividu" value="#{facesContext.externalContext.request.contextPath}/pages/individu/individuSearch.xhtml">  
+    <p:graphicImage value="/images/folder_user128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="individus" targetPosition="topRight" position="bottomLeft" value="Gestion des individus" />   
+    </p:panel> 
+    
+    <p:panel id="structures" header="">  
+    <h:outputLink id="structure" value="#{facesContext.externalContext.request.contextPath}/pages/structure/structureSearch.xhtml">  
+    <p:graphicImage value="/images/folder_sites128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="structure" targetPosition="topRight" position="bottomLeft" value="Gestion des structures" />  
+    </p:panel>  
+  
+    <p:panel id="groupes" header=""> 
+    <h:outputLink id="groupe" value="#{facesContext.externalContext.request.contextPath}/pages/groupe/groupeSearch.xhtml">  
+    <p:graphicImage value="/images/folder_users128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="groupe" targetPosition="topRight" position="bottomLeft" value="Gestion des groupes" />      
+         
+    </p:panel>  
+  
+        <p:panel id="contrats" header="">         
+
+	    <h:outputLink id="contrat" value="#{facesContext.externalContext.request.contextPath}/pages/contrat/contratSearch.xhtml">  
+	    <p:graphicImage value="/images/Program_Group_Icon_128.png" /> 
+	    </h:outputLink>  
+	    <p:tooltip for="contrat" targetPosition="topRight" position="bottomLeft" value="Gestion des contrats" />   
+        </p:panel>  
+        
+      <p:panel id="avenants" header=""> 
+             <h:outputLink id="avenant" value="#{facesContext.externalContext.request.contextPath}/pages/avenant/avenantSearch.xhtml">  
+    <p:graphicImage value="/images/folder_docs_alt128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="avenant" targetPosition="topRight" position="bottomLeft" value="Gestion des avenants" />  
+    </p:panel>  
+
+  
+
+        <p:panel id="nomenclature" header="">
+    <h:outputLink id="nomenclatures" value="#{facesContext.externalContext.request.contextPath}/pages/nomenclature/ncNamesSearch.xhtml">  
+    <p:graphicImage value="/images/folder_dev128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="nomenclatures" targetPosition="topRight" position="bottomLeft" value="Gestion des nomenclatures" />      
+        </p:panel> 
+
+        
+
+         <p:panel id="items" header="">  
+ <h:outputLink id="item" value="#{facesContext.externalContext.request.contextPath}/pages/nomenclature/ncSearch.xhtml">  
+    <p:graphicImage value="/images/folder_sites_alt128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="item" targetPosition="topRight" position="bottomLeft" value="Gestion des items des nomenclatures" />
+         </p:panel> 
+
+         
+
+          <p:panel id="lieux" header="">
+    <h:outputLink id="lieu" value="#{facesContext.externalContext.request.contextPath}/pages/lieu/lieuSearch.xhtml">  
+    <p:graphicImage value="/images/folder_pictures_alt128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="lieu" targetPosition="topRight" position="bottomLeft" value="Gestion des lieux" />  
+         </p:panel> 
+
+     
+
+          
+      
+      
+      
+
+          <p:panel id="equipements" header="">
+     <h:outputLink id="equipement" value="#{facesContext.externalContext.request.contextPath}/pages/equipement/equipementSearch.xhtml">  
+    <p:graphicImage value="/images/folder_utilities_alt128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="equipement" targetPosition="topRight" position="bottomLeft" value="Gestion des équipements" />     
+         </p:panel> 
+         
+           <p:panel id="evenements" header="">
+     <h:outputLink id="evenement" value="#{facesContext.externalContext.request.contextPath}/pages/evenement/evenementSearch.xhtml">  
+    <p:graphicImage value="/images/folder_target128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="evenement" targetPosition="topRight" position="bottomLeft" value="Gestion des evenements" />  
+         </p:panel> 
+         
+         <p:panel id="domaines" header="">
+     <h:outputLink id="domaine" value="#{facesContext.externalContext.request.contextPath}/pages/domaine/domaineSearch.xhtml">  
+    <p:graphicImage value="/images/folder_domaines128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="domaine" targetPosition="topRight" position="bottomLeft" value="Gestion des domaines" />  
+         </p:panel> 
+         
+              
+          <p:panel id="documents" header="">
+     <h:outputLink id="document" value="#{facesContext.externalContext.request.contextPath}/pages/document/documentSearch.xhtml">  
+    <p:graphicImage value="/images/folder_docs128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="document" targetPosition="topRight" position="bottomLeft" value="Gestion des documents" />  
+         </p:panel> 
+         
+         <p:panel id="horaires" header="">
+     <h:outputLink id="horaire" value="#{facesContext.externalContext.request.contextPath}/pages/permission/horaireaccess/horaireAccessSearch.xhtml">  
+    <p:graphicImage value="/images/folderev128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="horaire" targetPosition="topRight" position="bottomLeft" value="Gestion des horaires d'accèss" />  
+         </p:panel> 
+         
+             <p:panel id="plages" header="">
+     <h:outputLink id="plage" value="#{facesContext.externalContext.request.contextPath}/pages/permission/plageadresse/plageAdresseSearch.xhtml">  
+    <p:graphicImage value="/images/folder_adresse128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="plage" targetPosition="topRight" position="bottomLeft" value="Gestion des plages d'adresses" />  
+         </p:panel> 
+         
+         <p:panel id="comptes" header="">
+     <h:outputLink id="compte" value="#{facesContext.externalContext.request.contextPath}/pages/compte/compteSearch.xhtml">  
+    <p:graphicImage value="/images/User_Icon_128.png" /> 
+    </h:outputLink>  
+    <p:tooltip for="compte" targetPosition="topRight" position="bottomLeft" value="Gestion des comptes et permissions" />  
+         </p:panel> 
+        
+
+    </p:dashboard>  
+  -->
+	</h:form>
+</ui:composition>

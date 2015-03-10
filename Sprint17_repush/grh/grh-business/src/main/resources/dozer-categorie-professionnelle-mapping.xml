@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.CategorieProfessionnelleDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.CategorieProfessionnelle</class-b>
+		<field>
+			<a>nomenclatureByGroupeDto</a>
+			<b>nomenclatureByGroupe</b>
+		</field>
+		<field>
+			<a>nomenclatureByCategorieDto</a>
+			<b>nomenclatureByCategorie</b>
+		</field>
+		<field>
+			<a>nomenclatureByTypeCategorieDto</a>
+			<b>nomenclatureByTypeCategorie</b>
+		</field>
+		<field>
+			<a>grilleIndiciaireDtos</a>
+			<b>grilleIndiciaires</b>
+		</field>
+		<field>
+			<a>categorieNiveauDtos</a>
+			<b>niveaux</b>
+		</field>
+		<field>
+			<a>gradeDtos</a>
+			<b>grades</b>
+		</field>
+		
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.GrilleIndiciaireDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.GrilleIndiciaire</class-b>
+		<field>
+			<a>categorieProfessionnelleDto</a>
+			<b>categorieProfessionnelle</b>
+		</field>
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.CategorieNiveauDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.CategorieNiveau</class-b>
+		<field>
+			<a>categorieProfessionnelleDto</a>
+			<b>categorieProfessionnelle</b>
+		</field>
+		<field>
+			<a>nomenclatureDto</a>
+			<b>niveau</b>
+		</field>
+		
+	</mapping>
+
+
+</mappings>

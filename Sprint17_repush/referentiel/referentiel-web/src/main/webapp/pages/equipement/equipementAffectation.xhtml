@@ -1,0 +1,794 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{OccupationEquipementMgrBean.crud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+
+	<ui:include src="/pages/equipement/equipementHeader.xhtml" />
+
+	<br></br>
+
+	<h:form id="OccupationsFromId" prependId="false">
+		<p:fieldset legend="Equipement Affectations">
+
+			<p:dataTable id="AffectationEquipementLieuData"
+				styleClass="affLieuStyle"
+				value="#{OccupationEquipementMgrBean.listRefLieuDto}" var="current"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@(.affLieuStyle)" />
+
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_affectationequipement_lieu }      " />
+					<p:commandButton id="addOccupationLieuButton"
+						icon="ui-icon-plusthick" onclick="PF('dlgLieuListAffect').show()"
+						rendered="#{equipementCrudBean.createAllow}">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+
+
+
+				<p:column sortBy="#{current.id}" width="30">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.designationLieu}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_lieu}" />
+					</f:facet>
+					<h:outputText value="#{current.designationLieu}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+
+				<p:column style="width:8%" width="200">
+					<p:commandButton id="removeLieuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						rendered="#{equipementCrudBean.deleteAllow}"
+						actionListener="#{OccupationEquipementMgrBean.deleteLieu(current)}"
+						process="@(.affLieuStyle)" update="@(.affLieuStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:commandButton id="updateLieuButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupLieuStyle)"
+						update="@(.occupLieuStyle)"
+						rendered="#{equipementCrudBean.editAllow}"
+						action="infoAffectationEquipementLieuEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname"
+							value="Affectation équipement pour lieu" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{OccupationEquipementMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+
+			<br></br>
+
+			<p:dataTable id="occupationStructureData" styleClass="affStrStyle"
+				paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+				value="#{OccupationEquipementMgrBean.listRefStructureDto}"
+				var="current">
+
+
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@(.affStrStyle)" />
+
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_affectation_structure}      " />
+					<p:commandButton id="addStructureButton" icon="ui-icon-plusthick"
+						onclick="PF('dlgStructureListAffect').show()"
+						rendered="#{equipementCrudBean.createAllow}">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+					</p:commandButton>
+				</f:facet>
+
+
+				<p:column sortBy="#{current.id}" width="30">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llStructureLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectation_structure_titre}" />
+					</f:facet>
+					<h:outputText value="#{current.llStructureLatin}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{equipementCrudBean.deleteAllow}" width="200">
+
+					<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{OccupationEquipementMgrBean.deleteStructure(current)}"
+						process="@(.affStrStyle)" update="@(.affStrStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="updateStrButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupStrStyle)"
+						update="@(.occupStrStyle)"
+						rendered="#{equipementCrudBean.editAllow}"
+						action="infoAffectationEquipementStructureEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname"
+							value="Affectation équipement pour structure" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{OccupationEquipementMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<br></br>
+
+			<p:dataTable id="occupationLieuGroupeData" styleClass="affGrpStyle"
+				value="#{OccupationEquipementMgrBean.listRefGroupeDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_affectationequipement_groupe}      " />
+					<p:commandButton id="addGroupeButton" ajax="true"
+						icon="ui-icon-plusthick"
+						rendered="#{equipementCrudBean.createAllow}"
+						onclick="PF('dlgGroupeListAffect').show()">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+
+					</p:commandButton>
+				</f:facet>
+
+				<p:column sortBy="#{current.id}" width="30">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.llGroupe}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_groupe}" />
+					</f:facet>
+					<h:outputText value="#{current.llGroupe}" />
+				</p:column>
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{equipementCrudBean.deleteAllow}" width="200">
+					<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{OccupationEquipementMgrBean.deleteGroupe(current)}"
+						process="@(.affGrpStyle)" update="@(.affGrpStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="updateGrpButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupGrpStyle)"
+						update="@(.occupGrpStyle)"
+						rendered="#{equipementCrudBean.editAllow}"
+						action="infoAffectationEquipementGroupeEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname"
+							value="Affectation équipement pour groupe" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{OccupationEquipementMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+
+			<br></br>
+			<p:dataTable id="occupationLieuIndividuData" styleClass="affIdvStyle"
+				value="#{OccupationEquipementMgrBean.listRefIndividuDto}"
+				var="current" paginator="true" paginatorPosition="bottom"
+				emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+				<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+
+				<p:ajax event="page" update="@this" />
+				<p:ajax event="sort" update="@all" process="@form" />
+				<f:facet name="header">
+					<h:outputText
+						value="#{equipementmsgs.equipement_affectationequipement_individu}" />
+					<p:commandButton id="addIndividuButton" ajax="true" actionListener="#{OccupationEquipementMgrBean.activerRecherche()}"
+						icon="ui-icon-plusthick"
+						rendered="#{equipementCrudBean.createAllow}"
+						onclick="PF('dlgIndividuListAffect').show()">
+						<f:param name="idf" value="#{equipementBckBean.refEquipementDto.id}" />
+
+					</p:commandButton>
+
+
+				</f:facet>
+				<p:column sortBy="#{current.id}" width="30">
+					<f:facet name="header">
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectation_numero}" />
+					</f:facet>
+					<h:outputText value="#{current.id}" />
+				</p:column>
+				<p:column sortBy="#{current.nomLatin}" width="150">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_individu_name} " />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin} #{current.prenomLatin}" />
+				</p:column>
+
+				<p:column sortBy="#{current.dateDebut}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}" />
+					</f:facet>
+					<h:outputText value="#{current.dateDebut}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column sortBy="#{current.dateFin}" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</f:facet>
+					<h:outputText value="#{current.dateFin}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="width:8%"
+					rendered="#{equipementCrudBean.deleteAllow}" width="200">
+					<p:commandButton id="removeIndividuButton" icon="ui-icon-trash"
+						title="#{commonmsgs.button_delete}"
+						actionListener="#{OccupationEquipementMgrBean.deleteIndividu(current)}"
+						process="@(.affIdvStyle)" update="@(.affIdvStyle)">
+						<f:param name="idf"
+							value="#{equipementBckBean.refEquipementDto.id}" />
+						<p:confirm header="Confirmation"
+							message="#{commonmsgs.msg_delete_confirmation}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="updateIndvButton" icon="ui-icon-pencil"
+						title="#{commonmsgs.button_update}" process="@(.occupIndvStyle)"
+						update="@(.occupIndvStyle)"
+						rendered="#{equipementCrudBean.editAllow}"
+						action="infoAffectationEquipementIndividuEdit.xhtml"
+						onstart="PF('blockUIWidget').block()"
+						oncomplete="PF('blockUIWidget').unblock()">
+						<f:param name="idf" value="#{current.id}" />
+						<f:param name="idr" value="#{current.id}" />
+						<f:param name="entitiname"
+							value="Affectation équipement pour groupe" />
+						<f:setPropertyActionListener value="#{current}"
+							target="#{OccupationEquipementMgrBean.refOccupationLieuDto}" />
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+		</p:fieldset>
+	</h:form>
+
+
+
+	<p:dialog header="#{lieumsgs.lieu_list_ajout}"
+		widgetVar="dlgLieuListAffect" resizable="false" width="300"
+		draggable="true" appendTo="@(body)" modal="true">
+		<h:form id="listLieuOccupationForm" prependId="false">
+			<p:panelGrid id="descriptionLieu" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_selection_lieu}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="occupationLieuLieuData"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idLieu}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_affectationequipement_lieu}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_lieu_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_lieu}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefLieuDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_Type_affectation}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="lieuSelect"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idTypeOccupation}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_Type_affectation}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_Typeaffectation_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_Type_affectation}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateDebut}"
+							id="datedebutlieu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutlieu" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateFin}"
+							id="datefinlieu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefinlieu" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{OccupationEquipementMgrBean.addLieu()}"
+							update="@(.affLieuStyle)" oncomplete="dlgLieuListAffect.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+							<f:param name="editMode"
+								value="#{OccupationEquipementMgrBean.editMode}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" immediate="true"
+							oncomplete="dlgLieuListAffect.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog header="#{structuremsgs.structure_list_ajout}"
+		widgetVar="dlgStructureListAffect" resizable="false" width="300"
+		appendTo="@(body)" modal="true" draggable="true">
+		<h:form id="listStructureOccupationForm" prependId="false">
+			<p:panelGrid id="descriptionStr" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_selection_strucuture}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="occupationLieuStructureData"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idStructure}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_affectationequipement_structure}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_structure_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_strucuture}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_Type_affectation}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="structureSelect"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idTypeOccupation}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_Type_affectation}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_Typeaffectation_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_Type_affectation}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateDebut}"
+							id="datedebutstructure" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutstructure" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateFin}"
+							id="datefinstructure" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefinstructure" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{OccupationEquipementMgrBean.addStructure()}"
+							update="@(.affStrStyle)"
+							oncomplete="dlgStructureListAffect.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+							<f:param name="editMode"
+								value="#{OccupationEquipementMgrBean.editMode}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" immediate="true"
+							oncomplete="dlgStructureListAffect.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog header="#{groupemsgs.groupe_list_ajout}"
+		widgetVar="dlgGroupeListAffect" resizable="false" width="300"
+		draggable="true" appendTo="@(body)" modal="true">
+		<h:form id="listGroupeOccupationForm" prependId="false">
+			<p:panelGrid id="descriptionGrp" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectationequipement_selection_groupe}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="groupeData"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_affectationequipement_groupe}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_groupe_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_affectationequipement_selection_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_Type_affectation}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="groupeSelect"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idTypeOccupation}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_Type_affectation}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_Typeaffectation_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_Type_affectation}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut} *" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateDebut}"
+							id="datedebutgroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutgroupe" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateFin}"
+							id="datefingroupe" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefingroupe" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{OccupationEquipementMgrBean.addGroupe()}"
+							update="@(.affGrpStyle)" oncomplete="dlgGroupeListAffect.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+							<f:param name="editMode"
+								value="#{OccupationEquipementMgrBean.editMode}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							icon="ui-icon-close" immediate="true"
+							oncomplete="dlgGroupeListAffect.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog
+		header="#{equipementmsgs.equipement_affectationequipement_individu}" 
+		widgetVar="dlgIndividuListAffect" resizable="false" width="300"
+		appendTo="@(body)" modal="true" draggable="true">
+		<h:form id="listIndividuOccupationForm" prependId="false">
+	
+		
+		
+				<p:panelGrid id="descriptionIndividu" styleClass="noBorder1" >
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_affectationequipement_selection_Individu}*" />
+					</p:column>
+					<p:column>
+
+						<p:selectOneMenu id="individuSelect"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idIndividu}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_affectationequipement_individu}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_individu_required}">
+							<f:selectItem itemLabel="#{equipementmsgs.equipement_affectationequipement_selection_Individu}" itemValue="" />
+							<f:selectItems value="#{OccupationEquipementMgrBean.listIndividuDto}" />
+						</p:selectOneMenu>
+
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{equipementmsgs.equipement_Type_affectation}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="occupationLieuTypeOccupationData3"
+							style="text-align: left;width:160px"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.idTypeOccupation}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{equipementmsgs.equipement_Type_affectation}"
+							required="true"
+							requiredMessage="#{equipementmsgs.equipement_Typeaffectation_required}">
+							<f:selectItem
+								itemLabel="#{equipementmsgs.equipement_selection_Type_affectation}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeOccupation}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_debut} *" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateDebut}"
+							id="datedebutindividu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_debut}" required="true"
+							requiredMessage="#{equipementmsgs.equipement_date_debut_recired}">
+							<f:ajax render="datedebutindividu" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{equipementmsgs.equipement_date_fin}" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true"
+							value="#{OccupationEquipementMgrBean.refOccupationLieuDto.dateFin}"
+							id="datefinindividu" showButtonPanel="true"
+							label="#{equipementmsgs.equipement_date_fin}">
+							<f:ajax render="datefinindividu" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{OccupationEquipementMgrBean.addIndividu()}"
+							update="@(.affIdvStyle)"
+							oncomplete="dlgIndividuListAffect.hide()">
+							<f:param name="idf"
+								value="#{equipementBckBean.refEquipementDto.id}" />
+							<f:param name="editMode"
+								value="#{OccupationEquipementMgrBean.editMode}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							immediate="true" icon="ui-icon-close"
+							oncomplete="dlgIndividuListAffect.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+
+</ui:composition>

@@ -1,0 +1,109 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_dossier_employe_absence">
+
+
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{dossierEmployemsgs.dossier_employe_absence}s" />
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<p:dataTable var="absence" value="#{dossierEmployeBean.listAbsences}" id="absencesTable"
+						widgetVar="absencesTable" rowKey="#{absence.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{dossierEmployemsgs.dossier_employe_datable_list_absence_no_result}"
+						rowStyleClass="#{absence.jusitifee != null and absence.jusitifee == 'true' ? null : 'ui-messages-error'}"
+						>
+
+						
+						<p:column headerText="#{absenceMsgs.label_numero}"
+				style="width:2%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column  
+				headerText="#{absenceMsgs.label_type_absence}">
+				<h:outputText value="#{absence.nomenclatureDto.libelleLongFr}"/>
+			</p:column>
+			<p:column 
+				headerText="#{absenceMsgs.label_date_debut}">
+				<h:outputText value="#{absence.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column  
+				headerText="#{absenceMsgs.label_date_fin}">
+				<h:outputText value="#{absence.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			
+			<p:column  
+				headerText="#{absenceMsgs.label_heure_debut}">
+				<h:outputText value="#{absence.heureDebut}">
+				<f:convertDateTime type="date" pattern="HH:mm" />
+				</h:outputText>
+			</p:column>
+			<p:column  
+				headerText="#{absenceMsgs.label_heure_fin}">
+				<h:outputText value="#{absence.heureFin}">
+				<f:convertDateTime type="date" pattern="HH:mm" />
+				</h:outputText>
+			</p:column>
+			<p:column  
+				headerText="#{absenceMsgs.label_justifiee}">
+				<h:outputText value="#{absence.jusitifee != null and absence.jusitifee == 'true' ? 'Oui' : 'Non'}"/>
+			</p:column>
+						
+						
+					</p:dataTable>
+				</p:column>
+
+			</p:row> 
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+
+
+
+</ui:composition>
+

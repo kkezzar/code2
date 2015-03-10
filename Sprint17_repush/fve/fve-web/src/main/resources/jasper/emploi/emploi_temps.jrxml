@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="emploi_temps" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4f95686f-eaaf-43e0-806f-9eca79e24fb5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="3a93fb20-653a-4f8d-9a18-7d78dd86c639"/>
+	<subDataset name="Table Dataset 2" uuid="61b56a01-e178-4158-b772-5a68a3ac04cb"/>
+	<subDataset name="Table Dataset 3" uuid="4bea67aa-5b4b-42ba-b2b6-e379a6e246da"/>
+	<subDataset name="Table Dataset 4" uuid="5d0c58a0-ddab-4f5e-8f77-c30a82a5a924"/>
+	<subDataset name="dataset1" uuid="e906a59c-43c3-4448-8b82-f2890073cb16"/>
+	<subDataset name="dataset2" uuid="b6c8a4d1-a620-4f69-bc00-f66645c9749d"/>
+	<parameter name="ANNEE_ACADEMIQUE" class="java.lang.String"/>
+	<parameter name="PERIODE" class="java.lang.String"/>
+	<parameter name="NIVEAU" class="java.lang.String"/>
+	<parameter name="OFFRE_FORMATION" class="java.lang.String"/>
+	<parameter name="GROUPE_PEDAGOGIQUE" class="java.lang.String"/>
+	<parameter name="IMG_LOGO" class="java.lang.String"/>
+	<parameter name="IMG_PAPS" class="java.lang.String"/>
+	<field name="plageHoraire" class="java.lang.String"/>
+	<field name="celluleDimanche" class="java.util.List"/>
+	<field name="celluleLundi" class="java.util.List"/>
+	<field name="celluleMardi" class="java.util.List"/>
+	<field name="celluleMercredi" class="java.util.List"/>
+	<field name="celluleJeudi" class="java.util.List"/>
+	<field name="celluleVendredi" class="java.util.List"/>
+	<field name="celluleSamedi" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="83" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9974fd58-d1c8-4d92-8eda-3d8cafc7041d" x="347" y="1" width="122" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMPLOI DU TEMPS]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14df1738-0697-4537-ba56-b2d446c27860" x="0" y="22" width="802" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ANNEE_ACADEMIQUE} +" "+ $P{PERIODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="050a9cd1-9dbe-41fa-9627-18ecb9559873" x="0" y="63" width="802" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NIVEAU}+" "+$P{GROUPE_PEDAGOGIQUE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d5e0ca41-5c8d-4b9d-9349-0d4a0993d7bc" x="1" y="42" width="801" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{OFFRE_FORMATION}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="41c2c02b-8ee6-4d94-a5fa-1a3f8393c04b" x="0" y="0" width="171" height="68"/>
+				<imageExpression><![CDATA[$P{IMG_LOGO}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="59e5b754-0929-4395-a43b-ba0ac961fe49" x="663" y="0" width="139" height="68"/>
+				<imageExpression><![CDATA[$P{IMG_PAPS}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="413d1ef1-5d57-440d-943b-2496e3175e06" x="75" y="0" width="145" height="19" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Solid" lineColor="#333333"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="9ca8f8f8-ee9d-49b1-849c-7615b1f5696b" x="220" y="0" width="145" height="19" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="44e57447-5c42-4bac-84f5-3db44911ba03" x="365" y="0" width="145" height="19" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="53629025-f359-40a5-829d-55ec74e07e92" x="511" y="0" width="145" height="19" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="dc500753-9363-48bb-845d-6d811ea62f58" x="656" y="0" width="145" height="19" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ced47a70-1642-4fd9-8479-2a9cd6c768e5" x="95" y="0" width="95" height="20" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DIMANCHE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="14d1fee2-5c01-43d9-b1e8-18aa1a7e6cad" x="395" y="0" width="94" height="18" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[MARDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e74b2c44-0255-45d5-a008-5cee451a5159" x="535" y="2" width="98" height="18" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[MERCREDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bad7f2c8-cea0-48ad-973b-1f033a1d5d5f" x="244" y="0" width="93" height="20" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[LUNDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f50216e4-7e9a-4bfa-b9e3-035c08c672f1" x="681" y="0" width="98" height="18" backcolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[JEUDI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="48" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="76fe4267-367f-49d0-88ad-67e6298d87a1" x="75" y="-1" width="145" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="b882a83a-8782-4e14-91a5-81cd67b186bc" x="220" y="-1" width="145" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="bc563c50-493a-4005-bf2e-7be822ee4e9c" x="365" y="-1" width="145" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="c85df946-a00d-4e5f-acdd-3dd89028210d" x="511" y="-1" width="145" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="f17263aa-ceb6-432f-9c02-4b78bc0257ce" x="656" y="-1" width="145" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2b5595e8-85d6-41e6-a5ad-d0d6badca878" x="74" y="0" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleDimanche}== null ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleDimanche}== null ? "" : $F{celluleDimanche}.get( 0 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c608f60a-6313-4902-a19c-840e51abed79" x="75" y="15" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleDimanche}== null || $F{celluleDimanche}.size()<2 ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleDimanche}== null || $F{celluleDimanche}.size()<2 ? "" : $F{celluleDimanche}.get( 1 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="90a2b6b7-fbb1-44e6-9a81-039b59df686b" x="75" y="30" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleDimanche}== null || $F{celluleDimanche}.size()<3 ? Boolean.FALSE:Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleDimanche}== null || $F{celluleDimanche}.size()<3 ? "":$F{celluleDimanche}.get( 2 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9285f7a1-0b6b-412b-9637-1be48d697d7f" x="220" y="0" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleLundi}== null ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleLundi}== null ? "" : $F{celluleLundi}.get( 0 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a6863805-073f-4caf-a9da-e59ed5d71992" x="511" y="0" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMercredi}== null ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMercredi}== null ? "" : $F{celluleMercredi}.get( 0 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0b437796-07c7-4934-aa92-b826f9385453" x="657" y="0" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleJeudi}== null ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleJeudi}== null ? "" : $F{celluleJeudi}.get( 0 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fdfb7f34-66c2-401f-b369-6cd3be702858" x="220" y="15" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleLundi}== null || $F{celluleLundi}.size()<2 ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleLundi}== null || $F{celluleLundi}.size()<2 ? "" : $F{celluleLundi}.get( 1 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="080cc2f5-41a6-427d-adba-20cbc44a71cb" x="365" y="15" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMardi}== null || $F{celluleMardi}.size()<2 ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMardi}== null || $F{celluleMardi}.size()<2 ? "" : $F{celluleMardi}.get( 1 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="484edad0-c0e5-46bd-97fe-840de9a0aca8" x="511" y="15" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMercredi}== null || $F{celluleMercredi}.size()<2 ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMercredi}== null || $F{celluleMercredi}.size()<2 ? "" : $F{celluleMercredi}.get( 1 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="eb955c17-e0b9-4e95-9801-facfaef65681" x="656" y="16" width="146" height="16">
+					<printWhenExpression><![CDATA[($F{celluleJeudi}== null || $F{celluleJeudi}.size()<2 ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleJeudi}== null || $F{celluleJeudi}.size()<2 ? "" : $F{celluleJeudi}.get( 1 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3a21d753-e098-4e8a-86ba-09cc29276065" x="220" y="30" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleLundi}== null || $F{celluleLundi}.size()<3 ? Boolean.FALSE:Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleLundi}== null || $F{celluleLundi}.size()<3 ? "":$F{celluleLundi}.get( 2 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ac1c02d5-e12a-465e-8579-c6e67eee4322" x="365" y="30" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMardi}== null || $F{celluleMardi}.size()<3 ? Boolean.FALSE:Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMardi}== null || $F{celluleMardi}.size()<3 ? "":$F{celluleMardi}.get( 2 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="53c9c022-3612-4d96-bcd9-ed83b7b4ae75" x="511" y="30" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMercredi}== null || $F{celluleMercredi}.size()<3 ? Boolean.FALSE:Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMercredi}== null || $F{celluleMercredi}.size()<3 ? "":$F{celluleMercredi}.get( 2 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="88126fe2-e173-4e6d-bc02-7e9f82fcd5eb" x="657" y="30" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleJeudi}== null || $F{celluleJeudi}.size()<3 ? Boolean.FALSE:Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleJeudi}== null || $F{celluleJeudi}.size()<3 ? null:$F{celluleJeudi}.get( 2 ))]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7ba53435-03ec-4193-a2ab-f4626efd28a4" x="365" y="0" width="145" height="16">
+					<printWhenExpression><![CDATA[($F{celluleMardi}== null ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{celluleMardi}== null ? "" : $F{celluleMardi}.get( 0 ))]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="0dc912ea-a309-4458-8c43-891e87360331" x="2" y="-1" width="73" height="48" forecolor="#333333"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c0d84d36-7508-4cd8-b187-3f08298e76be" x="1" y="10" width="72" height="30" backcolor="#A0A0A0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{plageHoraire}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement uuid="1e67bc98-c167-4941-93b0-9eab8b88f71b" x="1" y="5" width="138" height="16"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

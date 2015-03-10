@@ -1,0 +1,628 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+	 #{serviceOnouMsgs.service_onou_page_title_enregistrer_demandes}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="right">
+						<p:inputText id="sMatricule" placeholder="Matricule"
+							value="#{inscriptionAdministrativeMBean.searchByMatricule}" />
+						<p:separator />
+						<p:inputText id="sNom" placeholder="Nom"
+							value="#{inscriptionAdministrativeMBean.searchByNom}" />
+						<p:spacer height="2px"></p:spacer>
+						<p:inputText id="sPrenom" placeholder="Prénom"
+							value="#{inscriptionAdministrativeMBean.searchByPrenom}" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search"
+							update="ResultSearchDataTable" process="form_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{inscriptionAdministrativeMBean.searchAction()}"></p:commandButton>
+						<p:commandButton id="rechercheAvc" value="Recherche avancée"
+							styleClass="ui-button-vert-o" title="Recherche avancée">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable"
+					value="#{inscriptionAdministrativeMBean.dossiersInscAdminModel}"
+					var="currentInscription" rowKey="#{currentInscription.id}"
+					style="margin-top:5px" resizableColumns="true"
+					selectionMode="single" paginator="true" rows="5" lazy="true"
+					rowsPerPageTemplate="5,10,50,100" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{inscriptionAdministrativeMBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_numero_matricule}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.numeroMatricule}" />
+					</p:column>
+
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuNomLatin}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_prenom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuPrenomLatin}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_date_naissance}" />
+
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.individuDateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_annee_academique}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.anneeAcademiqueCode}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_domaine}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleDomaine}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_filiere}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleFiliere}" />
+					</p:column>
+					<p:column style="width:15%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_specialite}" />
+						</f:facet>
+						<h:outputText value="#{currentInscription.refLibelleSpecialite}" />
+					</p:column>
+					<p:column style="width:8%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{inscriptionAdministrativeMsgs.dossier_inscription_niveau}" />
+						</f:facet>
+
+						<h:outputText value="#{currentInscription.refCodeNiveau}" />
+					</p:column>
+					
+					<p:column style="width:7%">
+						<f:facet name="header">
+							<h:outputText
+								value="Hébérgement" />
+						</f:facet>
+							<h:outputText value="#{commonmsgs.label_oui}" rendered="#{currentInscription.herbergementDemande eq true}" />
+							<h:outputText value="#{commonmsgs.label_non}" rendered="#{currentInscription.herbergementDemande eq false}" />
+					</p:column>
+
+					<p:column style="width:5%">
+						<f:facet name="header">
+							<h:outputText
+								value="Bourse" />
+						</f:facet>
+							<h:outputText value="#{commonmsgs.label_oui}" rendered="#{currentInscription.bourseDemandee eq true}" />
+							<h:outputText value="#{commonmsgs.label_non}" rendered="#{currentInscription.bourseDemandee eq false}" />
+					</p:column>
+					
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{inscriptionAdministrativeMBean.crud}">
+
+					<!-- Information dossier d'inscription -->
+					<p:tab
+						title="#{inscriptionAdministrativeMsgs.dossier_inscription_tab_dossier_inscription}">
+						<!-- CRUD form -->
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<!-- Detail de l'etudiant -->
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="Détail de l'étudiant" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nin} " />
+									</p:column>
+									<p:column
+										styleClass="#{inscriptionAdministrativeMBean.dossierInscription.nin}">
+										<h:outputText value="" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_matricule} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.numeroMatricule}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuNomLatin.toUpperCase()}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuNomArabe.toUpperCase()}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuPrenomLatin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom_ar} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuPrenomArabe}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_date_naissance} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuDateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Lieu de naissance" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuLieuNaissance}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Nationalité" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuNationaliteLibelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Nationalité arabe" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.individuNationaliteLibelleLongAr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_page_title_detail}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column style="width:250px">
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_annee_academique} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.anneeAcademiqueCode}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_date_creation} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.dateCreation}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_type_inscription} " />
+									</p:column>
+									<p:column styleClass="value" colspan="3">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.typeDossierLibelleFr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_cycle} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.cycleLibelleLongLt}">
+
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_niveau} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.niveauLibelleLongLt}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_domaine}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.refLibelleDomaine}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_filiere}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.refLibelleFiliere}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_specialite}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.refLibelleSpecialite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{inscriptionAdministrativeMsgs.dossier_inscription_offre_formation}" />
+									</p:column>
+									<p:column styleClass="value" >
+										<h:outputText
+											value="#{inscriptionAdministrativeMBean.dossierInscription.offreFormationLibelleFr}" />
+									</p:column>
+								</p:row>
+
+							</p:panelGrid>
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column colspan="6" styleClass="title">
+										<h:outputText value="Information service de l'ONOU / Hébérgement" />
+									</p:column>
+								</p:row>
+
+   								<p:row>
+									<p:column style="width:250px">
+										<h:outputText value="Demandé" />
+									</p:column>
+
+									<p:column styleClass="value">
+										<p:selectBooleanCheckbox
+											value="#{inscriptionAdministrativeMBean.dossierInscription.herbergementDemande}" />
+									</p:column>
+											
+									<p:column styleClass="right">
+										<h:outputText value="Type demande" />
+									</p:column>
+									<p:column styleClass="value">
+										   <p:selectOneMenu value="#{inscriptionAdministrativeMBean.dossierInscription.idTypeDemandeHebergement}">								            
+								            <f:selectItem
+												itemLabel="Choisir type de la demande" itemValue="" />
+											<f:selectItems
+												value="#{inscriptionAdministrativeMBean.listeItemsTypesHebergement}" />
+								        </p:selectOneMenu>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="Information service de l'ONOU / Bourse" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Demandée" />
+									</p:column>
+									<p:column styleClass="value">
+										<p:selectBooleanCheckbox
+											value="#{inscriptionAdministrativeMBean.dossierInscription.bourseDemandee}" />
+									</p:column>
+								
+									<p:column styleClass="right">
+										<h:outputText value="Type demande" />
+									</p:column>
+									
+									<p:column styleClass="value">								
+										   <p:selectOneMenu value="#{inscriptionAdministrativeMBean.dossierInscription.idTypeDemandeBourse}">								            
+								            <f:selectItem
+												itemLabel="Choisir type de la demande"
+												itemValue="" />
+											<f:selectItems
+												value="#{inscriptionAdministrativeMBean.listeItemsTypesBourses}" />
+								        </p:selectOneMenu>
+									</p:column>
+								</p:row> 
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+
+										<p:column colspan="4">
+
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" icon="ui-icon-disk"
+												update=":form_crud :form_search"
+												styleClass="ui-button-save"
+												actionListener="#{inscriptionAdministrativeMBean.saveDecisionONOUAction()}">
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												actionListener="#{inscriptionAdministrativeMBean.cancelDossierInscriptionAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+							
+						</h:form>
+					</p:tab>
+
+					<!-- Situation derniere inscription -->
+					<p:tab
+						title="#{inscriptionAdministrativeMsgs.dossier_inscription_tab_situation_derniere_inscription}">
+						<p:panelGrid
+							styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_annee_academique} " />
+								</p:column>
+								
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.anneeAcademiqueCode}">
+
+									</h:outputText>
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_etablissement} " />
+								</p:column>
+								
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.llEtablissementLatin}" />
+								</p:column>
+			
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_cycle}" />
+								</p:column>
+
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.cycleLibelleLongLt}" />
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_niveau}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.niveauLibelleLongLt}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_domaine}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.refLibelleDomaine}" />
+
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_filiere}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.refLibelleFiliere}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_specialite}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.refLibelleSpecialite}">
+
+									</h:outputText>
+								</p:column>
+
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_offre_formation}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText value="#{inscriptionAdministrativeMBean.ancienDossierInscriptionAdministrativeDto.offreFormationLibelleFr}">
+
+									</h:outputText>
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column styleClass="title" colspan="4">
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_decision}" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_decision_jury}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText
+										value="#{inscriptionAdministrativeMBean.bilanSessionAnnuelDto.typeDecisionLibelleFr}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText
+										value="#{dossierReinscriptionMsgs.dossier_reinscription_fiche_voeu_moyenne_admission}" />
+								</p:column>
+								<p:column styleClass="value">
+									<h:outputText
+										value="#{inscriptionAdministrativeMBean.bilanSessionAnnuelDto.moyenne}" />
+								</p:column>
+							</p:row>
+
+						</p:panelGrid>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}"
+						disabled="#{inscriptionAdministrativeMBean.dossierInscription.id == null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+							<c:set var="entity" value="DossierInscriptionAdministrative"
+								scope="request" />
+							<c:set var="identifiant"
+								value="#{inscriptionAdministrativeMBean.dossierInscription.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="DossierInscriptionAdministrative" />
+							<ui:param name="identifiant"
+								value="#{inscriptionAdministrativeMBean.dossierInscription.id.toString()}" />
+							<ui:param name="editionMode" value="#{false}" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,143 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<h:form id="form_dossier_medical_vaccins">
+
+
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{suiviMedicalMgs.vaccins_title}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="vaccin" value="#{dossierMedicalMBean.listVaccins}" id="vaccinsTable"
+						widgetVar="vaccinsTable" rowKey="#{vaccin.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{suiviMedicalMgs.vaccin_datable_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddVaccin" styleClass="ui-button-bleu" title="ajouter vaccin" icon="ui-icon-plusthick"  
+										
+										process="@this vaccinsTable" 
+										ajax="true"
+										immediate="true" 
+										update="vaccinsTable @this"
+										action="#{dossierMedicalMBean.addVaccin()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{suiviMedicalMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column
+							headerText="#{suiviMedicalMgs.vaccin}">
+							<p:selectOneMenu style="width:100%" required="true" requiredMessage="#{suiviMedicalMgs.vaccin_required}"
+								value="#{vaccin.nomenclatureDto.id}"
+								label="#{suiviMedicalMgs.vaccin_select}">
+								<f:selectItem
+									itemLabel="#{suiviMedicalMgs.vaccin_select}"
+									itemValue="" />
+								<f:selectItems value="#{dossierMedicalMBean.listeNcVaccin}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column headerText="#{suiviMedicalMgs.date_vaccin}">
+							<p:calendar navigator="true" value="#{vaccin.dateVaccin}" style="width:100%" required="true"
+								label="#{suiviMedicalMgs.date_vaccin}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{suiviMedicalMgs.date_vaccin_required}">
+							</p:calendar>
+						</p:column>
+						<p:column headerText="#{suiviMedicalMgs.date_rappel}">
+							<p:calendar navigator="true" value="#{vaccin.dateRappel}" style="width:100%" required="true"
+								label="#{suiviMedicalMgs.date_rappel}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{suiviMedicalMgs.date_rappel_required}">
+							</p:calendar>
+						</p:column>
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveVaccin"  
+									action="#{dossierMedicalMBean.removeVaccin()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="vaccinsTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{dossierMedicalMBean.selectedVaccinIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			<p:row>
+			<p:column>
+				<p:toolbar  styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" process="@form"
+						 icon="ui-icon-disk" update=":tabViewEdit:form_dossier_medical_vaccins:vaccinsTable"
+						actionListener="#{dossierMedicalMBean.onSaveVaccins}">
+
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" 
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{dossierMedicalMBean.init()}">
+						</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

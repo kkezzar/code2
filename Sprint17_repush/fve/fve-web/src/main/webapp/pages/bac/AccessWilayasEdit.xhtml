@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{referentielOrientationMsgs.REF_ORIENTATION_GERER_ACCESS_WILAYAS}
+	</ui:define>
+	
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="outputPanel">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+				<h:form id="form_search">
+
+					<!-- toolbar -->
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton icon="ui-icon-plus" value="Nouveau"
+						
+								onstart="PF('page').block()"
+								onsuccess="PF('page').unblock()"
+								actionListener="#{accessWilayaMBean.addAccessWilayaAction()}"
+								update=":form_crud"></p:commandButton>
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+							<!-- 							<p:selectOneMenu id="selectAnnee" style="margin:5px 5px 0px 5px;"
+								value="#{sessionBeanFve.printSearchDto.anneeAcademiqueId}"
+								label="#{printMsgs.print_anne_univeristaire}">
+								<f:selectItem
+									itemLabel="#{printMsgs.print_select_annee_academique}"
+									itemValue="" />
+								<f:selectItems value="#{accessWilayaMBean.listAnneeAcademique}" />
+							</p:selectOneMenu> -->
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="20px"></p:spacer>
+
+					<p:dataTable id="dtTbl_accessWilaya"
+						value="#{accessWilayaMBean.accessWilayaList}"
+						var="currentAcessWilaya" rowKey="#{currentAcessWilaya.id}"
+						selectionMode="single" paginator="true" rows="5"
+						paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+						<f:param name="acessWilayaId" value="#{currentAcessWilaya.id}" />
+
+						<!-- 						<p:ajax event="page" update="dtTbl_accessWilaya"
+							onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()"></p:ajax> -->
+
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{accessWilayaMBean.onRowSelect}" process="@this"
+							onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()" update=":form_crud" />
+
+						<f:facet name="header">
+							<h:outputText value="Liste des accès wilayas" />
+						</f:facet>
+
+						<p:column style="width:100px"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ANNEE_ACADEMIQUE}">
+							<h:outputText
+								value="#{currentAcessWilaya.anneeAcademiquelibelle}" />
+						</p:column>
+
+						<p:column style="width:40%"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}"
+							sortBy="#{currentAcessWilaya.refCodeDomaine}">
+							<h:outputText value="#{currentAcessWilaya.domaineLibelleLt}" />
+						</p:column>
+
+						<p:column style="width:30%"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}"
+							sortBy="#{currentAcessWilaya.refCodeFiliere}">
+							<h:outputText value="#{currentAcessWilaya.filiereLibelleLt}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</h:form>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<!-- CRUD form -->
+				<h:form id="form_crud">
+					<p:panelGrid styleClass="ui-panelgrid-full-width ui-panelgrid-form-no-border"
+						rendered="#{accessWilayaMBean.crud}">
+
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">#{referentielOrientationMsgs.REF_ORIENTATION_ENREGISTRER_ACCESS_WILAYA}</p:column>
+							</p:row>
+						</f:facet>
+
+						<!-- Annee acaemdique -->
+						<p:row>
+
+							<p:column style="width:200px">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ANNEE_ACADEMIQUE}" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="listAnneeAcademique"
+									value="#{accessWilayaMBean.accessWilayaDto.idAnneeAcademique}"
+									disabled="true">
+									<f:selectItems value="#{accessWilayaMBean.listAnneeAcademique}"
+										var="d" itemLabel="#{d.label}" itemValue="#{d.value}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<!-- domaine -->
+						<p:row>
+							<p:column styleClass="required">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="listDomaines" style="width:250px"
+									value="#{accessWilayaMBean.accessWilayaDto.refCodeDomaine}"
+									required="true"
+									requiredMessage="#{referentielOrientationMsgs.ref_orientation_domaine_obligatoire}">
+									<f:selectItem
+										itemLabel="#{dossierTransfertMsgs.dossier_transfert_select_domaine}"
+										itemValue="" />
+									<f:selectItems value="#{accessWilayaMBean.listDomaines}"
+										var="d" itemLabel="#{d.label}" itemValue="#{d.value}" />
+									<p:ajax
+										listener="#{accessWilayaMBean.handleDomainesListChange}"
+										event="valueChange"
+										update="listFilieres,listDomaines,form_crud" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<!-- filiere -->
+						<p:row>
+
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu id="listFilieres" style="width:250px"
+									value="#{accessWilayaMBean.accessWilayaDto.refCodeFiliere}">
+									<f:selectItem
+										itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_filiere}"
+										itemValue="" />
+									<p:ajax event="valueChange" />
+									<f:selectItems value="#{accessWilayaMBean.listFilieres}"
+										var="d" itemLabel="#{d.label}" itemValue="#{d.value}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<!-- Wilayas -->
+						<p:row>
+							<p:column>
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_WILAYAS}" />
+							</p:column>
+
+							<p:column>
+								<p:pickList id="pickList" value="#{accessWilayaMBean.wilayas}"
+									var="wilaya" itemValue="#{wilaya}"
+									itemLabel="#{wilaya.wilayaLibelleLt}"
+									converter="wilayaConverter">
+									<p:ajax event="transfer"
+										listener="#{accessWilayaMBean.onTransferWilayas}" />
+								</p:pickList>
+							</p:column>
+						</p:row>
+
+						<!-- Actions -->
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="2">
+									<p:commandButton id="saveBtn" icon="ui-icon-disk"
+										value="Enregistrer" validateClient="true" styleClass="ui-button-save"
+										update="form_crud,:form_search"
+										actionListener="#{accessWilayaMBean.saveAccessWilaya()}"></p:commandButton>
+
+									<p:spacer width="5px"></p:spacer>
+
+									<p:commandButton icon="ui-icon-minus" value="Supprimer" styleClass="ui-button-delete"
+										id="deleteAccesWilaya" update=":form_crud, :form_search"
+										disabled="#{accessWilayaMBean.accessWilayaDto.id eq 0}"
+										actionListener="#{accessWilayaMBean.deleteAccessWilaya()}">
+										<p:confirm header="Confirmation"
+											message="#{referentielOrientationMsgs.ref_orientation_delete_acces_wilaya_confirm_msg}"
+											icon="ui-icon-alert" />
+									</p:commandButton>
+
+									<p:spacer width="10px"></p:spacer>
+
+									<p:commandButton icon="ui-icon-cancel" value="Annuler"
+										immediate="true" update="form_crud,:form_search"
+										action="#{accessWilayaMBean.cancelAccessWilayaAction()}"></p:commandButton>
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:panelGrid>
+
+				</h:form>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

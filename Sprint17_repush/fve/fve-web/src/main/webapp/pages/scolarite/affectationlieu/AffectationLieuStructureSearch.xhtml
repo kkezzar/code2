@@ -1,0 +1,199 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:fieldset
+		legend="#{affectationLieuStructureMsgs.affect_lieu_structure_search_title}"
+		toggleable="true">
+		
+			<h:form id="form_affectation_lieu_structure_Search">
+			<h:panelGrid columns="1">
+			<p:panelGrid >
+
+
+					<p:row >
+						<p:column style="width:250px">
+					<p:selectOneMenu id="anneeS" filter="true" style="width:250px"
+						filterMatchMode="startsWith"
+						value="#{affectationLieuStructureBean.searchDto.anneeAcademiqueId}"
+						label="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique}">						
+						<f:selectItem
+							itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{affectationLieuStructureBean.anneeAcademiqueList}" />
+					</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:200px">
+					<p:selectOneMenu id="periodiciteS" filter="true"  style="width:200px"
+						filterMatchMode="startsWith"
+						value="#{affectationLieuStructureBean.searchDto.periodiciteId}"
+						label="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite}">	
+						<p:ajax update=":form_affectation_lieu_structure_Search:periodeS"
+							onstart="PF('affectationLieuStructureFormBlock').block()"
+							onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+							listener="#{affectationLieuStructureBean.periodiciteSChanged}" />					
+						<f:selectItem
+							itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{affectationLieuStructureBean.periodiciteList}" />
+							</p:selectOneMenu>
+							
+						</p:column>
+					<p:column style="width:200px">	
+					<p:selectOneMenu id="periodeS" filter="true"  style="width:200px"
+						filterMatchMode="startsWith"
+						value="#{affectationLieuStructureBean.searchDto.periodeId}"
+						label="#{affectationLieuStructureMsgs.affect_lieu_structure_periode}">						
+						<f:selectItem
+							itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_periode_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{affectationLieuStructureBean.periodeList}" />
+							</p:selectOneMenu>
+							
+							</p:column>
+							</p:row>
+							<p:row >
+					<p:column style="width:250px">
+					<p:selectOneMenu id="jourS" filter="true" style="width:250px"
+						filterMatchMode="startsWith"
+						value="#{affectationLieuStructureBean.searchDto.jourId}"
+						label="#{affectationLieuStructureMsgs.affect_lieu_structure_jour}">						
+						<f:selectItem
+							itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_jour_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{affectationLieuStructureBean.jourList}" />
+							</p:selectOneMenu>
+							
+							</p:column>
+					<p:column style="width:200px">
+					<p:selectOneMenu id="plageHoraireS" filter="true" style="width:200px"
+						filterMatchMode="startsWith"
+						value="#{affectationLieuStructureBean.searchDto.plageHoraireId}"
+						label="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire}">						
+						<f:selectItem
+							itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{affectationLieuStructureBean.plageHoraireList}" />
+							</p:selectOneMenu>
+							</p:column>
+					<p:column style="width:200px">
+							
+				</p:column>
+				</p:row>
+							</p:panelGrid>
+				<p:toolbar id="affectationLieuStructureSearchToolBar" styleClass="toolBarMesrs" style="margin:0;">
+				<p:toolbarGroup>
+						
+                <p:commandButton id="btnSearch" value="Rechercher"
+								update="dtTbl_affectLieuStruct :form_affectation_lieu_structure_detail"
+								icon="ui-icon-search"
+								actionListener="#{affectationLieuStructureBean.searchAffectationLieuStructureList()}"
+								onstart="PF('affectationLieuStructureFormBlock').block()"
+								oncomplete="PF('affectationLieuStructureFormBlock').unblock()">
+							</p:commandButton>
+				</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+					<p:commandButton id="btnAddaffectationLieuStructure" value="#{commonmsgs.bouton_nouveau}" rendered="#{editMode}" actionListener="#{affectationLieuStructureBean.addAffectationLieuStructure()}"  icon="ui-icon-plusthick"  immediate="true"  resetValues="true"
+							 ajax="true" update=":form_affectation_lieu_structure_detail" 
+							 onstart="PF('affectationLieuStructureFormBlock').block()"
+							onsuccess="PF('affectationLieuStructureFormBlock').unblock()" >
+						</p:commandButton>
+						
+				</p:toolbarGroup>
+				</p:toolbar>
+				</h:panelGrid>
+							<br></br>
+							
+			<p:dataTable id="dtTbl_affectLieuStruct" 
+					value="#{affectationLieuStructureBean.affectationLieuStructureList}"
+					var="affectLieuStruct" rowKey="#{affectLieuStruct.id}"  rowIndexVar="rowIndex"
+					style="margin-top:5px;" resizableColumns="true"
+					selectionMode="single" paginator="true" rows="5" lazy="true"
+					paginatorPosition="bottom"					
+					emptyMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_datable_list_no_result}">
+
+					<p:ajax event="rowSelect"
+						listener="#{affectationLieuStructureBean.onRowSelect}"
+						update=":form_affectation_lieu_structure_detail"
+						onstart="PF('affectationLieuStructureFormBlock').block()"
+						onsuccess="PF('affectationLieuStructureFormBlock').unblock()" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{affectationLieuStructureMsgs.affect_lieu_structure_resultat_recherche}" />
+					</f:facet>
+          <p:column headerText="#{examenMsgs.examen_numero}" style="width:3%">
+				<h:outputText value="#{rowIndex+1}" styleClass="labelValue" />
+			</p:column>
+                       <p:column style="width:14%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.anneeAcademiqueCode} " />
+					</p:column>
+                   <p:column style="width:12%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_periode}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.periodeLibelleLongFr} " />
+					</p:column>
+					<p:column style="width:10%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_jour}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.jourLibelleFr}" />
+					</p:column>
+
+					<p:column style="width:12%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.plageHoraireLibelleFr}" />
+					</p:column>
+
+					<p:column style="width:12%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.refLieuDesignation} " />
+					</p:column>
+					<p:column style="width:37%">
+						<f:facet name="header">
+							<h:outputText
+								value="#{affectationLieuStructureMsgs.affect_lieu_structure_structure}" />
+						</f:facet>
+
+						<h:outputText value="#{affectLieuStruct.llStructureLatin} " />
+					</p:column>
+
+					
+
+				</p:dataTable>
+			
+					</h:form>
+			
+		</p:fieldset>
+
+
+	
+</ui:composition>
+

@@ -1,0 +1,59 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+
+       
+            <h:outputText value="#{habilitationmsgs.domaine_description}" styleClass="value" /> 
+              <hr></hr>
+       <p:panelGrid id="editDomaineDescription" styleClass="ui-panelgrid-full-width" rendered="#{domaineBckBean.refDomaineDto.id!=null}"> 
+            
+            <p:row>
+                   <p:column style="width:10%">
+					 <h:outputText value="#{habilitationmsgs.domaine_identifiant_label}" />
+				  </p:column>
+				<p:column style="width:20%">
+					<h:outputText id="identifiant" styleClass="value"
+						value="#{domaineBckBean.refDomaineDto.identifiant}"/>
+				</p:column> 
+			       <p:column style="width:10%">
+					 <h:outputText value="#{habilitationmsgs.domaine_name_label}" />
+				  </p:column>
+				<p:column style="width:20%">
+					<h:outputText id="nom" styleClass="value"
+						value="#{domaineBckBean.refDomaineDto.nom}"/>
+				</p:column>
+				 
+			       <p:column style="width:10%">
+					 <h:outputText value="#{habilitationmsgs.domaine_name_arabe_label}" />
+				  </p:column>
+				<p:column style="width:20%">
+					<h:outputText id="nomArabe" styleClass="value"
+						value="#{domaineBckBean.refDomaineDto.nomArabe}"/>
+				</p:column>  
+			</p:row>
+			</p:panelGrid>
+			<p:panelGrid id="parentGrid" styleClass="ui-panelgrid-full-width" rendered="#{domaineBckBean.refDomaineDto.idfDomaineParent!=null}">
+			<p:row>
+                   <p:column style="width:15%">
+					 <h:outputText value="#{habilitationmsgs.domaine_idf_domaine_parent_label}" />
+				  </p:column>
+				<p:column  style="width:35%">
+					<h:outputText id="idfParent" styleClass="value"
+						value="#{domaineBckBean.refDomaineDto.idfDomaineParent}"/>
+				</p:column> 
+			       <p:column style="width:15%">
+					 <h:outputText value="#{habilitationmsgs.domaine_name_domaine_parent_label}" />
+				  </p:column>
+				<p:column style="width:35%">
+					<h:outputText id="nomParent" styleClass="value"
+						value="#{domaineBckBean.refDomaineDto.nomDomaineParent}"/>
+				</p:column> 
+			</p:row>
+			
+			    </p:panelGrid>
+
+</ui:composition>

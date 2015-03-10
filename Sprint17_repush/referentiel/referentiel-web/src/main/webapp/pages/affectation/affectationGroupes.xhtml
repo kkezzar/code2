@@ -1,0 +1,184 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{affectationMgrBean.groupeCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+
+	<h:form id="affectationGroupesFormId" 
+		dir="#{localeBean.dir}">
+		<pe:blockUI target="affectationGroupesData" widgetVar="affGrpWidget">
+			<h:graphicImage value="/images/ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:dataTable id="affectationGroupesData" styleClass="affGrpOutPanel"
+			paginator="true" paginatorPosition="bottom" dir="#{localeBean.dir}"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="5"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{affectationMgrBean.listRefAffectationGroupeDto}"
+			var="current">
+
+			<f:facet name="header">
+				<h:outputText dir="#{localeBean.dir}"
+					value="#{affectationmsgs.affectation_groupes_affectes}      " />
+				<p:commandButton id="addGroupeButton"
+					actionListener="#{affectationMgrBean.beforeAdd}" ajax="true"
+					onstart="PF('affGrpWidget').block()"
+					onsuccess="PF('affGrpWidget').unblock()" icon="ui-icon-plusthick"
+					oncomplete="PF('dlgAffecterGroupe').show()"
+					rendered="#{affecGroupeCrudBean.createAllow}" />
+			</f:facet>
+			
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@(.affGrpOutPanel)"
+				process="@(.affGrpOutPanel)" />
+			<p:column sortBy="#{current.llGroupe}" width="30%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_groupe}" />
+				</f:facet>
+				<h:outputText value="#{current.llGroupe}" />
+			</p:column>
+			<p:column sortBy="#{current.roleLibelleLongFr}" width="30%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_role}" />
+				</f:facet>
+				<h:outputText value="#{current.roleLibelleLongFr}" />
+			</p:column>
+			<p:column sortBy="#{current.dateDebut}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_debut}" />
+				</f:facet>
+				<h:outputText value="#{current.dateDebut}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{current.dateFin}" width="15%">
+				<f:facet name="header">
+					<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+				</f:facet>
+				<h:outputText value="#{current.dateFin}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column style="width:10%"
+				rendered="#{affecGroupeCrudBean.deleteAllow}">
+				<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					onstart="PF('affGrpWidget').block()"
+					onsuccess="PF('affGrpWidget').unblock()"
+					actionListener="#{affectationMgrBean.deleteGroupe(current)}"
+					process="@(.affGrpOutPanel)" update="@(.affGrpOutPanel)">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+					
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+	<p:dialog header="#{affectationmsgs.affectation_groupe_title}" position="center"
+		widgetVar="dlgAffecterGroupe" modal="true" resizable="false" closeOnEscape="true"
+		appendTo="@(body)" width="650" height="130">
+		<h:form id="dlgAffecterGroupeForm" >
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_groupe} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:selectOneMenu id="selectGroupe"
+							style="text-align: left;width:100%"
+							value="#{affectationMgrBean.refAffectationDto.idGroupe}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_selection_groupe}"
+							required="true"
+							requiredMessage="#{affectationmsgs.affectation_groupe_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:20%">
+						<h:outputText
+							value="#{affectationmsgs.affectation_selection_role} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:selectOneMenu id="selectionGrpRole"
+							style="text-align: left;width:100%"
+							value="#{affectationMgrBean.refAffectationDto.roleId}"
+							filter="true" filterMatchMode="contains"
+							label="#{affectationmsgs.affectation_role}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_role_required}">
+							<f:selectItem
+								itemLabel="#{affectationmsgs.affectation_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_debut} *" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" binding="#{grpFirstDate}"
+							value="#{affectationMgrBean.refAffectationDto.dateDebut}"
+							id="debutGrp" showButtonPanel="true" validator="dateValidator"
+							label="#{affectationmsgs.affectation_date_debut}" required="true"
+							requiredMessage="#{affectationmsgs.affectation_debut_required}"
+							pattern="dd/MM/yyyy" />
+
+					</p:column>
+					<p:column style="width:20%">
+						<h:outputText value="#{affectationmsgs.affectation_date_fin}" />
+					</p:column>
+					<p:column style="width:30%">
+						<p:calendar navigator="true" validator="dateValidator"
+							value="#{affectationMgrBean.refAffectationDto.dateFin}"
+							id="finGrp" showButtonPanel="true"
+							label="#{affectationmsgs.affectation_date_fin}" required="false"
+							requiredMessage="#{affectationmsgs.affectation_fin_required}"
+							pattern="dd/MM/yyyy">
+							<f:attribute name="firstDate" value="#{grpFirstDate}" />
+						</p:calendar>
+
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br></br>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+
+					<p:commandButton value="#{commonmsgs.button_ok}"
+						icon="ui-icon-check" process="@form"
+						actionListener="#{affectationMgrBean.addGroupe('dlgAffecterGroupe')}"
+						update="@(.affGrpOutPanel)">
+						
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_cancel}"
+						immediate="true" icon="ui-icon-close"
+						oncomplete="dlgAffecterGroupe.hide()" />
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

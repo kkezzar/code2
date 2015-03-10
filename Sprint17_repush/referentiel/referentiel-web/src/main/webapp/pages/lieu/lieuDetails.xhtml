@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_lieu}" style="border:0;">
+
+
+
+
+
+			<p:tabView effect="#{tabBean.effect}" effectDuration="normal"
+				id="lieuTabViewID">
+				<p:tab id="infos" title="#{commonmsgs.common_infos}">
+					<ui:include src="/pages/lieu/infoLieuDetails.xhtml" />
+				</p:tab>
+
+				<c:forEach var="tabItem" items="#{lieuDroitBean.listActions}"
+					varStatus="status">
+					<p:tab title="#{tabItem.nomFonction}"
+						disabled="#{lieuBckBean.refLieuDto.id==null or(!lieuBckBean.refLieuDto.reservable and tabItem.nomFonction eq 'Réservation')}">
+						<ui:include src="#{tabItem.urlFonction}">
+							<c:set var="entity" value="lieu" scope="request">
+							</c:set>
+							<c:set var="id" value="#{lieuBckBean.refLieuDto.id}"
+								scope="request">
+							</c:set>
+							<ui:param name="createAllow" value="false" />
+							<ui:param name="editAllow" value="false" />
+							<ui:param name="deleteAllow" value="false" />
+							<ui:param name="entity" value="lieu" />
+							<ui:param name="id" value="#{lieuBckBean.refLieuDto.id}" />
+						</ui:include>
+					</p:tab>
+
+				</c:forEach>
+
+
+				<p:tab title="#{commonmsgs.common_documents}"
+					disabled="#{lieuMgrBean.refLieuDto.id==null or(!lieuMgrBean.refLieuDto.reservable and tabItem.nomFonction eq 'Réservation')}">
+
+					<ui:include src="/pages/lieu/lieuDocument.xhtml">
+
+						<c:set var="entity" value="lieu" scope="request">
+						</c:set>
+						<c:set var="identifiant" value="#{identifiant}" scope="request">
+						</c:set>
+						<ui:param name="createAllow" value="false" />
+						<ui:param name="editAllow" value="false" />
+						<ui:param name="deleteAllow" value="false" />
+						<ui:param name="entity" value="lieu" />
+						<ui:param name="identifiant" value="#{identifiant}" />
+
+					</ui:include>
+				</p:tab>
+
+			</p:tabView>
+
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

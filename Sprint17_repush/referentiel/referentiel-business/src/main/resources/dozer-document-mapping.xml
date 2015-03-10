@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefDocumentDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefDocument
+		</class-b>
+		
+		<field>
+			<a>langueId</a>
+			<b>nomenclatureByLangue.id</b>
+		</field>
+		<field>
+			<a>langueLibelleLongFr</a>
+			<b>nomenclatureByLangue.libelleLongFr</b>
+		</field>
+		<field>
+			<a>langueLibelleLongAr</a>
+			<b>nomenclatureByLangue.libelleLongAr</b>
+		</field>
+		<field>
+			<a>langueLibelleCourtFr</a>
+			<b>nomenclatureByLangue.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>langueLibelleCourtAr</a>
+			<b>nomenclatureByLangue.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>langueCode</a>
+			<b>nomenclatureByLangue.code</b>
+		</field>
+
+
+		<field>
+			<a>natureDocumentId</a>
+			<b>nomenclatureByNatureDocument.id</b>
+		</field>
+		<field>
+			<a>natureDocumentLibelleLongFr</a>
+			<b>nomenclatureByNatureDocument.libelleLongFr</b>
+		</field>
+		<field>
+			<a>natureDocumentLibelleLongAr</a>
+			<b>nomenclatureByNatureDocument.libelleLongAr</b>
+		</field>
+		<field>
+			<a>natureDocumentLibelleCourtFr</a>
+			<b>nomenclatureByNatureDocument.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>natureDocumentLibelleCourtAr</a>
+			<b>nomenclatureByNatureDocument.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>natureDocumentCode</a>
+			<b>nomenclatureByNatureDocument.code</b>
+		</field>
+
+
+		<field>
+			<a>typeDocumentId</a>
+			<b>nomenclatureByTypeDocument.id</b>
+		</field>
+		<field>
+			<a>typeDocumentLibelleLongFr</a>
+			<b>nomenclatureByTypeDocument.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeDocumentLibelleLongAr</a>
+			<b>nomenclatureByTypeDocument.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeDocumentLibelleCourtFr</a>
+			<b>nomenclatureByTypeDocument.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeDocumentLibelleCourtAr</a>
+			<b>nomenclatureByTypeDocument.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeDocumentCode</a>
+			<b>nomenclatureByTypeDocument.code</b>
+		</field>
+
+		<field>
+			<a>classementId</a>
+			<b>nomenclatureByClassement.id</b>
+		</field>
+		<field>
+			<a>classementLibelleLongFr</a>
+			<b>nomenclatureByClassement.libelleLongFr</b>
+		</field>
+		<field>
+			<a>classementLibelleLongAr</a>
+			<b>nomenclatureByClassement.libelleLongAr</b>
+		</field>
+		<field>
+			<a>classementLibelleCourtFr</a>
+			<b>nomenclatureByClassement.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>classementLibelleCourtAr</a>
+			<b>nomenclatureByClassement.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>classementCode</a>
+			<b>nomenclatureByClassement.code</b>
+		</field>
+
+
+		<field>
+			<a>idParentDocument</a>
+			<b>refDocument.id</b>
+		</field>
+
+		<field>
+			<a>identifiantParentDocument</a>
+			<b>refDocument.identifiant</b>
+		</field>
+
+		<field>
+			<a>titreParentDocument</a>
+			<b>refDocument.titreDocument</b>
+		</field>
+
+		<field>
+			<a>dateParentDocument</a>
+			<b>refDocument.dateDocument</b>
+		</field>
+
+		<field>
+			<a>referenceParentDocument</a>
+			<b>refDocument.referenceDocument</b>
+		</field>
+
+		<field>
+			<a>urlParentDocument</a>
+			<b>refDocument.url</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+
+	</mapping>
+
+</mappings>

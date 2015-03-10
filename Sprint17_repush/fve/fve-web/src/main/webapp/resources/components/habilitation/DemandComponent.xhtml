@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+ <!-- INTERFACE COMPOSANT DEMANDE  -->
+<composite:interface>
+		 
+		<composite:attribute name="nestedOfDto"  type="dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OffreFormationDto"	shortDescription=" Object offre de formation associée" />
+		<composite:attribute name="demandDto"  type="dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeDto"	shortDescription=" Object Demande"/>
+		<composite:attribute name="demandI18nDtoFr"  type="dz.gov.mesrs.sii.commons.business.model.dto.bpm.DemandeI18nDto"	shortDescription=" Object Demande Fr"/>
+		<composite:attribute name="toEdit"	 type="java.lang.Boolean"	required="true"  shortDescription=" Demande en mode Edition"/>
+		<composite:attribute name="toValidate"	 type="java.lang.Boolean"	required="true"  shortDescription=" Demande en mode Validation"/>
+		
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT DEMANDE -->          
+<composite:implementation>
+	<h:form id="form1">				
+				<p:panelGrid  id="recapDemandOfPanelId" columns="2" style="width:100%;" columnClasses="oneCol, twoCol">  
+		            	<f:facet name="header">  
+		        			#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OF_ASSOCIEE_TABLE_HEADER}
+		    			</f:facet>  
+		  
+		            	<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OF_ASSOCIEE_CODE}" />
+		            	<h:outputLabel value="#{cc.attrs.nestedOfDto.code}"  styleClass="labelValue" />
+		    					
+		            	<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OF_ASSOCIEE_LIBELLE_FR}" />
+		            	<h:outputLabel value="#{cc.attrs.nestedOfDto.i18nDtos['fr'].libelle}"  styleClass="labelValue" />
+		    				
+		            	<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OF_ASSOCIEE_SPECIALITE_FR}"/>
+		            	<h:outputLabel value="#{cc.attrs.nestedOfDto.i18nDtos['fr'].libelleSpecialite}"  styleClass="labelValue"/>
+     			</p:panelGrid> 
+     			<br />
+     			<p:panelGrid  id="detailDemandPanelId" columns="2" style=" width:100%;" columnClasses="oneCol, twoCol">  
+		            	<f:facet name="header">  
+		        			#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_DETAIL_TABLE_HEADER}
+		    			</f:facet>  
+		  
+		       			<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_CODE}" />
+		            	<h:outputLabel value="#{cc.attrs.demandDto.code}" rendered="#{not cc.attrs.toEdit}" styleClass="labelValue" />
+		            	<h:inputText id="demandeCodeID" value="#{ofEvalBB.selectedDemand.code}" rendered="#{cc.attrs.toEdit}" 
+		            	styleClass="labelValue" style="width:200px;"  required="true"   requiredMessage="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_REQUIRED_MSG_CODE}" maxlength="10"/>
+		    	
+		            	<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OBJET_FR}" />
+		            	<h:outputLabel value="#{cc.attrs.demandI18nDtoFr.objet}" rendered="#{not cc.attrs.toEdit}" styleClass="labelValue"/>
+		            	<h:inputText id="demandeObjetID" value="#{ofEvalBB.demandeDtoI18ns['fr'].objet}" rendered="#{cc.attrs.toEdit}" styleClass="labelValue"
+		            	 style="width:100%" required="true"   requiredMessage="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_REQUIRED_MSG_SUBJECT}"  maxlength="250"/>
+		    					
+		            	<h:outputLabel value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_DEMANDE_OBSERVATION_FR}"/>
+		            	<h:outputLabel value="#{cc.attrs.demandI18nDtoFr.observations}" rendered="#{not cc.attrs.toEdit}" styleClass="labelValue"/>
+		            	<p:inputTextarea  id="demandeObservationID" value="#{ofEvalBB.demandeDtoI18ns['fr'].observations}" rendered="#{cc.attrs.toEdit}" rows="5" autoResize="false"
+		            								 styleClass="labelValue" style="width:100%"   maxlength="500"/>
+     			
+     			</p:panelGrid> 
+     			
+     			<p:toolbar styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+							<p:commandButton id="btnSaveDemandID" 	value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_BTN_SAVE_DEMAND}" 	 
+																	ajax="true"  rendered="#{cc.attrs.toEdit}" actionListener="#{ofEvalBB.saveDemand()}" update="@all" validateClient="true">
+														<f:param name="currentOfId" value="#{txtIdOfDemand.value}" />
+														<f:param name="currentDemandId" value="#{txtIdDemand.value}" />
+							</p:commandButton>
+				</p:toolbarGroup>
+								
+				<p:toolbarGroup align="right">
+							<p:commandButton id="btnSubmitDemandID"  value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_BTN_SUBMIT_DEMAND}" 	 
+																	ajax="true" 	rendered="#{cc.attrs.toEdit}" 	actionListener="#{ofEvalBB.submitDemand()}"  update="@all" validateClient="true">
+														<f:param name="currentOfId" value="#{txtIdOfDemand.value}" />
+														<f:param name="currentDemandId" value="#{txtIdDemand.value}" />
+														<p:confirm		header="Confirmation"	 message="Voulez-vous confirmer la Soumission de la demande Evaluation  ?"	icon="ui-icon-alert" />
+							</p:commandButton>
+							<p:commandButton id="btnValidateDemandID"  value="#{evalDmdSubmitMsgs.EVAL_DMD_SUBMIT_BTN_VALIDATE_DEMAND}" 	 ajax="true" 
+																	rendered="#{cc.attrs.toValidate}" actionListener="#{ofEvalBB.validateDemand()}" update="@all" validateClient="true">
+														<f:param name="currentOfId" value="#{txtIdOfDemand.value}" />
+														<f:param name="currentDemandId" value="#{txtIdDemand.value}" />
+														<p:confirm	 	header="Confirmation"	 message="Voulez-vous confirmer la Validation de la demande Evaluation  ?"	icon="ui-icon-alert" />
+										</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+     			
+     			 <!--  HIDDEN HELPER FIELDS -->
+				<p:outputPanel  id="hiddenDataPanel">
+					<h:inputHidden id="idDemandTxtID" 		binding="#{txtIdDemand}" 			  value="#{cc.attrs.demandDto.id}"/>
+					<h:inputHidden id="idOfxtID" 		binding="#{txtIdOfDemand}" 			  value="#{cc.attrs.nestedOfDto.id}"/>
+				</p:outputPanel>
+				 <p:messages id="messages" showDetail="true" autoUpdate="false" closable="true"  showSummary="false"/>
+				
+	</h:form>	
+</composite:implementation>
+
+</html>

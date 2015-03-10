@@ -1,0 +1,206 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:panel header="#{evalControleContinuMsgs.eval_controle_continu_field_import_title}" id="infoId" rendered="#{controleContinuBean.noteEvalList != null}" toggleable="true">
+	
+		<pe:blockUI target="noteDataTable" widgetVar="noteWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<p:panelGrid styleClass="ui-panelgrid-full-width" id="importId">
+			<p:row>
+				<p:column style="width:10%">
+					<h:outputLabel
+						value="#{evalControleContinuMsgs.eval_controle_continu_importer_selection_fichier}" />
+				</p:column>
+				<p:column style="width:90%">
+					<p:fileUpload update="importId" sizeLimit="50000000"
+						fileUploadListener="#{controleContinuBean.handleFileUpload}"
+						mode="advanced" dragDropSupport="true" process="@this"
+						allowTypes="/(\.|\/)(xlsx)$/"
+						value="#{controleContinuBean.fileToImport}"
+						label="#{evalControleContinuMsgs.eval_controle_continu_upload_parcourir}"
+						uploadLabel="#{evalControleContinuMsgs.eval_controle_continu_upload_charger}"
+						cancelLabel="#{evalControleContinuMsgs.eval_controle_continu_upload_annuler}">
+					</p:fileUpload>
+				</p:column>
+			</p:row>
+			<p:row rendered="#{controleContinuBean.fileToImport != null}">
+
+				<p:column>
+					<h:outputLabel
+						value="#{evalControleContinuMsgs.eval_controle_continu_upload_file_name}" />
+
+				</p:column>
+				<p:column>
+					<h:outputLabel value="#{controleContinuBean.fileName} "
+						styleClass="labelValue" />
+					<h:outputLabel value="  " />
+					<p:commandButton id="btnImport" process="@this"
+						value="#{evalControleContinuMsgs.eval_controle_continu_button_importer}"
+						actionListener="#{controleContinuBean.importFile}"
+						update="noteDataTable :evalForm:actionPanel"
+						onstart="PF('globalWidget').block()"
+						oncomplete="PF('globalWidget').unblock()">
+					</p:commandButton>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:panel>
+	<p:outputPanel>
+		<p:dataTable id="noteDataTable" var="row" styleClass="detailStyle"
+			rendered="#{controleContinuBean.noteEvalList != null}"
+			value="#{controleContinuBean.noteEvalList}" widgetVar="noteDataTable"
+			resizableColumns="true"
+			currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rows="20" rowsPerPageTemplate="10,20,30,40,50" paginator="true"
+			filteredValue="#{controleContinuBean.filtredNoteEval}"
+			emptyMessage="#{evalControleContinuMsgs.eval_controle_continu_data_table_seacrh_result_no_result}"
+			rowIndexVar="rowIndex">
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_pdf}"
+							immediate="true">
+							<p:graphicImage name="/images/pdf.png" />
+							<pe:exporter type="pdf" target="noteDataTable"
+								facetBackground="#AAFFBB" datasetPadding="10"
+								fileName="#{controleContinuBean.exportFileName}"
+								orientation="Landscape" encoding="ISO-8859-1" />
+						</h:commandLink>
+						<p:spacer width="20" />
+						<h:commandLink title="#{commonmsgs.tooltip_btn_export_xls}"
+							immediate="true">
+							<p:graphicImage name="/images/excel.png" />
+							<pe:exporter type="xlsx" target="noteDataTable"
+								fileName="#{controleContinuBean.exportFileName}" />
+						</h:commandLink>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<h:outputText
+							value="#{evalControleContinuMsgs.eval_controle_continu_data_table_search_all}" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('noteDataTable').filter()" style="width:150px"
+							placeholder="#{evalControleContinuMsgs.eval_controle_continu_data_table_search_key}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+			<p:ajax event="sort" update="noteDataTable"
+				onstart="PF('globalWidget').block()"
+				onsuccess="PF('globalWidget').unblock()" />
+			<p:ajax event="page" process="@this"
+				onstart="PF('globalWidget').block()"
+				onsuccess="PF('globalWidget').unblock()" />
+			<f:facet name="header">
+				<p:panelGrid rendered="false" columns="2">
+					<h:outputText
+						value="#{controleContinuBean.evalControleContinuDto.gpNomAffichage} " />
+
+					<h:outputText
+						value="#{controleContinuBean.evalControleContinuDto.dateEvaluation}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+
+				</p:panelGrid>
+			</f:facet>
+			<p:column exportable="false"
+				headerText="#{evalControleContinuMsgs.eval_controle_continu_data_table_column_index}"
+				style="width:10%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column width="20%" sortBy="#{row.numeroMatricule}"
+				filterStyle="display:none" filterBy="#{row.numeroMatricule}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_matricule}" />
+				</f:facet>
+				<h:outputText value="#{row.numeroMatricule}" />
+			</p:column>
+
+			<p:column width="20%" sortBy="#{row.etudiantNomLatin}"
+				filterStyle="display:none" filterBy="#{row.etudiantNomLatin}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_nom}" />
+				</f:facet>
+				<h:outputText value="#{row.etudiantNomLatin}" />
+			</p:column>
+
+			<p:column width="20%" sortBy="#{row.etudiantPrenomLatin}"
+				filterStyle="display:none" filterBy="#{row.etudiantPrenomLatin}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_prenom}" />
+				</f:facet>
+				<h:outputText value="#{row.etudiantPrenomLatin}" />
+			</p:column>
+
+			<p:column width="20%" sortBy="#{row.etudiantDateNaissance}"
+				filterBy="#{row.etudiantDateNaissance}" filterStyle="display:none"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_date_naissance}" />
+				</f:facet>
+				<h:outputText value="#{row.etudiantDateNaissance}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:30%" sortBy="#{row.note}"
+				filterStyle="display:none" filterBy="#{row.note}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_note}" />
+				</f:facet>
+				<pe:inputNumber rendered="#{!row.absent}" id="note"
+					required="#{absent.value == 'false' and not empty param['evalForm:saveBtn']}"
+					style="width:95%;border: none; background: #ffffff;color: black;"
+					requiredMessage="#{evalControleContinuMsgs.eval_controle_continu_etudiant_note_required}"
+					minValue="0.00" maxValue="#{controleContinuBean.noteMax}"
+					decimalSeparator="." value="#{row.note}">
+				</pe:inputNumber>
+				<h:outputText rendered="#{row.absent}"
+					style="font-style: italic;font-weight:bold"
+					value="#{evalControleContinuMsgs.eval_controle_continu_etudiant_absent}" />
+			</p:column>
+			<p:column width="20%" sortBy="#{row.absent}" exportable="false"
+				filterStyle="display:none" filterBy="#{row.absent}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_absent}" />
+				</f:facet>
+				<p:selectBooleanCheckbox value="#{row.absent}" binding="#{absent}"
+					id="absent">
+					<p:ajax update="noteDataTable" onstart="PF('noteWidget').block()"
+						onsuccess="PF('noteWidget').unblock()" />
+				</p:selectBooleanCheckbox>
+			</p:column>
+
+			<p:column style="width:30%" sortBy="#{row.observation}"
+				filterStyle="display:none" filterBy="#{row.observation}"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText
+						value="#{evalControleContinuMsgs.eval_controle_continu_data_table_list_column_obervation}" />
+				</f:facet>
+				<p:inputText
+					style="width:95%;border: none; background: #ffffff;color: black;"
+					value="#{row.observation}">
+				</p:inputText>
+
+			</p:column>
+		</p:dataTable>
+	</p:outputPanel>
+	
+</ui:composition>
+

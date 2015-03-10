@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{evalControleContinuMsgs.eval_controle_continu_panel_enregistrer_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<h:form id="evalForm">
+			<pe:blockUI target="evalForm" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+			<p:outputPanel id="globalPanel">
+			<ui:include
+				src="/pages/cursus/controlecontinu/ControleContinuSearchResult.xhtml" />
+			<br />
+			<p:panel id="detailPanel"
+				rendered="#{controleContinuBean.showDetail}">
+				<p:tabView activeIndex="0" cache="false">
+					<p:tab
+						title="#{evalControleContinuMsgs.eval_controle_continu_tab_evaluation_title}">
+						<ui:include
+							src="/pages/cursus/controlecontinu/ControleContinuInfoEdit.xhtml" />
+					</p:tab>
+					<p:tab disabled="#{controleContinuBean.evalControleContinuDto.id == null}"
+						title="#{evalControleContinuMsgs.eval_controle_continu_tab_note_title}">
+						<ui:include 
+							src="/pages/cursus/controlecontinu/ControleContinuNoteEdit.xhtml" />
+					</p:tab>
+
+				</p:tabView>
+				<br />
+				<p:toolbar id="actionPanel">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+							update="globalPanel" rendered="#{sessionDroitBean.createAllow}"
+							id="saveBtn" icon="ui-icon-disk"
+							onstart="PF('globalWidget').block()" process="evalForm"
+							oncomplete="PF('globalWidget').unblock()"
+							actionListener="#{controleContinuBean.saveEval()}">
+						</p:commandButton>
+						<p:separator />
+						<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+							update="globalPanel"
+							disabled="#{controleContinuBean.evalControleContinuDto.id==null}"
+							rendered="#{sessionDroitBean.createAllow}" id="delBtn"
+							icon="ui-icon-trash" onstart="PF('globalWidget').block()"
+							process="@this" oncomplete="PF('globalWidget').unblock()"
+							actionListener="#{controleContinuBean.deleteEval()}">
+							<p:confirm header="Confirmation"
+								message="#{commonmsgs.msg_delete_confirmation}"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+			</p:panel>
+			</p:outputPanel>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

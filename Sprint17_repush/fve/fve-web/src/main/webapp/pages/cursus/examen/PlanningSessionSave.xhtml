@@ -1,0 +1,239 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<pe:blockUI target="panelGrid" widgetVar="planningBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	<p:panel header="#{examenMsgs.examen_field_planning_search_title}">
+		<p:panelGrid id="panelGrid" styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_type_session}"
+						for="c_typeSession" style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectOneMenu id="c_typeSession" required="true"
+						style="width:100%"
+						value="#{planningSessionSaveBean.planningSessionDto.ncTypeSessionId}"
+						filter="true" filterMatchMode="contains"
+						label="#{examenMsgs.examen_type_session}">
+						<p:ajax update="panelGrid" onstart="PF('planningBlock').block()"
+							onsuccess="PF('planningBlock').unblock()" process="@this"
+							listener="#{planningSessionSaveBean.typeSessionChanged}" />
+						<f:selectItem itemLabel="#{examenMsgs.examen_type_session_select}"
+							itemValue="" />
+						<f:selectItems value="#{planningSessionSaveBean.typeSessionList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{examenMsgs.examen_session_normale_a_remplacer}"
+						for="listSession" style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%" id="sessionNormal">
+					<p:selectOneMenu id="listSession" required="true"
+						style="width:100%"
+						disabled="#{planningSessionSaveBean.sessionListDisable}"
+						value="#{planningSessionSaveBean.planningSessionDto.sessionARemplacerId}"
+						filter="true" filterMatchMode="contains"
+						label="#{examenMsgs.examen_type_session}">
+						<f:selectItem itemLabel="#{examenMsgs.examen_type_session_select}"
+							itemValue="" />
+						<f:selectItems
+							value="#{planningSessionSaveBean.sessionNormaleList}" />
+
+					</p:selectOneMenu>
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_numero_session}"
+						for="numeroSession" style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<pe:inputNumber
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+						id="numeroSession" required="true" style="width:100%"
+						requiredMessage="#{examenMsgs.examen_numero_session_required}"
+						minValue="1" maxValue="100"
+						value="#{planningSessionSaveBean.planningSessionDto.numeroSession}">
+					</pe:inputNumber>
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_intitule}"
+						for="intititule" style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:inputText id="intititule" style="width:100%"
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+						styleClass="value"
+						value="#{planningSessionSaveBean.planningSessionDto.intitule}"
+						label="#{examenMsgs.examen_intitule}" required="true"
+						requiredMessage="#{examenMsgs.examen_intitule_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_debut}"
+						for="datedebut" style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:calendar navigator="true" readonlyInput="false"
+						style="width:100%"
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+						value="#{planningSessionSaveBean.planningSessionDto.dateDebut}"
+						id="datedebut" label="#{examenMsgs.examen_date_debut}"
+						pattern="dd/MM/yyyy" required="true" widgetVar="calwidget"
+						mindate="calwidget.today()"
+						yearRange="#{sessionBeanFve.codeAnneeAcademique.trim().substring(0,4)}:#{sessionBeanFve.codeAnneeAcademique.trim().substring(5,9)}"
+						requiredMessage="#{examenMsgs.examen_date_debut_required}" />
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_fin}" for="datefin"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:calendar navigator="true" readonlyInput="false"
+						style="width:100%"
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+						value="#{planningSessionSaveBean.planningSessionDto.dateFin}"
+						id="datefin" label="#{examenMsgs.examen_date_fin}"
+						pattern="dd/MM/yyyy" required="true" widgetVar="calwidget"
+						mindate="calwidget.today()"
+						yearRange="#{sessionBeanFve.codeAnneeAcademique.trim().substring(0,4)}:#{sessionBeanFve.codeAnneeAcademique.trim().substring(5,9)}"
+						requiredMessage="#{examenMsgs.examen_date_fin_required}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_avec_controle_continu}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectBooleanCheckbox
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR' or !planningSessionSaveBean.inclureControle}"
+						value="#{planningSessionSaveBean.planningSessionDto.avecControleContinu}" />
+				</p:column>
+
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{examenMsgs.examen_avec_controle_intermediaire}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<p:selectBooleanCheckbox
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR' or !planningSessionSaveBean.inclureControle}"
+						value="#{planningSessionSaveBean.planningSessionDto.avecControleIntermediaire}" />
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel
+						value="#{examenMsgs.examen_coeffcient_note_eliminatoire}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<pe:inputNumber id="note" required="false" style="width:95%"
+						disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+						minValue="0.00" maxValue="1" decimalSeparator="."
+						value="#{planningSessionSaveBean.planningSessionDto.coefficientNoteEliminatoire}">
+					</pe:inputNumber>
+				</p:column>
+				<p:column colspan="2" />
+
+
+			</p:row>
+
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_situation}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText style="width:100%"
+						value="#{planningSessionSaveBean.planningSessionDto.situationLibelleFr}"
+						styleClass="value">
+					</h:outputText>
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_creation}"
+						style="width:100%" />
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{planningSessionSaveBean.planningSessionDto.dateCreation}"
+						styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_publication}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{planningSessionSaveBean.planningSessionDto.datePublication}"
+						styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column style="width:15%">
+					<p:outputLabel value="#{examenMsgs.examen_date_cloture}"
+						style="width:100%"></p:outputLabel>
+				</p:column>
+				<p:column style="width:35%">
+					<h:outputText
+						value="#{planningSessionSaveBean.planningSessionDto.dateCloture}"
+						styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+		<p:toolbar style="margin-top:5px">
+			<p:toolbarGroup align="left">
+				<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+					disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}"
+					id="saveBtn2" icon="ui-icon-disk"
+					process=":form_planning_session_search:planningInfo"
+					onclick="PF('globalWidget').block()"
+					update=":form_planning_session_search"
+					oncomplete="PF('globalWidget').unblock()"
+					actionListener="#{planningSessionSaveBean.savePlanningSession()}">
+				</p:commandButton>
+				<p:spacer width="5px"></p:spacer>
+				<p:commandButton value="#{commonmsgs.bouton_publier}"
+					disabled="#{planningSessionSaveBean.planningSessionDto.situationCode!='CRE'}"
+					id="publishBtn" icon="ui-icon-battery-3"
+					process=":form_planning_session_search:planningInfo"
+					onstart="PF('globalWidget').block()"
+					oncomplete="PF('globalWidget').unblock()"
+					actionListener="#{planningSessionSaveBean.publishPlanningSession()}">
+				</p:commandButton>
+				<p:spacer width="5px"></p:spacer>
+				<p:commandButton value="#{commonmsgs.bouton_cloturer}"
+					disabled="#{planningSessionSaveBean.planningSessionDto.situationCode!='PBL'}"
+					id="fenceBtn" icon="ui-icon-locked"
+					process=":form_planning_session_search:planningInfo"
+					onstart="PF('globalWidget').block()"
+					oncomplete="PF('globalWidget').unblock()"
+					actionListener="#{planningSessionSaveBean.fencePlanningSession()}">
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</p:panel>
+</ui:composition>
+

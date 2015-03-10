@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	
+<!-- 		<h:form id="pieceForm"> -->
+<!-- 			<p:panel id="titlePage" header="#{pieceMsgs.piece_panel_title}"> -->
+				<p:fieldset id="fspCStudManagerBean"
+					legend="#{pieceMsgs.piece_data_table_list_provided_title}"
+					styleClass="mesrsFieldset">
+					<p:dataTable id="PieceStudFourniDataTableView" var="row"
+						value="#{pieceManagerBean.listPcProvided}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" lazy="true" paginatorPosition="bottom"
+						rowsPerPageTemplate="5,10,15"
+						emptyMessage="#{pieceMsgs.piece_data_table_seacrh_result_no_result}"
+						style="margin:8px" rowIndexVar="rowIndex" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+						
+						<p:ajax event="page" update="@all" process="@form"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="sort" update="@all" process="@form" />
+
+						<f:facet name="header">
+							<h:outputText value="#{pieceMsgs.piece_data_table_list_title}" />
+						</f:facet>
+						<p:column headerText="#{pieceMsgs.piece_data_table_column_index}"
+							style="width:20px">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_type}"
+							style="width:50%">
+							<h:outputText value="(#{row.nombre}) #{row.ncLlLatinTypePiece}" />
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_required}"
+							style="width:60px">
+							<h:outputText value="#{row.obligatoire ? 'Oui' : 'Non'}"/>
+							
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_provided}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.fournie ? 'Oui' : 'Non'}"/>
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_date}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.dateFourniture}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_observation}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.observation}" />
+						</p:column>
+
+					</p:dataTable>
+
+
+				</p:fieldset>
+				<br />
+				<br />
+
+				<p:fieldset id="fspCEtabManagerBean"
+					legend="#{pieceMsgs.piece_data_table_list_to_provided_title}"
+					styleClass="mesrsFieldset">
+					<p:dataTable id="PieceEtabFourniDataTableView" var="row"
+						value="#{pieceManagerBean.listPcToProvid}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" lazy="true" paginatorPosition="bottom"
+						rowsPerPageTemplate="5,10,15"
+						emptyMessage="#{pieceMsgs.piece_data_table_seacrh_result_no_result}"
+						style="margin:8px" rowIndexVar="rowIndex" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+						<f:param name="keyWords" value="#{txtKeyWords.value}" />
+						<f:param name="searchMode" value="#{txtSearchMode.value}" />
+						<f:param name="editionMode" value="detail" />
+
+						<p:ajax event="page" update="@all" process="@form"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="sort" update="@all" process="@form" />
+
+						<f:facet name="header">
+							<h:outputText value="#{pieceMsgs.piece_data_table_list_title}" />
+						</f:facet>
+						
+						<p:column headerText="#{pieceMsgs.piece_data_table_column_index}"
+							style="width:20px">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_type}"
+							style="width:50%">
+							<h:outputText value="(#{row.nombre}) #{row.ncLlLatinTypePiece}" />
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_required}"
+							style="width:60px">
+							<h:outputText value="#{row.obligatoire ? 'Oui':'Non'}" />
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_provided}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.fournie ? 'Oui':'Non'}" />
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_piece_date}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.dateFourniture}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{pieceMsgs.piece_data_table_list_column_observation}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.observation}" />
+						</p:column>
+
+					</p:dataTable>
+
+
+				</p:fieldset>
+
+<!-- 			</p:panel> -->
+<!-- 		</h:form> -->
+
+</ui:composition>

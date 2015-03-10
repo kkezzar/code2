@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:outputPanel styleClass="dossierStyle">
+		<!-- 	<p:panel style="height:200px" id="infosIndividuPanel"> -->
+		<h:form id="etudiantFormEdit">
+			<pe:blockUI target="etudiantFormEdit" widgetVar="descriptionEtudiant">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<p:panelGrid id="descriptionEtudiant"
+				styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel
+							value="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+							for="matricule" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="matricule" style="text-align: left;width:100%"
+							maxlength="18"
+							value="#{dossierEtudiantSearchBean.dossierEtudiant.numeroMatricule}"
+							label="#{dossierEtudiantMsgs.dossier_etudiant_matricule}"
+							required="true"
+							requiredMessage="#{dossierEtudiantMsgs.dossier_etudiant_matricule_required}"
+							valueChangeListener="#{dossierEtudiantBean.entityChanged}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<p:outputLabel
+							value="#{dossierEtudiantMsgs.dossier_etudiant_date_creation}" />
+					</p:column>
+					<p:column style="width:70%">
+						<h:outputText styleClass="value"
+							value="#{dossierEtudiantSearchBean.dossierEtudiant.dateCreation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<!-- 						<p:calendar navigator="true" -->
+						<!-- 							value="#{dossierEtudiantSearchBean.dossierEtudiant.dateCreation}" -->
+						<!-- 							id="datecreation" -->
+						<!-- 							label="#{dossierEtudiantMsgs.dossier_etudiant_date_creation}" -->
+						<!-- 							pattern="dd/MM/yyyy" required="true" -->
+						<!-- 							valueChangeListener="#{dossierEtudiantBean.entityChanged}" -->
+						<!-- 							requiredMessage="#{dossierEtudiantMsgs.dossier_etudiant_date_creation_required}" -->
+						<!-- 							mindate="1/1/1800" maxdate="#{localeBean.currentDate}" /> -->
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<h:outputText
+							value="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_latin}" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="etabOrigneFr" style="text-align: left;width:100%"
+							value="#{dossierEtudiantSearchBean.dossierEtudiant.etablissementOrigineFr}"
+							label="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_latin}"
+							valueChangeListener="#{dossierEtudiantBean.entityChanged}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<h:outputText
+							value="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_arabe}" />
+					</p:column>
+					<p:column style="width:70%">
+						<p:inputText id="etabOrigneAr"
+							style="text-align: right;width:100%"
+							value="#{dossierEtudiantSearchBean.dossierEtudiant.etablissementOrigineAr}"
+							label="#{dossierEtudiantMsgs.dossier_etudiant_etab_origine_arabe}"
+							valueChangeListener="#{dossierEtudiantBean.entityChanged}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:30%">
+						<h:outputText
+							value="#{dossierEtudiantMsgs.dossier_etudiant_etablissement_affectation}" />
+					</p:column>
+					<p:column style="width:70%">
+						<h:outputText styleClass="value"
+							value="#{dossierEtudiantSearchBean.dossierEtudiant.refLlEtablissementLatin} (#{dossierEtudiantSearchBean.dossierEtudiant.refCodeEtablissement} - #{dossierEtudiantSearchBean.dossierEtudiant.refAncienCodeEtablissement}) " />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+
+			<br />
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+						id="saveBtn" update="@(.infoEtudiantStyle)" icon="ui-icon-disk"
+						onstart="PF('descriptionEtudiant').block()"
+						onsuccess="PF('descriptionEtudiant').unblock()"
+						actionListener="#{dossierEtudiantBean.save}">
+					</p:commandButton>
+					<p:separator />
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						icon="ui-icon-arrowthick-1-w"
+						action="#{dossierEtudiantBean.cancel}" immediate="true">
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+		</h:form>
+		<!-- 	</p:panel> -->
+	</p:outputPanel>
+
+</ui:composition>

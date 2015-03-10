@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_individus}" id="globalPanel">
+
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+				
+			<p:tabView id="tabviewIndividu">
+				<!--  
+				  				
+				  <p:ajax event="tabChange"/>-->
+				<p:tab id="#{commonmsgs.common_infos}"
+					title="#{commonmsgs.common_infos}">
+					<ui:include src="/pages/individu/infoIndividuEdit.xhtml" />
+				</p:tab>
+
+
+
+				<c:forEach var="tabItem" items="#{individuDroitBean.listActions}">
+					<p:tab title="#{tabItem.nomFonction}"
+						disabled="#{individuMgrBean.refIndividuDto.id==null}">
+						<ui:include src="#{tabItem.urlFonction}">
+
+							<ui:param name="createAllow" value="#{tabItem.creer}" />
+							<ui:param name="editAllow" value="#{tabItem.modifier}" />
+							<ui:param name="deleteAllow" value="#{tabItem.supprimer}" />
+							<ui:param name="entity" value="individu" />
+							
+						</ui:include>
+					</p:tab>
+				</c:forEach>
+
+
+				<p:tab title="#{commonmsgs.common_documents}"
+					disabled="#{individuMgrBean.refIndividuDto.id==null}">
+
+					<ui:include src="/pages/individu/individuDocument.xhtml">
+
+						<ui:param name="createAllow" value="true" />
+						<ui:param name="editAllow" value="true" />
+						<ui:param name="deleteAllow" value="true" />
+						<ui:param name="entity" value="individu" />
+						<ui:param name="identifiant"
+							value="#{individuMgrBean.refIndividuDto.identifiant}" />
+					</ui:include>
+				</p:tab>
+
+
+			</p:tabView>
+			<br />
+			<h:form>
+				<p:commandButton value="#{commonmsgs.button_return}"
+					icon="ui-icon-arrowreturnthick-1-w" immediate="true"
+					onstart="PF('blockUIWidget').block()"
+					oncomplete="PF('blockUIWidget').unblock()"
+					action="#{individuMgrBean.toSearch()}" process="@this">
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_cancel_modification_confirmation}" />
+
+
+				</p:commandButton>
+
+			</h:form>
+		
+		
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

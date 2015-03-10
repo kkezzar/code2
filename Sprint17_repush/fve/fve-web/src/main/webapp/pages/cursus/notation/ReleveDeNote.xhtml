@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:note="http://java.sun.com/jsf/composite/components/notation">
+<h:head>
+	<style>
+.ui-dialog {
+	height: auto !important;
+}
+</style>
+</h:head>
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{bilanMsgs.releve_note_panel_consulter_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<h:form id="bilanForm" enctype="multipart/form-data">
+			<pe:blockUI target="bilanForm" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				showSummary="false" closable="true" life="5000" />
+			<p:fieldset legend="#{bilanMsgs.bilan_field_search_title}"
+				toggleable="true">
+				<p:panelGrid id="panelSearch" styleClass="ui-panelgrid-full-width">
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel style="width:100%;text-align:left"
+								value="#{bilanMsgs.bilan_annee_academique}" for="annee"></p:outputLabel>
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="annee" filter="true" required="true"
+								filterMatchMode="contains" style="width:100%;text-align:left"
+								requiredMessage="#{bilanMsgs.bilan_annee_academique_required}"
+								value="#{bilanBean.anneeAcademiqueId}"
+								label="#{bilanMsgs.bilan_annee_academique}">
+								<p:ajax update="bilanForm" onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									listener="#{bilanBean.anneeChanged}" />
+								<f:selectItem
+									itemLabel="#{bilanMsgs.bilan_annee_academique_select}"
+									itemValue="" />
+								<f:selectItems value="#{bilanBean.anneeAcademiqueList}" />
+							</p:selectOneMenu>
+
+						</p:column>
+
+						<p:column style="width:15%">
+							<p:outputLabel style="width:100%;text-align:left"
+								value="#{bilanMsgs.bilan_offre_formation}" for="oof"></p:outputLabel>
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="oof" required="false"
+								style="width:100%;text-align:left" value="#{bilanBean.oofId}"
+								requiredMessage="#{bilanMsgs.bilan_offre_formation_required}"
+								filter="true" filterMatchMode="contains"
+								label="#{bilanMsgs.bilan_offre_formation}">
+								<p:ajax update="bilanForm" onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									listener="#{bilanBean.ofChanged}" />
+								<f:selectItem
+									itemLabel="#{bilanMsgs.bilan_offre_formation_select}"
+									itemValue="" />
+								<f:selectItems value="#{bilanBean.ofList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{bilanMsgs.bilan_niveau}" for="niveau"></p:outputLabel>
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="niveau" required="true"
+								value="#{bilanBean.niveauId}" filter="true"
+								filterMatchMode="contains" style="width:100%;text-align:left"
+								requiredMessage="#{bilanMsgs.bilan_niveau_required}"
+								label="#{bilanMsgs.bilan_niveau}">
+								<p:ajax update="bilanForm" onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									listener="#{bilanBean.niveauReleveChanged}" />
+								<f:selectItem itemLabel="#{bilanMsgs.bilan_niveau_select}"
+									itemValue="" />
+								<f:selectItems value="#{bilanBean.niveauList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column style="width:15%">
+							<p:outputLabel value="#{bilanMsgs.bilan_periode}" for="periode"></p:outputLabel>
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="periode" required="false"
+								value="#{bilanBean.periodeId}" filter="true"
+								filterMatchMode="contains" style="width:100%;text-align:left"
+								requiredMessage="#{bilanMsgs.bilan_niveau_required}"
+								label="#{bilanMsgs.bilan_periode}">
+								<p:ajax update="bilanForm" onstart="PF('globalWidget').block()"
+									onsuccess="PF('globalWidget').unblock()"
+									listener="#{bilanBean.periodeReleveChanged}" />
+								<f:selectItem itemLabel="#{bilanMsgs.bilan_periode_select}"
+									itemValue="" />
+								<f:selectItems value="#{bilanBean.periodeList}" />
+
+							</p:selectOneMenu>
+						</p:column>
+
+					</p:row>
+					<p:row>
+						<p:column style="width:300px" colspan="4">
+							<p:commandButton id="btnSearch"
+								value="#{commonmsgs.bouton_rechercher}" update="bilanForm"
+								style="text-align:left" process="panelSearch"
+								onstart="PF('globalWidget').block()"
+								onsuccess="PF('globalWidget').unblock()"
+								actionListener="#{bilanBean.findReleveNote()}"
+								icon="ui-icon-search">
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:fieldset>
+			<br />
+			<p:panel rendered="#{bilanBean.showDetail}" id="detail">
+				<p:dataTable id="delDataTable" var="row" styleClass="detailStyle"
+					value="#{bilanBean.releveNoteList}" widgetVar="evalDataTable"
+					resizableColumns="true" rowKey="#{row.id}" selectionMode="single"
+					paginator="true"
+					currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rows="20" rowsPerPageTemplate="10,20,30,40,50"
+					emptyMessage="#{bilanMsgs.bilan_data_table_seacrh_result_no_result}"
+					rowIndexVar="rowIndex">
+					<p:ajax event="sort" onstart="PF('globalWidget').block()"
+						onsuccess="PF('globalWidget').unblock()" />
+					<p:ajax event="rowSelect" listener="#{bilanBean.onRowSelect}"
+						onstart="PF('globalWidget').block()"
+						update=":bilanForm:noteDetail"
+						onsuccess="PF('globalWidget').unblock()"
+						oncomplete="PF('releveNote').show()" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{bilanMsgs
+                                             .bilan_data_table_bilan_annuel_title}" />
+					</f:facet>
+					<p:column headerText="#{bilanMsgs.bilan_data_table_column_index}"
+						style="width:5%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{row.numeroInscriptionEtudiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_numero_inscription}" />
+						</f:facet>
+						<h:outputText value="#{row.numeroInscriptionEtudiant}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{row.nomLatinEtudiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_nom}" />
+						</f:facet>
+						<h:outputText value="#{row.nomLatinEtudiant}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{row.prenomLatinEtudiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_prenom}" />
+						</f:facet>
+						<h:outputText value="#{row.prenomLatinEtudiant}" />
+					</p:column>
+					<p:column width="10%" sortBy="#{row.dateNaissanceEtudiant}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_date_naissance}" />
+						</f:facet>
+						<h:outputText value="#{row.dateNaissanceEtudiant}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<!-- 					<p:columns var="entry" value="#{row.bilanPeriode}" -->
+					<!-- 						width="10%" columnIndexVar="i"> -->
+					<!-- 						<f:facet name="header"> -->
+					<!-- 							<h:outputText value="#{entry.periodeLibelleFr}" /> -->
+					<!-- 						</f:facet> -->
+					<!-- 						<h:outputText value="#{row.bilanPeriode[i].moyenne}" /> -->
+					<!-- 					</p:columns> -->
+					<p:column width="5%" sortBy="#{row.moyenne}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_moyenne_generale}" />
+						</f:facet>
+						<h:outputText value="#{utilBean.formatNote(row.moyenne)}" />
+					</p:column>
+
+					<p:column width="15%" sortBy="#{row.typeDecisionLibelleFr}">
+						<f:facet name="header">
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_decision}" />
+						</f:facet>
+						<h:outputText value="#{row.typeDecisionLibelleFr}" />
+					</p:column>
+
+				</p:dataTable>
+				<br />
+
+				<p:toolbar>
+<!-- 					<p:toolbarGroup align="left"> -->
+<!-- 						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" -->
+<!-- 							update="bilanForm" rendered="#{sessionDroitBean.createAllow}" -->
+<!-- 							id="closeBtn" icon="ui-icon-circlesmall-close" -->
+<!-- 							onstart="PF('globalWidget').block()" process="bilanForm" -->
+<!-- 							oncomplete="PF('globalWidget').unblock()" -->
+<!-- 							actionListener="#{bilanBean.colturerBilanAnnuel}"> -->
+<!-- 						</p:commandButton> -->
+<!-- 					</p:toolbarGroup> -->
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_imprime}" ajax="false"
+							update=":bilanForm" immediate="true"
+							actionListener="#{bilanBean.imprimerReleveNote}"
+							rendered="#{sessionDroitBean.createAllow}" id="delBtn"
+							icon="ui-icon-print" process="@this">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+			</p:panel>
+
+
+			<p:dialog showEffect="blind" hideEffect="explode" width="900"
+				header="#{bilanMsgs.releve_note_dialog_title} #{bilanBean.selectedBilan.nomLatinEtudiant}"
+				widgetVar="releveNote" modal="true" resizable="false">
+				<p:outputPanel id="noteDetail"
+					style="text-align:left;font-size:x-small">
+					<p:panelGrid columns="8" styleClass="ui-panelgrid-full-width">
+						<h:outputText value="#{bilanMsgs.releve_note_data_grid_numero_inscription}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.numeroInscriptionEtudiant}" />
+						<h:outputText value="#{bilanMsgs.releve_note_data_grid_nom}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.nomLatinEtudiant}" />
+						<h:outputText value="#{bilanMsgs.releve_note_data_grid_prenom}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.prenomLatinEtudiant}" />
+						<h:outputText
+							value="#{bilanMsgs.releve_note_data_grid_date_naissance}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.dateNaissanceEtudiant}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+						<h:outputText value="#{bilanMsgs.releve_note_data_grid_niveau}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.niveauCode}" />
+						<h:outputText value="#{bilanMsgs.releve_note_data_grid_moyenne}" />
+						<h:outputText styleClass="value"
+							value="#{utilBean.formatNote(bilanBean.selectedBilan.moyenne)}" />
+						<h:outputText
+							value="#{bilanMsgs.releve_note_data_grid_decision_jury}" />
+						<h:outputText styleClass="value"
+							value="#{bilanBean.selectedBilan.typeDecisionLibelleFr}" />
+						<h:outputText
+							value="#{bilanMsgs.releve_note_data_grid_total_credit_cumule}" />
+						<h:outputText styleClass="value"
+							value="#{utilBean.formatNote(bilanBean.selectedBilan.creditObtenu)}" />
+					</p:panelGrid>
+					<br />
+					<p:toolbar id="actionPanel">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{commonmsgs.bouton_imprime}"
+								ajax="false" update=":bilanForm" immediate="true"
+								actionListener="#{bilanBean.printSelectedBilan}"
+								rendered="#{sessionDroitBean.createAllow}" icon="ui-icon-print"
+								process="@this">
+							</p:commandButton>
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:commandButton value="#{commonmsgs.bouton_fermer}"
+								icon="ui-icon-circlesmall-close"
+								onclick="PF('releveNote').hide()">
+							</p:commandButton>
+						</p:toolbarGroup>
+
+					</p:toolbar>
+					<br />
+
+					<p:dataGrid var="periode" headerText="Basic"
+						value="#{bilanBean.selectedBilan.bilanSessionDtos}" columns="1"
+						layout="grid">
+						<p:panel style="width:100%" header="#{periode.columnIntitule}"
+							toggleable="true" rendered="#{periode.bilanUes.size()>1}">
+							<note:NoteUeComponent listData="#{periode}" showDette="false" />
+
+						</p:panel>
+
+					</p:dataGrid>
+
+				</p:outputPanel>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

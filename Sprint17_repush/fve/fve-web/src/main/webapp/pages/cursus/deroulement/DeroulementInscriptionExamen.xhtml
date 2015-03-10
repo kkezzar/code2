@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<pe:blockUI target="absenceEtudiantPanel" widgetVar="nonRemiseBlock">
+		<i class="fa fa-spinner fa-spin" />
+	</pe:blockUI>
+	<p:outputPanel id="absenceEtudiantPanel">
+		<p:panelGrid styleClass="ui-panelgrid-full-width">
+			<p:row>
+				<p:column style="width:10%">
+					<p:outputLabel value="#{examenMsgs.examen_salle}" for="salle" />
+				</p:column>
+				<p:column style="width:90%">
+					<p:selectOneMenu id="salle" filter="true" style="width:50%"
+						filterMatchMode="contains" required="true"
+						value="#{deroulementInscriptionExamenBean.salleExamenDto.id}"
+						label="#{examenMsgs.examen_examen}">
+						<p:ajax update="absenceEtudiantPanel" process="@this"
+							onstart="PF('nonRemiseBlock').block()"
+							onsuccess="PF('nonRemiseBlock').unblock()"
+							listener="#{deroulementInscriptionExamenBean.salleChanged()}" />
+						<f:selectItem itemLabel="#{examenMsgs.examen_salle_tout}"
+							itemValue="" />
+						<f:selectItems
+							value="#{deroulementInscriptionExamenBean.salleExamenList}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<p:dataTable id="dtTbl_etudiants"
+			value="#{deroulementInscriptionExamenBean.inscriptionExamenList}"
+			var="currentEtudiant" style="margin-top:5px;" resizableColumns="true"
+			paginator="true" rowIndexVar="rowIndex" rows="20"
+			paginatorPosition="bottom"
+			currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+			emptyMessage="#{examenMsgs.examen_datable_list_etudiant_no_result}">
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_liste_inscrit_target}" />
+			</f:facet>
+
+			<p:column headerText="#{examenMsgs.examen_numero}" style="width:5%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_matricule}" />
+				</f:facet>
+
+				<h:outputText value="#{currentEtudiant.numeroMatricule}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_nom}" />
+				</f:facet>
+
+				<h:outputText value="#{currentEtudiant.individuNomLatin} " />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_prenom}" />
+				</f:facet>
+
+				<h:outputText value="#{currentEtudiant.individuPrenomLatin} " />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_copie_non_remise}" />
+				</f:facet>
+				<p:selectBooleanCheckbox id="nonremiseId"
+					disabled="#{currentEtudiant.absent}"
+					value="#{currentEtudiant.copieNonRemise}">
+					<p:ajax update="absentId absentJustifieId" />
+				</p:selectBooleanCheckbox>
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_absent}" />
+				</f:facet>
+				<p:selectBooleanCheckbox id="absentId"
+					disabled="#{currentEtudiant.copieNonRemise}"
+					value="#{currentEtudiant.absent}">
+					<p:ajax update="nonremiseId absentJustifieId" />
+				</p:selectBooleanCheckbox>
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_absent_justifie}" />
+				</f:facet>
+				<p:selectBooleanCheckbox id="absentJustifieId"
+					disabled="#{currentEtudiant.copieNonRemise or !currentEtudiant.absent}"
+					value="#{currentEtudiant.absenceJustifie}">
+				</p:selectBooleanCheckbox>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{examenMsgs.examen_motif_absence}" />
+
+				</f:facet>
+				<!-- 				<h:outputText value="#{currentEtudiant.motifAbsence}" /> -->
+
+				<p:inputText value="#{currentEtudiant.motifAbsence}"
+					style="width:100%" label="#{examenMsgs.examen_motif_absence}" />
+
+			</p:column>
+
+		</p:dataTable>
+		<br />
+		<p:commandButton id="btnSave" value="#{commonmsgs.bouton_enregistrer}"
+			update="absenceEtudiantPanel" icon="ui-icon-disk"
+			process="absenceEtudiantPanel"
+			actionListener="#{deroulementInscriptionExamenBean.save()}"
+			onstart="PF('nonRemiseBlock').block()"
+			oncomplete="PF('nonRemiseBlock').unblock()">
+		</p:commandButton>
+	</p:outputPanel>
+</ui:composition>
+

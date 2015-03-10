@@ -1,0 +1,114 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<p:panelGrid columns="1" cellspacing="0"
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+		<p:panelGrid id="descriptionPoste"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText styleClass="value" value="Code #{dto.code}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{posteMsgs.label_objet}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.objet}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{posteMsgs.label_date_creation}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateCreation}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row rendered="#{dto.resultat != null}">
+				<p:column>
+					<h:outputText value="#{posteMsgs.label_resultat_attendus_poste}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.resultat}" styleClass="value"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{posteMsgs.label_niveau_competence}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.niveauCompetenceDto.libelleLongFr}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{posteMsgs.label_niveau_qualification}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.niveauQualificationDto.libelleLongFr}" styleClass="value"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column colspan="4">
+					<p:dataTable id="connaissanceDataTable"
+						value="#{dto.connaissanceDtos}"
+						var="connaissance"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{posteMsgs.msg_poste_connaissance_empty}">
+						<f:facet name="header">
+							<h:outputText value="#{posteMsgs.label_connaissances}" />
+						</f:facet>
+						<p:column headerText="#{posteMsgs.poste_numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column headerText="#{posteMsgs.label_type_connaissance}" >
+							<h:outputText value="#{connaissance.typeConnaissanceDto.libelleLongFr}" />
+						</p:column>
+						<p:column headerText="#{posteMsgs.label_connaissance}" >
+							<h:outputText value="#{connaissance.description}" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column colspan="4">
+					<p:dataTable id="habileteDataTable"
+						value="#{dto.habileteDtos}"
+						var="habilete"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{posteMsgs.msg_poste_habilete_empty}">
+						<f:facet name="header">
+							<h:outputText value="#{posteMsgs.label_habiletes}" />		
+						</f:facet>
+						<p:column headerText="#{posteMsgs.poste_numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column headerText="#{posteMsgs.label_type_habilete}" >
+							<h:outputText value="#{habilete.typeHabileteDto.libelleLongFr}" />
+						</p:column>
+						<p:column headerText="#{posteMsgs.label_niveau_habilete}" >
+							<h:outputText value="#{habilete.niveauHabileteDto.libelleLongFr}" />
+						</p:column>
+						<p:column headerText="#{posteMsgs.label_habilitation}" >
+							<h:outputText value="#{habilete.description}" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+			
+			</p:row>
+		</p:panelGrid>
+
+	</p:panelGrid>
+
+</ui:composition>
+

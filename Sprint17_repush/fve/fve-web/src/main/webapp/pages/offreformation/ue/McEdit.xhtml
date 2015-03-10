@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:fieldset
+		legend="#{uniteEnseignementMsgs.unite_enseignement_mc_field_title}">
+		<p:panelGrid style="width:100%" id="mcInfo">
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel rendered="#{ueBB.rattachementMcDto.id != 0}"
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_code}" />
+					<p:outputLabel rendered="#{ueBB.rattachementMcDto.id == 0}"
+						for="mcCode"
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{ueBB.rattachementMcDto.mcCode}"
+						rendered="#{ueBB.rattachementMcDto.id != 0}" style="width:100%"
+						styleClass="value" />
+					<p:column style="width:25%">
+						<p:selectOneMenu rendered="#{ueBB.rattachementMcDto.id == 0}"
+							value="#{ueBB.rattachementMcDto.mcId}" filter="true"
+							filterMatchMode="contains"
+							requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_mc_code_required}"
+							id="mcCode" required="true" style="width:100%">
+							<p:ajax update="mcInfo" onstart="PF('tabUIWidget').block()"
+								onsuccess="PF('tabUIWidget').unblock()"
+								listener="#{ueBB.mcChanged}" />
+							<f:selectItem
+								itemLabel="#{uniteEnseignementMsgs.unite_enseignement_mc_select}"
+								itemValue="" />
+							<f:selectItems value="#{ueBB.mcItemList}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:column>
+				<p:column style="width:50%" colspan="2" />
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_libelle_fr}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{ueBB.rattachementMcDto.mcLibelleFr}"
+						style="width:100%" styleClass="value" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_libelle_ar}" />
+				</p:column>
+				<p:column style="width:25%">
+					<h:outputText value="#{ueBB.rattachementMcDto.mcLibelleAr}"
+						style="width:100%" styleClass="value" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_note_base}"
+						for="noteBase" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber value="#{ueBB.rattachementMcDto.noteDeBase}"
+						required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_rattachement_note_base_required}"
+						minValue="0" maxValue="20" style="width:100%" id="noteBase">
+					</pe:inputNumber>
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_note_obtention}"
+						for="noteObtention" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber value="#{ueBB.rattachementMcDto.noteObtension}"
+						required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_rattachement_note_obtention_required}"
+						minValue="0" maxValue="20" id="noteObtention" style="width:100%">
+					</pe:inputNumber>
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_note_eliminatoire}"
+						for="noteEliminatoire" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber value="#{ueBB.rattachementMcDto.noteEliminatoire}"
+						required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_rattachement_note_eliminatoire_required}"
+						minValue="0" maxValue="20" style="width:100%"
+						id="noteEliminatoire">
+					</pe:inputNumber>
+				</p:column>
+
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_optionnelle}"
+						for="optionnelle" />
+				</p:column>
+				<p:column style="width:25%">
+					<p:selectBooleanCheckbox
+						value="#{ueBB.rattachementMcDto.optionnelle}" style="width:100%"
+						id="optionnelle" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_credit}"
+						for="credit" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber value="#{ueBB.rattachementMcDto.credit}"
+						required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_rattachement_credit_required}"
+						minValue="0" maxValue="30" style="width:100%" id="credit">
+					</pe:inputNumber>
+				</p:column>
+				<p:column style="width:25%">
+					<p:outputLabel
+						value="#{uniteEnseignementMsgs.unite_enseignement_mc_coefficient}"
+						for="coefficient" />
+				</p:column>
+				<p:column style="width:25%">
+					<pe:inputNumber value="#{ueBB.rattachementMcDto.coefficient}"
+						required="true"
+						requiredMessage="#{uniteEnseignementMsgs.unite_enseignement_rattachement_coefficient_required}"
+						minValue="0" maxValue="20" id="coefficient" style="width:100%">
+					</pe:inputNumber>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+	</p:fieldset>
+
+</ui:composition>
+

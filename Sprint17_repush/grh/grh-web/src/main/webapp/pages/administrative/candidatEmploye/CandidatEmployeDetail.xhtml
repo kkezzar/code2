@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	
+									<ui:include
+				src="/pages/common/IndividuMinDetailComponent.xhtml" >
+				<ui:param name="title"  value="Employé"></ui:param>
+				<ui:param name="refIndividuDtoParam"  value="#{candidatEmployeDtoParam.refIndividuDto}"></ui:param>
+				</ui:include>
+									<p:panelGrid id="candidatPnlGrid"
+										styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+
+												<h:outputText styleClass="value" value="Sélection" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.retenu}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.retenu?'Oui':'Non' }" />
+
+											</p:column>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_selection}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateSelection}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+										</p:row>
+										<p:row>
+											<p:column>
+												<h:outputLabel
+													value="#{candidatEmployemsgs.date_convocation}" />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateConvocation}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+
+											<p:column>
+												<h:outputLabel value="#{candidatEmployemsgs.classement}  " />
+											</p:column>
+											<p:column style="width:25%">
+												<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.classement}" />
+											</p:column>
+										</p:row>
+										<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="Décision" />
+											</p:column>
+										</p:row>
+										<p:row>
+									<p:column>
+										<h:outputLabel
+											value="#{candidatEmployemsgs.poste_recrutement}" />
+									</p:column>
+
+									<p:column>
+                                     <h:outputText value="#{candidatEmployeDtoParam.detailRecrutementDto.reference}" styleClass="value"/>
+									</p:column>								
+								</p:row>
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.admis}" />
+										</p:column>
+										<p:column style="width:25%">
+											<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.admis?'Oui':'Non' }" />
+										</p:column>
+                                         <p:column>
+										<h:outputLabel value="#{candidatEmployemsgs.date_decision}"  />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateDecesion}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{candidatEmployemsgs.date_convocation}" />
+									</p:column>
+
+									<p:column >
+                                    	<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateConvocationRec}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+
+									<p:column >
+										<h:outputLabel 
+											value="#{candidatEmployemsgs.reference_decision} " />
+									</p:column>
+									<p:column >
+                                    <h:outputText styleClass="value" value="#{candidatEmployeDtoParam.referenceDecision}"  ></h:outputText>
+									</p:column>
+								</p:row>
+
+								
+									<p:row>
+											<p:column colspan="4" styleClass="title">
+												<h:outputText styleClass="value" value="#{candidatEmployemsgs.installation}" />
+											</p:column>
+										</p:row>
+										
+								
+								<p:row>
+                                         <p:column  >
+											<h:outputLabel value="#{candidatEmployemsgs.installe} " />
+										</p:column>
+										<p:column style="width:25%">
+											<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.installe?'Oui':'Non' }" />
+							
+										</p:column>
+                                         <p:column rendered="#{candidatEmployeDtoParam.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.date_signature_pv_installation}"  />
+									</p:column>
+									<p:column rendered="#{candidatEmployeDtoParam.installe}">
+										<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateSignature}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+	                               </p:row>
+										
+								<p:row>
+									<p:column rendered="#{candidatEmployeDtoParam.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.matricule_attribue} " />
+									</p:column>
+
+									<p:column rendered="#{candidatEmployeDtoParam.installe}">
+                                   <h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.matricule}">
+													
+													</h:outputText>
+									</p:column>
+                                      <p:column rendered="#{candidatEmployeDtoParam.installe}">
+										<h:outputLabel value="#{candidatEmployemsgs.date_installation} "  />
+									</p:column>
+									<p:column rendered="#{candidatEmployeDtoParam.installe}">
+										<h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.dateInstallation}">
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+													</h:outputText>
+									</p:column>
+									
+								</p:row>	
+									<p:row>
+					<p:column  rendered="#{candidatEmployeDtoParam.installe}">
+						<p:outputLabel value="#{candidatEmployemsgs.affectation} "></p:outputLabel>
+					</p:column>
+					<p:column colspan="3" rendered="#{candidatEmployeDtoParam.installe}">
+						                 <h:outputText styleClass="value"
+													value="#{candidatEmployeDtoParam.refStructureDto.llStructureLatin}">
+												
+													</h:outputText>
+					</p:column>
+					
+				</p:row>	
+										
+									</p:panelGrid>
+
+</ui:composition>

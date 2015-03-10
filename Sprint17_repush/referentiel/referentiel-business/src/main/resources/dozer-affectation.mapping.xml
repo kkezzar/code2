@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefAffectationDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefAffectation
+		</class-b>
+
+		<field>
+			<a>idIndividu</a>
+			<b>refIndividu.id</b>
+		</field>
+
+
+		<field>
+			<a>nomLtIndividu</a>
+			<b>refIndividu.nomLatin</b>
+		</field>
+
+		<field>
+			<a>prenomLtIndividu</a>
+			<b>refIndividu.prenomLatin</b>
+		</field>
+
+		<field>
+			<a>idGroupe</a>
+			<b>refGroupeByGroupe.id</b>
+		</field>
+		<field>
+			<a>identifiantGroupe</a>
+			<b>refGroupeByGroupe.identifiant</b>
+		</field>
+		<field>
+			<a>lcGroupe</a>
+			<b>refGroupeByGroupe.lcGroupe</b>
+		</field>
+		<field>
+			<a>lcGroupeArabe</a>
+			<b>refGroupeByGroupe.lcGroupeArabe</b>
+		</field>
+		<field>
+			<a>llGroupe</a>
+			<b>refGroupeByGroupe.llGroupe</b>
+		</field>
+		<field>
+			<a>llGroupeArabe</a>
+			<b>refGroupeByGroupe.llGroupeArabe</b>
+		</field>
+
+		<field>
+			<a>groupeIdRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.id</b>
+		</field>
+		<field>
+			<a>groupeLlFrRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.llEtablissementLatin</b>
+		</field>
+
+		<field>
+			<a>groupeCodeRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>groupeLlArRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.llEtablissementArabe</b>
+		</field>
+		<field>
+			<a>groupeAncienCodeRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.ancienCode</b>
+		</field>
+
+		<field>
+			<a>idGroupeAffecte</a>
+			<b>refGroupeByGroupeAffecte.id</b>
+		</field>
+		<field>
+			<a>lcGroupeAffecte</a>
+			<b>refGroupeByGroupeAffecte.lcGroupe</b>
+		</field>
+		<field>
+			<a>lcGroupeArabeAffecte</a>
+			<b>refGroupeByGroupeAffecte.lcGroupeArabe</b>
+		</field>
+		<field>
+			<a>llGroupeAffecte</a>
+			<b>refGroupeByGroupeAffecte.llGroupe</b>
+		</field>
+		<field>
+			<a>llGroupeArabeAffecte</a>
+			<b>refGroupeByGroupeAffecte.llGroupeArabe</b>
+		</field>
+
+
+
+		<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+		<field>
+			<a>identifiantStructure</a>
+			<b>refStructure.identifiant</b>
+		</field>
+		<field>
+			<a>lcStructureArabe</a>
+			<b>refStructure.lcStructureArabe</b>
+		</field>
+		<field>
+			<a>lcStructureLatin</a>
+			<b>refStructure.lcStructureLatin</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>refStructure.llStructureArabe</b>
+		</field>
+		<field>
+			<a>llStructureLatin</a>
+			<b>refStructure.llStructureLatin</b>
+		</field>
+		<field>
+			<a>structureIdRefEtablissement</a>
+			<b>refStructure.refEtablissement.id</b>
+		</field>
+		<field>
+			<a>structureLlFrRefEtablissement</a>
+			<b>refStructure.refEtablissement.llEtablissementLatin</b>
+		</field>
+		<field>
+			<a>structureLlArRefEtablissement</a>
+			<b>refStructure.refEtablissement.llEtablissementArabe</b>
+		</field>
+		<field>
+			<a>structureAncienCodeRefEtablissement</a>
+			<b>refStructure.refEtablissement.ancienCode</b>
+		</field>
+
+		<field>
+			<a>structureCodeRefEtablissement</a>
+			<b>refStructure.refEtablissement.identifiant</b>
+		</field>
+
+		<field>
+			<a>roleId</a>
+			<b>nomenclature.id</b>
+		</field>
+		<field>
+			<a>roleLibelleLongFr</a>
+			<b>nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>roleLibelleLongAr</a>
+			<b>nomenclature.libelleLongAr</b>
+		</field>
+		<field>
+			<a>roleLibelleCourtFr</a>
+			<b>nomenclature.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>roleLibelleCourtAr</a>
+			<b>nomenclature.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>roleCode</a>
+			<b>nomenclature.code</b>
+		</field>
+		<field>
+			<a>idEvenement</a>
+			<b>refEvenement.id</b>
+		</field>
+		<field>
+			<a>objetEvenement</a>
+			<b>refEvenement.objet</b>
+		</field>
+		<field>
+			<a>descriptionEvenement</a>
+			<b>refEvenement.description</b>
+		</field>
+
+
+		<field>
+			<a>idDomaine</a>
+			<b>refDomaineLMD.id</b>
+		</field>
+		<field>
+			<a>identifiantDomaine</a>
+			<b>refDomaineLMD.identifiant</b>
+		</field>
+		<field>
+			<a>lcDomaineArabe</a>
+			<b>refDomaineLMD.lcDomaineArabe</b>
+		</field>
+		<field>
+			<a>lcDomaine</a>
+			<b>refDomaineLMD.lcDomaine</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>refDomaineLMD.llDomaineArabe</b>
+		</field>
+		<field>
+			<a>llDomaine</a>
+			<b>refDomaineLMD.llDomaine</b>
+		</field>
+
+
+		<field>
+			<a>idFiliere</a>
+			<b>refFiliereLmd.id</b>
+		</field>
+		<field>
+			<a>identifiantFiliere</a>
+			<b>refFiliereLmd.identifiant</b>
+		</field>
+		<field>
+			<a>lcFiliereArabe</a>
+			<b>refFiliereLmd.lcFiliereArabe</b>
+		</field>
+		<field>
+			<a>lcFiliere</a>
+			<b>refFiliereLmd.lcFiliere</b>
+		</field>
+		<field>
+			<a>llStructureArabe</a>
+			<b>refFiliereLmd.llFiliereArabe</b>
+		</field>
+		<field>
+			<a>llFiliere</a>
+			<b>refFiliereLmd.llFiliere</b>
+		</field>
+		<field>
+			<a>idRefEtablissement</a>
+			<b>refStructure.refEtablissement.id</b>
+		</field>
+		<field>
+			<a>idRefEtablissement</a>
+			<b>refGroupeByGroupe.refEtablissement.id</b>
+		</field>
+
+	</mapping>
+
+
+</mappings>

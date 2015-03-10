@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierEtudiantDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.DossierEtudiant
+		</class-b>
+		<field>
+			<a>nin</a>
+			<b>individu.identifiant</b>
+		</field>
+		<field>
+			<a>individuId</a>
+			<b>individu.id</b>
+		</field>
+		<field>
+			<a>anneeBac</a>
+			<b>dossierBachelier.importation.anneeBac</b>
+		</field>
+
+		<field>
+			<a>dossierBachelierId</a>
+			<b>dossierBachelier.id</b>
+		</field>
+		<field>
+			<a>dossierBachelierMatricule</a>
+			<b>dossierBachelier.matricule</b>
+		</field>
+		<field>
+			<a>dateCreation</a>
+			<b>dossier.dateCreation</b>
+		</field>
+		<field>
+			<a>typeDossier</a>
+			<b>dossier.typeDossier</b>
+		</field>
+		<field>
+			<a>idDossier</a>
+			<b>dossier.id</b>
+		</field>
+		<field>
+			<a>situationId</a>
+			<b>dossier.situationEntite.id</b>
+		</field>
+		<field>
+			<a>inscriptionAdministrativeDtos</a>
+			<b>dossierInscriptionAdministratives</b>
+		</field>
+		<field>
+			<a>refCodeEtablissement</a>
+			<b>refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>refEtablissementId</a>
+			<b>refEtablissement.id</b>
+		</field>
+
+	</mapping>
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.DossierEtudiantDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Dossier
+		</class-b>
+
+		<field>
+			<a>situationId</a>
+			<b>situationEntite.id</b>
+		</field>
+	</mapping>
+
+</mappings>

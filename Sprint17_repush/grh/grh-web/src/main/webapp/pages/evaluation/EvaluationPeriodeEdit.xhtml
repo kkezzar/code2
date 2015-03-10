@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{evalEmpMsgs.enrg_evaluation_employes_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_evaluation_periode_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_nouveau}" process="@this"
+							immediate="true"
+							action="#{evaluationMBean.onNewEvaluationPeriode}" styleClass="ui-buttpn-bleu"
+							update=":pnl_detail" 
+							onstart="PF('page').block()" 
+							onsuccess="PF('page').unblock()"/>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:calendar navigator="true" 
+							value="#{evaluationMBean.evaluationPeriodeSearchDto.dateDebutPeriode}"
+							id="dateDebPeriodeSearch" showButtonPanel="true"
+							label="#{evalEmpMsgs.label_debut_periode}" 
+							placeholder="#{evalEmpMsgs.label_debut_periode}"
+							pattern="dd/MM/yyyy"/>
+						<p:spacer width="5px"></p:spacer>
+						<p:calendar navigator="true" 
+							value="#{evaluationMBean.evaluationPeriodeSearchDto.dateFinPeriode}"
+							id="dateFinPeriodeSearch" showButtonPanel="true"
+							label="#{evalEmpMsgs.label_fin_periode}" 
+							placeholder="#{evalEmpMsgs.label_fin_periode}"
+							pattern="dd/MM/yyyy"/>
+							
+						<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu" process="form_evaluation_periode_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{evaluationMBean.onSearchEvaluationPeriode()}"/>
+		
+					</p:toolbarGroup>
+				</p:toolbar>
+			</h:form>
+
+				<p:dataTable var="evaluationPeriode" lazy="true"
+					value="#{evaluationMBean.evaluationPeriodeDtos}"
+					widgetVar="evaluationPeriodeDataTable" rowKey="#{evaluationPeriode.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{evalEmpMsgs.evaluation_periode_datable_list_no_result}">
+					
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{evaluationMBean.onEvaluationPeriodeSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 update=":pnl_detail" />
+		
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{evaluationPeriode.dateEvaluation}" 
+						headerText="#{evalEmpMsgs.label_date_evaluation}">
+						<h:outputText value="#{evaluationPeriode.dateEvaluation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{evaluationPeriode.dateDebutPeriode}" 
+						headerText="#{evalEmpMsgs.label_debut_periode}">
+						<h:outputText value="#{evaluationPeriode.dateDebutPeriode}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{evaluationPeriode.dateFinPeriode}" 
+						headerText="#{evalEmpMsgs.label_fin_periode}">
+						<h:outputText value="#{evaluationPeriode.dateFinPeriode}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			
+			<br></br>
+			
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty evaluationMBean.evaluationPeriodeDto}">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<h:form id="form_periode_evaluation_edit">
+								<p:panelGrid id="periodeEvaluationPanel" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+									<p:row>
+										<p:column colspan="4" styleClass="title">
+											<h:outputText value="#{evalEmpMsgs.label_enrg_periode_evaluation}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{evalEmpMsgs.label_date_evaluation} " />
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:calendar navigator="true" 
+												value="#{evaluationMBean.evaluationPeriodeDto.dateEvaluation}"
+												id="dateEval" showButtonPanel="true"
+												label="#{evalEmpMsgs.label_date_evaluation}" 
+												required="true"
+												requiredMessage="#{evalEmpMsgs.msg_date_evaluation_required}"
+												pattern="dd/MM/yyyy"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{evalEmpMsgs.label_debut_periode} " />
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:calendar navigator="true" 
+												value="#{evaluationMBean.evaluationPeriodeDto.dateDebutPeriode}"
+												id="dateDebPer" showButtonPanel="true"
+												label="#{evalEmpMsgs.label_debut_periode}" 
+												required="true"
+												requiredMessage="#{evalEmpMsgs.msg_date_debut_periode_required}"
+												pattern="dd/MM/yyyy"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{evalEmpMsgs.label_fin_periode} " />
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:calendar navigator="true" 
+												value="#{evaluationMBean.evaluationPeriodeDto.dateFinPeriode}"
+												id="dateFinPer" showButtonPanel="true"
+												label="#{evalEmpMsgs.label_fin_periode}" 
+												required="true"
+												requiredMessage="#{evalEmpMsgs.msg_date_fin_periode_required}"
+												pattern="dd/MM/yyyy"/>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<p:toolbar id="periodeEvaluationToolBar" styleClass="toolBarMesrs" rendered="#{evaluationMBean.evaluationPeriodeDto != null}">
+									<p:toolbarGroup>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+											id="savePeriodeEvaluationBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+											actionListener="#{evaluationMBean.onSavePeriodeEvaluation}"
+											rendered="#{evaluationMBean.evaluationPeriodeDto != null}"/>
+									</p:toolbarGroup>
+								</p:toolbar>
+							 </h:form>
+						
+						<p:panelGrid id="evaluationEmployesGrid" columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border evaluationEmployesGrid">
+							<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" 
+								rendered="#{evaluationMBean.evaluationPeriodeDto != null and evaluationMBean.evaluationPeriodeDto.id != null}">
+								<p:row>
+									<p:column styleClass="title">
+										<h:outputText value="#{evalEmpMsgs.label_employes_evaluation}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:dataTable id="evluationEmployeDataTable"
+											value="#{evaluationMBean.evaluationEmployeDtos}"
+											var="evaluation"
+											lazy="true"
+											rowKey="#{evaluation.id}"
+											rowIndexVar="rowIndex"
+											emptyMessage="#{evalEmpMsgs.msg_evaluation_employe_periode_empty}"
+											paginator="true" rows="5" paginatorPosition="bottom"
+											selectionMode="single"
+											columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+														<p:commandButton id="btnAddEvaluationEmploye" styleClass="ui-button-bleu" 
+																title="ajouter evaluation" icon="ui-icon-plusthick"  
+																process="@this" 
+																ajax="true"
+																immediate="true" 
+																update="@(.evaluationEmployeGrid)"
+																action="#{evaluationMBean.onNewEmployeEvaluation()}">
+														</p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+											<p:ajax event="rowSelect" immediate="true"
+												listener="#{evaluationMBean.onEvaluationEmployeSelected}" process="@this"
+												onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						 						update="@(.evaluationEmployeGrid)" />
+		
+											<p:column headerText="#{commonmsgs.column_numero_ligne}" style="width:2%">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_matricule_employe}" >
+												<h:outputText value="#{evaluation.employeDto.matricule}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.label_employe}" >
+												<h:outputText value="#{evaluation.employeDto.refIndividuDto.prenomLatin} #{evaluation.employeDto.refIndividuDto.nomLatin}" />
+											</p:column>
+											<p:column headerText="#{dossierEmployemsgs.dossier_employe_date_naissance}" >
+												<h:outputText value="#{evaluation.employeDto.refIndividuDto.dateNaissance}" >
+													<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+												</h:outputText>
+											</p:column>
+											<p:column headerText="#{evalEmpMsgs.label_note}" >
+												<h:outputText value="#{evaluation.note}" />
+											</p:column>
+										</p:dataTable>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</p:panelGrid>
+						<p:panelGrid id="evaluationEmployeGrid" columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border evaluationEmployeGrid">
+							<h:form>
+								<p:panelGrid  styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" 
+									rendered="#{evaluationMBean.evaluationEmployeDto != null}">
+									<p:row>
+										<p:column styleClass="title" colspan="2">
+											<h:outputText value="#{evalEmpMsgs.label_evaluer_employe}" styleClass="value"/>
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column style="width:25%">
+											<h:outputLabel value="#{grhmsgs.employe} " styleClass="required"/>
+										</p:column>
+										<p:column style="width:75%" colspan="3">
+											<p:commandLink id="employe"
+												onclick="PF('employeDetailDialog').show()"
+												rendered="#{evaluationMBean.evaluationEmployeDto.employeDto != null}"
+												immediate="true">
+												<h:outputText
+													value="#{evaluationMBean.evaluationEmployeDto.employeDto.refIndividuDto.nomLatin} #{evaluationMBean.evaluationEmployeDto.employeDto.refIndividuDto.prenomLatin}"
+													styleClass="value" />
+											</p:commandLink>
+											<p:inputText value="#{evaluationMBean.evaluationEmployeDto.employeDto}"  
+												   required="true" 
+												   requiredMessage="#{mutationMgs.employe_required}" 
+												   rendered="#{evaluationMBean.evaluationEmployeDto.employeDto==null}" 
+												   onclick="PF('dossierEmployeDialogSearch').show()"/>
+											<p:spacer width="10px"/>
+											<p:commandButton id="btnAddEmploye" 
+												rendered="#{evaluationMBean.evaluationEmployeDto.employeDto!=null and evaluationMBean.evaluationEmployeDto.id == null}"
+												styleClass="ui-button-bleu" title="Ajouter Employé"
+												icon="ui-icon-plusthick" ajax="true" immediate="true"
+												onsuccess="PF('dossierEmployeDialogSearch').show()"/>
+	                               
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText value="#{evalEmpMsgs.label_appreciation_generale}" />
+										</p:column>
+										<p:column>
+											<p:inputTextarea style="width:100%;height:50px"
+												value="#{evaluationMBean.evaluationEmployeDto.appreciation}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column>
+											<h:outputText value="#{evalEmpMsgs.label_note}" />
+										</p:column>
+										<p:column>
+											<h:inputText value="#{evaluationMBean.evaluationEmployeDto.note}" />
+										</p:column>
+									</p:row>
+									<p:row>
+										<p:column colspan="2">
+											<p:dataTable id="detailEvaluationDataTable"
+												var="detail"
+												value="#{evaluationMBean.evaluationEmployeDto.detailDtos}"
+												rowIndexVar="rowIndexVar"
+												rowKey="#{detail.id}">
+													<f:facet name="header">
+														<h:outputText value="#{evalEmpMsgs.label_evaluation_critere}" />
+													</f:facet>
+													<p:column headerText="#{commonmsgs.column_numero_ligne}" style="width:2%">
+														<h:outputText value="#{rowIndexVar+1}" />
+													</p:column>
+													<p:column headerText="#{evalEmpMsgs.label_critere}" style="width: 30%;">
+														<h:outputText value="#{detail.critereDto.libelleLongFr}" />
+													</p:column>
+													<p:column headerText="#{evalEmpMsgs.label_niveau}" style="width: 30%;">
+														<p:selectOneMenu value="#{detail.niveauDto.id}" >
+															<f:selectItem itemLabel="#{evalEmpMsgs.label_niveau}"/>
+															<f:selectItems value="#{evaluationMBean.niveauAppreciationList}"/>											
+														</p:selectOneMenu>
+													</p:column>
+													<p:column headerText="#{evalEmpMsgs.label_appreciation}">
+														<p:inputTextarea value="#{detail.appreciation}" style="width:100%;height:50px"/>
+													</p:column>
+											</p:dataTable>
+										</p:column>
+									</p:row>
+								</p:panelGrid>
+								<p:toolbar id="employeEvaluationToolBar" styleClass="toolBarMesrs" rendered="#{evaluationMBean.evaluationEmployeDto != null}">
+									<p:toolbarGroup>
+										<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+												id="saveEmployeEvaluationBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+												actionListener="#{evaluationMBean.onSaveEmployeEvaluation}"/>
+									</p:toolbarGroup>
+								</p:toolbar>
+							</h:form>
+						</p:panelGrid>
+						<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+							<ui:include
+								src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+								<ui:param name="dossierEmployeDtoParam"
+									value="#{evaluationMBean.evaluationEmployeDto.employeDto}"/>
+							</ui:include>
+						</p:dialog>
+				</p:panelGrid>
+				</p:outputPanel>
+				
+			</p:outputPanel>
+		</p:outputPanel>
+		<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+							<ui:param name="nameMBean" value="#{evaluationMBean}"/>
+							<ui:param name="updateAjax" value=":pnl_Gerer"/>
+							<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"/>
+							<ui:param name="dialogHeader" value="Sélectionner un employé"/>
+						</ui:include>
+	</ui:define>
+</ui:composition>
+</html>

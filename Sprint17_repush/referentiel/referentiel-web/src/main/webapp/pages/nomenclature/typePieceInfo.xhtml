@@ -1,0 +1,56 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+   
+     <p:panelGrid id="infotpPanelId" styleClass="noBorder1">
+      <p:row>
+      <p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_code_type_dossier}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.codeTypeDossier}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_libelle_long_fr_type_dossier}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.ncLlLatinTypeDossier}" style="font-weight: bold;"/>
+		</p:column>
+		
+		<p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_libelle_long_ar_type_dossier}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.ncLlArabeTypeDossier}" style="font-weight: bold;"/>
+		</p:column>
+		
+		</p:row>
+		<p:row>
+		<p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_code_type_piece}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.codeTypePiece}" style="font-weight: bold;"/>
+		</p:column> 
+		<p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_libelle_long_fr_type_piece}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.ncLlLatinTypePiece}" style="font-weight: bold;"/>
+		</p:column>
+		
+		<p:column>
+			<h:outputText  value="#{typepiecemsgs.typepiece_item_libelle_long_ar_type_piece}:  " />
+		</p:column>
+		<p:column>	
+			<h:outputText  value="#{typePieceBckBean.refTypePieceConstitutiveDto.ncLlArabeTypePiece}" style="font-weight: bold;"/>
+		</p:column>
+		
+		</p:row>
+      </p:panelGrid>          
+   
+    
+</ui:composition>

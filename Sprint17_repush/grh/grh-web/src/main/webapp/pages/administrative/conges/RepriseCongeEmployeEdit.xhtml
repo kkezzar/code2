@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{congeEmployeMgs.pnl_enregistrer_reprise_employe} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_reprise_conge_search">
+
+
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						
+
+						
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+						<p:spacer width="10px"></p:spacer>
+						<p:inputText id="keyWordsID"
+							value="#{repriseCongeEmployeMBean.searchKeyWords}"
+							placeholder="#{commonmsgs.search_watermark_text_key_words}"
+							label="#{commonmsgs.search_label_mots_cles}" />
+
+						<p:separator />
+
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_reprise_conge_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{repriseCongeEmployeMBean.onSearch}"></p:commandButton>
+						<!--  </p:panelGrid> -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+
+
+				<p:dataTable var="conge" lazy="true"
+					value="#{repriseCongeEmployeMBean.congeEmployeModel}"
+					widgetVar="congesTable" rowKey="#{conge.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{repriseCongeEmployeMBean.onCongeEmployeSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":pnl_detail" />
+
+					<f:facet name="header">
+
+					</f:facet>
+					<p:column headerText="#{congeEmployeMgs.numero}" style="width:2%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column
+						sortBy="refIndividu.nomLatin"
+						headerText="#{congeEmployeMgs.employe}">
+						<h:outputText
+							value="#{conge.dossierEmployeDto.refIndividuDto.nomLatin} #{conge.dossierEmployeDto.refIndividuDto.prenomLatin}" />
+					</p:column>
+					<p:column sortBy="#{conge.dateDemande}"
+						headerText="#{congeEmployeMgs.date_demande}">
+						<h:outputText value="#{conge.dateDemande}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{conge.dateDebutAccepte}"
+						headerText="#{congeEmployeMgs.date_debut_accepte}">
+						<h:outputText value="#{conge.dateDebutAccepte}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column
+						sortBy="#{conge.nbreJourAccepte}"
+						headerText="#{congeEmployeMgs.nb_jours_accepte}">
+						<h:outputText
+							value="#{conge.nbreJourAccepte}" />
+					</p:column>
+                    <p:column sortBy="#{conge.dateRepriseAccepte}"
+						headerText="#{congeEmployeMgs.date_reprise_accepte}">
+						<h:outputText value="#{conge.dateRepriseAccepte}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+
+			</h:form>
+
+			<!-- Fin search -->
+			<br></br>
+			
+		<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty repriseCongeEmployeMBean.congeEmployeDto}">
+					<p:tabView id="tabView">
+					<p:tab title="#{congeEmployeMgs.pnl_enregistrer_reprise_employe}  " >
+					<ui:include
+							src="/pages/administrative/conges/ResultatCongeEmployeDetail.xhtml">
+							<ui:param name="congeEmployeDtoParam"
+								value="#{repriseCongeEmployeMBean.congeEmployeDto}"></ui:param>
+						</ui:include>
+						<h:form id="form_reprise_conge_edit">
+						 <p:panelGrid id="reprise_conge_editPnl"
+								styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText value="#{congeEmployeMgs.reprise_conge_title}" styleClass="value" />
+									</p:column>
+								</p:row>
+						
+							<p:row>
+									<p:column >
+										<h:outputLabel value="#{congeEmployeMgs.date_reprise_reelle} "
+											styleClass="required" />
+									</p:column>
+									<p:column >
+											<p:calendar navigator="true" value="#{repriseCongeEmployeMBean.congeEmployeDto.dateRepriseReelle}" style="width:100%"
+								label="#{congeEmployeMgs.date_reprise_reelle}"
+								pattern="dd/MM/yyyy"
+								requiredMessage="#{congeEmployeMgs.date_reprise_reelle_required}">
+								<p:ajax event="dateSelect" update="nbJourReel" listener="#{repriseCongeEmployeMBean.onDateRepriseReelleChange}" process="@this"/>
+							</p:calendar> 
+									</p:column>
+									<p:column >
+										<h:outputLabel value="#{congeEmployeMgs.nb_jours_accepte} "
+											 />
+									</p:column>
+									<p:column >
+									<h:outputText id="nbJourReel" value="#{repriseCongeEmployeMBean.congeEmployeDto.nbreJourReel}" styleClass="value" />
+								</p:column>
+								</p:row>
+								<p:row>
+									<p:column >
+										<h:outputLabel value="#{congeEmployeMgs.motif_reprise} "
+											/>
+									</p:column>
+									<p:column >
+										<p:inputText id="motifReprise" value="#{repriseCongeEmployeMBean.congeEmployeDto.motifReprise}" ></p:inputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+					
+
+
+						
+						<p:panelGrid columns="1" cellspacing="0"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:toolbar id="congeToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+						id="saveRepriseCongeBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{repriseCongeEmployeMBean.onSave}" onstart="PF('page').block()" onsuccess="PF('page').unblock()">
+
+						
+					</p:commandButton>
+						
+					
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{repriseCongeEmployeMBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+						</p:panelGrid>	
+					</h:form>
+					</p:tab>
+	    <p:tab title="#{commonmsgs.tab_historique}" disabled="#{repriseCongeEmployeMBean.congeEmployeDto.id == null}">
+														<eh:EntityHistoryComponent 
+															list="#{repriseCongeEmployeMBean.congeEmployeHistory}"
+															idParamName="id"
+															idParamValue="#{repriseCongeEmployeMBean.congeEmployeDto.id}">
+														</eh:EntityHistoryComponent>	
+													</p:tab>
+	</p:tabView>
+					
+					
+
+
+
+
+
+
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- Fin detail -->
+		</p:outputPanel>
+		
+	</ui:define>
+</ui:composition>
+</html>

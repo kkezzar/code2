@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefLieuDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefLieu
+		</class-b>
+
+		<field>
+			<a>typelieuId</a>
+			<b>nomenclatureByTypeLieu.id</b>
+		</field>
+		<field>
+			<a>typelieuLibelleLongFr</a>
+			<b>nomenclatureByTypeLieu.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typelieuLibelleLongAr</a>
+			<b>nomenclatureByTypeLieu.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typelieuLibelleCourtFr</a>
+			<b>nomenclatureByTypeLieu.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typelieuLibelleCourtAr</a>
+			<b>nomenclatureByTypeLieu.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typelieuCode</a>
+			<b>nomenclatureByTypeLieu.code</b>
+		</field>
+
+
+
+		<field>
+			<a>typeImplantId</a>
+			<b>nomenclatureByTypeImplantation.id</b>
+		</field>
+		<field>
+			<a>typeImplantLibelleLongFr</a>
+			<b>nomenclatureByTypeImplantation.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeImplantLibelleLongAr</a>
+			<b>nomenclatureByTypeImplantation.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeImplantLibelleCourtAr</a>
+			<b>nomenclatureByTypeImplantation.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeImplantLibelleCourtFr</a>
+			<b>nomenclatureByTypeImplantation.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeImplantCode</a>
+			<b>nomenclatureByTypeImplantation.code</b>
+		</field>
+
+
+
+		<field>
+			<a>typeAccesId</a>
+			<b>nomenclatureByTypeacces.id</b>
+		</field>
+		<field>
+			<a>typeAccesLibelleLongFr</a>
+			<b>nomenclatureByTypeacces.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeAccesLibelleLongAr</a>
+			<b>nomenclatureByTypeacces.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeAccesLibelleCourtFr</a>
+			<b>nomenclatureByTypeacces.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeAccesLibelleCourtAr</a>
+			<b>nomenclatureByTypeacces.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeAccesCode</a>
+			<b>nomenclatureByTypeacces.code</b>
+		</field>
+
+
+		<field>
+			<a>typeSalleId</a>
+			<b>nomenclatureByTypesalle.id</b>
+		</field>
+		<field>
+			<a>typeSalleLibelleLongFr</a>
+			<b>nomenclatureByTypesalle.libelleLongFr</b>
+		</field>
+		<field>
+			<a>typeSalleLibelleLongAr</a>
+			<b>nomenclatureByTypesalle.libelleLongAr</b>
+		</field>
+		<field>
+			<a>typeSalleLibelleCourtFr</a>
+			<b>nomenclatureByTypesalle.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>typeSalleLibelleCourtAr</a>
+			<b>nomenclatureByTypesalle.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>typeSalleCode</a>
+			<b>nomenclatureByTypesalle.code</b>
+		</field>
+		<field>
+			<a>idPerelieu</a>
+			<b>refLieu.id</b>
+		</field>
+
+		<field>
+			<a>desigPereLieu</a>
+			<b>refLieu.designation</b>
+		</field>
+
+		<field>
+			<a>desigArPereLieu</a>
+			<b>refLieu.designationArabe</b>
+		</field>
+
+
+		<field>
+			<a>idStructure</a>
+			<b>refStructure.id</b>
+		</field>
+
+		<field>
+			<a>llStructureArabe</a>
+			<b>refStructure.llStructureArabe</b>
+		</field>
+
+		<field>
+			<a>llStructureLatin</a>
+			<b>refStructure.llStructureLatin</b>
+		</field>
+
+
+
+		<!-- daira -->
+		<field>
+			<a>dairaId</a>
+			<b>nomenclatureByDaira.id</b>
+		</field>
+		<field>
+			<a>dairaLibelleLongFr</a>
+			<b>nomenclatureByDaira.libelleLongFr</b>
+		</field>
+		<field>
+			<a>dairaLibelleLongAr</a>
+			<b>nomenclatureByDaira.libelleLongAr</b>
+		</field>
+		<field>
+			<a>dairaLibelleCourtFr</a>
+			<b>nomenclatureByDaira.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>dairaLibelleCourtAr</a>
+			<b>nomenclatureByDaira.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>dairaCode</a>
+			<b>nomenclatureByDaira.code</b>
+		</field>
+
+		<!-- Commune -->
+		<field>
+			<a>communeId</a>
+			<b>nomenclatureByCommune.id</b>
+		</field>
+		<field>
+			<a>communeLibelleLongFr</a>
+			<b>nomenclatureByCommune.libelleLongFr</b>
+		</field>
+		<field>
+			<a>communeLibelleLongAr</a>
+			<b>nomenclatureByCommune.libelleLongAr</b>
+		</field>
+		<field>
+			<a>communeLibelleCourtFr</a>
+			<b>nomenclatureByCommune.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>communeLibelleCourtAr</a>
+			<b>nomenclatureByCommune.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>communeCode</a>
+			<b>nomenclatureByCommune.code</b>
+		</field>
+
+		<!-- Willaya -->
+		<field>
+			<a>wilayaId</a>
+			<b>nomenclatureByWilaya.id</b>
+		</field>
+		<field>
+			<a>wilayaLibelleLongFr</a>
+			<b>nomenclatureByWilaya.libelleLongFr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleLongAr</a>
+			<b>nomenclatureByWilaya.libelleLongAr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleCourtFr</a>
+			<b>nomenclatureByWilaya.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>wilayaLibelleCourtAr</a>
+			<b>nomenclatureByWilaya.libelleCourtAr</b>
+		</field>
+		<field>
+			<a>wilayaCode</a>
+			<b>nomenclatureByWilaya.code</b>
+		</field>
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefLieuDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefSituation
+		</class-b>
+		<field-exclude>
+			<a>id</a>
+			<b>id</b>
+		</field-exclude>
+		<field>
+			<a>llSituationFr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongFr</b>
+		</field>
+		<field>
+			<a>llSituationAr</a>
+			<b>refEntiteSituation.nomenclature.libelleLongAr</b>
+		</field>
+	</mapping>
+
+
+
+
+</mappings>

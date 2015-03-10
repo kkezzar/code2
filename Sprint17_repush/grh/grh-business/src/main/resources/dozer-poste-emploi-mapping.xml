@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+          
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.PosteEmploiDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.PosteEmploi</class-b>
+		<field>
+			<a>niveauQualificationDto.id</a>
+			<b>niveauQualification.id</b>
+		</field>
+		<field>
+			<a>niveauQualificationDto.libelleLongFr</a>
+			<b>niveauQualification.libelleLongFr</b>
+		</field>
+		<field>
+			<a>niveauCompetenceDto.id</a>
+			<b>niveauCompetence.id</b>
+		</field>
+		<field>
+			<a>niveauCompetenceDto.libelleLongFr</a>
+			<b>niveauCompetence.libelleLongFr</b>
+		</field>
+		<field>
+			<a>connaissanceDtos</a>
+			<b>connaissances</b>
+		</field>
+		<field>
+			<a>habileteDtos</a>
+			<b>habiletes</b>
+		</field>
+		<field>
+			<a>etablissementDto.id</a>
+			<b>etablissement.id</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.ConnaissancePosteDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.ConnaissancePoste</class-b>
+		<field>
+			<a>typeConnaissanceDto.id</a>
+			<b>typeConnaissance.id</b>
+		</field>
+		<field>
+			<a>typeConnaissanceDto.libelleLongFr</a>
+			<b>typeConnaissance.libelleLongFr</b>
+		</field>
+		<field>
+			<a>posteDto.id</a>
+			<b>poste.id</b>
+		</field>
+	</mapping>
+	
+	
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.HabiletePosteDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.HabiletePoste</class-b>
+		<field>
+			<a>typeHabileteDto.id</a>
+			<b>typeHabilete.id</b>
+		</field>
+		<field>
+			<a>typeHabileteDto.libelleLongFr</a>
+			<b>typeHabilete.libelleLongFr</b>
+		</field>
+		<field>
+			<a>niveauHabileteDto.id</a>
+			<b>niveauHabilete.id</b>
+		</field>
+		<field>
+			<a>niveauHabileteDto.libelleLongFr</a>
+			<b>niveauHabilete.libelleLongFr</b>
+		</field>
+		<field>
+			<a>posteDto.id</a>
+			<b>poste.id</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.grh.business.model.dto.AffectationPosteDto</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.grh.AffectationPoste</class-b>
+		<field>
+			<a>posteDto.id</a>
+			<b>poste.id</b>
+		</field>
+		<field>
+			<a>dossierEmployeDto</a>
+			<b>employe</b>
+		</field>
+<!-- 		<field> -->
+<!-- 			<a>dossierEmployeDto.id</a> -->
+<!-- 			<b>employe.id</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a>dossierEmployeDto.refIndividuDto.nomLatin</a> -->
+<!-- 			<b>employe.refIndividu.nomLatin</b> -->
+<!-- 		</field> -->
+<!-- 		<field> -->
+<!-- 			<a>dossierEmployeDto.refIndividuDto.prenomLatin</a> -->
+<!-- 			<b>employe.refIndividu.prenomLatin</b> -->
+<!-- 		</field> -->
+	</mapping>
+
+</mappings>

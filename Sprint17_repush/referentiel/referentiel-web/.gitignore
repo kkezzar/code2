@@ -1,0 +1,8 @@
+.settings/
+.project
+.classpath
+target/
+bin/
+work/
+.faces-config.xml.jsfdia
+fwkreferentiel.log

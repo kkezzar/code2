@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.ActiviteProjetDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.ActiviteProjet</class-b>
+      		
+      		<field>
+      					<a>activiteNomenclatureDto</a>
+	  					<b>activiteNomenclature</b>
+      		</field> 
+      		<field>
+      					<a>projetDto</a>
+	  					<b>projet</b>
+      		</field> 
+      		
+      		 
+   	</mapping>
+</mappings>

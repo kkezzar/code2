@@ -1,0 +1,92 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+	<p:panelGrid columns="1" cellspacing="0"
+		styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+		<p:panelGrid id="descriptionDemande"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column colspan="4" styleClass="title">
+					<h:outputText styleClass="value" value="#{positionMgs.label_demande}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{positionMgs.label_type_demande}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.nomenclatureByPositionDto.libelleLongFr}" styleClass="value"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{positionMgs.label_date_demande}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateDemande}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column rendered="#{dto.nomenclatureByMotifDto != null}">
+					<h:outputText value="#{positionMgs.label_motif}" />
+				</p:column>
+				<p:column rendered="#{dto.nomenclatureByMotifDto != null}">
+					<h:outputText value="#{dto.nomenclatureByMotifDto.libelleLongFr}" styleClass="value"/>
+				</p:column>
+				<p:column rendered="#{dto.structureDto != null}">
+					<h:outputText value="#{positionMgs.label_detachement}" />
+				</p:column>
+				<p:column rendered="#{dto.structureDto!= null}">
+					<h:outputText value="#{dto.structureDto.llStructureLatin}" styleClass="value"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{positionMgs.label_date_debut_demande}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateDebut}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{positionMgs.label_date_fin_demande}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{dto.dateFin}" styleClass="value">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{positionMgs.label_prolongation}" />
+				</p:column>
+				<p:column >
+					<h:outputText value="#{dto.prolongation != null and dto.prolongation  == true ? 'Oui' : 'Non'}" styleClass="value"/>
+				</p:column>
+			</p:row>
+
+		</p:panelGrid>
+	</p:panelGrid>
+
+
+
+
+
+
+
+
+
+
+
+</ui:composition>
+

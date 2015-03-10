@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:messages id="messages" showSummary="true" autoUpdate="true"
+			closable="true" />
+		<ui:include src="/pages/permission/permissionHeader.xhtml" />
+		<br />
+		<p:panel id="infospermissionPanel" style="border:0;" var="current">
+			<h:form id="permissionEditForm">
+
+				<pe:blockUI target="permissionEditForm" widgetVar="pWidget">
+					<h:graphicImage library="images" name="ajax-loader1.gif" />
+				</pe:blockUI>
+				<p:fieldset legend="#{commonmsgs.button_permission}">
+					<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{permissionmsgs.permission_domaine}" />
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="domaine" style="width:100%"
+									value="#{permissionBckBean.refPermissionDto.idDomaine}"
+									label="#{permissionmsgs.permission_domaine}">
+
+									<f:selectItem
+										itemLabel="#{permissionmsgs.permission_domaine_select}"
+										itemValue="" />
+									<f:selectItems value="#{permissionBckBean.listItemDomaines}" />
+									<p:ajax listener="#{permissionBckBean.domaineChanged}"
+										onstart="PF('pWidget').block()"
+										onsuccess="PF('pWidget').unblock()"
+										update="permissionEditForm,module" />
+								</p:selectOneMenu>
+							</p:column>
+						
+							<p:column style="width:15%">
+								<h:outputText value="#{permissionmsgs.permission_sub_domaine} " />
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="subDomaine" style="width:100%"
+									value="#{permissionBckBean.refPermissionDto.idSubDomaine}"
+									label="#{permissionmsgs.permission_sub_domaine}">
+
+									<f:selectItem
+										itemLabel="#{permissionmsgs.permission_subDomaine_select}"
+										itemValue="" />
+									<f:selectItems value="#{permissionBckBean.listItemSubDomaines}" />
+
+									<p:ajax listener="#{permissionBckBean.subDomaineChanged}"
+										onstart="PF('pWidget').block()"
+										onsuccess="PF('pWidget').unblock()" update="fonctionData" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText value="#{permissionmsgs.permission_module} " />
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="module" style="width:100%"
+									value="#{permissionBckBean.refPermissionDto.idModule}"
+									label="#{permissionmsgs.permission_module}">
+
+									<f:selectItem
+										itemLabel="#{permissionmsgs.permission_module_select}"
+										itemValue="" />
+									<f:selectItems value="#{permissionBckBean.listItemModules}" />
+									<p:ajax listener="#{permissionBckBean.moduleChanged}"
+										onstart="PF('pWidget').block()"
+										onsuccess="PF('pWidget').unblock()"
+										update="fonctionData,fonction" />
+
+								</p:selectOneMenu>
+							</p:column>
+						
+							<p:column style="width:15%">
+								<h:outputText value="#{permissionmsgs.permission_fonction} " />
+							</p:column>
+							<p:column style="width:35%">
+								<p:selectOneMenu id="fonction" style="width:100%"
+									value="#{permissionBckBean.refPermissionDto.idFonction}"
+									label="#{permissionmsgs.permission_fonction}">
+
+									<f:selectItem
+										itemLabel="#{permissionmsgs.permission_fonction_select}"
+										itemValue="" />
+									<f:selectItems value="#{permissionBckBean.listItemFonctions}" />
+									<p:ajax listener="#{permissionBckBean.fonctionChanged}"
+										onstart="PF('pWidget').block()"
+										onsuccess="PF('pWidget').unblock()" update="fonctionData" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+
+					</p:panelGrid>
+					<br />
+					<p:dataTable resizableColumns="true" id="fonctionData"
+						value="#{permissionBckBean.listPermissions}" var="permission"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="12"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+						<p:ajax event="page" update="@this"
+							onstart="PF('pWidget').block()"
+							onsuccess="PF('pWidget').unblock()" />
+						<p:ajax event="sort" update="@all" process="@form"
+							onstart="PF('pWidget').block()"
+							onsuccess="PF('pWidget').unblock()" />
+						<f:facet name="header">
+							<h:outputText value="#{permissionmsgs.permission_fonction_liste}" />
+						</f:facet>
+						<p:column width="50%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_name_table_label}" />
+							</f:facet>
+							<h:outputText value="#{permission.nomLatinFonction}"></h:outputText>
+						</p:column>
+						<p:column style="text-align:center" width="10%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_all_label}" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{permission.allAccess}">
+
+								<p:ajax listener="#{permissionBckBean.allCheckChange}"
+									update="fonctionData" onstart="PF('pWidget').block()"
+									onsuccess="PF('pWidget').unblock()" />
+								<f:attribute name="selectedRecord" value="#{permission}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="text-align:center" width="10%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_read_table_label}" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{permission.consulter}">
+
+								<p:ajax listener="#{permissionBckBean.readCheckChange}"
+									update="fonctionData" />
+								<f:attribute name="selectedRecord" value="#{permission}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="text-align:center" width="10%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_create_table_label}" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{permission.creer}">
+
+								<p:ajax listener="#{permissionBckBean.checkChange}"
+									onstart="PF('pWidget').block()"
+									onsuccess="PF('pWidget').unblock()" update="fonctionData" />
+								<f:attribute name="selectedRecord" value="#{permission}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column style="text-align:center" width="10%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_edit_table_label}" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{permission.modifier}">
+
+								<p:ajax listener="#{permissionBckBean.checkChange}"
+									update="fonctionData" />
+								<f:attribute name="selectedRecord" value="#{permission}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+
+						<p:column style="text-align:center" width="10%">
+							<f:facet name="header">
+								<h:outputText
+									value="#{permissionmsgs.permission_fonction_delete_table_label}" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{permission.supprimer}">
+
+								<p:ajax listener="#{permissionBckBean.checkChange}"
+									update="fonctionData" />
+								<f:attribute name="selectedRecord" value="#{permission}" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+
+					</p:dataTable>
+
+				</p:fieldset>
+				<br></br>
+				<p:toolbar id="panelButton">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" process="@this"
+							onstart="PF('pWidget').block()"
+							onsuccess="PF('pWidget').unblock()"
+							actionListener="#{permissionBckBean.save}">
+
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.button_return}"
+							icon="ui-icon-disk" process="@this"
+							onstart="PF('pWidget').block()"
+							onsuccess="PF('pWidget').unblock()"
+							action="#{permissionBckBean.back}">
+
+							<!--
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_sortir}" icon="ui-icon-alert" />-->
+
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+
+
+
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

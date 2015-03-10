@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+        <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.AxeDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.Axe</class-b>
+      		<field>
+      					<a>axeNomenclatureId</a>
+	  					<b>axeNomenclature.id</b>
+      		</field>
+      		<field>
+      					<a>axeNomenclatureCode</a>
+	  					<b>axeNomenclature.code</b>
+      		</field>
+      		<field>
+      					<a>axeNomenclatureLibelleFr</a>
+	  					<b>axeNomenclature.libelleLongFr</b>
+      		</field>
+      		<field>
+      					<a>programmeId</a>
+	  					<b>programme.id</b>
+      		</field>
+      		<field>
+      					<a>programmeCode</a>
+	  					<b>programme.code</b>
+      		</field>
+      		<field>
+      					<a>programmeLibelleFr</a>
+	  					<b>programme.intituleFr</b>
+      		</field>
+      	</mapping>
+</mappings>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+     <mapping map-null="false">
+      <class-a>dz.gov.mesrs.sii.referentiel.business.model.dto.RefPartenaireDto</class-a>
+      <class-b>dz.gov.mesrs.sii.commons.data.model.referentiel.RefPartenaire</class-b>
+      <!-- Role -->
+      
+      <field>
+      <a>codeRole</a>
+	  <b>nomenclature.code</b>
+      </field>
+       <field>
+      <a>idRole</a>
+	  <b>nomenclature.id</b>
+      </field>
+      <field>
+      <a>llRoleFr</a>
+	  <b>nomenclature.libelleLongFr</b>
+      </field>
+      <field>
+      <a>llRoleAr</a>
+	  <b>nomenclature.libelleLongAr</b>
+      </field>
+      <!-- Contrat -->
+      <field>
+      <a>idContrat</a>
+	  <b>refContrat.id</b>
+      </field>
+      <!-- Structure -->
+      <field>
+      <a>idStructure</a>
+	  <b>refStructure.id</b>
+      </field>
+       <field>
+      <a>llStructureLatin</a>
+	  <b>refStructure.llStructureLatin</b>
+      </field>
+      <field>
+      <a>llStructureArabe</a>
+	  <b>refStructure.llStructureArabe</b>
+      </field>
+      <!-- Individu -->
+      <field>
+      <a>idIndividu</a>
+	  <b>refIndividu.id</b>
+      </field>
+      <field>
+      <a>nomLatin</a>
+	  <b>refIndividu.nomLatin</b>
+      </field>
+      <field>
+      <a>prenomLatin</a>
+	  <b>refIndividu.prenomLatin</b>
+      </field>
+      <field>
+      <a>nomArabe</a>
+	  <b>refIndividu.nomarabe</b>
+      </field>
+      <field>
+      <a>prenomArabe</a>
+	  <b>refIndividu.prenomArabe</b>
+      </field>
+      <!-- Groupe -->
+      <field>
+      <a>idGroupe</a>
+	  <b>refGroupe.id</b>
+      </field>
+      <field>
+      <a>llGroupe</a>
+	  <b>refGroupe.llGroupe</b>
+      </field>
+      <field>
+      <a>llGroupeArabe</a>
+	  <b>refGroupe.llGroupeArabe</b>
+      </field>
+   </mapping>   
+ 
+</mappings>

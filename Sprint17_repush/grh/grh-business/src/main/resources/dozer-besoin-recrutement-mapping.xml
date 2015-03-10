@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.BesoinRecrutement
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.BesoinRecrutementDto
+		</class-b>
+
+		<field>
+			<a>refEtablissement</a>
+			<b>refEtablissementDto</b>
+		</field>
+
+		<field>
+			<a>nomenclatureByTypeRecrutement</a>
+			<b>nomenclatureByTypeRecrutementDto</b>
+		</field>
+		<field>
+			<a>nomenclatureByModeRecrutement</a>
+			<b>nomenclatureByModeRecrutementDto</b>
+		</field>
+		<field>
+			<a>detailRecrutements</a>
+			<b>detailRecrutementDtos</b>
+		</field>
+       <field>
+			<a>situationEntite</a>
+			<b>situationEntiteDto</b>
+		</field>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.DetailRecrutement
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.DetailRecrutementDto
+		</class-b>
+		<field>
+			<a>besoinRecrutement</a>
+			<b>besoinRecrutementDto</b>
+		</field>
+
+		<field>
+			<a>corps</a>
+			<b>corpsDto</b>
+		</field>
+		<field>
+			<a>grade</a>
+			<b>gradeDto</b>
+		</field>
+		<field>
+			<a>categorieProfessionnelle</a>
+			<b>categorieProfessionnelleDto</b>
+		</field>
+		<field>
+			<a>posteSuperieure</a>
+			<b>posteSuperieureDto</b>
+		</field>
+		<field>
+			<a>refStructure</a>
+			<b>refStructureDto</b>
+		</field>
+     <field>
+			<a>candidatEmployes</a>
+			<b>candidatEmployeDtos</b>
+		</field>
+
+	</mapping>
+
+<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.commons.data.model.grh.CandidatEmploye
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.grh.business.model.dto.CandidatEmployeDto
+		</class-b>
+	
+		<field>
+			<a>refIndividu</a>
+			<b>refIndividuDto</b>
+		</field>
+
+		<field>
+			<a>detailRecrutement</a>
+			<b>detailRecrutementDto</b>
+		</field>
+		<field>
+			<a>refStructure</a>
+			<b>refStructureDto</b>
+		</field>
+		
+
+
+	</mapping>
+
+</mappings>

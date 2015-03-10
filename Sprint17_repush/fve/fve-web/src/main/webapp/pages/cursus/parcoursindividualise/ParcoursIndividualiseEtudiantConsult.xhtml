@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="centerContent">
+
+		<pe:blockUI target="pnl_valider_parcours"
+			widgetVar="parcoursIndividualiseFormBlock">
+			<h:graphicImage library="images" name="ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:panel styleClass="globalPanelStyle"
+			header="#{parcoursIndividualiseMsgs.parcours_individualise_pnl_consultation_mes_parcours_title}"
+			id="pnl_valider_parcours">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+
+			<h:form id="form_parcoursList">
+				<p:toolbar>
+						<p:toolbarGroup align="left">
+
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+						<h:panelGrid columns="2">
+						<p:selectOneMenu id="annee"  filter="true"
+								filterMatchMode="startsWith"
+								value="#{parcoursIndividualiseEtudiantConsultBean.searchDto.anneeAcademiqueId}"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}">
+								
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseEtudiantConsultBean.anneeAcademiqueList}" />
+							 <p:ajax   
+										listener="#{parcoursIndividualiseEtudiantConsultBean.search}"
+										event="valueChange" update="dtTbl_parcours :form_parcours_individualise_consult" />
+							</p:selectOneMenu>
+							</h:panelGrid>
+							<!--  
+						<p:panelGrid >
+							<p:row>
+						<p:column style="width:150px">
+
+
+							<p:selectOneMenu id="annee" style="width:100%" filter="true"
+								filterMatchMode="startsWith"
+								value="#{parcoursIndividualiseEtudiantConsultBean.searchDto.anneeAcademiqueId}"
+								label="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}">
+								
+								<f:selectItem
+									itemLabel="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}"
+									itemValue="" />
+								<f:selectItems
+									value="#{parcoursIndividualiseEtudiantConsultBean.anneeAcademiqueList}" />
+							 <p:ajax   
+										listener="#{parcoursIndividualiseEtudiantConsultBean.search}"
+										event="valueChange" update="dtTbl_parcours :form_parcours_individualise_consult" />
+							</p:selectOneMenu>
+
+						</p:column>
+						
+					
+						<p:column style="width:200px">
+							<p:commandButton id="btnSearch" value="Rechercher"
+								update="dtTbl_parcours :form_parcours_individualise_consult"
+								icon="ui-icon-search"
+								actionListener="#{parcoursIndividualiseEtudiantConsultBean.search}"
+								onstart="PF('dWidget').block()"
+								oncomplete="PF('dWidget').unblock()">
+
+							</p:commandButton>
+						</p:column>
+
+					</p:row>
+</p:panelGrid>-->
+						</p:toolbarGroup>
+
+					</p:toolbar>
+				
+<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="dtTbl_parcours" styleClass="globalPanelStyle"
+					value="#{parcoursIndividualiseEtudiantConsultBean.parcoursIndividualiseList}"
+					var="currentParcours" rowKey="#{currentParcours.id}"
+					style="margin-top:5px" resizableColumns="true"
+					selectionMode="single" paginator="true" rows="5" lazy="true"
+					paginatorPosition="bottom"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}">
+
+					<p:ajax event="rowSelect"
+						listener="#{parcoursIndividualiseEtudiantConsultBean.onRowSelect}"
+						update=":form_parcours_individualise_consult"
+						onstart="PF('parcoursIndividualiseFormBlock').block()"
+						onsuccess="PF('parcoursIndividualiseFormBlock').unblock()" />
+					<f:facet name="header">
+						<h:outputText
+							value="#{parcoursIndividualiseMsgs.parcours_individualise_resultat_recherche}" />
+					</f:facet>
+                        <p:column >
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_annee_academique}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.anneeAcademiqueCode} " />
+					</p:column>
+                   <p:column >
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_periode}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.libellePeriode} " />
+					</p:column>
+					 
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_numero_inscription}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.numeroInscription}" />
+					</p:column>
+<!-- 
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_matricule}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.numeroMatricule}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_nom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.individuNomLatin} " />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_prenom}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.individuPrenomLatin} " />
+					</p:column>
+ -->
+                       
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_domaine}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.refLibelleDomaine} " />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_filiere}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.refLibelleFiliere} " />
+					</p:column>
+					<!--  
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_specialite}" />
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.refLibelleSpecialite} " />
+					</p:column>
+-->
+					<p:column>
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_datable_etudiant_date_creation}" />
+
+						</f:facet>
+
+						<h:outputText value="#{currentParcours.dateCreation}">
+							<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+
+                            <p:column>
+                          <f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_situation}" />
+
+						</f:facet>
+							<h:outputText value="#{currentParcours.situationLibelleFr}">
+							</h:outputText>
+
+						</p:column>
+
+				</p:dataTable>
+
+
+			</h:form>
+			<br></br>
+			<h:form id="form_parcours_individualise_consult">
+				<p:outputPanel id="detailParcoursPanelId"
+					rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto}">
+
+
+
+					<p:fieldset
+						legend="#{parcoursIndividualiseMsgs.parcours_individualise_infos_etudiant}"
+						rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto}">
+
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_nin}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.nin}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_matricule}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.numeroMatricule}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_nom}:" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuNomLatin.toUpperCase()}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_nom_ar}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuNomArabe}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_prenom}: " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuPrenomLatin.substring(0,1).toUpperCase().concat(parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuPrenomLatin.substring(1).toLowerCase())}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_prenom_ar}: " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuPrenomArabe}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_date_naissance}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.individuDateNaissance}"
+										styleClass="labelValue">
+										<f:convertDateTime pattern="dd-MM-yyyy" />
+									</h:outputText>
+								</p:column>
+
+
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_matricule_bac}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.matriculeBac}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+
+					</p:fieldset>
+					<br></br>
+					<p:fieldset
+						legend="#{parcoursIndividualiseMsgs.parcours_individualise_infos_inscription}"
+						rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto}">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_anne_univeristaire}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.anneeAcademiqueCode}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_numero_inscription}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.numeroInscription}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_offre_formation}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_domaine}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_filiere}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_niveau}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.refLibelleNiveau}"
+										styleClass="labelValue" />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_specialite}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}"
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+							<!--
+							<p:row>
+							<p:column>
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_periode}" />
+							</p:column>
+								<p:column>
+
+						<h:outputText value="#{parcoursIndividualiseEtudiantConsultBean.periodeDto.libelleLongLt}" />
+					</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_demande}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.creditsDemande} "
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>-->
+						</p:panelGrid>
+					</p:fieldset>
+					<br></br>
+					<p:fieldset
+						legend="#{parcoursIndividualiseMsgs.parcours_individualise_le_parcours}"
+						rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.parcoursIndividualiseMatiereList}">
+						<p:panelGrid>
+	<p:row>
+							<p:column>
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_periode}: " />
+							</p:column>
+								<p:column>
+
+						<h:outputText value="#{parcoursIndividualiseEtudiantConsultBean.periodeDto.libelleLongLt}" />
+					</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_demande}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.creditsDemande} "
+										styleClass="labelValue" />
+								</p:column>
+								
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseMsgs.parcours_individualise_situation}:  " />
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{parcoursIndividualiseEtudiantConsultBean.situation} "
+										styleClass="labelValue" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					
+					<p:dataTable id="ResultSearchDataTable"
+						var="parcoursIndividualiseMatiere" editable="true"
+						rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.parcoursIndividualiseMatiereList}"
+						resizableColumns="false"
+						value="#{parcoursIndividualiseEtudiantConsultBean.parcoursIndividualiseMatiereList}"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{parcoursIndividualiseMsgs.parcours_individualise_datable_list_parcours_individualise_no_result}"
+						rowIndexVar="rowIndex" rows="5"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+						style="margin:8px">
+						<!--  
+						<f:facet name="header">
+							<h:outputText
+								value="#{parcoursIndividualiseMsgs.parcours_individualise_le_parcours} (#{parcoursIndividualiseEtudiantConsultBean.situation})" />
+						</f:facet>
+-->
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1} " />
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_ue}"
+							width="27%">
+							<h:outputText value="#{parcoursIndividualiseMatiere.ueLibelleFr}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_mc}"
+							width="28%">
+							<h:outputText value="#{parcoursIndividualiseMatiere.mcLibelleFr}"
+								styleClass="labelValue">
+
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_credits}"
+							width="5%">
+							<h:outputText value="#{parcoursIndividualiseMatiere.mcCredits}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_nature}"
+							width="10%">
+							<h:outputText
+								value="#{parcoursIndividualiseMatiere.optionnelle==true?'Optionnelle':'Obligatoire'}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_choix}"
+							width="5%">
+							<h:outputText
+								value="#{parcoursIndividualiseMatiere.optionnelle==true and parcoursIndividualiseMatiere.choix?'Oui':''}"
+								styleClass="labelValue">
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{parcoursIndividualiseMsgs.parcours_individualise_reamrque}"
+							width="30%">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{parcoursIndividualiseMatiere.remarque}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{parcoursIndividualiseMatiere.remarque}"
+										style="width:100%"
+										label="#{parcoursIndividualiseMsgs.parcours_individualise_reamrque}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+					</p:dataTable>
+
+					<p:outputPanel id="creditsoutputPanelId"
+						styleClass="creditsAtteintStyle"
+						style="text-align:right;margin:20px"
+						rendered="#{not empty parcoursIndividualiseEtudiantConsultBean.parcoursIndividualiseMatiereList}">
+
+						<p:row>
+
+							<p:column>
+								<h:outputText
+									value="#{parcoursIndividualiseMsgs.parcours_individualise_total_credit_atteint}:  " />
+							</p:column>
+							<p:column>
+
+								<h:outputText id="creditsAtteintId"
+									value="#{parcoursIndividualiseEtudiantConsultBean.creditsAtteint}"
+									styleClass="labelValue" />
+							</p:column>
+						</p:row>
+
+					</p:outputPanel>
+					</p:fieldset>
+				</p:outputPanel>
+
+
+			</h:form>
+
+		</p:panel>
+
+
+
+
+
+
+
+
+
+	</ui:define>
+</ui:composition>
+</html>

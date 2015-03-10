@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+	#{groupePedagogiqueMsgs.groupepedagogique_panel_detail_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:panel id="panelGlobal">
+			<pe:blockUI target="panelGlobal" widgetVar="globalWidget">
+				<i class="fa fa-spinner fa-spin" />
+			</pe:blockUI>
+			<h:form id="groupepedagogiqueForm" enctype="multipart/form-data">
+				<ui:include
+					src="/pages/cursus/groupepedagogique/GroupePedagogiqueSearch.xhtml" />
+			</h:form>
+			<h:form id="detailForm" enctype="multipart/form-data">
+				<p:outputPanel id="editGroupe" styleClass="editStyle"
+					rendered="#{groupePedagogiqueManagerBean.showDetail}">
+
+					<p:tabView multiple="false" activeIndex="0" widgetVar="gpWidget"
+						id="tabview">
+						<p:tab
+							title="#{groupePedagogiqueMsgs.groupepedagogique_tab_groupe_information}">
+							<ui:include
+								src="/pages/cursus/groupepedagogique/GroupePedagogiqueInfoHeader.xhtml" />
+						</p:tab>
+						<p:tab
+							title="#{groupePedagogiqueMsgs.groupepedagogique_tab_association}">
+							<ui:include
+								src="/pages/cursus/groupepedagogique/AssociationDetail.xhtml" />
+						</p:tab>
+						<p:tab
+							title="#{groupePedagogiqueMsgs.groupepedagogique_tab_affectation}">
+							<ui:include
+								src="/pages/cursus/groupepedagogique/AffectationGroupeDetail.xhtml" />
+						</p:tab>
+					</p:tabView>
+
+					<p:panelGrid styleClass="rowStyle">
+						<p:row>
+							<p:column>
+								<p:commandButton id="impimer" icon="ui-icon-print"
+									value="#{groupePedagogiqueMsgs.groupepedagogique_imprimer}"
+									ajax="false"
+									actionListener="#{groupeAffectationBean.imprimerGroupe()}">
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton id="impimer_trombinoscope" icon="ui-icon-print"
+									value="#{groupePedagogiqueMsgs.groupepedagogique_imprimer_trombinoscope}"
+									ajax="false"
+									actionListener="#{groupeAffectationBean.imprimerTrombinoscope()}">
+								</p:commandButton>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:outputPanel>
+			</h:form>
+
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>
+
+
+
+
+

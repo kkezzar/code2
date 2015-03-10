@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_habilitation_fonction_objet}"
+			style="border:0;">
+			<ui:include src="/pages/module/moduleInfo.xhtml" />
+			<br />
+			<br />
+			<h:form id="fonctionFromId">
+
+				<h:outputText value="#{habilitationmsgs.fonction_description}"
+					style="font-weight: bold;" />
+				<hr></hr>
+				<p:panelGrid id="fonctionDescription" styleClass="noBorder1">
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{habilitationmsgs.fonction_identifiant_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="fct_identifiant" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.identifiant}" />
+						</p:column>
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.fonction_name_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="fct_nom" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.nom}" />
+						</p:column>
+
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.fonction_name_arabe_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="fct_nom_arabe" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.nomArabe}" />
+						</p:column>
+
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.fonction_rang_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="fct_rang" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.rang}" />
+						</p:column>
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{habilitationmsgs.fonction_url_label}" />
+						</p:column>
+						<p:column>
+							<h:outputText id="fct_url" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.url}" />
+						</p:column>
+					</p:row>
+					<br/>
+					<p:row>
+						<p:column rendered="#{fonctionBckBean.refFonctionDto.idPeriode!=null}">
+							<h:outputText value="#{habilitationmsgs.fonction_periode_label}" />
+						</p:column>
+						<p:column rendered="#{fonctionBckBean.refFonctionDto.idPeriode!=null}">
+							<h:outputText id="fct_periode" style="font-weight: bold;"
+								value="#{fonctionBckBean.refFonctionDto.nomPeriode}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{habilitationmsgs.fonction_ancre_aide_label} " />
+						</p:column>
+						<p:column style="width:85%">
+							<h:outputText value="#{fonctionBckBean.refFonctionDto.helpAnchor}" styleClass="value" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br/><br/>
+				 <p:dataTable resizableColumns="true" id="contratData"
+					value="#{fonctionBckBean.listActionsDto}" var="action"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:param name="searchValue" value="#{fonctionBckBean.searchValue}"/>
+					<f:param name="idfct" value="#{fonctionBckBean.idfct}"/>
+					
+                    <p:ajax event="page" update="@this" />
+					<p:ajax event="sort" update="@all" process="@form" />
+					 <f:facet name="header">  
+                         <h:outputText value="#{habilitationmsgs.fonction_action_liste}" />
+                       </f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.fonction_action_identifiant_table_label}" />
+						</f:facet>
+						<h:outputText value="#{action.identifiant}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.fonction_action_name_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{action.nom}" ></h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.fonction_action_name_arabe_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{action.nomArabe}" ></h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{habilitationmsgs.fonction_action_rang_table_label}"  />
+						</f:facet>
+
+						<h:outputText value="#{action.rang}" />
+					</p:column>
+					
+				</p:dataTable>
+
+
+				<br></br>
+				<p:column>
+					<p:commandButton value="#{commonmsgs.button_return}"
+						icon="ui-icon-arrowreturnthick-1-w" process="@this"
+						action="#{fonctionBckBean.back}" ajax="false">
+						<f:param name="searchValue" value="#{fonctionBckBean.searchValue}" />
+					</p:commandButton>
+				</p:column>
+			</h:form>
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

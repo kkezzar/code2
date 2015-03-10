@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:dataTable id="dtTbl_examens" selectionMode="single"
+		value="#{examenSessionBean.examensSessionList}" var="currentExamen"
+		rowKey="#{currentExamen.id}" style="margin-top:5px;"
+		resizableColumns="true" paginator="true" rowIndexVar="rowIndex"
+		rows="5" paginatorPosition="bottom"
+		columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+		emptyMessage="#{examenMsgs.examen_datable_list_examnes_no_result}">
+
+		<p:ajax event="rowSelect"
+			listener="#{examenSessionBean.onExamenSelect}"  update=":form_planning_session_search:tabViewPlannigId:PlanningSessionTabViewId" onstart="PF('globalWidget').block()"
+			onsuccess="PF('globalWidget').unblock()" />
+		<f:facet name="header">
+			<h:outputText value="#{examenMsgs.examen_les_examens_planif_session}" />
+			<!-- 			<p:commandButton id="_btnAddExamen" rendered="#{!examenSessionBean.deroulementMode}" -->
+			<!-- 				actionListener="#{examenSessionBean.addExamen()}" -->
+			<!-- 				icon="ui-icon-plusthick" update=":panelGlobal" -->
+			<!-- 				disabled="#{planningSessionSaveBean.planningSessionDto.situationCode=='PBL' or planningSessionSaveBean.planningSessionDto.situationCode=='CLTR'}" -->
+			<!-- 				onstart="PF('globalWidget').block()" -->
+			<!-- 				onsuccess="PF('globalWidget').unblock()"> -->
+			<!-- 			</p:commandButton> -->
+		</f:facet>
+		<p:column headerText="#{examenMsgs.examen_numero}" style="width:2%">
+			<h:outputText value="#{rowIndex+1}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_matiere}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.mcLibelleFr} " />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_type}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.refTypeExamenLibelle} " />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_date}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.dateExamen}">
+				<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+			</h:outputText>
+		</p:column>
+
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_heure_debut}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.heureDebut}">
+				<f:convertDateTime type="date" pattern="HH:mm" />
+			</h:outputText>
+		</p:column>
+
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_duree}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.duree} " />
+		</p:column>
+
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_anonymat}" />
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.anonymat==true?'Oui':'Non'}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{examenMsgs.examen_date_creation}" />
+
+			</f:facet>
+
+			<h:outputText value="#{currentExamen.dateCreation}">
+				<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+			</h:outputText>
+		</p:column>
+
+	</p:dataTable>
+</ui:composition>
+

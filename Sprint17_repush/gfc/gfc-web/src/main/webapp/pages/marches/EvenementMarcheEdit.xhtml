@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{marchesMsgs.page_title_enregister_evenements_marche}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search"
+				onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('form_dossier-etud:btnSearch').click(); return false;}">
+				<pe:blockUI target="form_search" widgetVar="formSearchWidget">
+					<i class="fa fa-spinner fa-spin"></i>
+				</pe:blockUI>
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable id="ResultSearchDataTable" var="current"
+					resizableColumns="false" lazy="true"
+					value="#{evenementsMarcheBean.modelMarches}" paginatorPosition="bottom"
+					rowIndexVar="rowIndex"
+					emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="20"
+					rowKey="#{current.id}" selectionMode="single"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{evenementsMarcheBean.onRowSelect}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+						update=":form_crud" />
+
+					<p:column headerText="#{commonmsgs.column_numero_ligne}"
+						style="width:40px">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{gfcMsgs.intitule_fr}">
+						<h:outputText value="#{current.intituleFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.type}">
+						<h:outputText value="#{current.type.libelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="#{gfcMsgs.date_signature}">
+						<h:outputText value="#{current.dateSignature}">
+							<f:convertDateTime type="date"
+								pattern="#{applicationBean.datePattern()}" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Montant">
+						<h:outputText value="#{current.montant}">
+							<f:convertNumber type="currency" currencySymbol="" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{evenementsMarcheBean.crud}" id="tabview">
+
+					<p:tab title="Détail du marché" >
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_fr}" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.intituleFr}">
+										</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.intitule_ar}">
+										</h:outputText>
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.intituleAr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Type de marché" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.type.libelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Contrat" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.contrat.objetContratFr} / #{evenementsMarcheBean.marcheDto.contrat.identifiant}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Contact" />
+									</p:column>
+
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.contact.civiliteLibelleLongFr}. #{evenementsMarcheBean.marcheDto.contact.prenomArabe} #{evenementsMarcheBean.marcheDto.contact.nomLatin} ">
+										</h:outputText>
+									</p:column>
+
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Mode de passation" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.modePassation.libelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Montant" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.montant}">
+											<f:convertNumber type="currency" currencySymbol="" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Marché à " />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox
+											value="#{evenementsMarcheBean.marcheDto.prestation}"
+											disabled="true">
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" Prestations " />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox
+											value="#{evenementsMarcheBean.marcheDto.equipement}"
+											disabled="true">
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" Equipements " />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox
+											value="#{evenementsMarcheBean.marcheDto.produit}"
+											disabled="true">
+										</p:selectBooleanCheckbox>
+										<h:outputText value=" Produits " />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Date approbation" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.dateApprobation}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Date publication" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.datePublication}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Date signautre" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.dateSignature}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="Date ODS" />
+									</p:column>
+									<p:column>
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.dateOds}">
+											<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<h:outputText styleClass="value"
+											value="#{evenementsMarcheBean.marcheDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column colspan="4">
+
+										<p:dataTable id="datatable_evenements" var="current"
+											resizableColumns="false" lazy="true" rowIndexVar="rowIndex"
+											value="#{evenementsMarcheBean.marcheDto.evenementMarches}"
+											paginator="true"
+											emptyMessage="#{commonmsgs.data_table_empty_Message}"
+											rowKey="#{current.id}" selectionMode="single"
+											rows="#{uiConfig['primefaces.dataTable.rows']}"
+											paginatorPosition="#{uiConfig['primefaces.dataTable.paginatorPosition']}"
+											currentPageReportTemplate="#{uiConfig['primefaces.dataTable.currentPageReportTemplate']}"
+											paginatorTemplate="#{uiConfig['primefaces.dataTable.paginatorTemplate']}"
+											rowsPerPageTemplate="#{uiConfig['primefaces.dataTable.rowsPerPageTemplate']}">
+
+											<p:ajax event="rowSelect" immediate="true"
+												listener="#{evenementsMarcheBean.onRowSelectEvenementMarche}"
+												process="@this"
+												onsuccess="PF('gererDemBudgetaireWidget').show()"
+												update=":crud_form_detail" />
+						
+											<f:facet name="header">
+												<p:toolbar>
+													<p:toolbarGroup align="left">
+													<h:outputText styleClass="title" value="Les évenements du marché" />
+													</p:toolbarGroup>
+													<p:toolbarGroup align="right">
+														<p:commandButton styleClass="ui-button-bleu-o pull-right"
+															title="Ajouter un évenement"
+															icon="ui-icon-plusthick" ajax="true"
+															update=":crud_form_detail" value=" Ajouter"
+															action="#{evenementsMarcheBean.addAction()}" 
+															onsuccess="PF('gererDemBudgetaireWidget').show()"></p:commandButton>
+													</p:toolbarGroup>
+												</p:toolbar>
+											</f:facet>
+
+											<p:column headerText="#{commonmsgs.column_numero_ligne}">
+												<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+
+											<p:column headerText="Date">
+												<h:outputText value="#{current.dateEvenement}" >
+													<f:convertDateTime pattern="#{applicationBean.datePattern()}" />
+												</h:outputText>
+											</p:column>
+
+											<p:column headerText="Type">
+												<h:outputText value="#{current.type.libelleLongFr}" />
+											</p:column>
+
+											<p:column headerText="Description">
+												<h:outputText value="#{current.description}" />
+											</p:column>
+
+											<p:column headerText="impact">
+												<h:outputText value="#{current.impact}" />
+											</p:column>
+											
+											<p:column headerText="Messures prises">
+												<h:outputText value="#{current.mesurePrise}" />
+											</p:column>
+											
+<!-- 											<p:column headerText="">
+												<h:outputText value="#{current.situation.libelleSituation}"></h:outputText>
+											</p:column> -->
+										</p:dataTable>
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="4">
+<!-- 
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												id="saveBtn" update=":crud_form_detail:form_crud :form_search"
+												styleClass="ui-button-save" onstart="PF('page').block()"
+												oncomplete="PF('page').unblock()"
+												actionListener="#{evenementsMarcheBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer> -->
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												styleClass="pull-right" id="cancelBtn" update=":form_crud"
+												immediate="true" process="@this"
+												actionListener="#{evenementsMarcheBean.cancelAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+							</p:panelGrid>
+	
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}" disabled="">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentComponent.xhtml">
+							<c:set var="entity" value="Marche" scope="request" />
+							<c:set var="identifiant"
+								value="#{evenementsMarcheBean.marcheDto.getId().toString()}"
+								scope="request" />
+							<ui:param name="entity" value="Marche" />
+							<ui:param name="identifiant"
+								value="#{evenementsMarcheBean.marcheDto.getId().toString()}" />
+							<ui:param name="editionMode" value="false" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+			<pe:blockUI widgetVar="gererRepBudget" target="gererRepBudget">
+				<i class="fa fa-spinner fa-spin"></i>
+			</pe:blockUI>
+			<p:dialog
+				header="Enregistrer la demande budgétaire par chapitre ou article"
+				id="gererRepBudget" position="center"
+				widgetVar="gererDemBudgetaireWidget" modal="true" resizable="false">
+				<p:outputPanel id="crud_form_detail">
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+								
+								<p:row>
+									<p:column>
+										<h:outputText value="Date" styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:calendar required="true"
+											value="#{evenementsMarcheBean.evenementMarcheDto.dateEvenement}"
+											pattern="#{applicationBean.datePattern()}" />
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:outputLabel value="Type d'évenement" styleClass="required" />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu id="listTypesEvenements"
+											styleClass="input-xxlarge-px"
+											value="#{evenementsMarcheBean.evenementMarcheDto.type.id}"
+											filter="true" filterMatchMode="contains" required="true">
+											<f:selectItem
+												itemLabel="#{parametrageBudgetMsg.select_structure}"
+												itemValue="" />
+											<f:selectItems
+												value="#{evenementsMarcheBean.listTypesEvenements}" />
+										</p:selectOneMenu>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText styleClass="required" value="Description" />
+									</p:column>
+									<p:column>
+										<p:inputText required="true"
+											value="#{evenementsMarcheBean.evenementMarcheDto.description}"
+											styleClass="input-xlarge" />
+									</p:column>
+								</p:row>
+								
+								<p:row>
+									<p:column>
+										<h:outputText value="Impact" />
+									</p:column>
+									<p:column>
+										<p:inputText 
+											value="#{evenementsMarcheBean.evenementMarcheDto.impact}"
+											styleClass="input-xlarge" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="Mesures prises" />
+									</p:column>
+									<p:column>
+										<p:inputText 
+											value="#{evenementsMarcheBean.evenementMarcheDto.mesurePrise}"
+											styleClass="input-xlarge" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{parametrageBudgetMsg.observation}" />
+									</p:column>
+									<p:column colspan="3">
+										<p:inputTextarea styleClass="input-large"
+											value="#{evenementsMarcheBean.evenementMarcheDto.observation}" />
+									</p:column>
+								</p:row>
+
+								<!-- Actions -->
+								<f:facet name="footer">
+									<p:row>
+										<p:column>
+											<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+												disabled="#{evenementsMarcheBean.evenementMarcheDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="saveBtn" update=":crud_form_detail :tabview:datatable_evenements" styleClass="ui-button-save"
+												onstart="PF('gererRepBudget').block()"
+												oncomplete="PF('gererRepBudget').unblock()"
+												actionListener="#{evenementsMarcheBean.saveAction()}">
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer>
+
+<!-- 											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												disabled="#{evenementsMarcheBean.evenementMarcheDto.id eq null or evenementsMarcheBean.evenementMarcheDto.situation.codeSituation eq gfcConstantBean.situationValideeCode}"
+												id="validateBtn" update=":tabview:datatable_evenements"
+												styleClass="ui-button-validate-o"
+												onstart="PF('gererRepBudget').block()"
+												oncomplete="PF('gererRepBudget').unblock()"
+												actionListener="#{evenementsMarcheBean.validateAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_validation_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="5px"></p:spacer> -->
+
+											<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+												id="removeBtn" update=":tabview:datatable_evenements"
+												disabled="#{evenementsMarcheBean.evenementMarcheDto.situation.codeSituation ne gfcConstantBean.situationCreeeCode}"
+												styleClass="ui-button-delete-o"
+												onstart="PF('gererRepBudget').block()"
+												oncomplete="PF('gererRepBudget').unblock()"
+												onsuccess="PF('gererDemBudgetaireWidget').hide(); PF('gererRepBudget').unblock()"
+												actionListener="#{evenementsMarcheBean.deleteAction()}">
+												<p:confirm header="#{commonmsgs.dlg_confirmation}"
+													message="#{commonmsgs.msg_delete_confirmation}"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+
+											<p:spacer width="10px"></p:spacer>
+
+												<p:commandButton value="#{commonmsgs.bouton_fermer}" 
+													id="cancelBtn0" immediate="true" process="@this"
+													onstart="PF('gererDemBudgetaireWidget').hide(); ">
+												</p:commandButton>
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+
+						<!-- les documents 
+						<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+							title="#{commonmsgs.tab_documents}"
+							titletip="#{commonmsgs.tab_documents_tooltip}"
+							disabled="#{evenementsMarcheBean.evenementMarcheDto.id eq null}">
+							<f:facet name="title">
+								<h:outputText value="" />
+								<i class="fa fa-files-o"></i>
+							</f:facet>
+							<ui:include src="/pages/document/DocumentComponent.xhtml">
+								<c:set var="entity" value="EvenementMarche" scope="request" />
+								<c:set var="identifiant"
+									value="#{evenementsMarcheBean.evenementMarcheDto.id.toString()}"
+									scope="request" />
+								<ui:param name="entity" value="EvenementMarche" />
+								<ui:param name="identifiant"
+									value="#{evenementsMarcheBean.evenementMarcheDto.id.toString()}" />
+								<ui:param name="editionMode" value="true" />
+							</ui:include>
+						</p:tab>
+						-->
+				</p:outputPanel>
+
+			</p:dialog>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

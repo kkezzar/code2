@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.OuvertureOffreFormationDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.OuvertureOffreFormation
+		</class-b>
+		<field>
+			<a>offreFormationId</a>
+			<b>offreFormation.id</b>
+		</field>
+		<field>
+			<a>offreFormationCode</a>
+			<b>offreFormation.code</b>
+		</field>
+
+		<field>
+			<a>ofLibelleLongFr</a>
+			<b>offreFormation.libelleLongFr</b>
+		</field>
+		
+		<field>
+			<a>ofLibelleLongAr</a>
+			<b>offreFormation.libelleLongAr</b>
+		</field>
+
+
+		<field>
+			<a>ofNumeroArrete</a>
+			<b>offreFormation.numeroArrete</b>
+		</field>
+
+		<field>
+			<a>ofRefCodeDomaine</a>
+			<b>offreFormation.refDomaineLMD.identifiant</b>
+		</field>
+
+		<field>
+			<a>ofRefCodeFiliere</a>
+			<b>offreFormation.refFiliereLmd.identifiant</b>
+		</field>
+
+		<field>
+			<a>ofRefCodeSpecialite</a>
+			<b>offreFormation.refSpecialiteLmd.identifiant</b>
+		</field>
+
+		<field>
+			<a>ofRefCodeCycle</a>
+			<b>offreFormation.cycle.code</b>
+		</field>
+		<field>
+			<a>ofRefCodeTypeFormation</a>
+			<b>offreFormation.typeFormation.code</b>
+		</field>
+
+		<field>
+			<a>ofRefCodeVocation</a>
+			<b>offreFormation.vocationFormation.code</b>
+		</field>
+
+		<field>
+			<a>ofDateArrete</a>
+			<b>offreFormation.dateArrete</b>
+		</field>
+
+		<field>
+			<a>ofDateCreation</a>
+			<b>offreFormation.dateCreation</b>
+		</field>
+
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>anneeAcademiquePremiereAnnee</a>
+			<b>anneeAcademique.premiereAnnee</b>
+		</field>
+		<field>
+			<a>anneeAcademiqueDeuxiemeAnnee</a>
+			<b>anneeAcademique.deuxiemeAnnee</b>
+		</field>
+		<field>
+			<a>cycleId</a>
+			<b>offreFormation.cycle.id</b>
+		</field>
+		<field>
+			<a>cycleCode</a>
+			<b>offreFormation.cycle.code</b>
+		</field>
+		<field>
+			<a>cycleLibelleLongLt</a>
+			<b>offreFormation.cycle.libelleLongLt</b>
+		</field>
+
+		<field>
+			<a>idDomaine</a>
+			<b>offreFormation.refDomaineLMD.id</b>
+		</field>
+		<field>
+			<a>codeDomaine</a>
+			<b>offreFormation.refDomaineLMD.identifiant</b>
+		</field>
+		<field>
+			<a>libelleDomaine</a>
+			<b>offreFormation.refDomaineLMD.llDomaine</b>
+		</field>
+		<field>
+			<a>idFiliere</a>
+			<b>offreFormation.refFiliereLMD.id</b>
+		</field>
+		<field>
+			<a>codeFiliere</a>
+			<b>offreFormation.refFiliereLMD.identifiant</b>
+		</field>
+		<field>
+			<a>libelleFiliere</a>
+			<b>offreFormation.refFiliereLMD.llFiliere</b>
+		</field>
+		<field>
+			<a>idSpecialite</a>
+			<b>offreFormation.refSpecialiteLMD.id</b>
+		</field>
+		<field>
+			<a>codeSpecialite</a>
+			<b>offreFormation.refSpecialiteLMD.identifiant</b>
+		</field>
+		<field>
+			<a>libelleSpecialite</a>
+			<b>offreFormation.refSpecialiteLMD.llSpecialite</b>
+		</field>
+		
+		<field>
+			<a>libelleSpecialiteAr</a>
+			<b>offreFormation.refSpecialiteLMD.llSpecialiteArabe</b>
+		</field>
+
+		<field>
+			<a>idEtablissement</a>
+			<b>refEtablissement.id</b>
+		</field>
+		<field>
+			<a>codeEtablissement</a>
+			<b>refEtablissement.identifiant</b>
+		</field>
+		<field>
+			<a>lcEtablissementArabe</a>
+			<b>refEtablissement.lcEtablissementArabe</b>
+		</field>
+		<field>
+			<a>llEtablissementArabe</a>
+			<b>refEtablissement.llEtablissementArabe</b>
+		</field>
+		<field>
+			<a>lcEtablissementLatin</a>
+			<b>refEtablissement.lcEtablissementLatin</b>
+		</field>
+		<field>
+			<a>llEtablissementLatin</a>
+			<b>refEtablissement.llEtablissementLatin</b>
+		</field>
+
+	</mapping>
+
+</mappings>

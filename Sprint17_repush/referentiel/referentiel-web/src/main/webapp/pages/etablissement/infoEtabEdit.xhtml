@@ -1,0 +1,263 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<h:form id="infoEtabEditForm" prependId="false">
+		<pe:blockUI target="infoEtabEditForm" widgetVar="widget">
+			<h:graphicImage value="/images/ajax-loader1.gif" />
+		</pe:blockUI>
+		<p:panel style="height:600px" id="infosEtabPanel">
+
+			<h:outputText value="#{commonmsgs.common_infos}"
+				style="font-weight: bold;" />
+			<hr></hr>
+			<p:panelGrid id="description" styleClass="ui-panelgrid-full-width">
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_identifiant}" />
+					</p:column>
+					<p:column style="width:35%">
+						<h:outputText id="identifiant" styleClass="value"
+							value="#{etablissementBckBean.refEtablissementDto.identifiant}" />
+
+					</p:column>
+
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_ancien_code} " />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="ancienidentifiant" style="font-weight: bold"
+							value="#{etablissementBckBean.refEtablissementDto.ancienCode}"
+							label="#{etablissementmsgs.etablissement_ancien_code}">
+						</p:inputText>
+					</p:column>
+
+				</p:row>
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_type_etablissement_fr}" for="typeetablissement"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="typeetablissement"
+							style="text-align: left;width:100%"
+							value="#{etablissementBckBean.refEtablissementDto.typeId}"
+							label="#{etablissementmsgs.etablissement_type_etablissement_fr}"
+							required="true" filter="true" filterMatchMode="startsWith"
+							valueChangeListener="#{etablissementBckBean.codeChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_type_etablissement_required}">
+							<f:selectItem
+								itemLabel="#{etablissementmsgs.etablissement_select_Type}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listTypeEtablissement}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column style="width:15%">
+						<p:outputLabel value="#{etablissementmsgs.etablissement_wilaya}" for="wilayaEtablissement"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="wilayaEtablissement"
+							style="text-align: left;width:100%"
+							value="#{etablissementBckBean.refEtablissementDto.wilayaId}"
+							label="#{etablissementmsgs.etablissement_wilaya}" required="true"
+							filter="true" filterMatchMode="startsWith"
+							valueChangeListener="#{etablissementBckBean.codeChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_wilaya_required}">
+							<f:selectItem
+								itemLabel="#{etablissementmsgs.etablissement_select_wilaya}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listWilaya}" />
+						</p:selectOneMenu>
+					</p:column>
+
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_libelle_long_latin}" for="llEtabLatin"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="llEtabLatin" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.llEtablissementLatin}"
+							label="#{etablissementmsgs.etablissement_libelle_long_latin}"
+							required="true"
+							valueChangeListener="#{etablissementBckBean.llLatinChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_libelle_required}">
+						</p:inputText>
+					</p:column>
+
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_libelle_long_arabe}" for="llArabe"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="llArabe" style="text-align: right;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.llEtablissementArabe}"
+							label="#{etablissementmsgs.etablissement_libelle_long_arabe}"
+							required="true"
+							valueChangeListener="#{etablissementBckBean.llArabeChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_libelle_arabe_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_libelle_court_latin}" for="lcLatin"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="lcLatin" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.lcEtablissementLatin}"
+							label="#{etablissementmsgs.etablissement_libelle_court_latin}"
+							required="true"
+							valueChangeListener="#{etablissementBckBean.lcLatinChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_libelle_court_required}">
+						</p:inputText>
+					</p:column>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_libelle_court_ar}" for="lcAr"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="lcAr" style="text-align: right;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.lcEtablissementArabe}"
+							label="#{etablissementmsgs.etablissement_libelle_court_ar}"
+							required="true"
+							valueChangeListener="#{etablissementBckBean.lcArabeChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_libelle_court_ar_required}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+
+				<p:row>
+					<p:column style="width:15%">
+						<p:outputLabel
+							value="#{etablissementmsgs.etablissement_date_creation}" for="datenaissance"/>
+					</p:column>
+					<p:column style="width:35%">
+						<p:calendar navigator="true"
+							value="#{etablissementBckBean.refEtablissementDto.dateCreation}"
+							required="true" id="datenaissance" showButtonPanel="true"
+							validator="dateValidator" pattern="dd/MM/yyyy"
+							label="#{etablissementmsgs.etablissement_date_creation}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							requiredMessage="#{etablissementmsgs.etablissement_date_creation_required}" />
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_decret} " />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="decret" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.decret}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							label="#{etablissementmsgs.etablissement_decret}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText
+							value="#{etablissementmsgs.etablissement_forme_juridique_fr}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:selectOneMenu id="fj" style="text-align: left;width:100%"
+							value="#{etablissementBckBean.refEtablissementDto.formeJuridiqueId}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							label="#{etablissementmsgs.etablissement_forme_juridique_fr}">
+							<f:selectItem
+								itemLabel="#{etablissementmsgs.etablissement_select_fj}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listFormeJuridique}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nss}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="nss" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.nss}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							label="#{etablissementmsgs.etablissement_nss}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nis}" />
+					</p:column>
+
+
+
+					<p:column style="width:35%">
+						<p:inputText id="nis" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.nis}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							label="#{etablissementmsgs.etablissement_nis}">
+						</p:inputText>
+					</p:column>
+					<p:column style="width:15%">
+						<h:outputText value="#{etablissementmsgs.etablissement_nif}" />
+					</p:column>
+					<p:column style="width:35%">
+						<p:inputText id="nif" style="text-align: left;width:98%"
+							value="#{etablissementBckBean.refEtablissementDto.nif}"
+							valueChangeListener="#{etablissementBckBean.entityChanged}"
+							label="#{etablissementmsgs.etablissement_nif}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<br />
+			<br />
+			<br />
+			<p:toolbar id="MenuGrid">
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{commonmsgs.button_save}"
+						update="infoEtabEditForm" icon="ui-icon-disk"
+						onstart="PF('widget').block()" oncomplete="PF('widget').unblock()"
+						action="#{etablissementBckBean.save}">
+						<f:param name="searchValue"
+							value="#{etablissementBckBean.searchValue}" />
+						<f:param name="id" value="#{etablissementBckBean.id}" />
+					</p:commandButton>
+					<p:spacer />
+					<p:commandButton id="addButton" icon="ui-icon-plusthick"
+						value="#{commonmsgs.button_add}"
+						rendered="#{etablissementDroitBean.createAllow}"
+						disabled="#{etablissementBckBean.id==null}"
+						action="#{etablissementBckBean.addEtab}">
+						<f:param name="searchValue"
+							value="#{etablissementBckBean.searchValue}" />
+						<f:param name="id" value="#{etablissementBckBean.id}" />
+					</p:commandButton>
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.button_return}"
+						immediate="true" icon="ui-icon-disk"
+						action="#{etablissementBckBean.back}">
+						<f:param name="searchValue"
+							value="#{etablissementBckBean.searchValue}" />
+					</p:commandButton>
+				</p:toolbarGroup>
+
+			</p:toolbar>
+
+		</p:panel>
+	</h:form>
+</ui:composition>

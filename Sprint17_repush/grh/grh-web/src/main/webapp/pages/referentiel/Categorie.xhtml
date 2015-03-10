@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<ui:define name="pageTitleContent">
+		#{categoriemsgs.page_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel" >
+			<h:panelGrid style="width: 100%;">
+				<p:row>
+					<p:column>
+						<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+					
+						<h:form id="form_search">
+							<p:toolbar >
+								<p:toolbarGroup align="left">
+						
+									<p:commandButton 
+										action="#{categorieMBean.onNew}" 
+										styleClass="ui-buttop-bleu"
+										value="#{commonmsgs.bouton_nouveau}"
+										update=":form_view_categorie"
+										ajax="true"
+										process="@this"/>
+									
+								</p:toolbarGroup>
+						
+								<p:toolbarGroup align="right">
+									<h:outputLabel for="keyWordsID" value="#{commonmsgs.search_label_mots_cles}" style="font-size:11px" /> 	
+									<p:separator />
+										<p:inputText id="keyWordsID" value="#{categorieMBean.searchKeyWords}"   
+														 label="#{commonmsgs.search_label_mots_cles}" />
+									<p:watermark for="keyWordsID" value="Saisissez un mot clé" />  
+									<p:separator />
+									<p:commandButton id="btnSearch"  
+													 update="@([id$=resultSearchDataTable])"
+													 icon="ui-icon-search"  
+													 ajax="true" 
+													 styleClass="ui-button-bleu" 
+													 process="@this keyWordsID"
+													 action="#{categorieMBean.onSearch()}"
+													 onstart="PF('page').block()" 
+													 oncomplete="PF('page').unblock()"/>
+								</p:toolbarGroup>
+							</p:toolbar>
+						
+							
+						
+							
+						</h:form>
+					</p:column>
+				</p:row>
+				<p:spacer height="20px"></p:spacer>
+				<p:row>
+					<p:column>
+						<p:dataTable id="resultSearchDataTable"
+								value="#{categorieMBean.categorieDtos}" var="categorie" paginator="true"
+								rowKey="#{categorie.id}" rowIndexVar="rowIndex"
+								paginatorPosition="bottom" selectionMode="single" lazy="false"
+								rows="10"
+								emptyMessage="#{grhmsgs.statuts_no_result}"
+								
+								>
+								<p:ajax event="rowSelect" immediate="true"
+									listener="#{categorieMBean.onCategorieSelected}" process="@this"
+									onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+									update=":form_view_categorie" />
+								<f:facet name="header">
+									<h:outputText value="#{categoriemsgs.categorie_list}" />
+								</f:facet>
+								<p:column headerText="N°" style="width: 30px;">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column headerText="#{grhmsgs.code}" style="width: 30px;">
+									<h:outputText value="#{categorie.nomenclatureByCategorieDto.code}"/>
+								</p:column>
+								<p:column headerText="#{grhmsgs.libelle}">
+									<h:outputText value="#{categorie.nomenclatureByCategorieDto.libelleLongFr}"/>
+								</p:column>
+								<p:column headerText="#{grhmsgs.hors_categorie}" style="width: 150px;" >
+									<h:outputText value="#{categorie.horsCategorie != null and categorie.horsCategorie.booleanValue() == 'true' ? 'Oui' : 'Non'}"/>
+								</p:column>
+							</p:dataTable>
+					</p:column>
+				</p:row>
+				
+						<p:spacer height="20px"></p:spacer>
+				<p:row>
+					<p:column>		
+							<h:form id="form_view_categorie" >
+								<p:panel rendered="#{categorieMBean.categorieDto!=null}"  header="#{categoriemsgs.add_categorie}" >
+										<h:panelGrid style="width: 100%;">
+											<p:row>
+												<p:column>
+													<p:panelGrid columns="4" style="width: 100%;">
+														<h:outputLabel value="#{grhmsgs.categorie}"  styleClass="required"/>
+														<p:selectOneMenu id="categorie"
+															label="#{grhmsgs.categorie}"
+															value="#{categorieMBean.categorieDto.nomenclatureByCategorieDto.id}"
+															styleClass="labelValue"
+															required="true"
+															requiredMessage="#{categoriemsgs.categorie_required}">
+															<f:selectItem itemLabel="--#{grhmsgs.categorie}--"/>
+															<f:selectItems value="#{categorieMBean.categories}" />
+														</p:selectOneMenu>
+									
+														<h:outputLabel value="#{grhmsgs.type_categorie}" />
+														<p:selectOneMenu id="typeCategorie"
+															label="#{grhmsgs.type_categorie}"
+															value="#{categorieMBean.categorieDto.nomenclatureByTypeCategorieDto.id}"
+															styleClass="labelValue">
+															<f:selectItem itemLabel="--#{grhmsgs.type_categorie}--"/>
+															<f:selectItems value="#{categorieMBean.typeCategories}" />
+														</p:selectOneMenu>
+									
+														<h:outputLabel value="#{grhmsgs.groupe}" styleClass="required" />
+														<p:selectOneMenu id="groupe"
+															label="#{grhmsgs.groupe}"
+															value="#{categorieMBean.categorieDto.nomenclatureByGroupeDto.id}"
+															styleClass="labelValue"	
+															required="true"
+															requiredMessage="#{categoriemsgs.groupe_required}">
+															<f:selectItem itemLabel="--#{grhmsgs.groupe}--"/>
+															<f:selectItems value="#{categorieMBean.groupes}" />
+														</p:selectOneMenu>
+									
+														<h:outputLabel value="#{grhmsgs.indice_minimal}" />
+														<h:inputText id="indiceMinimal"
+															value="${categorieMBean.categorieDto.indiceMin}" 
+															label="#{grhmsgs.indice_minimal}"/>
+									
+														<h:outputLabel value="#{grhmsgs.hors_categorie}" />
+														<p:selectBooleanCheckbox id="horsCategorie" 
+															value="#{categorieMBean.categorieDto.horsCategorie}"
+															label="#{grhmsgs.hors_categorie}"/>
+																		
+													</p:panelGrid>
+												</p:column>
+											</p:row>
+											<p:spacer height="20px"></p:spacer>
+											<p:row>
+												<p:column>
+													<p:dataTable id="niveauxQualificationsDataTable" 
+														rowIndexVar="rowIndex"
+														rowKey="#{niveau.id}"
+														value="#{categorieMBean.niveaux}"
+														var="niveau"
+														selection="#{categorieMBean.selectedNiveaux}">
+															<f:facet name="header">Les niveaux de qualification</f:facet>
+															<p:column headerText="N°" style="width:30px;text-align:center;"> 	
+																<h:outputText value="#{rowIndex+1}" styleClass="center"/>
+															</p:column>
+															<p:column headerText="#{grhmsgs.niveau}" > 	
+																<h:outputText value="#{niveau.libelleLongFr}" styleClass="center"/>
+															</p:column>
+															<p:column selectionMode="multiple" style="width:30px;text-align:center;"/>	
+													</p:dataTable>
+												</p:column>
+
+												<p:column>
+													<p:dataTable id="grilleIndiceCategorieDataTable"
+														rowIndexVar="rowIndex" 
+														var="grilleIndiciaire"
+														value="#{categorieMBean.categorieDto.grilleIndiciaireDtos}"
+														>
+															<f:facet name="header">La grille des indices relatives à la catégorie</f:facet>
+															<p:column headerText="N°" style="width:30px;text-align:center;"> 	
+																<h:outputText value="#{rowIndex+1}" styleClass="center"/>
+															</p:column>
+															<p:column headerText="#{grhmsgs.echelon}" style="width:30px;text-align:center;"> 	
+																<h:outputText value="#{grilleIndiciaire.echlon}" styleClass="center"/>
+															</p:column>
+															<p:column headerText="#{grhmsgs.indice}" style="width:30px;text-align:center;">
+																<h:inputText value="#{grilleIndiciaire.indice}" 
+																	required="true"
+																	requiredMessage="#{categoriemsgs.indice_required}"/> 	
+															</p:column>
+													</p:dataTable>
+												</p:column>
+											</p:row>
+											<p:spacer height="20px"></p:spacer>
+											<p:row>
+												<p:column>
+													<p:toolbar id="categorieProfessionnelleToolBar" styleClass="toolBarMesrs"
+														style="width:100%;">
+														<p:toolbarGroup align="left">
+															<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+																id="saveBtn" icon="ui-icon-disk"
+																onstart="PF('page').block()" 
+																oncomplete="PF('page').unblock()"
+																action="#{categorieMBean.onSave()}"
+																update=":outputPanel"
+																ajax="true">
+															</p:commandButton>
+															<span class="ui-separator">
+																<span class="ui-icon ui-icon-grip-dotted-vertical" />
+															</span>
+															<p:commandButton value="#{commonmsgs.bouton_supprimer}"
+																id="deleteBtn" icon="ui-icon-disk"
+																styleClass="ui-button-delete-o"
+																onstart="PF('page').block()" 
+																oncomplete="PF('page').unblock()"
+																action="#{categorieMBean.onDelete()}"
+																update=":outputPanel"
+																rendered="#{categorieMBean.categorieDto.id != null}"
+																immediate="true">
+															</p:commandButton>
+														</p:toolbarGroup>
+													</p:toolbar>
+												</p:column>
+											</p:row>
+										</h:panelGrid>
+								</p:panel>
+							</h:form>
+					</p:column>
+				</p:row>
+
+			</h:panelGrid>
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>
+
+</html>

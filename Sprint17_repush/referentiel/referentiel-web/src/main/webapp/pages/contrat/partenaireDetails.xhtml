@@ -1,0 +1,493 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:view xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:f="http://java.sun.com/jsf/core">
+		<f:event type="preRenderView"
+			listener="#{partenaireMgrBean.partenaireCrud(createAllow, editAllow, deleteAllow)}" />
+	</f:view>
+	<ui:include src="/pages/contrat/contratHeader.xhtml" />
+	<br></br>
+	<h:form id="PartenaireFromId" prependId="false">
+
+		<p:dataTable id="partenaireStructureData" styleClass="parStrOutPanel"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+			value="#{partenaireMgrBean.listRefStructureDto}" var="current">
+
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@all" process="@form" />
+			<f:facet name="header">
+				<h:outputText
+					value="#{contratmsgs.contrat_partenaire_structure}      " />
+				<p:commandButton id="addStructureButton" icon="ui-icon-plusthick"
+					rendered="#{partenaireCrudBean.createAllow}"
+					onclick="PF('dlgStructureList').show()" update="@(.parStrOutPanel)">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+				</p:commandButton>
+			</f:facet>
+
+			<p:column sortBy="#{current.llStructureLatin}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_structure}" />
+				</f:facet>
+				<h:outputText value="#{current.llStructureLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.llRoleFr}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_role}" />
+				</f:facet>
+				<h:outputText value="#{current.llRoleFr}" />
+			</p:column>
+			<p:column sortBy="#{current.contractant}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_contractant}" />
+				</f:facet>
+				<h:outputText value="#{current.contractant?'Oui':'Non'}" />
+			</p:column>
+			<p:column sortBy="#{current.observation}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_observation}" />
+				</f:facet>
+				<h:outputText value="#{current.observation}" />
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{partenaireCrudBean.deleteAllow}">
+				<p:commandButton id="removeStructureButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					actionListener="#{partenaireMgrBean.deleteStructure(current)}"
+					update="@(.parStrOutPanel)" process="@(.parStrOutPanel)">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		<br></br>
+
+		<p:dataTable resizableColumns="true" id="partenaireGroupeData"
+			styleClass="parGrpOutPanel"
+			value="#{partenaireMgrBean.listRefGroupeDto}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@all" process="@form" />
+			<f:facet name="header">
+				<h:outputText value="#{contratmsgs.contrat_partenaire_groupe}      " />
+				<p:commandButton id="addGroupeButton" ajax="true"
+					icon="ui-icon-plusthick"
+					rendered="#{partenaireCrudBean.createAllow}"
+					update="@(.parGrpOutPanel)" onclick="PF('dlgGroupeList').show()">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+				</p:commandButton>
+			</f:facet>
+
+			<p:column sortBy="#{current.llGroupe}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_groupe}" />
+				</f:facet>
+				<h:outputText value="#{current.llGroupe}" />
+			</p:column>
+			<p:column sortBy="#{current.llGroupe}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_role}" />
+				</f:facet>
+				<h:outputText value="#{current.llRoleFr}" />
+			</p:column>
+			<p:column sortBy="#{current.contractant}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_contractant}" />
+				</f:facet>
+				<h:outputText value="#{current.contractant?'Oui':'Non'}" />
+			</p:column>
+			<p:column sortBy="#{current.observation}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_observation}" />
+				</f:facet>
+				<h:outputText value="#{current.observation}" />
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{partenaireCrudBean.deleteAllow}">
+				<p:commandButton id="removeGroupeButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					actionListener="#{partenaireMgrBean.deleteGroupe(current)}"
+					process="@(.parGrpOutPanel)" update="@(.parGrpOutPanel)">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		<br></br>
+
+		<p:dataTable resizableColumns="true" id="partenaireIndividuData"
+			styleClass="parIdvOutPanel"
+			value="#{partenaireMgrBean.listRefIndividuDto}" var="current"
+			paginator="true" paginatorPosition="bottom"
+			emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="2"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+			<f:param name="id" value="#{partenaireMgrBean.id}" />
+			<p:ajax event="page" update="@this" />
+			<p:ajax event="sort" update="@all" process="@form" />
+			<f:facet name="header">
+				<h:outputText
+					value="#{contratmsgs.contrat_partenaire_individu}      " />
+				<p:commandButton id="addIndividuButton" ajax="true"
+					icon="ui-icon-plusthick"
+					rendered="#{partenaireCrudBean.createAllow}"
+					update="@(.parIdvOutPanel)" onclick="PF('dlgIndividuList').show()">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+				</p:commandButton>
+			</f:facet>
+			<p:column sortBy="#{current.nomLatin}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_individu_name}" />
+				</f:facet>
+				<h:outputText value="#{current.nomLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.prenomLatin}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_individu_prenom}" />
+				</f:facet>
+				<h:outputText value="#{current.prenomLatin}" />
+			</p:column>
+			<p:column sortBy="#{current.llRoleFr}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_role}" />
+				</f:facet>
+				<h:outputText value="#{current.llRoleFr}" />
+			</p:column>
+			<p:column sortBy="#{current.contractant}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_contractant}" />
+				</f:facet>
+				<h:outputText value="#{current.contractant?'Oui':'Non'}" />
+			</p:column>
+			<p:column sortBy="#{current.observation}">
+				<f:facet name="header">
+					<h:outputText value="#{contratmsgs.contrat_partenaire_observation}" />
+				</f:facet>
+				<h:outputText value="#{current.observation}" />
+			</p:column>
+			<p:column style="width:8%"
+				rendered="#{partenaireCrudBean.deleteAllow}">
+				<p:commandButton id="removeIndividuButton" icon="ui-icon-trash"
+					title="#{commonmsgs.button_delete}"
+					actionListener="#{partenaireMgrBean.deleteIndividu(current)}"
+					update="@(.parIdvOutPanel)" process="@(.parIdvOutPanel)">
+					<f:param name="id" value="#{partenaireMgrBean.id}" />
+					<p:confirm header="Confirmation"
+						message="#{commonmsgs.msg_delete_confirmation}"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+	<p:dialog header="#{structuremsgs.structure_list_title}"
+		appendTo="@(body)" modal="true" widgetVar="dlgStructureList"
+		resizable="false" width="300" draggable="true">
+		<h:form id="listStructureForm" prependId="false">
+			<p:panelGrid id="StrDescription" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_strucuture} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="partenaireStructureSelect"
+							style="text-align: left;width:160px"
+							value="#{partenaireMgrBean.refPartenaireDto.idStructure}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_partenaire_structure}"
+							required="true"
+							requiredMessage="#{contratmsgs.contrat_structure_required}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_structure}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefStructureDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_role} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="PartenaireRoleSelect"
+							style="text-align: left;width:160px"
+							value="#{partenaireMgrBean.refPartenaireDto.idRole}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_partenaire_role}" required="true"
+							requiredMessage="#{contratmsgs.contrat_partenaire_role_required}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox
+							value="#{partenaireMgrBean.refPartenaireDto.contractant}" />
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_contractant}"
+							style="text-align: top" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputTextarea id="strObservation"
+							style="text-align: left;width:150px" rows="5" cols="100"
+							value="#{partenaireMgrBean.refPartenaireDto.observation}"
+							label="#{contratmsgs.contrat_partenaire_observation}">
+
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" process="@form"
+							actionListener="#{partenaireMgrBean.addStructure()}"
+							update="@(.parStrOutPanel)" oncomplete="dlgStructureList.hide()">
+							<f:param name="id" value="#{partenaireMgrBean.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							immediate="true" icon="ui-icon-close"
+							oncomplete="dlgStructureList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog header="#{groupemsgs.groupe_list_title}" appendTo="@(body)"
+		modal="true" widgetVar="dlgGroupeList" resizable="false" width="300"
+		draggable="true">
+		<h:form id="listGroupeForm" prependId="false">
+			<p:panelGrid id="grpDescription" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_groupe} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="partenaireGroupeSelect"
+						style="text-align: left;width:160px"
+							value="#{partenaireMgrBean.refPartenaireDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_partenaire_groupe}" required="true"
+							requiredMessage="#{contratmsgs.contrat_groupe_required}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_groupe}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_role} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="PartenaireRoleData"
+						style="text-align: left;width:160px"
+							value="#{partenaireMgrBean.refPartenaireDto.idRole}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_partenaire_role}" required="true"
+							requiredMessage="#{contratmsgs.contrat_partenaire_role_required}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox
+							value="#{partenaireMgrBean.refPartenaireDto.contractant}" />
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_contractant}"
+							style="text-align: top" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputTextarea id="grpObservation"
+							style="text-align: left;width:150px" rows="5" cols="100"
+							value="#{partenaireMgrBean.refPartenaireDto.observation}"
+							label="#{contratmsgs.contrat_partenaire_observation}">
+
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" update="@(.parGrpOutPanel)"
+							action="#{partenaireMgrBean.addGroupe}" process="@form"
+							oncomplete="dlgGroupeList.hide()">
+							<f:param name="id" value="#{partenaireMgrBean.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							immediate="true" icon="ui-icon-close"
+							oncomplete="dlgGroupeList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+
+
+	<p:dialog header="#{individumsgs.individu_list_title}"
+		appendTo="@(body)" modal="true" widgetVar="dlgIndividuList"
+		resizable="false" width="300" draggable="true">
+		<h:form id="listIndividuForm" prependId="false">
+			<p:panelGrid id="idvDescription" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_individu} *" />
+					</p:column>
+					<p:column>
+				<p:autoComplete minQueryLength="3" maxResults="10" queryDelay="1000" value="#{partenaireMgrBean.refPartenaireDto}" 
+							id="partenaireIndividuSelect"
+							completeMethod="#{partenaireIndividuConverter.completePartenaireIndividu}"
+							var="individuDto"
+							itemLabel="#{individuDto.nomLatin} #{individuDto.prenomLatin}"
+							itemValue="#{individuDto.idIndividu}"
+							converter="#{partenaireIndividuConverter}" forceSelection="true"
+							label="#{contratmsgs.contrat_partenaire_individu}"
+							required="true"
+							requiredMessage="#{contratmsgs.contrat_individu_required}" />
+								
+<!-- 						<p:selectOneMenu id="partenaireIndividuSelect" -->
+<!-- 						style="text-align: left;width:160px" -->
+<!-- 							value="#{partenaireMgrBean.refPartenaireDto.idIndividu}" -->
+<!-- 							filter="true" filterMatchMode="startsWith" -->
+<!-- 							label="#{contratmsgs.contrat_partenaire_individu}" -->
+<!-- 							required="true" -->
+<!-- 							requiredMessage="#{contratmsgs.contrat_individu_required}"> -->
+<!-- 							<f:selectItem -->
+<!-- 								itemLabel="#{contratmsgs.contrat_partenaire_select_individu}" -->
+<!-- 								itemValue="" /> -->
+<!-- 							<f:selectItems value="#{comboBckBean.listRefIndividuDto}" /> -->
+
+<!-- 						</p:selectOneMenu> -->
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_selection_role} *" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="_partenaireRoleSelect"
+						style="text-align: left;width:160px"
+							value="#{partenaireMgrBean.refPartenaireDto.idRole}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{contratmsgs.contrat_partenaire_role}" required="true"
+							requiredMessage="#{contratmsgs.contrat_partenaire_role_required}">
+							<f:selectItem
+								itemLabel="#{contratmsgs.contrat_partenaire_select_role}"
+								itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRole}" />
+
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox
+							value="#{partenaireMgrBean.refPartenaireDto.contractant}" />
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_contractant}"
+							style="text-align: top" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="#{contratmsgs.contrat_partenaire_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputTextarea id="idvObservation" style="text-align: left;width:150px"
+							rows="5" cols="100"
+							value="#{partenaireMgrBean.refPartenaireDto.observation}"
+							label="#{contratmsgs.contrat_partenaire_observation}">
+
+						</p:inputTextarea>
+					</p:column>
+				</p:row>
+
+
+			</p:panelGrid>
+			<br></br>
+			<p:panelGrid styleClass="noBorder1">
+				<p:row>
+					<p:column>
+
+						<p:commandButton value="#{commonmsgs.button_ok}"
+							icon="ui-icon-check" update="@(.parIdvOutPanel)"
+							action="#{partenaireMgrBean.addIndividu}" process="@form"
+							oncomplete="dlgIndividuList.hide()">
+							<f:param name="id" value="#{partenaireMgrBean.id}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_cancel}"
+							immediate="true" icon="ui-icon-close"
+							oncomplete="dlgIndividuList.hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+</ui:composition>

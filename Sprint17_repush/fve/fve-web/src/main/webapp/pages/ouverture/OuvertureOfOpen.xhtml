@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="pageTitleContent">
+		#{ouvertureOfMsgs.ouverture_ouvrir_title}
+	</ui:define>
+	<ui:define name="centerContent">
+
+		<p:growl id="msgs" showDetail="true" autoUpdate="true"
+			showSummary="false" closable="true" life="5000" />
+		<pe:blockUI target="form_ouvertureOfSelect" widgetVar="blockUIWidget">
+			<i class="fa fa-spinner fa-spin" />
+		</pe:blockUI>
+		<h:form id="form_ouvertureOfSelect" style="font-size: 11px;">
+			<p:fieldset id="OfSearchResult"
+				legend="#{ouvertureOfMsgs.ouverture_selection_of_title}"
+				styleClass="mesrsFieldset">
+				<p:panelGrid id="toolbar" styleClass="ui-panelgrid-full-width">
+					<p:row>
+						<p:column style="width:15%">
+							<h:outputText value="#{ouvertureOfMsgs.ouverture_domaine}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="domaineSearch" filter="true"
+								filterMatchMode="startsWith" style="width:100%"
+								value="#{ouvertureOfOpenBean.offreFormationSearchDto.idDomaine}"
+								label="#{ouvertureOfMsgs.ouverture_select_domaine}">
+								<p:ajax update="toolbar" onstart="PF('blockUIWidget').block()"
+									oncomplete="PF('blockUIWidget').unblock()"
+									listener="#{ouvertureOfOpenBean.handleDomainesListChange}" />
+								<f:selectItem
+									itemLabel="#{ouvertureOfMsgs.ouverture_select_domaine}"
+									itemValue="" />
+								<f:selectItems value="#{ouvertureOfOpenBean.listDomaines}" />
+							</p:selectOneMenu>
+
+						</p:column>
+						<p:column style="width:15%">
+							<h:outputText value="#{ouvertureOfMsgs.ouverture_filiere}" />
+						</p:column>
+						<p:column style="width:35%">
+							<p:selectOneMenu id="filiereSearch" style="width:100%"
+								value="#{ouvertureOfOpenBean.offreFormationSearchDto.refCodeFiliere}"
+								filter="true" filterMatchMode="startsWith"
+								label="#{ouvertureOfMsgs.ouverture_slect_filiere}">
+								<f:selectItem
+									itemLabel="#{ouvertureOfMsgs.ouverture_slect_filiere}"
+									itemValue="" />
+								<f:selectItems value="#{ouvertureOfOpenBean.listFilieres}" />
+
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<p:toolbar id="searchToolBar">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch" value="Rechercher"
+							update="form_ouvertureOfSelect " icon="ui-icon-search"
+							actionListener="#{ouvertureOfOpenBean.findOffres}"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:dataTable id="OfResultSearchDataTable"
+					rendered="#{ouvertureOfOpenBean.ofResultSearch != null}"
+					value="#{ouvertureOfOpenBean.ofResultSearch}" var="of"
+					rowIndexVar="rowIndex" rowKey="#{of.id}" resizableColumns="true"
+					selectionMode="single" paginator="true" rows="5"
+					paginatorPosition="bottom"
+					emptyMessage="#{ouvertureOfMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_NO_RESULT}"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+					style="margin:8px">
+					<p:ajax event="rowSelect"
+						listener="#{ouvertureOfOpenBean.onRowSelect}"
+						update=":form_ouvertureOfSelect"
+						onstart="PF('blockUIWidget').block()"
+						onsuccess="PF('blockUIWidget').unblock()" />
+					<f:facet name="header">  
+            				#{ouvertureOfMsgs.ouverture_list_of_disponible}
+       				</f:facet>
+					<p:column
+						headerText="#{ouvertureOfMsgs.SEARCH_OF_DATA_TABLE_SEACRH_RESULT_COLUMN_INDEX}"
+						style="width:5%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_code}"
+						style="width:10%">
+						<h:outputText value="#{of.code}" />
+					</p:column>
+
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_libelle}"
+						styleClass="textOnLeft" style="width:20%">
+						<h:outputText value="#{of.libelleLongFr}" />
+					</p:column>
+
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_domaine}"
+						styleClass="textOnLeft" style="width:20%">
+						<h:outputText value="#{of.libelleDomaine}" />
+					</p:column>
+
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_filiere}"
+						styleClass="textOnLeft" style="width:15%">
+						<h:outputText value="#{of.libelleFiliere}" />
+					</p:column>
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_specialite}"
+						styleClass="textOnLeft" style="width:15%">
+						<h:outputText value="#{of.libelleSpecialite}" />
+					</p:column>
+					<p:column headerText="#{ouvertureOfMsgs.ouverture_cycle}"
+						style="width:15%">
+						<h:outputText value="#{of.libelleCycle}" />
+					</p:column>
+				</p:dataTable>
+			</p:fieldset>
+			<br />
+			<p:outputPanel id="detailPanel"
+				rendered="#{ouvertureOfOpenBean.showDetail}">
+				<p:fieldset id="OfSearchField"
+					legend="#{ouvertureOfMsgs.ouverture_ouvrir_title}">
+					<p:panelGrid id="recapOffreId" styleClass="ui-panelgrid-full-width">
+
+						<p:row>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_code}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.code}"
+									styleClass="value" />
+							</p:column>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_libelle}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText styleClass="value"
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.libelleLongFr}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_domaine}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText styleClass="value"
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.libelleDomaine}" />
+							</p:column>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_filiere}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText styleClass="value"
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.libelleFiliere}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_specialite}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText styleClass="value"
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.libelleSpecialite}" />
+							</p:column>
+							<p:column style="widht:15%">
+								<h:outputLabel value="#{ouvertureOfMsgs.ouverture_cycle}" />
+							</p:column>
+							<p:column style="widht:35%">
+								<h:outputText styleClass="value"
+									value="#{ouvertureOfOpenBean.selectedOffreFormationDto.libelleCycle}" />
+							</p:column>
+						</p:row>
+
+						<p:row>
+							<p:column style="width:25%">
+								<h:outputText
+									value="#{ouvertureOfMsgs.ouverture_annee_academique}" />
+							</p:column>
+
+							<p:column style="width:25%">
+								<h:panelGroup>
+									<h:outputText id="anneAcad" styleClass="value"
+										value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.anneeAcademiquePremiereAnnee} / #{ouvertureOfOpenBean.ouvertureOffreFormationDto.anneeAcademiqueDeuxiemeAnnee}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column style="width:25%">
+								<h:outputText value="#{ouvertureOfMsgs.ouverture_etablissement}" />
+							</p:column>
+							<p:column style="width:25%">
+								<h:outputText
+									value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.codeEtablissement} #{ouvertureOfOpenBean.ouvertureOffreFormationDto.refLibelleEtablissement}"
+									styleClass="value" />
+							</p:column>
+
+
+						</p:row>
+						<p:row>
+							<p:column style="width:25%">
+								<p:outputLabel
+									value="#{ouvertureOfMsgs.ouverture_effectif_minimum}"
+									for="effectifMin" />
+							</p:column>
+							<p:column style="width:25%">
+								<pe:inputNumber id="effectifMin" style="width:100%"
+									value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.effectifMin}"
+									required="true" minValue="0" maxValue="2000"
+									requiredMessage="#{ouvertureOfMsgs.ouverture_effectif_minimum_required}">
+								</pe:inputNumber>
+							</p:column>
+
+							<p:column style="width:25%">
+								<p:outputLabel for="effectifMax"
+									value="#{ouvertureOfMsgs.ouverture_effectif_maximum}" />
+							</p:column>
+							<p:column style="width:25%">
+								<pe:inputNumber id="effectifMax"
+									value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.effectifMax}"
+									required="true" style="width:100%" minValue="0" maxValue="2000"
+									requiredMessage="#{ouvertureOfMsgs.ouverture_effectif_maximum_required} ">
+								</pe:inputNumber>
+							</p:column>
+						</p:row>
+						<!-- Ouverure - FOOTER  -->
+
+						<p:row
+							rendered="#{not empty ouvertureOfOpenBean.ouvertureOffreFormationDto.dateOuverture}">
+
+							<p:column style="width:15%"
+								rendered="#{not empty ouvertureOfOpenBean.ouvertureOffreFormationDto.dateOuverture}">
+								<h:outputText
+									value="#{ouvertureOfMsgs.ouverture_date_ouverture}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText
+									value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.dateOuverture}"
+									styleClass="value">
+									<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+								</h:outputText>
+
+							</p:column>
+							<p:column style="width:15%"
+								rendered="#{not empty ouvertureOfOpenBean.ouvertureOffreFormationDto.dateFermeture}">
+								<h:outputText
+									value="#{ouvertureOfMsgs.ouverture_date_fermeture}" />
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{ouvertureOfOpenBean.ouvertureOffreFormationDto.dateFermeture}"
+									styleClass="value">
+									<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+				<br />
+
+				<p:toolbar style="margin-top:5px">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSaveID" update=":form_ouvertureOfSelect"
+							process=":form_ouvertureOfSelect"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							value="#{commonmsgs.bouton_ouvrir}"
+							rendered="#{!ouvertureOfOpenBean.selectedOffreFormationDto.estOuverte}"
+							actionListener="#{ouvertureOfOpenBean.save}">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

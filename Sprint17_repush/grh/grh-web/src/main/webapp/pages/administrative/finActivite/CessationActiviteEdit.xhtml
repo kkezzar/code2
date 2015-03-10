@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{finActiviteMgs.enrg_cessation_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<ui:include
+				src="/pages/administrative/finActivite/CessationSearch.xhtml" >
+					<ui:param name="renderedNouveau"  value="true"/>
+					<ui:param name="nameMBean"  value="#{cessationActiviteMBean}"/>
+					<ui:param name="updateAjax"  value=":pnl_Gerer"/>
+				</ui:include>
+			<br></br>
+			<p:outputPanel id="pnl_cessation_edit">
+				<p:outputPanel id="pnl_Edit" rendered="#{not empty cessationActiviteMBean.cessationActiviteDto}">
+					<h:form id="form_cessation_activite_edit">
+						<p:panelGrid columns="1" cellspacing="0" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:panelGrid id="cessationActivite" styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+								<p:row>
+									<p:column colspan="2" styleClass="title">
+										<h:outputText value="#{finActiviteMgs.label_cessation_activite}" styleClass="value"/>
+									</p:column>
+								</p:row>
+								<p:row >
+									<p:column style="width:25%">
+										<h:outputLabel value="#{grhmsgs.employe}" />
+									</p:column>
+									<p:column style="width:75%">
+										<p:commandLink id="employe"
+											onclick="PF('employeDetailDialog').show()"
+											rendered="#{cessationActiviteMBean.dossierEmployeDto != null}"
+											immediate="true">
+											<h:outputText
+												value="#{cessationActiviteMBean.dossierEmployeDto.refIndividuDto.nomLatin} #{cessationActiviteMBean.dossierEmployeDto.refIndividuDto.prenomLatin}"
+												styleClass="value" />
+										</p:commandLink>
+										<p:inputText value="#{cessationActiviteMBean.dossierEmployeDto}"  
+											   required="true" 
+											   requiredMessage="#{mutationMgs.employe_required}" 
+											   rendered="#{cessationActiviteMBean.dossierEmployeDto==null}" 
+											   onclick="PF('dossierEmployeDialogSearch').show()"/>
+										<p:spacer width="10px"/>
+										<p:commandButton id="btnAddEmploye" 
+											rendered="#{cessationActiviteMBean.dossierEmployeDto!=null and cessationActiviteMBean.typeSelecionEditable}"
+											styleClass="ui-button-bleu" title="Ajouter Employé"
+											icon="ui-icon-plusthick" ajax="true" immediate="true"
+											onsuccess="PF('dossierEmployeDialogSearch').show()"/>
+									</p:column>
+								</p:row>
+								<p:row >
+									<p:column >
+										<h:outputLabel value="#{finActiviteMgs.cessation_type}" />
+									</p:column>
+									<p:column >
+										<p:selectOneMenu
+											rendered="#{cessationActiviteMBean.typeSelecionEditable}"
+											id="typeCessationSelection"
+											required="true"
+											requiredMessage="#{msg_type_cessation_required}"
+											value="#{cessationActiviteMBean.cessationActiviteDto.nomenclature.id}">
+												<f:selectItem itemLabel="--#{finActiviteMgs.cessation_type_header}--" itemValue=""/>
+												<f:selectItems value="#{cessationActiviteMBean.listeTypeCessation}"/>
+												<p:ajax update=":pnl_cessation_edit"
+													listener="#{cessationActiviteMBean.onTypeCessationSelected()}" 
+													onstart="PF('page').block()"
+													onsuccess="PF('page').unblock()"/>
+										</p:selectOneMenu>
+										<h:outputText value="#{cessationActiviteMBean.cessationActiviteDto.nomenclature.libelleLongFr}" rendered="#{!cessationActiviteMBean.typeSelecionEditable}" />
+									</p:column>
+								</p:row>
+								<p:row rendered="#{cessationActiviteMBean.cessationActiviteDto.nomenclature.id != null}">
+									<p:column>
+										<h:outputLabel value="#{finActiviteMgs.date_deces}" rendered="#{cessationActiviteMBean.deces}" styleClass="required"/>
+										<h:outputLabel value="#{finActiviteMgs.date_depart_relle_retraite}" rendered="#{cessationActiviteMBean.departRetraite}" styleClass="required"/>
+										<h:outputLabel value="#{finActiviteMgs.date_cessation_defintive}" rendered="#{cessationActiviteMBean.cessationAutre}" styleClass="required"/>
+									</p:column>
+									
+									<p:column >
+										<p:calendar id="dateCessationDefinitive" navigator="true" 
+												required="true" 
+												requiredMessage="#{finActiviteMgs.msg_date_cessation_definitive_required}"
+												value="#{cessationActiviteMBean.cessationActiviteDto.dateCessationFinale}">
+										</p:calendar>
+									</p:column>
+								</p:row>
+								
+							<p:row rendered="#{cessationActiviteMBean.cessationActiviteDto.nomenclature.id != null and not empty cessationActiviteMBean.cessationActiviteDto.objet}">
+								<p:column>
+									<h:outputLabel value="Motif" />
+								</p:column>
+								<p:column rendered="#{cessationActiviteMBean.displayMotif and cessationActiviteMBean.motifEditable}">
+									<p:inputTextarea id="objet"  style="width:100%;height:50px"
+											value="#{cessationActiviteMBean.cessationActiviteDto.objet}">
+										</p:inputTextarea>
+								
+								</p:column>
+								<p:column rendered="#{cessationActiviteMBean.displayMotif and !cessationActiviteMBean.motifEditable}">
+									<h:outputText value="#{cessationActiviteMBean.cessationActiviteDto.objet}" />
+								</p:column>
+							</p:row>
+
+			</p:panelGrid>
+	
+
+
+		
+				<p:toolbar id="cessationActiviteToolBar" styleClass="toolBarMesrs" rendered="#{cessationActiviteMBean.cessationActiviteDto.nomenclature.id != null}">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+							id="saveDemandeDemssionBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+							actionListener="#{cessationActiviteMBean.onSave}"/>
+						<p:spacer width="10px"></p:spacer>
+						<p:commandButton value="#{commonmsgs.bouton_annuler}"
+							immediate="true" process="@this" id="backBtn"
+							icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+							actionListener="#{cessationActiviteMBean.onInit()}"/>
+					</p:toolbarGroup>
+			</p:toolbar>
+		</p:panelGrid>
+	</h:form>
+
+
+
+					
+				
+			</p:outputPanel>
+
+		</p:outputPanel>
+		<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{cessationActiviteMBean.dossierEmployeDto}"/>
+						</ui:include>
+					</p:dialog>
+</p:outputPanel>
+<ui:include
+			src="/pages/administrative/dossierEmploye/DossierEmployeDialogSearch.xhtml">
+			<ui:param name="nameMBean" value="#{cessationActiviteMBean}"/>
+			<ui:param name="updateAjax" value=":pnl_Gerer"/>
+			<ui:param name="dialogWidgetVar" value="dossierEmployeDialogSearch"/>
+			<ui:param name="dialogHeader" value="Sélectionner un employé"/>
+		</ui:include>
+	</ui:define>
+</ui:composition>
+</html>

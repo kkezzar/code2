@@ -1,0 +1,111 @@
+<ui:composition
+ xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:outputStylesheet library="./css" name="style.css" />
+    <ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+   <p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+    <p:panel style="height:600px" id="etatValidationReservationPanel2" header="#{commonmsgs.menu_domainelmd}"   > 
+    <ui:include src="/pages/domainelmd/domainelmdHeader.xhtml"/>
+    <br></br>
+    <p:fieldset legend="Modification">
+
+      <p:panel >  
+      <p:panelGrid  styleClass="noBorder1">
+      <p:row >
+		<p:column>
+		<h:outputText value="#{affectationdomlmdetabMgrBean.entitiname} : "  style="font-weight: bold;" />
+		<h:outputText value="#{affectationdomlmdetabMgrBean.idr}" style="font-weight: bold;"/>
+		</p:column>		 
+	  </p:row>
+      </p:panelGrid>          
+    </p:panel>
+     
+   
+      <br></br>
+		<h:form id="listetabForm">
+			<p:panelGrid id="descriptionAffectation" styleClass="noBorder1">
+				<p:row>
+					<p:column>
+						<h:outputText value="#{domainelmdmsgs.domainelmd_etablissement}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="etablissementselect"
+							value="#{affectationdomlmdetabMgrBean.refAffectDomLmdEtabDto.idEtablissement}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{domainelmdmsgs.domainelmd_etablissement}" required="true"
+							requiredMessage="#{domainelmdmsgs.domainelmd_etablissement_required}">
+							<f:selectItem itemLabel="#{domainelmdmsgs.domainelmd_affectation_selection_etablissement}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefEtablissementDto}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+			    <p:row>
+					<p:column>
+						<h:outputText value="#{domainelmdmsgs.domainelmd_date_affectation}*" />
+					</p:column>
+					<p:column>
+						<p:calendar navigator="true" 
+							value="#{affectationdomlmdetabMgrBean.refAffectDomLmdEtabDto.date}"
+							id="datedebutstr" showButtonPanel="true"
+							label="#{domainelmdmsgs.domainelmd_date_affectation}" required="true"
+							requiredMessage="#{domainelmdmsgs.domainelmd_affectation_date_recired}">
+							<f:ajax render="datedebutstr" event="change" />
+						</p:calendar>
+					</p:column>
+				</p:row>
+				
+				<p:row>
+					<p:column>
+						<h:outputText value="#{domainelmdmsgs.domainelmd_groupe}*" />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu id="groupeselect"
+							value="#{affectationdomlmdetabMgrBean.refAffectDomLmdEtabDto.idGroupe}"
+							filter="true" filterMatchMode="startsWith"
+							label="#{domainelmdmsgs.domainelmd_groupe}" required="true"
+							requiredMessage="#{domainelmdmsgs.domainelmd_affectation_groupe}">
+							<f:selectItem itemLabel="#{domainelmdmsgs.domainelmd_groupe}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listRefGroupeDto}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+			
+				<p:row>
+					<p:column>
+						<h:outputText value="#{domainelmdmsgs.domainelmd_affectation_observation}" />
+					</p:column>
+					<p:column>
+						<p:inputText id="observationstr"
+							style="text-align: left; width:300px"
+							value="#{affectationdomlmdetabMgrBean.refAffectDomLmdEtabDto.observation}"
+							label="#{domainelmdmsgs.domainelmd_affectation_observation}">
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<br></br>
+					<p:column>
+					<p:commandButton value="#{commonmsgs.button_save}" icon="ui-icon-check" actionListener="#{affectationdomlmdetabMgrBean.save}" update="@form" >
+					<f:param name="id" value="#{affectationdomlmdetabMgrBean.id}"/>
+					<f:param name="idr" value="#{affectationdomlmdetabMgrBean.idr}"/>
+					</p:commandButton>		
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.button_return}" immediate="true" icon="ui-icon-disk" action="#{domainelmdBckBean.back}">
+							<f:param name="searchValue" value="#{domainelmdBckBean.searchValue}" />
+						</p:commandButton>
+						</p:column>
+				</p:row>
+			</p:panelGrid>
+		</h:form>
+	  </p:fieldset>  
+      </p:panel>  
+     </ui:define>
+      </ui:composition>            
+</ui:composition>

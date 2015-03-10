@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{reintegrationsMsgs.page_title_gestion_reintegrations}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+			<h:form id="form_search">
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:selectOneMenu id="sourceReintegration"
+							value="#{dossierReintegrationMBean.sourceReintegration}"
+							style="margin-bottom:-10px">
+							<f:selectItem itemLabel="Sélectionner source de réintegration"
+								itemValue="" />
+							<f:selectItem itemLabel="Congés academique" itemValue="1" />
+							<f:selectItem itemLabel="Exclusions" itemValue="2" />
+
+							<p:ajax event="valueChange"
+								listener="#{dossierReintegrationMBean.handleEtablissementChange}"
+								update="form_search :form_crud"  onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()"  />
+
+						</p:selectOneMenu>
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+
+						<p:inputText id="sMatricule" placeholder="Matricule" />
+						<p:separator />
+						<p:inputText id="sNom" placeholder="Nom" />
+						<p:spacer height="2px"></p:spacer>
+						<p:inputText id="sPrenom" placeholder="Prénom" />
+						<p:separator />
+						<p:commandButton icon="ui-icon-search" update="form_search"
+							title="Rechercher"></p:commandButton>
+						<p:commandButton id="rechercheAvc" value="Recherche avancée"
+							title="Recherche avancée">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<p:dataTable resizableColumns="true" id="ResultSearchDataTable1"
+					value="#{dossierReintegrationMBean.listeReintegrationsDto}"
+					paginatorPosition="bottom" var="current" rowKey="#{current.id}"
+					paginator="true"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}"
+					selectionMode="single" lazy="true" rows="5"
+					rendered="#{dossierReintegrationMBean.sourceReintegration eq 2}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossierReintegrationMBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+
+					<p:column sortBy="#{current.dossierEtudiantMatricule}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_matricule}" />
+
+						</f:facet>
+						<h:outputText value="#{current.dossierEtudiantMatricule}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.individuNomLatin}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_nom}" />
+
+						</f:facet>
+						<h:outputText value="#{current.individuNomLatin}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.individuPrenomLatin}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_prenom}" />
+
+						</f:facet>
+						<h:outputText value="#{current.individuPrenomLatin}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.dateDemande}">
+						<f:facet name="header">
+
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_demande_reintegration}" />
+
+						</f:facet>
+						<h:outputText value="#{current.dateDemande}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Cause" />
+
+						</f:facet>
+						<h:outputText value="#{current.causeExclusion}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+
+				<p:dataTable resizableColumns="true" id="ResultSearchDataTable2"
+					value="#{dossierReintegrationMBean.listeCongesAcademiqueDto}"
+					paginatorPosition="bottom" var="current" rowKey="#{current.id}"
+					paginator="true"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}"
+					selectionMode="single" lazy="true" rows="5"
+					rendered="#{dossierReintegrationMBean.sourceReintegration eq 1}">
+
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{dossierReintegrationMBean.onRowSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":form_crud" />
+
+					<p:column sortBy="#{current.bacMatricule}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_matricule}" />
+
+						</f:facet>
+						<h:outputText value="#{current.bacMatricule}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.individuNomLatin}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_nom}" />
+
+						</f:facet>
+						<h:outputText value="#{current.individuNomLatin}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.individuPrenomLatin}">
+						<f:facet name="header">
+
+							<h:outputText value="#{commonmsgs.individu_prenom}" />
+
+						</f:facet>
+						<h:outputText value="#{current.individuPrenomLatin}">
+
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.dateDemande}">
+						<f:facet name="header">
+
+							<h:outputText
+								value="#{reintegrationMsgs.reintegration_date_demande}" />
+
+						</f:facet>
+						<h:outputText value="#{current.dateDemande}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{reintegrationMsgs.reintegration_type}" />
+
+						</f:facet>
+						<h:outputText value="#{current.typeCongeLibelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<p:spacer height="20px"></p:spacer>
+
+			<p:outputPanel id="form_crud">
+
+				<p:tabView rendered="#{dossierReintegrationMBean.crud}">
+
+					<!-- Information reintegration  -->
+					<p:tab
+						title="#{reintegrationsMsgs.dossier_reintegration_information_reintegration}">
+
+						<!-- CRUD form -->
+						<h:form>
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{reintegrationsMsgs.dossier_reintegration_information_etudiant}" />
+									</p:column>
+								</p:row>
+
+								<!-- Detail de l'etudiant -->
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nin}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuNin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_matricule} " />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dossierEtudiantMatricule}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuNomLatin.toUpperCase()}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuNomArabe.toUpperCase()}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuPrenomLatin}" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_prenom_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuPrenomArabe}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_date_naissance}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuDateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_lieu_naissance}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuLieuNaissance}">
+
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nationalite}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuNationaliteLibelleLongFr}">
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.individu_nationalite_ar}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.individuNationaliteLibelleLongAr}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{reintegrationMsgs.dossier_reintegration_information_reintegration}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column style="width:250px">
+										<h:outputText
+											value="#{reintegrationsMsgs.dossier_reintegration_anne_academique}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.anneeAcademiqueCode}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.dossier_reintegration_anne_academique}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateDecisionExclusion}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_date_debut_exclusion}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateDebutExclusion}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_date_fin_exclusion}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateFinExclusion}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_date_demande}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateDemande}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_date_resultat}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateResultat}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_date_autorisation}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.dateAutorisation}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_type_cause}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.reintegrationDto.refCodeTypeCauseExclusion}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+
+							<p:panelGrid
+								styleClass="ui-panelgrid-full-width ui-panelgrid-detail ui-panelgrid-form-no-border">
+
+								<p:row>
+									<p:column colspan="4" styleClass="title">
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_situation_derniere_inscription}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+
+									<p:column>
+										<h:outputText
+											value="#{reintegrationsMsgs.reintegration_annee_academique}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.anneeAcademiqueCode}">
+
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_etablissement}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.llEtablissementLatin}">
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_cycle}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.cycleLibelleLongLt}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_niveau}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.niveauLibelleLongLt}">
+											<f:convertDateTime pattern="dd-MM-yyyy" />
+										</h:outputText>
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_domaine}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.refLibelleDomaine}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_filiere}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.refLibelleFiliere}" />
+									</p:column>
+								</p:row>
+
+								<p:row>
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_specialite}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.refLibelleSpecialite}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{commonmsgs.label_offre_formation}" />
+									</p:column>
+									<p:column styleClass="value">
+										<h:outputText
+											value="#{dossierReintegrationMBean.dossierInscriptionAdministrativeDto.offreFormationLibelleFr}" />
+									</p:column>
+								</p:row>
+
+								<f:facet name="footer">
+									<p:row>
+										<p:column colspan="2">
+											<p:commandButton value="#{commonmsgs.bouton_validate}"
+												id="saveBtn" update=":form_crud"
+												disabled="#{dossierReintegrationMBean.reintegrationDto.reintegrationValidee}"
+												icon="ui-icon-disk" styleClass="ui-button-save"
+												actionListener="#{dossierReintegrationMBean.validateReintegrationAction()}">
+												<p:confirm header="Confirmation"
+													message="Voulez-vous confirmer la validation de la demande de réintegration ?"
+													icon="ui-icon-alert" />
+											</p:commandButton>
+	
+											<p:spacer width="10px"></p:spacer>
+
+											<p:commandButton value="#{commonmsgs.bouton_retour}"
+												id="cancelBtn" update=":form_crud :form_search"
+												actionListener="#{dossierReintegrationMBean.cancelReintegrationAction()}">
+											</p:commandButton>
+
+										</p:column>
+									</p:row>
+								</f:facet>
+
+							</p:panelGrid>
+						</h:form>
+					</p:tab>
+
+					<!-- les documents -->
+					<p:tab id="tabDocuments" titleStyleClass="ui-tab-documents"
+						title="#{commonmsgs.tab_documents}"
+						titletip="#{commonmsgs.tab_documents_tooltip}"
+						disabled="#{dossierReintegrationMBean.reintegrationDto.id == null}">
+						<f:facet name="title">
+							<h:outputText value="" />
+							<i class="fa fa-files-o"></i>
+						</f:facet>
+						<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+							<c:set var="entity" value="Reintegration" scope="request" />
+							<c:set var="identifiant"
+								value="#{dossierReintegrationMBean.reintegrationDto.id.toString()}"
+								scope="request" />
+							<ui:param name="entity" value="Reintegration" />
+							<ui:param name="identifiant"
+								value="#{dossierReintegrationMBean.reintegrationDto.id.toString()}" />
+							<ui:param name="editionMode" value="#{true}" />
+						</ui:include>
+					</p:tab>
+
+				</p:tabView>
+
+			</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

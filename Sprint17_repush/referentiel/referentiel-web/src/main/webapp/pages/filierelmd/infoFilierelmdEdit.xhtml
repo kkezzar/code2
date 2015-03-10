@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+
+	<h:form prependId="false">
+	<p:fieldset legend="Filiére informations">
+		<p:panelGrid id="idendite" styleClass="noBorder1">
+
+			
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_domaine} *" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="DomaineLmdList" 	value="#{filierelmdMgrBean.refFiliereLmdDto.idDomaine}"
+							filter="true" filterMatchMode="startsWith" label="#{filierelmdmsgs.filierelmd_domaine}" required="true"
+							requiredMessage="#{filierelmdmsgs.filierelmd_domaine_required}"  style="text-align: left;width:308px">
+							<f:selectItem itemLabel="#{filierelmdmsgs.selection_domaine}" itemValue="" />
+					<f:selectItems value="#{comboBckBean.listRefDomaineLMDDto}" />
+
+						</p:selectOneMenu>
+					
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_identite} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="identifiant" style="text-align: left; width:300px"
+
+						value="#{filierelmdMgrBean.refFiliereLmdDto.identifiant}"
+						label="#{filierelmdmsgs.filierelmd_identite}"
+						disabled="#{filierelmdMgrBean.updateMode}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_identite_required}">
+					</p:inputText>
+					
+				</p:column>
+			</p:row>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcr" style="text-align: left; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.lcFiliere}"
+						label="#{filierelmdmsgs.filierelmd_crlibelle}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_crlibelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_arabe_cr} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libcrArabe"
+						style="text-align: right; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.lcFiliereArabe}"
+						label="#{filierelmdmsgs.filierelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+			
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="lbelle" style="text-align: left; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.llFiliere}"
+						label="#{filierelmdmsgs.filierelmd_crlibelle}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_libelle_required}">
+					</p:inputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_libelle_arabe} *" />
+				</p:column>
+				<p:column>
+					<p:inputText id="libelleArabe"
+						style="text-align: right; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.llFiliereArabe}"
+						label="#{filierelmdmsgs.filierelmd_crlibelle_arabe}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_arlibelle_required}">
+					</p:inputText>
+				</p:column>
+			</p:row>
+
+		
+			<p:row>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_description} *" />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="description"
+						style="text-align: left; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.descriptionFiliere}"
+						label="#{filierelmdmsgs.filierelmd_description}" required="true"
+						requiredMessage="#{filierelmdmsgs.filierelmd_description_required}">
+					</p:inputTextarea>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{filierelmdmsgs.filierelmd_description_ar} " />
+				</p:column>
+				<p:column>
+					<p:inputTextarea id="descriptionArabe"
+						style="text-align: right; width:300px"
+						value="#{filierelmdMgrBean.refFiliereLmdDto.descriptionFiliereArabe}"
+						label="#{filierelmdmsgs.filierelmd_description_ar}">
+					</p:inputTextarea>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_niveau_recrutement}" />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="niveaurecrutement"
+							style="text-align: left;width:170px"
+							value="#{filierelmdMgrBean.refFiliereLmdDto.niveauRecrutementId}"
+							label="#{domainelmdmsgs.domainelmd_niveau_recrutement}" >
+							<f:selectItem itemLabel="#{domainelmdmsgs.domainelmd_niveau_recrutement}" itemValue="" />
+							<f:selectItems value="#{comboBckBean.listeNiveauRecrutement}" />
+						</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<h:outputText value="#{domainelmdmsgs.domainelmd_premiere_inscription} " />
+				</p:column>
+				<p:column>
+				          <p:selectBooleanCheckbox value="#{filierelmdMgrBean.refFiliereLmdDto.isPremiereInscription}" id="ispremiereinscription">
+				          </p:selectBooleanCheckbox>
+				</p:column>
+			</p:row>
+				
+		</p:panelGrid>
+	</p:fieldset>	
+		<br></br>
+				<p:commandButton value="#{commonmsgs.button_save}" icon="ui-icon-disk" action="#{filierelmdMgrBean.saveFiliere()}" />
+			
+				<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-arrowthick-1-w" action="#{filierelmdMgrBean.cancel}" immediate="true">
+								<f:param name="dossierEtudiantId" value="#{filierelmdMgrBean.refFiliereLmdDto.id}" />
+			    </p:commandButton>
+		
+	
+	</h:form>
+
+		
+
+</ui:composition>
+

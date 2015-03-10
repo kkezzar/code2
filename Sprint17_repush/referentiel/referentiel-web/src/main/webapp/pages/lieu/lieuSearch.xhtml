@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+		<p:panel header="#{commonmsgs.menu_lieu}" style="border:0;">
+			<h:form id="searchForm"				    
+				    onkeypress="if (event.keyCode == 13) { event.preventDefault(); document.getElementById('searchForm:searchButton').click(); return false;}">
+		
+
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{commonmsgs.button_new}"
+							rendered="#{lieuDroitBean.createAllow}" icon="ui-icon-document"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							action="#{lieuMgrBean.toNew}" />
+						<p:separator />
+						<p:commandButton title="Export Excel" icon="ui-icon-print"
+							immediate="true" ajax="false">
+							<p:dataExporter type="xls" target="lieuData"
+								fileName="listeDesLieux" />
+						</p:commandButton>
+
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:focus for="searchInput" />
+						<p:inputText value="#{lieuMgrBean.searchInput}" id="searchInput"
+							rendered="#{lieuDroitBean.readAllow}" style="width:200px" />
+						<p:watermark for="searchInput"
+							value="#{commonmsgs.watermark_find_generic}" />
+							
+						<p:commandButton onstart="PF('blockUIWidget').block()" id="searchButton"
+							oncomplete="PF('blockUIWidget').unblock()" update=":searchForm"
+							ajax="true" icon="ui-icon-search"
+							rendered="#{lieuDroitBean.readAllow}"
+							actionListener="#{lieuMgrBean.findGeneric}" />
+						<p:separator />
+						<p:commandLink id="rechercheAvc" onclick="PF('dlgSearch').show()"
+							rendered="#{lieuDroitBean.readAllow}">
+							<h:outputText value="#{commonmsgs.button_advanced_search}" />
+						</p:commandLink>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+				<br></br>
+				<p:messages id="messages" showSummary="true" autoUpdate="true"
+					closable="true" />
+				<p:dataTable resizableColumns="true" id="lieuData"
+					rendered="#{lieuBckBean.listRefLieuDto!=null}"
+					value="#{lieuBckBean.listRefLieuDto}" var="current"
+					paginator="true" paginatorPosition="bottom"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+					<f:facet name="header">
+						<h:outputText value="#{lieumsgs.lieu_list_title}" />
+					</f:facet>
+					<p:column sortBy="#{current.identifiant}">
+						<f:facet name="header">
+							<h:outputText value="#{lieumsgs.lieu_identite}" />
+						</f:facet>
+						<h:outputText value="#{current.identifiant}" />
+					</p:column>
+					<p:column sortBy="#{current.designation}">
+						<f:facet name="header">
+							<h:outputText value="#{lieumsgs.lieu_libelle}" />
+						</f:facet>
+						<h:outputText value="#{current.designation}" />
+					</p:column>
+					<p:column sortBy="#{current.typelieuLibelleLongFr}">
+						<f:facet name="header">
+							<h:outputText value="#{lieumsgs.lieu_type_lieu}" />
+						</f:facet>
+						<h:outputText value="#{current.typelieuLibelleLongFr}">
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{current.description}">
+						<f:facet name="header">
+							<h:outputText value="#{lieumsgs.lieu_description}" />
+						</f:facet>
+						<h:outputText value="#{current.description}">
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{current.llSituationFr}">
+						<f:facet name="header">
+							<h:outputText value="#{lieumsgs.lieu_situation}" />
+						</f:facet>
+
+						<h:outputText value="#{current.llSituationFr}" />
+					</p:column>
+
+					<p:column sortBy="#{current.dateSituation}">
+						<f:facet name="header">
+							<h:outputText value="Date" />
+						</f:facet>
+
+						<h:outputText value="#{current.dateSituation}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss"
+								timeZone="GMT+1" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="width:8%" exportable="false">
+						<p:commandButton id="readButton" action="#{lieuMgrBean.toDetails}"
+							icon="ui-icon-document" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{lieuDroitBean.readAllow}"
+							title="#{commonmsgs.button_consulter}">
+							<f:setPropertyActionListener value="#{current}"
+								target="#{lieuBckBean.refLieuDto}" />
+							<c:set var="id" value="#{current.id}" scope="request" />
+							<f:param name="id" value="#{current.id}" />
+							<f:param name="idf" value="#{current.id}" />
+							<f:param name="identifiant" value="#{current.identifiant}" />
+						</p:commandButton>
+
+						<p:commandButton id="modifyButton" action="#{lieuMgrBean.toEdit}"
+							icon="ui-icon-pencil" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()"
+							rendered="#{lieuDroitBean.editAllow}"
+							title="#{commonmsgs.button_update}">
+
+							<f:setPropertyActionListener value="#{current}"
+								target="#{lieuBckBean.refLieuDto}" />
+
+							<c:set var="id" value="#{current.id}" scope="request" />
+							<f:param name="id" value="#{current.id}" />
+							<f:param name="idf" value="#{current.id}" />
+							<f:param name="identifiant" value="#{current.identifiant}" />
+
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+
+
+		<p:dialog header="#{commonmsgs.button_advanced_search}"
+			widgetVar="dlgSearch" resizable="false" modal="true"
+			appendTo="@(body)">
+			<h:form id="formSearch">
+
+				<p:panelGrid id="infos" styleClass="noBorder1">
+					<p:row>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_type_lieu}:" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="selectTypeLieu"
+								value="#{lieuMgrBean.searchDto.typelieuId}" filter="true"
+								filterMatchMode="startsWith" label="#{lieumsgs.lieu_type_lieu}">
+								<f:selectItem itemLabel="#{lieumsgs.selection_type_lieu}"
+									itemValue="" />
+								<f:selectItems value="#{comboBckBean.listeTypeLieu}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_identite}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="identifiantSearch" style="text-align: left"
+								value="#{lieuMgrBean.searchDto.identifiant}"
+								label="#{lieumsgs.lieu_identite}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_libelle}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtSearch" style="text-align: left"
+								value="#{lieuMgrBean.searchDto.designation}"
+								label="#{lieumsgs.lieu_libelle}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_description}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libelleLtCourtSearch" style="text-align: left"
+								value="#{lieuMgrBean.searchDto.description}"
+								label="#{lieumsgs.lieu_description}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_libelle_arabe}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabeSearch" style="text-align: left"
+								value="#{lieuMgrBean.searchDto.designationArabe}"
+								label="#{lieumsgs.lieu_libelle_arabe}">
+
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{lieumsgs.lieu_description_ar}:" />
+						</p:column>
+						<p:column>
+							<p:inputText id="libellearabecourtSearch"
+								style="text-align: left"
+								value="#{lieuMgrBean.searchDto.descriptionArabe}"
+								label="#{lieumsgs.lieu_description_ar}">
+
+							</p:inputText>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+
+				<p:commandButton id="submitSearch"
+					value="#{commonmsgs.button_search}" update=":searchForm"
+					actionListener="#{lieuMgrBean.findAdvanced}"
+					oncomplete="PF('dlgSearch').hide();" />
+
+			</h:form>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>
+</html>

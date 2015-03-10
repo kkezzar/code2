@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	<sec:http security="none" pattern="/login.xhtml*" />
+	<sec:http security="none" pattern="/css/**" />
+	<sec:http security="none" pattern="/images/**" />
+	<sec:http security="none" pattern="/resources/**" />
+	<sec:http security="none" pattern="/javax.faces.resource/**" />
+	<sec:http auto-config="true" use-expressions="true">
+
+		<!-- <sec:intercept-url pattern="/login.xhtml" access="permitAll"/> ('ROLE_DCACM,ROLE_SUPERUSER,ROLE_DRTCOMMERCIAL,ROLE_HELPDESK,ROLE_DRTRH') -->
+		<sec:intercept-url pattern="/**"
+			access="hasAnyRole('USER,ADMIN')" />
+		<sec:form-login login-page="/login.xhtml"
+			default-target-url="/template/centertemplate.xhtml"
+			always-use-default-target="true" login-processing-url="/j_spring_security_check"
+			authentication-failure-url="/login.xhtml" />
+		<sec:logout invalidate-session="true"
+			delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE"
+			logout-success-url="/login.xhtml" />
+	</sec:http>
+	<!-- <sec:authentication-manager alias="authenticationManager"> <sec:authentication-provider 
+		ref="ldapAuthProvider"></sec:authentication-provider> </sec:authentication-manager> 
+		il faut supprimer les commentaires de cette ligne pour activer l'authentification 
+		via LDAP -->
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider>
+			<sec:user-service>
+			<sec:user name="ADMIN" password="ADMIN" authorities="ADMIN" />
+			</sec:user-service>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+
+<!--
+	<beans:bean id="ldapContextSource"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<beans:constructor-arg value="${ldap.url}" />
+
+		<beans:property name="userDn" value="${ldap.userdn}" />
+
+		<beans:property name="password" value="${ldap.password}" />
+
+	</beans:bean>
+
+	<beans:bean id="ldapAuthProvider"
+		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+		<beans:constructor-arg>
+			<beans:bean
+				class="org.springframework.security.ldap.authentication.BindAuthenticator">
+				<beans:constructor-arg ref="ldapContextSource" />
+				<beans:property name="userDnPatterns">
+					<beans:list>
+						<beans:value>uid={0},ou=Users</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</beans:constructor-arg>
+	</beans:bean>
+	-->
+	<sec:global-method-security
+		pre-post-annotations="enabled" />
+
+</beans:beans>

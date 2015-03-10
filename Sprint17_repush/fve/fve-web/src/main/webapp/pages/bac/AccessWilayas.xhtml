@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{referentielOrientationMsgs.REF_ORIENTATION_CONSULTER_ACCESS_WILAYAS}
+	</ui:define>
+	
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="outputPanel">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+				<h:form id="form_search">
+
+					<!-- toolbar -->
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+							<p:selectOneMenu id="selectAnnee" style="margin:5px 5px 0px 5px;"
+								value="#{accessWilayaMBean.idAnneeAcademique}"
+								label="#{printMsgs.print_anne_univeristaire}">
+								<f:selectItem
+									itemLabel="#{printMsgs.print_select_annee_academique}"
+									itemValue="" />
+								<f:selectItems value="#{accessWilayaMBean.listAnneeAcademique}" />
+
+								<p:ajax
+									listener="#{accessWilayaMBean.handleAnneeAcademiqueChange}"
+									event="valueChange" update=":form_view,form_search" />
+							</p:selectOneMenu>
+						</p:toolbarGroup>
+					</p:toolbar>
+
+
+					<p:spacer height="20px"></p:spacer>
+
+					<p:dataTable id="dtTbl_accessWilaya"
+						value="#{accessWilayaMBean.accessWilayaList}"
+						var="currentAcessWilaya" rowKey="#{currentAcessWilaya.id}"
+						selectionMode="single" paginator="true" rows="10" 
+						paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.data_table_empty_Message}">
+
+						<f:param name="acessWilayaId" value="#{currentAcessWilaya.id}" />
+
+						<!-- 						<p:ajax event="page" update="dtTbl_accessWilaya"
+							onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()"></p:ajax> -->
+
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{accessWilayaMBean.onRowSelect}" process="@this"
+							onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()" update=":form_view" />
+
+						<f:facet name="header">
+							<h:outputText
+								value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ACCESS_WILAYAS}" />
+						</f:facet>
+
+						<p:column style="width:100px"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_ANNEE_ACADEMIQUE}">
+							<h:outputText
+								value="#{currentAcessWilaya.anneeAcademiquelibelle}" />
+						</p:column>
+
+						<p:column style="width:40%"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}"
+							sortBy="#{currentAcessWilaya.refCodeDomaine}">
+							<h:outputText value="#{currentAcessWilaya.domaineLibelleLt}" />
+						</p:column>
+
+						<p:column style="width:30%"
+							headerText="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}"
+							sortBy="#{currentAcessWilaya.refCodeFiliere}">
+							<h:outputText value="#{currentAcessWilaya.filiereLibelleLt}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</h:form>
+
+				<p:spacer height="20px"></p:spacer>
+
+				<!-- CRUD form -->
+				<h:form id="form_view">
+					<p:panelGrid styleClass="ui-panelgrid-full-width ui-panelgrid-form-no-border ui-panelgrid-detail"
+						rendered="#{accessWilayaMBean.view}">
+
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">#{referentielOrientationMsgs.REF_ORIENTATION_DETAIL_ACCESS_WILAYA}</p:column>
+							</p:row>
+						</f:facet>
+
+						<!-- Annee acaemdique -->
+						<p:row>
+
+							<p:column styleClass="label" style="width:200px">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_DETAIL_ACCESS_WILAYA}" />
+							</p:column>
+							<p:column styleClass="value">
+								<h:outputText
+									value="#{accessWilayaMBean.accessWilayaDto.anneeAcademiquelibelle}" />
+							</p:column>
+						</p:row>
+
+						<!-- domaine -->
+						<p:row>
+							<p:column styleClass="label">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_DOMAINE}" />
+							</p:column>
+							<p:column  styleClass="value">
+								<h:outputText
+									value="#{accessWilayaMBean.accessWilayaDto.domaineLibelleLt}" />
+							</p:column>
+						</p:row>
+
+						<!-- filiere -->
+						<p:row>
+
+							<p:column styleClass="label">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_FILIERE}" />
+							</p:column>
+							<p:column  styleClass="value">
+								<h:outputText
+									value="#{accessWilayaMBean.accessWilayaDto.filiereLibelleLt}" />
+							</p:column>
+						</p:row>
+
+						<!-- Wilayas -->
+						<p:row>
+							<p:column styleClass="label">
+								<h:outputLabel
+									value="#{referentielOrientationMsgs.REF_ORIENTATION_LISTE_WILAYAS}" />
+							</p:column>
+
+							<p:column  styleClass="value">
+								<p:dataList value="#{accessWilayaMBean.wilayas.target}"
+									var="wilaya" type="unordered">
+                                         (#{wilaya.refCodeWilaya}) #{wilaya.wilayaLibelleLt}
+                               </p:dataList>
+
+							</p:column>
+						</p:row>
+
+						<!-- Actions -->
+						<f:facet name="footer">
+							<p:row>
+								<p:column colspan="2">
+									<p:commandButton icon="ui-icon-arrowreturn-1-w" value="Retour"
+										immediate="true" update="form_view,:form_search"
+										action="#{accessWilayaMBean.cancelAccessWilayaAction()}"></p:commandButton>
+								</p:column>
+							</p:row>
+						</f:facet>
+
+					</p:panelGrid>
+
+				</h:form>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

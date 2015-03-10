@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{affectationLieuStructureMsgs.affect_lieu_structure_pnl_gestion_title}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+		<p:outputPanel id="pnl_affectation_lieu_structure">
+
+			<ui:include
+				src="/pages/scolarite/affectationlieu/AffectationLieuStructureSearch.xhtml" >
+				<ui:param name="editMode" value="true" /> 
+				</ui:include>
+			<br></br>
+
+
+			<h:form id="form_affectation_lieu_structure_detail">
+				<p:fieldset legend="Affecter un lieu à une structure"
+					rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and not affectationLieuStructureBean.hideDetail}">
+					<h:panelGrid columns="1">
+						<p:panelGrid>
+							<p:row>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique} *"></p:outputLabel>
+
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="annee" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.anneeAcademiqueId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_annee_academique_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.anneeAcademiqueList}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="periodicite" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.periodiciteId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite}">
+										<p:ajax
+											update=":form_affectation_lieu_structure_detail:periode"
+											onstart="PF('affectationLieuStructureFormBlock').block()"
+											onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+											listener="#{affectationLieuStructureBean.periodiciteChanged}" />
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_periodicite_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.periodiciteList}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_periode} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="periode" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_periode_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.periodeId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_periode}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_periode_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.periodeList}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_jour} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="jour" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_jour_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.jourId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_jour}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_jour_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.jourList}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="plageHoraire" filter="true"
+										required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.plageHoraireId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_plage_horaire_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.plageHoraireList}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_type_lieu} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="typeLieu" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_type_lieu_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.refLieuTypeId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_type_lieu}">
+										<p:ajax update=":form_affectation_lieu_structure_detail:lieu"
+											onstart="PF('affectationLieuStructureFormBlock').block()"
+											onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+											listener="#{affectationLieuStructureBean.typeLieuChanged()}" />
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_type_lieu_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.typeLieuList}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:250px">
+									<p:selectOneMenu id="lieu" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.refLieuId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_lieu_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.lieuList}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_type_structure} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:200px">
+									<p:selectOneMenu id="typStructure" filter="true"
+										required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_type_structure_required}"
+										style="width:250px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.refStructureTypeId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_type_structure}">
+										<p:ajax
+											update=":form_affectation_lieu_structure_detail:structure"
+											onstart="PF('affectationLieuStructureFormBlock').block()"
+											onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+											listener="#{affectationLieuStructureBean.typeStructureChanged()}" />
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_type_structure_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.typeStructureList}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="width:200px">
+									<p:outputLabel
+										value="#{affectationLieuStructureMsgs.affect_lieu_structure_structure} *"></p:outputLabel>
+								</p:column>
+								<p:column style="width:400px">
+									<p:selectOneMenu id="structure" filter="true" required="true"
+										requiredMessage="#{affectationLieuStructureMsgs.affect_lieu_structure_structure_required}"
+										style="width:400px" filterMatchMode="startsWith"
+										value="#{affectationLieuStructureBean.affectationLieuStructureDto.refStructureId}"
+										label="#{affectationLieuStructureMsgs.affect_lieu_structure_structure}">
+										<f:selectItem
+											itemLabel="#{affectationLieuStructureMsgs.affect_lieu_structure_structure_select}"
+											itemValue="" />
+										<f:selectItems
+											value="#{affectationLieuStructureBean.structureList}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						<p:toolbar id="affectationLieuStructureToolBar"
+							styleClass="toolBarMesrs" style="width:1100px;margin:0;">
+							<p:toolbarGroup>
+								<p:commandButton id="btnAddaffectationLieuStructure"
+									value="#{commonmsgs.bouton_nouveau}"
+									actionListener="#{affectationLieuStructureBean.addAffectationLieuStructure()}"
+									icon="ui-icon-plusthick" immediate="true" resetValues="true"
+									ajax="true" update=":form_affectation_lieu_structure_detail"
+									onstart="PF('affectationLieuStructureFormBlock').block()"
+									onsuccess="PF('affectationLieuStructureFormBlock').unblock()">
+								</p:commandButton>
+								<p:spacer width="5px"></p:spacer>
+
+
+
+								<p:commandButton id="btnDeleteaffectationLieuStructure"
+									value="#{commonmsgs.bouton_supprimer}"
+									actionListener="#{affectationLieuStructureBean.deleteAffectationLieuStructure()}"
+									icon="ui-icon-minus" immediate="true" ajax="true"
+									update=":pnl_affectation_lieu_structure"
+									onstart="PF('affectationLieuStructureFormBlock').block()"
+									onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+									rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and affectationLieuStructureBean.affectationLieuStructureDto.id!=0 and not affectationLieuStructureBean.hideDetail}">
+									<p:confirm header="Confirmation"
+										message="#{affectationLieuStructureMsgs.affect_lieu_structure_remove_confirm_msg}"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:spacer width="5px"></p:spacer>
+
+
+								<p:commandButton id="btnSaveaffectationLieuStructure"
+									value="#{commonmsgs.bouton_enregistrer}"
+									actionListener="#{affectationLieuStructureBean.saveAffectationLieuStructure()}"
+									icon="ui-icon-disk" ajax="true"
+									onstart="PF('affectationLieuStructureFormBlock').block()"
+									update=":pnl_affectation_lieu_structure"
+									onsuccess="PF('affectationLieuStructureFormBlock').unblock()"
+									rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and not affectationLieuStructureBean.hideDetail}">
+									<p:confirm header="Confirmation"
+										message="#{affectationLieuStructureMsgs.affect_lieu_structure_save_confirm_msg}"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+
+
+							<p:toolbarGroup align="right">
+								<p:commandButton immediate="true"
+									value="#{commonmsgs.bouton_annuler}" id="backBtn"
+									icon="ui-icon-arrowreturn-1-w"
+									actionListener="#{affectationLieuStructureBean.annuler()}"
+									update=":pnl_affectation_lieu_structure"
+									rendered="#{not empty affectationLieuStructureBean.affectationLieuStructureDto and not affectationLieuStructureBean.hideDetail}">
+
+								</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>
+					</h:panelGrid>
+
+				</p:fieldset>
+
+			</h:form>
+
+			<!--     growl and blockUI               -->
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"
+				closable="true" life="5000" />
+			<pe:blockUI target="pnl_affectation_lieu_structure"
+				widgetVar="affectationLieuStructureFormBlock">
+				<h:panelGrid columns="2">
+					<h:graphicImage value="/resources/images/ajax-loader1.gif"
+						style="margin-right: 12px; vertical-align: middle;" />
+					<h:outputText value="#{commonmsgs.msg_wait}"
+						style="white-space: nowrap;" />
+				</h:panelGrid>
+			</pe:blockUI>
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

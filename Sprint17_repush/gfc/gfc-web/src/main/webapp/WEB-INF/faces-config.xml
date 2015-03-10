@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	
+
+	<application>	
+		<!-- GFC resources bundle -->
+		<resource-bundle>
+			<base-name>locale/gfcMessages</base-name>
+			<var>gfcMsgs</var>
+		</resource-bundle>
+
+		<resource-bundle>
+			<base-name>locale/parametrageBudget/ParametrageBudgetMessages</base-name>
+			<var>parametrageBudgetMsg</var>
+		</resource-bundle>
+
+	    <resource-bundle>
+			<base-name>locale/preparationBudgetFonctionnement/PreparationBudgetFonctionnementMessages</base-name>
+			<var>preparationBudgetFonctionnementMsgs</var>
+		</resource-bundle>	
+	
+         <resource-bundle>
+			<base-name>locale/misePlaceBudgetFonctionnement/MisePlaceBudgetFonctionnementMessages</base-name>
+			<var>misePlaceBudgetFonctionnementMsgs</var>
+		</resource-bundle>
+	 
+	     <resource-bundle>
+			<base-name>locale/marches/MarchesMessages</base-name>
+			<var>marchesMsgs</var>
+		</resource-bundle>
+	 
+	 	<resource-bundle>
+			<base-name>locale/missions/MissionsMessages</base-name>
+			<var>missionsMsgs</var>
+		</resource-bundle>
+		
+	     <resource-bundle>
+			<base-name>locale/referentiel/referentielMessages</base-name>
+			<var>referentielMsgs</var>
+		</resource-bundle>
+		
+	</application>	
+</faces-config>

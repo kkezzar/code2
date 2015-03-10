@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cmp="http://java.sun.com/jsf/composite/components/referentiel"
+	xmlns:ccmp="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{rchCircuitMsgs.programmes_circuits_page_manage_title}</ui:define>
+
+<!-- CONTENU PAGE -->
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+<!-- RECHERCHE CIRCUITS DE VALIDATION -->
+	<p:toolbar style="margin-buttom:8px">
+	<p:toolbarGroup    align="left" >
+		 <ccmp:SearchComponent id="cmpSearchProcessID" 
+						  searchKeyWords="#{circuitBB.searchComponentKeyWords}" 
+						  searchGenericMethodName="#{circuitBB.searchProcess()}"
+						  searchAdvancedMethodName="#{circuitBB.searchProcess()}"
+						  toUpdateOnSearch=":mainForm"
+						  txtKeyWordWidth="400"
+						  ajaxProgessId="ajaxprogress"
+						  textWatermark="#{rchCircuitMsgs.programmes_circuits_validation_search_text_key_words}">
+		  </ccmp:SearchComponent>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddProcess" 
+									value="#{rchCircuitMsgs.programmes_circuits_validation_button_add_processus_label}" 
+									action="#{circuitBB.prepareAddProcess()}"
+									process="@this"
+									update="mainForm:circuitOutPutPanelDetails"
+									icon="ui-icon-plusthick">
+						</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<br />
+<!-- LISTE CIRCUITS DE VALIDATION -->
+	<p:dataTable id="processusDataTable" var="row"
+							value="#{circuitBB.listProcessus}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{circuitBB.selectedProcessus}"
+							selectionMode="single"
+							currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"								
+        					paginator="true" 
+							rows="5" 
+							paginatorPosition="bottom"
+							rowsPerPageTemplate="5,10"
+							style="margin-bottom:8px;">
+				<p:ajax event="rowSelect" listener="#{circuitBB.onProcessusRowSelect}" update=":mainForm"	
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()"/>
+				<f:facet name="header">#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_default}</f:facet>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_code}">
+				<h:outputText value="#{row.code}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_fr}">
+				<h:outputText value="#{row.libelleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_objet_fr}">
+				<h:outputText value="#{row.entiteLibelleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_ar}">
+				<h:outputText value="#{row.libelleAr}" style="color:#336699; float:right;"/>
+				</p:column>
+				
+	</p:dataTable>
+		
+<!-- DETAILS CIRCUIT VALIDATION -->
+	<p:outputPanel id="circuitOutPutPanelDetails">
+	<p:panel header="#{circuitBB.titlePanelDetails}" 
+					rendered="#{circuitBB.canShowProcessusDetails}" style="margin-bottom:8px;">
+					
+	<p:panelGrid  id="panelGridProcessEdit" style="width:70%;margin-bottom:8px;">
+	 <p:row>
+						<p:column style="text-align:right;"><p:outputLabel value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_objet_fr}"  for="listEntitesEditID"/></p:column>
+						<p:column >
+							<p:selectOneMenu id="listEntitesEditID" 	value="#{circuitBB.selectedEntiteId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_objet_required}">
+								<f:selectItems value="#{circuitBB.currentEntities}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;width:20%;">
+				<p:outputLabel value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_code}" for="txtCodeProcess"/>
+			</p:column>
+			<p:column><p:inputText value="#{circuitBB.selectedProcessus.code}" required="true" id="txtCodeProcess"
+								requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_code_required}"/>	
+			</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;"><p:outputLabel value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_fr}" for="txtLibelleFrProcess"/></p:column>
+			<p:column><p:inputText id="txtLibelleFrProcess" value="#{circuitBB.selectedProcessus.libelleFr}" required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_libelle_fr_required}" style="width:100%;"/>	</p:column>
+	</p:row>
+	<p:row>
+			<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_ar}" /></p:column>
+			<p:column><p:inputText value="#{circuitBB.selectedProcessus.libelleAr}" style="width:100%;text-align:right;" />	</p:column>
+	</p:row>
+	</p:panelGrid>
+	
+	<p:outputPanel id="stepsDetailsOuputpanel">
+	<p:toolbar rendered="#{circuitBB.canShowStepsDetails}">
+	<p:toolbarGroup align="right">
+		<p:commandButton id="btnAddOneStep" 
+									action="#{circuitBB.prepareAddOneStep()}"
+									process="@this"
+									update=":dlgFormStep"
+									oncomplete="PF('dlgAddStep').show();"
+									icon="ui-icon-plusthick">
+						</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	<p:dataTable id="stepsDataTable" var="row"
+							value="#{circuitBB.listSteps}"
+							rowKey="#{row.id}"
+							emptyMessage="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_empty}"
+							rowIndexVar="rowIndex"
+							selection="#{circuitBB.selectedStep}"
+							style="margin-bottom:8px;"
+							rendered="#{circuitBB.canShowStepsDetails}">
+				<f:facet name="header">#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_default}</f:facet>
+				<p:column style="text-align:center;width:30px;">
+<!-- 					<p:graphicImage value="/resources/images/step_start.png" -->
+<!-- 										rendered="#{row.etapePrecedenteId == null}" -->
+<!-- 										alt="#{documentmsgs.document_photo_vide}" width="16" 	height="16"> -->
+<!-- 					</p:graphicImage> -->
+					<p:graphicImage value="/resources/images/step_next.png"
+										alt="#{documentmsgs.document_photo_vide}" width="16" 	height="16">
+					</p:graphicImage>
+				</p:column>
+				<p:column	headerText="" style="text-align:center;width:30px;"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_libelle_fr}">
+					<h:outputText value="#{row.libelleFr}" style="color:#336699;"/>
+				</p:column>
+<!-- 				<p:column style="text-align:center;width:30px;"> -->
+<!-- 					<p:graphicImage value="/resources/images/step_end.png" -->
+<!-- 										rendered="#{row.etapeSuivanteId == null}" -->
+<!-- 										alt="#{documentmsgs.document_photo_vide}" width="16" 	height="16"> -->
+<!-- 					</p:graphicImage> -->
+<!-- 				</p:column> -->
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_groupe_libelle_fr}">
+					<h:outputText value="#{row.groupeLibelleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column headerText="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_role_libelle_fr}">
+					<h:outputText value="#{row.roleLibelleFr}" style="color:#336699;"/>
+				</p:column>
+				<p:column style="text-align:center;width:32px;">
+						<p:commandButton id="btnRemoveOneStep"  
+															action="#{circuitBB.removeOneStep()}" 
+															 icon="ui-icon-trash" 
+															ajax="true" 
+															update=":mainForm:stepsDataTable :mainForm:msgProcess"   
+															process="@this"
+															onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();">
+								<p:confirm		header="#{rchCircuitMsgs.programmes_circuits_msg_remove_processus_confirm_title}"	
+														message="#{rchCircuitMsgs.programmes_circuits_msg_remove_step_confirm_msg}" 	icon="ui-icon-alert" />
+								<f:setPropertyActionListener target="#{circuitBB.selectedStepId}" value="#{row.id}" />	
+						</p:commandButton>
+				</p:column>
+				<p:column style="width:32px" >
+           					<p:commandButton id="editStepButtonID" 	 
+									icon="ui-icon-pencil" 
+									action="#{circuitBB.prepareEditOneStep()}" 
+									process="@this"	
+									update=":dlgFormStep"	
+									onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock();PF('dlgAddStep').show();">
+									<f:setPropertyActionListener target="#{circuitBB.selectedStepId}" value="#{row.id}" />								
+							</p:commandButton>
+      			</p:column>
+	</p:dataTable>
+	</p:outputPanel>
+	</p:panel>
+	<p:toolbar style="margin-buttom:8px" rendered="#{circuitBB.canShowProcessusDetails}" >
+	<p:toolbarGroup    align="left" >
+		
+	</p:toolbarGroup>
+	<p:toolbarGroup align="left">
+	<p:commandButton id="saveProcessButtonID" 
+							action="#{circuitBB.saveProcess()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchCircuitMsgs.programmes_circuits_validation_button_enregistrer_process_libelle}"
+							process="@this :mainForm:panelGridProcessEdit" 
+							ajax="true" 
+							update=":mainForm"
+							onstart="PF('ajaxprogress').block()"  oncomplete="PF('ajaxprogress').unblock()">
+							<f:setPropertyActionListener target="#{circuitBB.toEditProcessDialog}" value="true" />
+		</p:commandButton>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="left">
+	<p:separator/>
+	<p:commandButton id="btnRemoveProcess"  
+															action="#{circuitBB.removeProcess()}" 
+															 icon="ui-icon-trash" 
+															 value="#{rchCircuitMsgs.programmes_circuits_validation_button_delete_process_libelle}"
+															ajax="true" 
+															update=":mainForm"   
+															process="@this"
+															disabled="#{not circuitBB.canDeleteProcess}">
+								<p:confirm		header="#{rchCircuitMsgs.programmes_circuits_msg_remove_processus_confirm_title}"	
+								message="#{rchCircuitMsgs.programmes_circuits_msg_remove_processus_confirm_msg}" 	icon="ui-icon-alert" />
+	</p:commandButton>
+	</p:toolbarGroup>
+	</p:toolbar>
+	
+	</p:outputPanel>
+	
+	<p:messages id="msgProcess" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+</h:form>
+
+<!-- POPUPS -->
+<p:dialog  widgetVar="dlgAddProcessus"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchCircuitMsgs.programmes_circuits_add_processus_title}"
+ 					id="dlgAddProcessId" 
+ 					resizable="false"
+ 					style="font-size:#{sessionBean.fontSize}px">
+ 	<h:form id="dlgFormProcess">
+	<p:messages id="msgProcessDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+	 <p:panelGrid  id="panelGridProcess" style="width:600px;margin-bottom:8px;">
+				 <p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_objet_fr}" /></p:column>
+						<p:column >
+							<p:selectOneMenu id="listEntitesID" 	value="#{circuitBB.selectedEntiteId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_objet_required}">
+								<f:selectItems value="#{circuitBB.currentEntities}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;width:25%;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_code}" /></p:column>
+						<p:column styleClass="value"><p:inputText value="#{circuitBB.selectedProcessus.code}" required="true" 
+						requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_code_required}" />	</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_fr}" /></p:column>
+						<p:column><p:inputText value="#{circuitBB.selectedProcessus.libelleFr}" required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_processus_dialog_libelle_fr_required}" style="width:100%;"/>	</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_processus_column_libelle_ar}" /></p:column>
+						<p:column><p:inputText value="#{circuitBB.selectedProcessus.libelleAr}" style="width:100%;text-align:right;" />	</p:column>
+				</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddProcessDialogID"
+							 value="#{rchCircuitMsgs.programmes_circuits_validation_button_fermer_dialog_add_processus_label}" 	
+							 type="button" onclick="PF('dlgAddProcessus').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right" 	rendered="#{not circuitBB.toEditProcessDialog}">
+						<p:commandButton id="btnAddProcess" 
+							action="#{circuitBB.saveProcess()}"  
+							icon="ui-icon-disk"  
+							value = "#{rchCircuitMsgs.programmes_circuits_validation_button_dialog_ajouter_process_ajouter_libelle}"
+							process="@this :dlgFormProcess" 
+							ajax="true" 
+							update=":mainForm :dlgFormProcess" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="handleUpdateProcessRequest(xhr, status, args); PF('ajaxprogress').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+	</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateProcessRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddProcessus').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddProcessus').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<p:dialog  widgetVar="dlgAddStep"  
+					appendTo="@(body)" modal="true" 
+					header="#{rchCircuitMsgs.programmes_circuits_add_step_title}"
+ 					id="dlgAddStepId" 
+ 					resizable="false"
+ 					style="font-size:#{sessionBean.fontSize}px">
+<h:form id="dlgFormStep">
+
+	<p:messages id="msgStepDialog" showDetail="true" showSummary="false" autoUpdate="false" closable="true"/>
+	<br />
+	 <p:panelGrid  id="panelGridStep" style="width:500px;margin-bottom:8px;">
+				<p:row>
+						<p:column style="text-align:right;width:25%;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_libelle_fr}" /></p:column>
+						<p:column ><p:inputText value="#{circuitBB.selectedStep.libelleFr}" required="true" style="width:100%;"
+											requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_step_dialog_libelle_fr_required}" />	
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_groupe_libelle_fr}" /></p:column>
+						<p:column >
+							<p:selectOneMenu id="listGroupesID" 	value="#{circuitBB.selectedStep.groupeId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_step_dialog_groupe_required}">
+								<f:selectItems value="#{circuitBB.listGroupes}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_role_libelle_fr}" /></p:column>
+						<p:column >
+							<p:selectOneMenu id="listRolesID" 	value="#{circuitBB.selectedStep.roleId}" style="width:100%;" 
+								required="true" requiredMessage="#{rchCircuitMsgs.programmes_circuits_msg_add_step_dialog_groupe_required}">
+								<f:selectItems value="#{circuitBB.listRoles}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+				<p:row>
+						<p:column style="text-align:right;"><h:outputText value="#{rchCircuitMsgs.programmes_circuits_validation_datatable_list_steps_column_etape_precedente}" /></p:column>
+						<p:column >
+							<p:selectOneMenu id="listStepsNextID" 	value="#{circuitBB.selectedStep.etapePrecedenteId}" style="width:100%;"	>
+								<f:selectItems value="#{circuitBB.listPreviousSteps}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+						</p:selectOneMenu>
+						</p:column>
+				</p:row>
+	</p:panelGrid>
+	<p:toolbar style="margin-bottom:8px;">
+				<p:toolbarGroup>
+							<p:commandButton id="btnHideAddStepDialogID"
+							 value="#{rchCircuitMsgs.programmes_circuits_validation_button_fermer_dialog_add_processus_label}" 	
+							 type="button" onclick="PF('dlgAddStep').hide();"  icon="ui-icon-close">
+							</p:commandButton>
+				</p:toolbarGroup>
+		
+				<p:toolbarGroup align="right" 	rendered="#{not circuitBB.toEditStepDialog}">
+						<p:commandButton id="btnAddStepID" 
+							action="#{circuitBB.saveOneStep()}"  
+							value = "#{rchCircuitMsgs.programmes_circuits_validation_button_dialog_ajouter_step_ajouter_libelle}"
+							process="@this :dlgFormStep" 
+							ajax="true" 
+							update=":mainForm:stepsDataTable :dlgFormStep :mainForm:msgProcess" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="handleUpdateStepRequest(xhr, status, args); PF('ajaxprogress').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right" rendered="#{circuitBB.toEditStepDialog}">
+						<p:commandButton id="btnUpdateStep" 
+							action="#{circuitBB.saveOneStep()}"  
+							value = "#{rchCircuitMsgs.programmes_circuits_validation_button_dialog_ajouter_step_enregistrer_libelle}"
+							process="@this :dlgFormStep" 
+							ajax="true" 
+							update=":mainForm:stepsDataTable :dlgFormStep :mainForm:msgProcess" 
+							onstart="PF('ajaxprogress').block()"  oncomplete="handleUpdateStepRequest(xhr, status, args); PF('ajaxprogress').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+	</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateStepRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddStep').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddStep').hide();
+	       							 }
+    							}
+	</script>
+</p:dialog>
+<!-- SURCHARGE CSS -->
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+
+<!-- AJAX PROGRESS -->
+<pe:blockUI target="mainForm" widgetVar="ajaxprogress">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+</ui:define>
+</ui:composition>
+</html>

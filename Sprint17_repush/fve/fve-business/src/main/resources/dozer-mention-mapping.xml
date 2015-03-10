@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.cursus.MentionDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.cursus.Mention
+		</class-b>
+
+		<field>
+			<a>anneeAcademiqueId</a>
+			<b>anneeAcademique.id</b>
+		</field>
+		<field>
+			<a>ncMentionId</a>
+			<b>typeMention.id</b>
+		</field>
+
+		<field>
+			<a>ncMentionCode</a>
+			<b>typeMention.code</b>
+		</field>
+
+		<field>
+			<a>ncMentionLibelleLongFr</a>
+			<b>typeMention.libelleLongFr</b>
+		</field>
+		<field>
+			<a>ncMentionLibelleLongAr</a>
+			<b>typeMention.libelleLongAr</b>
+		</field>
+		<field>
+			<a>ncMentionLibelleCourtFr</a>
+			<b>typeMention.libelleCourtFr</b>
+		</field>
+		<field>
+			<a>ncMentionLibelleCourtAr</a>
+			<b>typeMention.libelleCourtAr</b>
+		</field>
+
+	</mapping>
+
+</mappings>

@@ -1,0 +1,430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+    transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{dossierTransfertMsgs.dossier_transfert_gerer_les_demandes_entrantes_exceptionnels}
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="outputPanel">
+
+			<pe:blockUI target="outputPanel" widgetVar="allWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+
+				<ui:include src="/pages/common/SearchEtudiant.xhtml" />
+
+				<h:form id="form_search">
+					<!-- toolbar -->
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton icon="ui-icon-plus" value="Nouveau"
+								style="margin:5px 5px 0px 5px;"
+								onstart="PF('allWidget').block()"
+								onsuccess="PF('allWidget').unblock()"
+								actionListener="#{dossierTransfertRectoratMBean.addDemandeTransfertAction()}"
+								update=":form_crud"></p:commandButton>
+						</p:toolbarGroup>
+
+						<p:toolbarGroup align="right">
+
+						</p:toolbarGroup>
+
+					</p:toolbar>
+
+					<p:spacer height="20px"></p:spacer>
+
+					<p:dataTable id="ResultSearchDataTable"
+						value="#{dossierTransfertRectoratMBean.dossierTransfertResultSearch}"
+						var="dossierTransfert" rowKey="#{dossierTransfert.id}"
+						paginator="true" paginatorPosition="bottom" selectionMode="single"
+						rows="5" lazy="true"
+						emptyMessage="#{dossierTransfertMsgs.dossier_transfert_datable_list_dossier_transfert_no_result}">
+
+						<p:ajax event="rowSelect" immediate="true"
+							listener="#{dossierTransfertRectoratMBean.onRowSelect}"
+							process="@this" onstart="PF('allWidget').block()"
+							onsuccess="PF('allWidget').unblock()" update=":form_crud" />
+
+						<f:facet name="header">
+							<h:outputText
+								value="#{dossierTransfertMsgs
+                                             .dossier_transfert_liste_title}" />
+						</f:facet>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_date_depot}"
+							width="8%">
+							<h:outputText value="#{dossierTransfert.dateDepot}">
+								<f:convertDateTime pattern="dd-MM-yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<!-- 					<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_etab_origine}"
+							width="20%">
+
+							<h:outputText value="#{dossierTransfert.refLibelleEtabOrigine}"
+								>
+							</h:outputText>
+						</p:column> -->
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_origine}"
+							width="12%">
+
+							<h:outputText value="#{dossierTransfert.domaineOrigineLibelleFr}">
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_origine}"
+							width="15%">
+
+							<h:outputText value="#{dossierTransfert.filiereOrigineLibelleFr}">
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_etab_accueil}"
+							width="15%">
+
+							<h:outputText value="#{dossierTransfert.refLibelleEtabAccueil}">
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}"
+							width="20%">
+
+							<h:outputText value="#{dossierTransfert.domaineDemandeLibelleFr}">
+
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}"
+							width="20%">
+
+							<h:outputText
+								value="#{dossierTransfert.filiereDemandeeLibelleFr}">
+
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{dossierTransfertMsgs.dossier_transfert_situation}"
+							width="20%">
+
+							<h:outputText value="#{dossierTransfert.situationLibelleFr}">
+							</h:outputText>
+
+						</p:column>
+					</p:dataTable>
+
+				</h:form>
+
+				<p:spacer height="20px"></p:spacer>
+
+
+				<p:outputPanel id="form_crud">
+					<p:tabView rendered="#{dossierTransfertRectoratMBean.crud}">
+
+						<p:tab title="Information Demande">
+							<!-- CRUD form -->
+							<h:form>
+
+								<p:panelGrid style="width:100%"
+									rendered="#{dossierTransfertRectoratMBean.crud}">
+
+									<!-- 								<f:facet name="header">
+									<p:row>
+										<p:column colspan="2">#{dossierTransfertMsgs.dossier_transfert_detail_demande}</p:column>
+									</p:row>
+								</f:facet> -->
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_date_depot} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.dateDepot}">
+												<f:convertDateTime pattern="dd-MM-yyyy" />
+											</h:outputText>
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText value="Etudiant " />
+										</p:column>
+										<p:column>
+											<p:commandButton
+												value="Rechercher un étudiant"
+												id="btnSearchEtudiant"
+												title="#{dossierInscriptionAdministrativeMsgs.dossier_inscription_chercher_dossier}"
+												icon="ui-icon-search" onclick="PF('blockUIWidget').block()"
+												oncomplete="PF('blockUIWidget').unblock()"
+												onsuccess="PF('dlgEtudiantInscritList').show()">
+												<p:ajax update="@(.detailContentStyle)">
+												</p:ajax>
+											</p:commandButton>
+										</p:column>
+									</p:row>
+
+
+									<p:row>
+										<p:column style="width:150px">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_origine} " />
+										</p:column>
+										<p:column style="width:500px">
+											<h:outputText
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refLibelleEtabOrigine}" />
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column style="width:150px">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_domaine_origine} " />
+										</p:column>
+										<p:column style="width:500px">
+											<h:outputText
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.domaineOrigineLibelleFr}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column style="width:150px">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_filiere_origine} " />
+										</p:column>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.filiereOrigineLibelleFr}" />
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column style="width:150px">
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_type_transfert} *" />
+										</p:column>
+										<p:column style="width:500px">
+											<p:selectOneMenu id="typeTransfert"
+												label="#{dossierTransfertMsgs.dossier_transfert_type_transfert}"
+												required="true"
+												requiredMessage="#{dossierTransfertMsgs.dossier_transfert_type_transfert_required}"
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeTypeTransfert}">
+
+												<f:selectItem
+													itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_type_transfert}"
+													itemValue="" />
+
+												<f:selectItems
+													value="#{dossierTransfertRectoratMBean.listTypesTransfert}" />
+
+												<p:ajax event="valueChange" update="etabAccueil"
+													listener="#{dossierTransfertRectoratMBean.typeTransfertChanged()}"></p:ajax>
+											</p:selectOneMenu>
+
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_etab_accueil} *" />
+										</p:column>
+
+										<p:column>
+											<p:selectOneMenu id="etabAccueil"  filter="true" filterMatchMode="startsWith"
+												disabled="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeTypeTransfert ne 'TIU' and dossierTransfertRectoratMBean.dossierTransfertDto.refCodeTypeTransfert ne 'TIC'}"
+												required="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeTypeTransfert eq 'TIU' or dossierTransfertRectoratMBean.dossierTransfertDto.refCodeTypeTransfert eq 'TIC'}"
+												requiredMessage="#{dossierTransfertMsgs.dossier_transfert_etab_accueil_required}"
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeEtabAccueil}">
+
+												<f:selectItem
+													itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_etablissement}"
+													itemValue="" />
+
+												<f:selectItems
+													value="#{dossierTransfertRectoratMBean.listEtablissements}" />
+												<p:ajax event="valueChange"
+													update="domaineDemande,filiereDemande" />
+											</p:selectOneMenu>
+
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_domaine_demande}  *" />
+										</p:column>
+										<p:column style="width:500px"> 
+											<p:selectOneMenu id="domaineDemande" required="true"  filter="true" filterMatchMode="startsWith" 
+												requiredMessage="#{dossierTransfertMsgs.dossier_transfert_domaine_demande_required}"
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeDomaineDemande}">
+												<f:selectItem
+													itemLabel="#{dossierTransfertMsgs.dossier_transfert_select_domaine}"
+													itemValue="" />
+												<f:selectItems
+													value="#{dossierTransfertRectoratMBean.listDomaines}" />
+												<p:ajax
+													listener="#{dossierTransfertRectoratMBean.handleDomainesListChange}"
+													event="valueChange" update="filiereDemande" />
+											</p:selectOneMenu>
+
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_filiere_demandee}" />
+										</p:column>
+										<p:column>
+											<p:selectOneMenu id="filiereDemande"  filter="true" filterMatchMode="startsWith" 
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeFiliereDemandee}">
+												<f:selectItem
+													itemLabel="#{dossierTransfertMsgs.dossier_transfert_slect_filiere}"
+													itemValue="" />
+												<f:selectItems
+													value="#{dossierTransfertRectoratMBean.listFilieres}" />
+												<p:ajax event="valueChange" process="@this" />
+											</p:selectOneMenu>
+
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_motif_transfert} *" />
+										</p:column>
+										<p:column>
+											<p:selectOneMenu id="motif"
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.refCodeMotif}"
+												required="true"
+												requiredMessage="#{dossierTransfertMsgs.dossier_transfert_motif_transfert_required}">
+												<f:selectItem
+													itemLabel="#{dossierTransfertMsgs.dossier_transfert_select_motif}"
+													itemValue="" />
+												<f:selectItems
+													value="#{dossierTransfertRectoratMBean.listMotifsTransfert}" />
+												<p:ajax event="valueChange" />
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+
+									<p:row>
+										<p:column>
+											<h:outputText
+												value="#{dossierTransfertMsgs.dossier_transfert_objet} *" />
+										</p:column>
+										<p:column>
+											<p:inputTextarea
+												value="#{dossierTransfertRectoratMBean.dossierTransfertDto.objet}"
+												required="true"
+												requiredMessage="#{dossierTransfertMsgs.dossier_transfert_objet_transfert_required}"
+												style="width:390px"></p:inputTextarea>
+										</p:column>
+									</p:row>
+
+									<!-- Actions -->
+									<f:facet name="footer">
+										<p:row>
+											<p:column></p:column>
+											<p:column style="text-align: left">
+												<p:commandButton value="#{commonmsgs.bouton_enregistrer}"
+													id="saveBtn" update=":form_search,:form_crud"
+													icon="ui-icon-disk"
+													actionListener="#{dossierTransfertRectoratMBean.saveDemandeTransfertAction()}">
+
+												</p:commandButton>
+
+												<p:spacer width="5px"></p:spacer>
+
+												<p:commandButton value="#{commonmsgs.bouton_validate}"
+													id="valideBtn" icon="ui-icon-disk"
+													rendered="#{dossierTransfertRectoratMBean.dossierTransfertDto.id ne null}"
+													update=":form_search,:form_crud"
+													actionListener="#{dossierTransfertRectoratMBean.validateDemandeTransfert()}">
+													<p:confirm header="Confirmation"
+														message="Voulez-vous confirmer la validation de la demande ?"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+
+												<p:spacer width="5px"></p:spacer>
+
+												<p:commandButton value="#{commonmsgs.bouton_desister}"
+													rendered="#{dossierTransfertRectoratMBean.dossierTransfertDto.id ne null}"
+													id="withdrawBtn" icon="ui-icon-disk"
+													update=":form_search,:form_crud"
+													actionListener="#{dossierTransfertRectoratMBean.withdrawDemandeTransfert()}">
+													<p:confirm header="Confirmation"
+														message="Voulez-vous confirmer le désistement du transfert ?"
+														icon="ui-icon-alert" />
+												</p:commandButton>
+
+												<p:spacer width="10px"></p:spacer>
+
+												<p:commandButton id="cancelBtn" icon="ui-icon-cancel"
+													value="#{commonmsgs.bouton_annuler}" immediate="true"
+													update=":form_search,:form_crud"
+													action="#{dossierTransfertRectoratMBean.cancelDemandeTransfert()}"></p:commandButton>
+											</p:column>
+										</p:row>
+									</f:facet>
+
+								</p:panelGrid>
+
+							</h:form>
+						</p:tab>
+
+						<p:tab title="Documents"
+							disabled="#{dossierTransfertRectoratMBean.dossierTransfertDto.id==null}">
+							<ui:include src="/pages/document/DocumentManageComponentWS.xhtml">
+								<c:set var="entity" value="DossierTransfert" scope="request" />
+								<c:set var="identifiant"
+									value="#{dossierTransfertRectoratMBean.dossierTransfertDto.id.toString()}"
+									scope="request" />
+								<ui:param name="entity" value="DossierTransfert" />
+								<ui:param name="identifiant"
+									value="#{dossierTransfertRectoratMBean.dossierTransfertDto.id.toString()}" />
+								<ui:param name="editionMode" value="#{true}" />
+							</ui:include>
+						</p:tab>
+
+					</p:tabView>
+				</p:outputPanel>
+
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

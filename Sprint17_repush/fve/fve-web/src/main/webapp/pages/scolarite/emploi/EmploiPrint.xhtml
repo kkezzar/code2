@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{emploiMsgs.emploi_pnl_impression_title} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+
+		<p:outputPanel id="pnl_emploi_print" style="width:1100px">
+			<h:form id="form_emploi_print">
+
+				<p:panelGrid columns="1" cellspacing="0">
+					<p:panelGrid>
+
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel value="#{emploiMsgs.emploi_annee_academique} *"></p:outputLabel>
+
+							</p:column>
+							<p:column style="width:250px">
+								<p:selectOneMenu id="annee" filter="true" required="true"
+									style="width:250px"
+									requiredMessage="#{emploiMsgs.emploi_annee_academique_required}"
+									filterMatchMode="startsWith"
+									value="#{emploiPrintBean.searchDto.anneeAcademiqueId}"
+									label="#{emploiMsgs.emploi_annee_academique}">
+									<p:ajax update="form_emploi_print"
+										listener="#{emploiPrintBean.anneeChanged}" />
+									<f:selectItem
+										itemLabel="#{emploiMsgs.emploi_annee_academique_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.anneeAcademiqueList}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel
+									value="#{emploiMsgs.emploi_periodicite} / #{emploiMsgs.emploi_periode} *"></p:outputLabel>
+							</p:column>
+							<p:column style="width:550px">
+								<p:selectOneMenu id="periodicite" filter="true" required="true"
+									style="width:250px"
+									requiredMessage="#{emploiMsgs.emploi_periodicite_required}"
+									filterMatchMode="startsWith"
+									value="#{emploiPrintBean.searchDto.periodiciteId}"
+									label="#{emploiMsgs.emploi_periodicite}">
+									<p:ajax update=":form_emploi_print"
+										listener="#{emploiPrintBean.periodiciteChanged}" />
+									<f:selectItem
+										itemLabel="#{emploiMsgs.emploi_periodicite_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.periodiciteList}" />
+								</p:selectOneMenu>
+								<p:spacer width="2px"></p:spacer>
+								<p:selectOneMenu id="periode" filter="true" required="true"
+									style="width:250px"
+									requiredMessage="#{emploiMsgs.emploi_periode_required}"
+									filterMatchMode="startsWith"
+									value="#{emploiPrintBean.searchDto.periodeId}"
+									label="#{emploiMsgs.emploi_periode}">
+									<p:ajax update=":form_emploi_print"
+										listener="#{emploiPrintBean.periodeChanged}" />
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_periode_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.periodeList}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel value="#{emploiMsgs.emploi_offre_formation} *"></p:outputLabel>
+							</p:column>
+							<p:column style="width:550px">
+								<p:selectOneMenu id="of" required="true" style="width:500px"
+									value="#{emploiPrintBean.searchDto.ouvertureOffreFormationId}"
+									filter="true" filterMatchMode="startsWith"
+									label="#{emploiMsgs.emploi_offre_formation}">
+									<p:ajax update=":form_emploi_print"
+										listener="#{emploiPrintBean.ofChanged}" />
+									<f:selectItem
+										itemLabel="#{emploiMsgs.emploi_offre_formation_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.offreFormationList}" />
+
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<p:outputLabel
+									value="#{emploiMsgs.emploi_niveau} / #{emploiMsgs.emploi_groupe} *"></p:outputLabel>
+							</p:column>
+							<p:column style="width:550px">
+								<p:selectOneMenu id="niveau" required="true" style="width:250px"
+									value="#{emploiPrintBean.searchDto.niveauId}" filter="true"
+									filterMatchMode="startsWith"
+									label="#{emploiMsgs.emploi_niveau}">
+									<p:ajax update=":form_emploi_print"
+										listener="#{emploiPrintBean.niveauChanged}" />
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_niveau_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.niveauList}" />
+
+								</p:selectOneMenu>
+								<p:spacer width="2px"></p:spacer>
+								<p:selectOneMenu id="groupe" required="true" style="width:250px"
+									value="#{emploiPrintBean.searchDto.groupePedagogiqueId}"
+									filter="true" filterMatchMode="startsWith"
+									label="#{emploiMsgs.emploi_groupe}">
+									<p:ajax update=":form_emploi_print"
+										listener="#{emploiPrintBean.groupeChanged()}" />
+									<f:selectItem itemLabel="#{emploiMsgs.emploi_groupe_select}"
+										itemValue="" />
+									<f:selectItems value="#{emploiPrintBean.groupeList}" />
+
+								</p:selectOneMenu>
+
+							</p:column>
+						</p:row>
+
+
+
+					</p:panelGrid>
+
+					<p:toolbar id="emploiSearchToolBar" styleClass="toolBarMesrs">
+						<p:toolbarGroup>
+							<p:commandButton id="btnSearch" value="#{commonmsgs.bouton_rechercher}"
+								update=":form_emploi_print" icon="ui-icon-search"
+								onstart="PF('globalWidget').block()"
+							   onsuccess="PF('globalWidget').unblock()"
+								actionListener="#{emploiPrintBean.searchSeances()}">
+							</p:commandButton>
+						</p:toolbarGroup>
+
+
+
+						<p:toolbarGroup align="right">
+
+						</p:toolbarGroup>
+					</p:toolbar>
+				</p:panelGrid>
+				<p:fieldset legend="#{emploiMsgs.emploi_resultat_recherche}" style="width:1100px" 
+					id="resultSearch">
+					<p:toolbar id="emploiprintToolBar" styleClass="toolBarMesrs" rendered="#{emploiPrintBean.seanceEmploiByPlageHoraireDtos!=null and  not empty emploiPrintBean.seanceEmploiByPlageHoraireDtos}"
+						style="width:100%;margin:0;">
+						<p:toolbarGroup>
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:commandLink id="pdf" ajax="false"
+								actionListener="#{emploiPrintBean.printEmploiByGroupePdf}">
+								<p:graphicImage value="/resources/images/pdf.png" />
+
+
+
+							</p:commandLink>
+
+<!-- 							<p:spacer width="20" /> -->
+
+<!-- 							<p:commandLink id="xls" ajax="false" actionListener="#{emploiPrintBean.printEmploiByGroupeExcel()}"> -->
+<!-- 								<p:graphicImage value="/resources/images/excel.png" /> -->
+
+
+
+<!-- 							</p:commandLink> -->
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable id="dtTbl_seances"
+						value="#{emploiPrintBean.seanceEmploiByPlageHoraireDtos}"
+						var="seance">
+						<p:column headerText=""
+							style="background: none repeat scroll 0% 0% #E6E6E6;text-align:center;">
+							<h:outputLabel value="#{seance.plageHoraireDto.heureDebut}"
+								style="display: block;">
+								<f:convertDateTime type="date" pattern="HH:mm" />
+							</h:outputLabel>
+
+
+							<h:outputLabel value="-" style="display: block;"></h:outputLabel>
+
+							<h:outputLabel value="#{seance.plageHoraireDto.heureFin}"
+								style="display: block;">
+								<f:convertDateTime type="date" pattern="HH:mm" />
+							</h:outputLabel>
+
+						</p:column>
+
+						<p:column headerText="#{emploiMsgs.emploi_dimanche}" style="text-align:center">
+							<table>
+								<ui:repeat var="groupe"
+									value="#{seance.seanceEmploiDtos['DIM']}" varStatus="status">
+
+									<tr>
+										<td style="border: 0px"><h:outputText
+												value="#{groupe.refLieuDesignation}" style="display: block;" />
+											<h:outputText
+												value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+												style="display: block;" /> <h:outputText
+												value="#{groupe.enseignantNom} #{groupe.enseignantPrenom}" />
+										</td>
+
+									</tr>
+
+								</ui:repeat>
+							</table>
+
+
+						</p:column>
+
+						<p:column headerText="#{emploiMsgs.emploi_lundi}" style="text-align:center">
+
+							<table style="border: 0px">
+								<ui:repeat var="groupe"
+									value="#{seance.seanceEmploiDtos['LUN']}" varStatus="status">
+
+									<tr>
+										<td style="border: 0px"><h:outputText
+												value="#{groupe.refLieuDesignation}" style="display: block;" />
+											<h:outputText
+												value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+												style="display: block;" /> <h:outputText
+												value="#{groupe.enseignantNom} #{groupe.enseignantPrenom}" />
+										</td>
+
+									</tr>
+								</ui:repeat>
+							</table>
+
+						</p:column>
+
+						<p:column headerText="#{emploiMsgs.emploi_mardi}" style="text-align:center">
+							<table style="border: 0px">
+								<ui:repeat var="groupe"
+									value="#{seance.seanceEmploiDtos['MAR']}" varStatus="status">
+
+									<tr>
+										<td style="border: 0px"><h:outputText
+												value="#{groupe.refLieuDesignation}" style="display: block;" />
+											<h:outputText
+												value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+												style="display: block;" /> <h:outputText
+												value="#{groupe.enseignantNom} #{groupe.enseignantPrenom}" />
+										</td>
+
+									</tr>
+
+								</ui:repeat>
+							</table>
+
+						</p:column>
+						<p:column headerText="#{emploiMsgs.emploi_mercredi}" style="text-align:center">
+							<table style="border: 0px">
+								<ui:repeat var="groupe"
+									value="#{seance.seanceEmploiDtos['MER']}" varStatus="status">
+
+									<tr>
+										<td style="border: 0px"><h:outputText
+												value="#{groupe.refLieuDesignation}" style="display: block;" />
+											<h:outputText
+												value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+												style="display: block;" /> <h:outputText
+												value="#{groupe.enseignantNom} #{groupe.enseignantPrenom}" />
+										</td>
+
+									</tr>
+								</ui:repeat>
+							</table>
+
+						</p:column>
+						<p:column headerText="#{emploiMsgs.emploi_jeudi}" style="text-align:center">
+							<table style="border: 0px">
+								<ui:repeat var="groupe"
+									value="#{seance.seanceEmploiDtos['JEU']}" varStatus="status">
+
+									<tr>
+										<td style="border: 0px"><h:outputText
+												value="#{groupe.refLieuDesignation}" style="display: block;" />
+											<h:outputText
+												value="#{groupe.refCodeTypeAp} #{groupe.rattachementMcMcCode}"
+												style="display: block;" /> <h:outputText
+												value="#{groupe.enseignantNom} #{groupe.enseignantPrenom}" />
+										</td>
+
+									</tr>
+								</ui:repeat>
+							</table>
+
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+		</p:outputPanel>
+
+
+	</ui:define>
+</ui:composition>
+</html>

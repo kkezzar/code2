@@ -1,0 +1,190 @@
+@CHARSET "ISO-8859-1";
+		@CHARSET "UTF-8";
+		.ui-widget, .ui-widget .ui-widget {
+		    font-size: 12px !important;
+		}
+		
+	
+		
+		/* .ui-layout-unit { */
+		/*     font-size: 85%; */
+		/* } */
+		
+		.panelColumns td {
+		    vertical-align: top; 
+		    padding:4px;
+		    font-size: 13px;
+		    
+		} 
+		
+		.ui-panelmenu h3 {
+			font-size: 1em;
+			margin: 2px;
+		}
+		
+
+		mesrsFieldset.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+		background-color: transparent;
+		padding:5px;
+		text-align: left;
+		margin-bottom:4px;
+		vertical-align: bottom;
+		}
+		
+		.ui-toolbar.ui-widget-header.toolBarMesrs {
+		background-color: transparent;
+		border-color: transparent;
+		font-size:12px;
+		padding:5px;
+		margin:2px;
+		}
+		
+		
+		
+		.left {  
+		    text-align: left;  
+		    font-size:12px;
+		    vertical-align: middle;
+		     
+		}  
+		  
+		.center {  
+		     text-align: center;  
+		      font-size:12px;
+		    vertical-align: middle;
+		}  
+		  
+		.right {  
+		     text-align: right;  
+		    font-size:12px;
+		    vertical-align: middle;
+		}  
+		  
+		 .textOnRight {
+		 
+   				 text-align: right;
+		} 
+		 .textOnLeft {
+		 
+   				 text-align: left;
+   				 vertical-align: middle;
+		} 
+		
+		.buttonPanel {  
+		     text-align: center;  
+		     width:80%;  
+		     margin:0px auto;  
+		     font-size:12px;
+		}  
+		
+		.mesrsTableCss {
+			
+			padding : 4px;
+			text-align: left;
+			font-family: arial;
+		}
+	
+	
+		.oneCol {
+					width:20% ;
+		}
+		.oneCol_1 {
+					width:40% ;
+		}
+		
+		.twoCol {
+				width:75%;
+		}
+		.uniformTable {
+			
+			text-align:center;
+			font-size:15px;
+		}
+		
+		.labelValue {
+					font-size: 12px;
+					font-weight: bolder;
+					color: #456A8F;
+		}
+		.labelValueFooter {
+					font-size: 10px;
+					font-weight: bolder;
+					color: #456A8F;
+		}
+		.fieldsetCss {
+		
+				margin : 5px;
+				padding : 8px;
+				font-size: 12px;
+		}
+		
+				.ui-tooltip {
+			    				
+			    				max-width: 600px;
+			    				font-size: 10px;
+			    				color: #456A8F;
+			    				
+				}
+	
+				.titleTreeNodeDetail {
+				color: #456A8F;
+				font-size:14px; 
+				line-height:22px;
+				}
+
+ 				.ui-selectonemenu-label{
+					 color: #456A8F !important;
+					 width:100% !important;
+					 
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                  
+                }
+
+				.ui-panel .ui-panel-titlebar {
+   							 
+   					text-align: center important;
+				}
+				.ui-tree {
+    				width: 280px !important; 
+    		
+				}
+				
+				.buttonsTable {
+						font-size : 12px;
+						width: 100%;
+						border-color: transparent;
+				}
+				
+					.searchControlsTable {
+						font-size : 12px;
+						border-color: transparent;
+				}
+				
+				.ui-dialog .ui-dialog-title {
+						float : none;
+   						text-align: center;
+   					
+				}
+					.ofSeacrhMemberDatatableCss {
+						width:900px;
+						margin-top:10px;
+						margin-bottom:10px;
+						font-size: 11px;
+				}
+				
+				 .blockUITable td {  
+			        border: none !important;  
+			        border-color: transparent  !important;  
+			        padding: 0 !important;  
+    			}  
+    			.ui-widget-header {
+    					text-align: center;
+    				    					
+    					
+    			}
+    			.ui-panel .ui-panel-titlebar {
+    					text-align: center;
+				}
+			

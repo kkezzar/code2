@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+	<mapping>
+		<class-a>dz.gov.mesrs.sii.fve.business.model.dto.offreformation.RepartitionUeDto
+		</class-a>
+		<class-b>dz.gov.mesrs.sii.commons.data.model.fve.offreformation.RepartitionUe
+		</class-b>
+
+		<field>
+			<a>parcoursTypeId</a>
+			<b>parcoursType.id</b>
+		</field>
+		<field>
+			<a>parcoursTypeCode</a>
+			<b>parcoursType.code</b>
+		</field>
+
+		<field>
+			<a>uniteEnseignementId</a>
+			<b>uniteEnseignement.id</b>
+		</field>
+		<field>
+			<a>uniteEnseignementCode</a>
+			<b>uniteEnseignement.code</b>
+		</field>
+		<field>
+			<a>uniteEnseignementLibelleFr</a>
+			<b>uniteEnseignement.libelleFr</b>
+		</field>
+		<field>
+			<a>uniteEnseignementLibelleAr</a>
+			<b>uniteEnseignement.libelleAr</b>
+		</field>
+		<field>
+			<a>uniteEnseignementCredits</a>
+			<b>uniteEnseignement.credits</b>
+		</field>
+		
+		<field>
+			<a>groupAChoixId</a>
+			<b>groupeRepartitionUeAChoix.id</b>
+		</field>
+		<field>
+			<a>groupAChoixNombreMax</a>
+			<b>groupeRepartitionUeAChoix.nombreMax</b>
+		</field>
+		<field>
+			<a>groupAChoixNombreMin</a>
+			<b>groupeRepartitionUeAChoix.nombreMin</b>
+		</field>
+		
+		<field>
+			<a>idPeriode</a>
+			<b>periode.id</b>
+		</field>
+		<field>
+			<a>codePeriode</a>
+			<b>periode.code</b>
+		</field>
+		<field>
+			<a>libellePeriode</a>
+			<b>periode.libelleLongLt</b>
+		</field>
+		
+	</mapping>
+
+
+</mappings>

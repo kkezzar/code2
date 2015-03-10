@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of" >
+	<ui:define name="centerContent">
+	<h:form id="form_ouvertureOfEdit">
+	<p:panel id="pnl_ouvertureOfEdit" header="#{ouvertureOfMsgs.ouverture_ouvrir_title}">
+   <!--   <p:accordionPanel multiple="false" activeIndex="1">  
+    <p:tab title="#{ouvertureOfMsgs.ouverture_infos_of_title}" > 	
+		 <of:OfComponent 		ofDto="#{ofBB.ofDto}" 	ofI18nDtoFr="#{ofBB.ofDtoI18ns['fr']}"  ofI18nDtoAr="#{ofBB.ofDtoI18ns['ar']}" toEdit="false"	/> 
+     </p:tab>  
+    <p:tab title="#{ouvertureOfMsgs.ouverture_title}">  
+  <p:panel>-->
+    <p:panelGrid  columns="2" style="width:815px"
+						>
+
+						<f:facet name="header">  
+        							
+    						</f:facet>
+    						<h:outputText value="#{ouvertureOfMsgs.ouverture_etablissement}" />
+    						<h:outputText value="#{ouvertureOfBean.ouvertureOffreFormationDto.refCodeEtablissement}" styleClass="labelValue" />
+    						
+						<h:outputText value="#{ouvertureOfMsgs.ouverture_annee_academique} * " />
+					<h:panelGroup>
+						<h:inputText id="anneAcad1" value="#{ouvertureOfBean.ouvertureOffreFormationDto.anneeAcademiquePremiereAnnee}" disabled="true"  required="true" requiredMessage="#{ouvertureOfMsgs.ouverture_annee_academique_required}"/>/<h:inputText id="anneAcad2" value="#{ouvertureOfBean.ouvertureOffreFormationDto.anneeAcademiqueDeuxiemeAnnee}" disabled="true"  required="true" requiredMessage="#{ouvertureOfMsgs.ouverture_annee_academique_required}"/>
+					</h:panelGroup>
+						<h:outputText
+							value="#{ouvertureOfMsgs.ouverture_effectif_minimum} * " />
+					
+						<h:inputText id="effectifMin" value="#{ouvertureOfBean.ouvertureOffreFormationDto.effectifMin}"   required="true" requiredMessage="#{ouvertureOfMsgs.ouverture_effectif_minimum_required}"  validatorMessage="#{ouvertureOfMsgs.ouverture_effectif_minimum_validateLongRang}">
+						<f:validateLongRange minimum="1" maximum="20000"></f:validateLongRange>
+						</h:inputText>
+					
+					
+						<h:outputText
+							value="#{ouvertureOfMsgs.ouverture_effectif_maximum} * " />
+					
+						<h:inputText id="effectifMax" value="#{ouvertureOfBean.ouvertureOffreFormationDto.effectifMax}"   required="true" requiredMessage="#{ouvertureOfMsgs.ouverture_effectif_maximum_required} " validatorMessage="#{ouvertureOfMsgs.ouverture_effectif_maximum_validateLongRang}">
+						<f:validateLongRange minimum="1" maximum="20000"></f:validateLongRange>
+						</h:inputText>
+					  
+					  <p:selectBooleanCheckbox id="selectboxouverte" rendered="#{not empty ouvertureOfBean.ouvertureOfId}"
+							value="#{ouvertureOfBean.ouvertureOffreFormationDto.estOuverte}"
+							itemLabel="#{ouvertureOfMsgs.ouverture_ouverte}" label="#{ouvertureOfMsgs.ouverture_ouverte}"
+							>
+							</p:selectBooleanCheckbox>
+				</p:panelGrid>
+ 
+      <!-- Ouverure - FOOTER  -->
+	    <p:panelGrid id="douvertureFooterPanelID" style="margin-top:5px; width:815px" rendered="#{not empty ouvertureOfBean.ouvertureOffreFormationDto.dateOuverture}">
+	    
+		<p:row>
+		
+			<p:column styleClass="left" rendered="#{not empty ouvertureOfBean.ouvertureOffreFormationDto.dateOuverture}">
+				<h:outputLabel
+					value="#{ouvertureOfMsgs.ouverture_date_ouverture}" />
+				<h:outputLabel value="#{ouvertureOfBean.ouvertureOffreFormationDto.dateOuverture}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+<p:column styleClass="right" rendered="#{not empty ouvertureOfBean.ouvertureOffreFormationDto.dateFermeture}">
+				<h:outputLabel
+					value="#{ouvertureOfMsgs.ouverture_date_fermeture}" />
+				<h:outputLabel value="#{ouvertureOfBean.ouvertureOffreFormationDto.dateFermeture}"
+					styleClass="labelValueFooter">
+					<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+				</h:outputLabel>
+
+			</p:column>
+			
+		</p:row>
+
+	</p:panelGrid>
+	<!--  </p:panel>
+    </p:tab>     
+</p:accordionPanel>-->
+			<!-- SUBMIT DEMANDE HABILITATION - TOOLBAR BUTTONS  -->
+	
+		<p:toolbar  style="margin-top:5px"  >
+				
+					<p:toolbarGroup    align="left">
+								<p:commandButton value="#{commonmsgs.bouton_retour}" action="#{ouvertureOfBean.goBack}"  immediate="true" onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()">
+									<f:param name="ouvertureOfId" value="#{ouvertureOfBean.ouvertureOfId}" />	
+        						</p:commandButton>  
+        			</p:toolbarGroup>
+					
+					<p:toolbarGroup  align="right">
+					           <p:separator />
+        						<p:commandButton  id="btnSaveID" value="#{commonmsgs.bouton_enregistrer}"  action="#{ouvertureOfBean.save}"   >
+        						
+        						<f:param name="ouvertureOfId" value="#{ouvertureOfBean.ouvertureOfId}" />
+        						<f:param name="ofId" value="#{ouvertureOfBean.ofId}" />
+        						</p:commandButton>
+ 							
+        						
+					</p:toolbarGroup>
+					
+		</p:toolbar>
+			<p:growl id="msgs" showDetail="true" autoUpdate="true"  closable="true" life="5000"/>	
+			</p:panel>
+		
+		 <pe:blockUI widgetVar="blockUIWidget">
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/ajax-loader1.gif"
+					style="margin-right: 12px; vertical-align: middle;" />
+				<h:outputText value="#{commonmsgs.msg_wait}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+		</pe:blockUI>
+		</h:form>
+	</ui:define>
+</ui:composition>

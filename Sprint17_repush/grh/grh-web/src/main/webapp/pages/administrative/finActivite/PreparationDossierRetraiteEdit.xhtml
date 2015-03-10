@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	
+	<ui:define name="pageTitleContent">
+		#{finActiviteMgs.preparer_dossier_retraite_page_title} 
+	</ui:define>
+
+	<ui:define name="centerContent">
+	<h:head>
+		<style>
+
+
+.ui-widget-header {
+    border: 1px solid #ECF0F1;
+    background: none repeat  !important;
+    color:  none !important;
+    font-weight: 700;
+}
+.ui-tabs-selected {
+ background: none repeat #1DA64A !important;
+}
+
+</style>
+	</h:head>
+		<p:outputPanel id="pnl_Gerer" >
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_admis_depart_search">
+				<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="right">
+								<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+								<p:spacer width="10px"></p:spacer>
+									<p:inputText id="keyWordsID" value="#{preparationDossierRetraiteMBean.searchKeyWords}"    placeholder="#{commonmsgs.search_watermark_text_key_words}"
+												 label="#{commonmsgs.search_label_mots_cles}" />
+								 
+								<p:separator />
+		
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_admis_depart_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{preparationDossierRetraiteMBean.onSearch}"/>
+					</p:toolbarGroup>
+				</p:toolbar>
+				<p:dataTable var="admission" lazy="true"
+					value="#{preparationDossierRetraiteMBean.finActviteModel}"
+					widgetVar="retraiteTable" rowKey="#{admission.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+					selectionMode="single"
+					emptyMessage="#{finActiviteMgs.msg_depart_retraite_no_result}">
+					
+					<f:facet name="header">
+		
+					</f:facet>
+					<p:ajax event="rowSelect" immediate="true"
+						listener="#{preparationDossierRetraiteMBean.onRowSelected}" process="@this"
+						onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+				 		update=":pnl_dossier_retraite" />
+			
+					<p:column headerText="#{finActiviteMgs.label_numero}"
+						style="width:3%;">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column sortBy="#{admission.employe.matricule}" style="width:9%"
+						headerText="#{finActiviteMgs.label_matricule}">
+						<h:outputText value="#{admission.employe.matricule}"/>
+					</p:column>
+					<p:column sortBy="individu.nomLatin" 
+						headerText="#{finActiviteMgs.label_employe}">
+						<h:outputText value="#{admission.employe.refIndividuDto.prenomLatin} #{admission.employe.refIndividuDto.nomLatin}" />
+					</p:column>
+					<p:column sortBy="#{admission.dateDepart}" 
+						headerText="#{finActiviteMgs.label_date_depart_prevue}">
+						<h:outputText value="#{admission.dateDepart}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="individu.dateNaissance" 
+						headerText="#{finActiviteMgs.label_date_naissance}">
+						<h:outputText value="#{admission.employe.refIndividuDto.dateNaissance}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<br></br>
+			
+				<p:outputPanel id="pnl_dossier_retraite" style="width: 50%;">
+					<p:outputPanel rendered="#{preparationDossierRetraiteMBean.finActiviteDto != null}">
+					<h:form>
+						<p:dataTable id="pieceStudFourniDataTable" var="row"
+						value="#{preparationDossierRetraiteMBean.finActiviteDto.dossierDto.pieceConstitutiveDtos}"
+						emptyMessage="#{finActiviteMgs.piece_data_table_seacrh_result_no_result}"
+						style="margin-bottom:8px" rowIndexVar="rowIndex"
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+		
+							<f:facet name="header">
+								<h:outputText value="#{finActiviteMgs.piece_retraite_data_table_title}" />
+							</f:facet>
+			
+							<p:column headerText="#{finActiviteMgs.piece_data_table_column_index}" style="width:5%">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{finActiviteMgs.piece_data_table_list_column_piece_type}" style="width:40%">
+								<h:outputText value="#{row.typePiece.ncLlLatinTypePiece}" />
+							</p:column>
+							<p:column headerText="#{finActiviteMgs.piece_data_table_list_column_piece_required}" style="width:10%;text-align:center">
+								<h:outputText value="#{row.typePiece.obligatoire ? 'Oui' : 'Non'}" />
+							</p:column>
+							<p:column style="width:10%;text-align:center" styleClass="textOnLeft">
+								<f:facet name="header">
+									<h:outputText value="#{finActiviteMgs.piece_data_table_list_column_piece_provided}" />
+								</f:facet>
+								<p:selectBooleanCheckbox value="#{row.fournie}" id="pieceProvided"
+									label="Checkbox" rendered="#{!pieceManagerBean.readOnly}" />
+								<h:outputText value="Oui" rendered="#{pieceManagerBean.readOnly}" />
+							</p:column>
+							<p:column headerText="#{finActiviteMgs.piece_data_table_list_column_piece_date}"
+								styleClass="textOnLeft" style="width:10%">
+									<p:calendar navigator="true" value="#{row.dateFourniture}"
+									id="dateFourniture1"
+									pattern="dd/MM/yyyy"  />
+							</p:column>
+						</p:dataTable>
+						<p:toolbar id="demandeDemissionToolBar" styleClass="toolBarMesrs">
+							<p:toolbarGroup>
+								<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save" 
+									id="saveDossierRetraiteBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+									actionListener="#{preparationDossierRetraiteMBean.onSave}"
+									onstart="PF('page').block()" onsuccess="PF('page').unblock()"/>
+							</p:toolbarGroup>
+						</p:toolbar>
+						</h:form>					
+					</p:outputPanel>
+				</p:outputPanel>
+			
+			</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

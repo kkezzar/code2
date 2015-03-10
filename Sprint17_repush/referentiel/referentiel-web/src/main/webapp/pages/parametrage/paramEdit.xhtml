@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel
+			header="#{paramMgrBean.refFileConfigDto.type eq 'IHM' ? parametragemsgs.parametrage_menu_parametres_ihm : parametragemsgs.parametrage_menu_parametres_config}"
+			style="border:0;">
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+			<h:form id="paramEditForm">
+
+				<p:fieldset legend="Informations sur le Fichier">
+
+					<p:panelGrid id="infosFile" styleClass="noBorder1">
+						<p:row>
+							<p:column>
+								<h:outputText value="#{parametragemsgs.parametrage_domaine} :" />
+							</p:column>
+							<p:column>
+								<h:outputText id="domain"
+									value="#{paramMgrBean.refFileConfigDto.nomDomaine}"
+									style="text-align: left;  font-weight: bold;">
+								</h:outputText>
+
+							</p:column>
+
+
+
+							<p:column>
+								<h:outputText value="#{parametragemsgs.parametrage_entite} :" />
+							</p:column>
+							<p:column>
+								<h:outputText id="entity"
+									value="#{paramMgrBean.refFileConfigDto.nameEntity}"
+									style="text-align: left;  ;font-weight: bold;">
+								</h:outputText>
+							</p:column>
+						</p:row>
+
+						<p:row>
+
+							<p:column>
+								<h:outputText value="#{parametragemsgs.parametrage_fichier} :" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{paramMgrBean.refFileConfigDto.name}"
+									style="font-weight: bold;"></h:outputText>
+							</p:column>
+
+
+
+							<p:column>
+								<h:outputText value="#{parametragemsgs.parametrage_url} :" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{paramMgrBean.refFileConfigDto.url}"
+									id="url" style="font-weight: bold;">
+
+								</h:outputText>
+							</p:column>
+
+
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{parametragemsgs.parametrage_type} :" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{paramMgrBean.refFileConfigDto.type}"
+									style="font-weight: bold;">
+								</h:outputText>
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{parametragemsgs.parametrage_select_langue} :" />
+							</p:column>
+							<p:column>
+								<h:outputText id="langue"
+									style="text-align:left ; font-weight: bold;"
+									value="#{paramMgrBean.refFileConfigDto.libelleLongFrLanguage}" />
+							</p:column>
+						</p:row>
+
+
+
+
+
+
+					</p:panelGrid>
+
+				</p:fieldset>
+
+				<br></br>
+				<p:fieldset legend="#{parametragemsgs.parametrage_list_params}">
+
+					<p:dataTable var="parametre" widgetVar="paramsTable"  
+						value="#{paramMgrBean.listParamOfFile}" filteredValue="#{paramMgrBean.filteredParams}"
+						rendered="#{paramMgrBean.listParamOfFile!=null}"
+						id="parametreTable" editable="true" paginator="true"
+						paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="15"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+						<f:param name="idf" value="#{paramMgrBean.idf}" />
+						<p:ajax event="page" update="@this" />
+						<p:ajax event="rowEdit" listener="#{paramMgrBean.onEdit}"
+							process="@form" update="@this">
+
+						</p:ajax>
+						<p:ajax event="rowEditCancel" listener="#{paramMgrBean.onCancel}"
+							process="@form">
+						</p:ajax>
+						<p:ajax event="filter" update="@this" process="@form" />
+						
+		
+						<p:column headerText="#{parametragemsgs.parametrage_cle}"
+							width="35%">
+
+							<h:outputText value="#{parametre.key}" />
+
+						</p:column>
+						<p:column headerText="#{parametragemsgs.parametrage_value}"
+							width="60%"   >
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{parametre.value}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{parametre.value}"
+										label="#{parametragemsgs.parametrage_value}"
+										style="text-align: left; width:100%" required="true"
+										requiredMessage="#{parametragemsgs.parametrage_value_required}" >
+										<f:param name="idf" value="#{paramMgrBean.idf}" />
+										</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+
+						<p:column width="5%"  headerText="#{parametragemsgs.parametrage_recherche}:" filterBy="value" filterMatchMode="contains">
+							<f:facet name="header">
+
+							</f:facet>
+							<p:rowEditor>
+							</p:rowEditor>
+
+						</p:column>
+
+
+					</p:dataTable>
+
+				</p:fieldset>
+				<br></br>
+				<p:panelGrid id="MenuGrid1" styleClass="noBorder1">
+
+					<p:row>
+						<p:column>
+							<p:commandButton
+								value="#{parametragemsgs.parametrage_button_default_param}"
+								icon="ui-icon-disk" process="@form" immediate="true"
+								actionListener="#{paramMgrBean.initDefaultConfig}"
+								update="@form">
+								<f:param name="idf" value="#{paramMgrBean.idf}" />
+								<p:confirm header="Confirmation"
+									message="#{parametragemsgs.msg_default_param_confirmation}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column>
+						<p:column>
+							<p:commandButton value="#{commonmsgs.button_return}"
+								icon="ui-icon-arrowreturnthik-1-w" process="@form"
+								immediate="true" action="#{paramMgrBean.toSearch}">
+								<f:param name="idf" value="#{paramMgrBean.idf}" />
+							</p:commandButton>
+						</p:column>
+
+					</p:row>
+				</p:panelGrid>
+			</h:form>
+
+
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

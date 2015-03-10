@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation"
+	>
+	
+<ui:composition template="/templates/fullPageLayout.xhtml">
+<ui:define name="pageTitleContent">#{generationBacMsgs.bac_generation_page_title}</ui:define>
+<ui:define name="title">#{generationBacMsgs.bac_generation_page_title}</ui:define>
+
+<ui:define name="centerContent">
+<h:form id="generationForm" >
+
+<p:panel id="fsGenerationCriteria" header="#{generationBacMsgs.bac_generation_panel_parametres_generation_title}">
+<p:panelGrid id="pgGenerationCriteria">
+			<p:row>
+	        		<p:column>
+	        		<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_parametres_generation_annee_label} " />
+	        		</p:column>
+					<p:column>
+<!-- 							   <h:outputLabel id="anneeId" value="#{generationBB.year}" 	 styleClass="labelValue"/> -->
+							   <p:selectOneMenu id="listAnneesID" 	value="#{generationBB.year}" style="width:100%">
+												<f:selectItems value="#{generationBB.listYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}" />
+												<p:ajax listener="#{generationBB.handleYearsChange}" 	event="valueChange" 
+												onstart="PF('blockUIWidgetRefresh').block()" oncomplete="PF('blockUIWidgetRefresh').unblock()"
+												process="@this" update="totalFilesToGenerateId errorsOutputPanel btnGenerate generationResultOutputPanel"/>
+							</p:selectOneMenu>
+					</p:column>
+			</p:row>
+	        <p:row>
+	        		<p:column>
+	        					<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_parametres_generation_etablissement_label}" />
+	        		</p:column>
+					<p:column>
+								<h:outputLabel id="etablissementId" value="#{generationBB.libelleEtab} (#{generationBB.newEtabCode})" 	 style="color:#336699;font-weight:bold; "/>
+					</p:column>
+			</p:row>
+				     <p:row>
+	        		<p:column>
+	        					<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_parametres_generation_total_dossiers_label}" />
+	        		</p:column>
+					<p:column>
+								<h:outputLabel id="totalFilesToGenerateId" value="#{generationBB.totalResult}" 	 style="color:#336699;font-weight:bold; "/>
+					</p:column>
+			</p:row>
+			<p:row>
+			<p:column></p:column>
+					<p:column  style="text-align:right;">
+					<p:commandButton value="#{generationBacMsgs.bac_generation_bouton_parametres_generation_generer_label}"  	id="btnGenerate" binding="#{btnGenerateBound}"
+												update="@([id$=generationForm])"  ajax="true" 	icon="ui-icon-play"  process="@this listAnneesID"
+												action="#{generationBB.generateBatch()}" onstart="PF('blockUIWidgetGenerate').block()" oncomplete="PF('blockUIWidgetGenerate').unblock()"
+												disabled="#{generationBB.activeGeneration}">
+									<p:confirm		header="#{generationBacMsgs.bac_generation_confirmation_title}"	 message="#{generationBacMsgs.bac_generation_confirmation_message}"	icon="ui-icon-alert" />
+																	
+					</p:commandButton>
+					</p:column>
+				</p:row>	
+				       
+				</p:panelGrid>
+				<p:confirmDialog global="true">
+        				<p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        				<p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+   				 </p:confirmDialog>
+						
+	<p:outputPanel id="errorsOutputPanel">
+				<p:messages id="msgGeneration" showDetail="true" showSummary="false" autoUpdate="true" closable="false" />
+				<p:dataTable id="missingAffectationsDataTable" var="row"
+								value="#{generationBB.bachelorsFilesWithoutCorrespondanceAffectation}"
+								rowKey="#{row.matricule}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								rowsPerPageTemplate="5,10,15"
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="#{generationBacMsgs.bac_generation_datatable_missing_affectations_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								rendered="#{generationBB.showErrorOutput}">
+				
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+			    					<f:facet name="header">  
+            								#{generationBacMsgs.bac_generation_datatable_missing_affectations_list_title}
+       						 	</f:facet>  
+											<p:column	headerText="N°" style="width:10px; text-align:center;">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_matricule_bac}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.matricule}" />
+											</p:column>
+				
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_nom_prenom_fr}" style="text-align:left; color:#336699;">
+														<h:outputText value="#{row.nomFr}  #{row.prenomFr}" />
+											</p:column>
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_nom_prenom_ar}" style="text-align:left; color:#336699;">
+														<h:outputText value="#{row.nomAr}  #{row.prenomAr}" />
+											</p:column>
+			
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_sexe}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeSexe}" />
+											</p:column>
+											
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_annee}"  style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.annee}" />
+											</p:column>
+											
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_filiere}"  style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeFiliereAffectation}" />
+											</p:column>
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_etablissement}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeEtablissementAffectation}" />
+											</p:column>
+										
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_missing_affectations_column_serie_bac}" style="text-align:center;">
+														<h:outputText value="#{row.libelleSerieBac}" />
+											</p:column>
+
+											
+						</p:dataTable>
+	</p:outputPanel>
+</p:panel>
+	
+<p:outputPanel id="generationResultOutputPanel">
+<p:panel id="fsGenerateResult"  header="#{generationBacMsgs.bac_generation_tabview_tab_synthese_title}" rendered="#{generationBB.showResultOutput}" toggleable="true">
+		
+		<p:tabView id="tvGenerateResult" style="padding:0px">
+				<p:tab title="#{generationBacMsgs.bac_generation_tabview_tab_synthese_title}">
+					<p:dataTable id="bachelorsFileToGenerateDataTable" var="row"
+								value="#{generationBB.dossierBacheliers}"
+								rowKey="#{row.matricule}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								rowsPerPageTemplate="5,10,15"
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								>
+				
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+			    					<f:facet name="header">#{generationBacMsgs.bac_generation_datatable_dossiers_generes_list_title}
+       						 	</f:facet>  
+											<p:column	headerText="N°" style="text-align:center;">
+														<h:outputText value="#{rowIndex+1}" />
+											</p:column>
+											<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_matricule_bac}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.matricule}" />
+											</p:column>
+				
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_nom_prenom_fr}" style="text-align:left; color:#336699;">
+														<h:outputText value="#{row.nomFr}  #{row.prenomFr}" />
+											</p:column>
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_nom_prenom_ar}" style="text-align:left; color:#336699;">
+														<h:outputText value="#{row.nomAr}  #{row.prenomAr}" />
+											</p:column>
+			
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_sexe}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeSexe}" />
+											</p:column>
+											
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_filiere}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeFiliereAffectation}" />
+											</p:column>
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_etablissement}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.refCodeEtablissementAffectation}" />
+											</p:column>
+										
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_serie_bac}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.libelleSerieBac}" />
+											</p:column>
+											
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_ville_naissance}" style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.libelleVilleNaissance}" />
+											</p:column>
+											
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_date_naissance}"  style="text-align:center; color:#336699;">
+														<h:outputText value="#{row.dateNaissance}">
+														<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+														</h:outputText>
+														
+											</p:column>
+									
+											<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_dossiers_generes_column_moyenne_bac}" style="text-align:right; color:#336699;">
+														<h:outputText value="#{row.moyenneBac}" />
+											</p:column>
+											
+						</p:dataTable>
+					 <p:panelGrid>
+							<p:row>
+	        				<p:column>
+	        						<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_synthese_generation_total_dossiers_bacheliers_label}" />
+	        				</p:column>
+							<p:column style="width:50px;">
+							   		<h:outputLabel id="totalBachelorsFilesId" value="#{generationBB.totalBachelorsFiles}" 	 style="text-align:right;font-weight:bold; color:#336699;"/>
+							</p:column>
+							</p:row>
+							<p:row>
+	        				<p:column>
+	        						<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_synthese_generation_total_dossiers_etudiants_generes_label} " />
+	        				</p:column>
+							<p:column style="width:50px;">
+							   		<h:outputLabel id="totalStudentsFilesId" value="#{generationBB.totalGeneratedStudentsFiles}" 	 style="text-align:right;font-weight:bold; color:#336699;"/>
+							</p:column>
+							</p:row>
+							<p:row>
+	        				<p:column>
+	        						<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_synthese_generation_total_dossiers_inscriptions_1ere_annee_generes_label}" />
+	        				</p:column>
+							<p:column style="width:50px;">
+							   		<h:outputLabel id="totalStudentsInscriptionFilesId" value="#{generationBB.totalGeneratedStudentsInscriptionFiles}" 	 style="text-align:right;font-weight:bold; color:#336699;"/>
+							</p:column>
+							</p:row>
+							<p:row>
+	        				<p:column>
+	        						<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_synthese_generation_total_dossiers_individus_generes_label}" />
+	        				</p:column>
+							<p:column style="width:50px;">
+							   		<h:outputLabel id="totalIndividusId" value="#{generationBB.totalGeneratedIndividus}" 	 style="text-align:right;font-weight:bold; color:#336699;"/>
+							</p:column>
+							</p:row>
+							<p:row>
+	        				<p:column>
+	        						<h:outputLabel value="#{generationBacMsgs.bac_generation_panelgrid_synthese_generation_total_dossiers_individus_existant_label}" />
+	        				</p:column>
+							<p:column style="width:50px;">
+							   		<h:outputLabel id="totalExistingIndividusId" value="#{generationBB.totalExistingIndividus}" 	 style="text-align:right;font-weight:bold; color:#336699;"/>
+							</p:column>
+							</p:row>
+				</p:panelGrid>
+				</p:tab>
+				<p:tab title="#{generationBacMsgs.bac_generation_tabview_tab_individus_generes_title}">
+						<p:dataTable id="generatedIndividusDataTable" var="row"
+								value="#{generationBB.individusGeneres}"
+								rowKey="#{row.identifiant}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								rowsPerPageTemplate="5,10,15"
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="#{generationBacMsgs.bac_generation_datatable_individus_generes_list_empty}."
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px">
+				
+								<p:ajax event="page"  update="@all" process="@form"  onstart="PF('blockUIWidgetPaging').block()" oncomplete="PF('blockUIWidgetPaging').unblock()"/>
+								<p:column	headerText="" style="width:10px" styleClass="center">
+										<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_identifiant}" style="width:20px" styleClass="center">
+										<h:outputText value="#{row.identifiant}" />
+								</p:column>
+								<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_nom_prenom_fr}" style="width:70px" styleClass="textOnLeft">
+										<h:outputText value="#{row.nomLatin}  #{row.prenomLatin}" />
+								</p:column>
+								<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_nom_prenom_ar}" style="width:70px" styleClass="textOnRight">
+										<h:outputText value="#{row.nomArabe}  #{row.prenomArabe}" />
+								</p:column>
+								<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_date_naissance}" style="width:30px" styleClass="center">
+										<h:outputText value="#{row.dateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+										</h:outputText>
+								</p:column>
+							</p:dataTable>
+				</p:tab>
+				<p:tab title="#{generationBacMsgs.bac_generation_tabview_tab_individus_existant_title}">
+				<p:dataTable id="existingIndividusDataTable" var="row"
+								value="#{generationBB.individusExistants}"
+								rowKey="#{row.identifiant}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="10" 
+								rowsPerPageTemplate="5,10,15"
+								lazy="true" 
+								paginatorPosition="bottom"
+								emptyMessage="#{generationBacMsgs.bac_generation_datatable_individus_existant_list_title}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px">
+							<p:column	headerText="" style="width:10px" styleClass="center">
+									<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_identifiant}" style="width:20px" styleClass="center">
+									<h:outputText value="#{row.identifiant}" />
+							</p:column>
+							<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_nom_prenom_fr}" style="width:70px" styleClass="textOnLeft">
+									<h:outputText value="#{row.nomLatin}  #{row.prenomLatin}" />
+							</p:column>
+							<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_nom_prenom_ar}" style="width:70px" styleClass="textOnRight">
+									<h:outputText value="#{row.nomArabe}  #{row.prenomArabe}" />
+							</p:column>
+							<p:column   	headerText="#{generationBacMsgs.bac_generation_datatable_individus_generes_column_date_naissance}" style="width:30px" styleClass="center">
+									<h:outputText value="#{row.dateNaissance}">
+											<f:convertDateTime pattern="dd-MM-yyyy" /> -->
+									</h:outputText>
+							</p:column>
+				</p:dataTable>
+				</p:tab>
+		</p:tabView>
+		
+</p:panel>
+
+</p:outputPanel>
+<br />
+<p:panel id="fsGenerationHistory"  header="#{generationBacMsgs.bac_generation_panel_historique_generation_title}" toggleable="true"> 
+	<p:dataTable id="listGenerationsDataTable" var="row"
+								value="#{generationBB.listGenerations}"
+								rowKey="#{row.id}"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+								paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+								paginator="true" 
+								rows="5" 
+								lazy="true" 
+								paginatorPosition="bottom"
+								rowsPerPageTemplate="5,10,15"
+								emptyMessage="#{generationBacMsgs.bac_generation_datatable_historique_generations_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="margin:4px"
+								>
+			<f:facet name="header">#{generationBacMsgs.bac_generation_datatable_historique_generations_list_title}</f:facet>  
+					<p:column	headerText=""  style="text-align:center;">
+							<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_annee}" style="text-align:center; color:#336699;">
+							<h:outputText value="#{row.anneeAcademique}" />
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_situation}" style="text-align:center; color:#336699;">
+							<h:outputText value="#{row.situation}" />
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_date_debut}" style="text-align:center; color:#336699;">
+							<h:outputText value="#{row.dateDebutGeneration}">
+								<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+							</h:outputText>
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_date_fin}" style="text-align:center; color:#336699;">
+								<h:outputText value="#{row.dateFinGeneration}" >
+									<f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" />
+								</h:outputText>
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_total_depart}" style="text-align:center; color:#336699;">
+								<h:outputText value="#{row.nbBacheliers}" />
+					</p:column>
+					<p:column	headerText="#{generationBacMsgs.bac_generation_datatable_historique_generations_column_total_dossiers_etudiants}" style="text-align:center; color:#336699;">
+								<h:outputText value="#{row.nbDossiersEtudiants}" />
+					</p:column>
+											
+		</p:dataTable>
+</p:panel>
+
+<h:inputHidden  id="listSizeID" binding="#{listSize}" value="#{generationBB.totalResult}"  style="font-size:12px"/>
+	</h:form>
+	
+	<pe:blockUI  id="blockUIGenerate" target=":generationForm"  widgetVar="blockUIWidgetGenerate">
+	<i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>  
+ 
+	<pe:blockUI  id="blockUIRefresh" target=":generationForm" widgetVar="blockUIWidgetRefresh">
+	<i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>  
+	
+	<pe:blockUI  id="blockUIPaging" target="@([id$=bachelorsFileToGenerateDataTable]) @([id$=existingIndividusDataTable]) @([id$=generatedIndividusDataTable])"  widgetVar="blockUIWidgetPaging">
+	<i class="fa fa-spinner fa-spin"></i>
+	</pe:blockUI>  
+	
+</ui:define>
+</ui:composition>
+</html>

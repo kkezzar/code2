@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    
+    <mapping map-null="false">
+      		<class-a>dz.gov.mesrs.sii.recherche.business.model.dto.ProjetDto</class-a>
+      		<class-b>dz.gov.mesrs.sii.commons.data.model.recherche.Projet</class-b>
+      	      		
+      		<field>
+      					<a>situationDto</a>
+	  					<b>situation</b>
+      		</field> 
+      		<field>
+      					<a>typeClotureDto</a>
+	  					<b>typeCloture</b>
+      		</field> 
+      		<field>
+      					<a>programeDto</a>
+	  					<b>programe</b>
+      		</field> 
+      		<field>
+      					<a>etablissementDto</a>
+	  					<b>etablissement</b>
+      		</field> 
+      		 <field>
+      					<a>structureDto</a>
+	  					<b>structure</b>
+      		</field>
+      		
+      		<field>
+      					<a>motclesDto</a>
+	  					<b>motcles</b>
+      		</field>
+      		
+      		<field>
+      					<a>activiteProjetsDto</a>
+	  					<b>activiteProjets</b>
+      		</field>
+      		
+      		<field>
+      					<a>themeDto</a>
+	  					<b>theme</b>
+      		</field>
+      		<field>
+      					<a>groupeDto</a>
+	  					<b>groupe</b>
+      		</field>      		 
+      		<field>
+      					<a>indEvaluationsDto</a>
+	  					<b>indEvaluations</b>
+      		</field>
+      		<field>
+      					<a>projetPartenairesDto</a>
+	  					<b>projetPartenaires</b>
+      		</field>
+      		
+      		<field>
+      					<a>etapeValidationsDto</a>
+	  					<b>etapeValidations</b>
+      		</field>
+      		
+   	</mapping>
+</mappings>
+

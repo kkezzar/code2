@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+	<ui:define name="centerContent">
+		<p:growl id="msgs" showDetail="true" autoUpdate="true" closable="true" life="5000" />
+		<p:panel header="#{preinscriptionMBean.dto == null ? 'Nouvel préinscription' : 'Gérer préinscription'}">
+			<p:panel>
+				<p:tabView widgetVar="preinscriptionTabView">
+					<p:tab title="Demandeur">
+						<ui:include src="/pages/cursus/individu/IndividuEdit.xhtml" />
+					</p:tab>
+					<p:tab title="Titre d'accés" disabled="#{preinscriptionMBean.titreAccesTabDisabled}">
+						<ui:include src="/pages/cursus/dossier/titreacces/TitreAccessEdit.xhtml" />
+					</p:tab>
+					<p:tab title="Demande" disabled="#{preinscriptionMBean.demandeTabDisabled}" id="demandeTab">
+						<ui:include src="/pages/cursus/preinscription/DemandeEdit.xhtml" />
+					</p:tab>
+				</p:tabView>
+			</p:panel>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

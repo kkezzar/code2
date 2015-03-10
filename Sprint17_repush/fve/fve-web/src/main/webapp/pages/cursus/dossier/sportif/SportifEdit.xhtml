@@ -1,0 +1,214 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:outputPanel styleClass="infoEtudiantStyle">
+		<p:outputPanel styleClass="sportPanel">
+			<h:form id="sportifForm" prependId="true">
+
+				<pe:blockUI target="sportifForm" widgetVar="sportWidget">
+				<h:graphicImage library="images" name="ajax-loader1.gif" />
+			</pe:blockUI>
+				<p:fieldset id="sportifData"
+					legend="#{sportifMsgs.sportif_data_table_list_title}"
+					styleClass="mesrsFieldset">
+					<p:dataTable id="sportifDataTable" var="row"
+						value="#{sportifManagerBean.listSituationSportiveDto}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" lazy="true" paginatorPosition="bottom"
+						rowKey="#{row.id}" rowsPerPageTemplate="5,10,15"
+						emptyMessage="#{sportifMsgs.sportif_data_table_seacrh_result_no_result}"
+						style="margin:8px" rowIndexVar="rowIndex"
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none">
+						<f:param name="dossierEtudiantId"
+							value="#{sportifManagerBean.dossierEtudiantId}" />
+						<f:param name="situationId"
+							value="#{sportifManagerBean.situationId}" />
+
+						<p:ajax event="page" update="@all" process="@(.sportPanel)"
+							onstart="PF('blockUIWidget').block()"
+							oncomplete="PF('blockUIWidget').unblock()" />
+						<p:ajax event="sort" update="@all" process="@(.sportPanel)" />
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_column_index}"
+							style="width:20px">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_list_column_sportif_type_libelle_latin}"
+							style="width:20%">
+							<h:outputText value="#{row.refLlLatinDisciplineSportive}" />
+						</p:column>
+
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_list_column_sportif_type_libelle_arabe}"
+							style="width:20%">
+							<h:outputText value="#{row.refLlArabeDisciplineSportive}" />
+						</p:column>
+
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_list_column_date_debut}"
+							styleClass="textOnLeft" style="width:8%">
+							<h:outputText value="#{row.dateDebut}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_list_column_date_fin}"
+							styleClass="textOnLeft" style="width:8%">
+							<h:outputText value="#{row.dateFin}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column
+							headerText="#{sportifMsgs.sportif_data_table_list_column_observation}"
+							styleClass="textOnLeft">
+							<h:outputText value="#{row.observation}" style="width:100%" />
+						</p:column>
+
+						<p:column width="8%" style="text-align:center">
+							<p:commandButton id="editSituation" icon="ui-icon-pencil"
+								process="sportifDataTable"
+								actionListener="#{sportifManagerBean.editSituation(row)}"
+								update="@(.sportPanel)">
+								<f:param name="dossierEtudiantId"
+									value="#{sportifManagerBean.dossierEtudiantId}" />
+							</p:commandButton>
+							<pe:tooltip for="editSituation"
+								value="#{commonmsgs.bouton_update}" showEffect="fadeIn"
+								hideEffect="fadeIn" />
+							<h:outputText value="  " />
+							<p:commandButton id="removeSituation" icon="ui-icon-trash"
+								process="sportifDataTable"
+								actionListener="#{sportifManagerBean.removeSituation(row)}"
+								update="@(.sportPanel)">
+								<f:param name="dossierEtudiantId"
+									value="#{sportifManagerBean.dossierEtudiantId}" />
+								<f:param name="situationId"
+									value="#{sportifManagerBean.situationId}" />
+								<p:confirm header="Confirmation"
+									message="#{commonmsgs.msg_delete_confirmation}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+							<pe:tooltip for="removeSituation"
+								value="#{commonmsgs.bouton_supprimer}" showEffect="fadeIn"
+								hideEffect="fadeIn" />
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+
+				<br />
+				<br />
+				<p:fieldset id="itemSportData"
+					legend="#{sportifMsgs.sportif_edit_situation}"
+					styleClass="mesrsFieldset">
+					<p:panelGrid id="situationSport" styleClass="rowStyle">
+						<p:row>
+							<p:column style="width:120px">
+								<h:outputText value="#{sportifMsgs.sportif_type_sportif} *" />
+							</p:column>
+							<p:column style="width:300px">
+								<p:selectOneMenu id="discipline"
+									value="#{sportifManagerBean.selectedSituation.refCodeDisciplineSportive}"
+									valueChangeListener="#{sportifManagerBean.entityChanged}"
+									required="true"
+									requiredMessage="#{sportifMsgs.sportif_type_sportif_required}"
+									label="#{sportifMsgs.sportif_type_sportif}">
+
+									<f:selectItem
+										itemLabel="#{sportifMsgs.sportif_type_sportif_select}"
+										itemValue="" />
+									<f:selectItems
+										value="#{sportifManagerBean.listDisciplineSportive}" />
+									<f:param name="dossierEtudiantId"
+										value="#{sportifManagerBean.dossierEtudiantId}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{sportifMsgs.sportif_date_debut} *" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" validator="dateValidator"
+									binding="#{_firstDate}"
+									value="#{sportifManagerBean.selectedSituation.dateDebut}"
+									pattern="dd/MM/yyyy" required="true"
+									valueChangeListener="#{sportifManagerBean.entityChanged}"
+									requiredMessage="#{sportifMsgs.sportif_date_debut_required}">
+
+								</p:calendar>
+							</p:column>
+
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{sportifMsgs.sportif_date_fin}" />
+							</p:column>
+							<p:column>
+								<p:calendar navigator="true" validator="dateValidator"
+									binding="#{_secondDate}"
+									valueChangeListener="#{sportifManagerBean.entityChanged}"
+									value="#{sportifManagerBean.selectedSituation.dateFin}"
+									pattern="dd/MM/yyyy">
+									<f:attribute name="firstDate" value="#{_firstDate}" />
+								</p:calendar>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="#{sportifMsgs.sportif_observation}" />
+							</p:column>
+							<p:column>
+								<p:inputTextarea style="width:300px"
+									valueChangeListener="#{sportifManagerBean.entityChanged}"
+									value="#{sportifManagerBean.selectedSituation.observation}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br />
+					<br />
+					<p:panelGrid styleClass="rowStyle">
+						<p:row>
+							<p:column>
+								<p:commandButton id="saveSport" icon="ui-icon-disk"
+									value="#{commonmsgs.bouton_enregistrer}"
+									process="itemSportData"
+									onstart="PF('sportWidget').block()"
+									onsuccess="PF('sportWidget').unblock()"
+									actionListener="#{sportifManagerBean.save()}"
+									update="@(.sportPanel)">
+									<f:param name="dossierEtudiantId"
+										value="#{sportifManagerBean.dossierEtudiantId}" />
+									<f:param name="situationId"
+										value="#{sportifManagerBean.situationId}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton id="addSportSituation" icon="ui-icon-plusthick"
+									value="#{commonmsgs.bouton_nouveau}" process="@none"
+									disabled="#{sportifManagerBean.situationId == null}"
+									actionListener="#{sportifManagerBean.addSituation()}"
+									update="@(.sportPanel)">
+									<f:param name="dossierEtudiantId"
+										value="#{sportifManagerBean.dossierEtudiantId}" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+							<p:commandButton value="#{commonmsgs.bouton_retour}"
+								icon="ui-icon-arrowthick-1-w" action="#{dossierEtudiantBean.cancel}" immediate="true">
+							<f:param name="dossierEtudiantId" value="#{dossierEtudiantBean.dossierEtudiantId}" />
+			                </p:commandButton>
+			                </p:column>
+
+						</p:row>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</p:outputPanel>
+	</p:outputPanel>
+</ui:composition>

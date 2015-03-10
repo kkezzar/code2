@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-
+
+transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:eh="http://java.sun.com/jsf/composite/components">
+
+<ui:composition template="/templates/fullPageLayout.xhtml">
+
+	<!-- titre de la page -->
+	<ui:define name="pageTitleContent">
+		#{suiviMedicalMgs.pnl_enregistrer_visite_medical} 
+	</ui:define>
+
+	<!-- contenu de la page -->
+	<ui:define name="centerContent">
+	
+		<p:outputPanel id="pnl_Gerer">
+			<p:growl id="msgs" showDetail="true" autoUpdate="true" life="3000" />
+			<h:form id="form_visiteMedical_search">
+
+
+		<p:toolbar styleClass="toolBarMesrs">
+					<p:toolbarGroup align="left">
+						
+
+						
+					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:outputLabel value="#{commonmsgs.search_label_mots_cles}:   "></p:outputLabel>
+						<p:spacer width="10px"></p:spacer>
+						<p:inputText id="keyWordsID"
+							value="#{visiteMedicaleMBean.searchKeyWords}"
+							placeholder="#{commonmsgs.search_watermark_text_key_words}"
+							label="#{commonmsgs.search_label_mots_cles}" />
+
+						<p:separator />
+
+						<p:commandButton icon="ui-icon-search" update=":pnl_Gerer"
+							styleClass="ui-button-bleu"
+							process="form_visiteMedical_search"
+							onstart="PF('page').block()" onsuccess="PF('page').unblock()"
+							title="Rechercher"
+							actionListener="#{visiteMedicaleMBean.onSearch}"></p:commandButton>
+						<!--  </p:panelGrid> -->
+					</p:toolbarGroup>
+				</p:toolbar>
+
+
+
+		</h:form>
+			
+			<p:dataTable var="visite" value="#{visiteMedicaleMBean.listeVisiteMedicale}" id="visitesTable"
+						widgetVar="visitesTable" rowKey="#{visite.id}"
+					style="margin-top:5px;width:100%" resizableColumns="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					selectionMode="single"
+					columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+					rowIndexVar="rowIndex"
+						emptyMessage="#{suiviMedicalMgs.visite_medicale_datable_no_result}">
+                      <p:ajax event="rowSelect" immediate="true"
+						listener="#{visiteMedicaleMBean.onVisiteSelect}"
+						process="@this" onstart="PF('page').block()"
+						onsuccess="PF('page').unblock()" update=":pnl_detail" />
+
+						<f:facet name="header">
+							
+						</f:facet>
+						<p:column
+							headerText="#{suiviMedicalMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+                         <p:column headerText="#{suiviMedicalMgs.employe}">
+							<h:outputText value="#{visite.dossierEmployeDto.refIndividuDto.nomLatin} #{visite.dossierEmployeDto.refIndividuDto.prenomLatin}"  styleClass="value">
+						
+						</h:outputText>
+						</p:column>
+					  <p:column headerText="#{suiviMedicalMgs.date_demande}">
+							<h:outputText value="#{visite.dateDemande}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						
+						<p:column headerText="#{suiviMedicalMgs.date_convenue}">
+							<h:outputText value="#{visite.dateConvenue}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						</p:column>
+						<p:column headerText="#{suiviMedicalMgs.heure_convenue}">
+							<h:outputText value="#{visite.heureConvenue}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="HH:mm"/>
+						</h:outputText>
+						</p:column>
+						<p:column headerText="#{suiviMedicalMgs.objet}">
+							<h:outputText value="#{visite.objet}"  styleClass="value">
+						</h:outputText>
+						</p:column>
+						
+						
+					</p:dataTable>
+			<br></br>
+			<p:outputPanel id="pnl_detail">
+				<p:outputPanel id="pnl_Edit"
+					rendered="#{not empty visiteMedicaleMBean.visiteMedicaleDto}">
+
+					<h:form id="form_visite_medicale_gerer">
+						<p:panelGrid cellspacing="0" id="reponse_rdv_Pnl"
+							styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+							<p:row>
+								<p:column colspan="4" styleClass="title">
+									<h:outputText
+										value="#{suiviMedicalMgs.pnl_gerer_rdv_visite_medical}" />
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{suiviMedicalMgs.employe} " />
+								</p:column>
+								<p:column style="width:25%">
+									<p:commandLink onclick="PF('employeDetailDialog').show()"
+										rendered="#{visiteMedicaleMBean.visiteMedicaleDto.dossierEmployeDto!=null}"
+										immediate="true">
+										<h:outputText
+											value="#{visiteMedicaleMBean.visiteMedicaleDto.dossierEmployeDto.refIndividuDto.nomLatin} #{visiteMedicaleMBean.visiteMedicaleDto.dossierEmployeDto.refIndividuDto.prenomLatin}"
+											styleClass="value" />
+									</p:commandLink>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{suiviMedicalMgs.date_souhaitee} "
+										 />
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputText value="#{visiteMedicaleMBean.visiteMedicaleDto.dateRdv}"  styleClass="value">
+						       <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{suiviMedicalMgs.heure_souhaitee}" />
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputText value="#{visiteMedicaleMBean.visiteMedicaleDto.heureRdv}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="HH:mm"/>
+						</h:outputText>
+						</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel value="#{suiviMedicalMgs.objet} " />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{visiteMedicaleMBean.visiteMedicaleDto.objet}"  styleClass="value">
+						</h:outputText>
+								</p:column>
+							</p:row>
+								<p:row>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{suiviMedicalMgs.date_convenue}"
+										 />
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputText value="#{visiteMedicaleMBean.visiteMedicaleDto.dateConvenue}"  styleClass="value">
+						       <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputLabel value="#{suiviMedicalMgs.heure_convenue}" />
+								</p:column>
+								<p:column style="width:25%">
+									<h:outputText value="#{visiteMedicaleMBean.visiteMedicaleDto.heureConvenue}"  styleClass="value">
+						<f:convertDateTime type="date" pattern="HH:mm"/>
+						</h:outputText>
+						</p:column>
+						</p:row>
+							<p:row>
+								<p:column style="width:25%" >
+									<h:outputLabel value="#{suiviMedicalMgs.date_visite}"
+										styleClass="required" />
+								</p:column>
+								<p:column style="width:25%" >
+									<p:calendar id="dateVisite" navigator="true" required="true"
+										requiredMessage="#{suiviMedicalMgs.date_visite_required}"
+										value="#{visiteMedicaleMBean.visiteMedicaleDto.dateVisite}">
+									</p:calendar>
+								</p:column>
+								<p:column style="width:25%" >
+									<h:outputLabel value="#{suiviMedicalMgs.heure_visite}" styleClass="required"  />
+								</p:column>
+								<p:column style="width:25%" >
+									<p:calendar id="heureVisite" navigator="true" timeOnly="true"
+										pattern="HH:mm"
+										value="#{visiteMedicaleMBean.visiteMedicaleDto.heureVisite}"
+										title="#{suiviMedicalMgs.heure_visite}"
+										label="#{suiviMedicalMgs.heure_visite}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel value="#{suiviMedicalMgs.diagnostic}" styleClass="required" />
+								</p:column>
+
+								<p:column>
+									<p:inputTextarea id="diagnostic" styleClass="input-xlarge-px" required="true" requiredMessage="#{suiviMedicalMgs.diagnostic_required}"
+										value="#{visiteMedicaleMBean.visiteMedicaleDto.dignostic}">
+									</p:inputTextarea>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						
+						<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{suiviMedicalMgs.medicaments_title}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="medicament" value="#{visiteMedicaleMBean.listMedicaments}" id="medicamentsTable"
+						widgetVar="medicamentsTable" rowKey="#{medicament.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{suiviMedicalMgs.medicament_datable_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddVaccin" styleClass="ui-button-bleu" title="ajouter medicament" icon="ui-icon-plusthick"  
+										
+										process="@this medicamentsTable" 
+										ajax="true"
+										immediate="true" 
+										update="medicamentsTable @this"
+										action="#{visiteMedicaleMBean.addMedicament()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{suiviMedicalMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column
+							headerText="#{suiviMedicalMgs.medicament}">
+							<p:selectOneMenu style="width:100%" required="true" requiredMessage="#{suiviMedicalMgs.vaccin_required}"
+								value="#{medicament.nomenclatureDto.id}"
+								label="#{suiviMedicalMgs.medicament_select}">
+								<f:selectItem
+									itemLabel="#{suiviMedicalMgs.medicament_select}"
+									itemValue="" />
+								<f:selectItems value="#{visiteMedicaleMBean.listeNcmedicament}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column headerText="#{suiviMedicalMgs.posologie}">
+						 <p:inputText value="#{medicament.posologie}" required="true"  requiredMessage="#{suiviMedicalMgs.posologie_required}" style="width:100%">
+						 </p:inputText>	
+						</p:column>
+						<p:column headerText="#{suiviMedicalMgs.nb_jours}">
+							 <p:inputText value="#{medicament.nbJour}" required="true"  requiredMessage="#{suiviMedicalMgs.nb_jours_required}">
+						 </p:inputText>	
+						</p:column>
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveVaccin"  
+									action="#{visiteMedicaleMBean.removeMedicament()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="medicamentsTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{visiteMedicaleMBean.selectedMedicamentIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+		
+		
+		<p:panelGrid cellspacing="0"
+			styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border">
+			<p:row>
+				<p:column styleClass="title">
+					<h:outputText value="#{suiviMedicalMgs.examens_title}" />
+				</p:column>
+
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable var="examen" value="#{visiteMedicaleMBean.listExamens}" id="examensTable"
+						widgetVar="examensTable" rowKey="#{examen.id}"
+						style="margin-top:5px" resizableColumns="true" paginator="true"
+						rows="5" paginatorPosition="bottom" 
+						columnClasses="none,none,none,right,left,none, none, none,none,none,none"
+						rowIndexVar="rowIndex"
+						emptyMessage="#{suiviMedicalMgs.examen_datable_no_result}">
+
+						<f:facet name="header">
+							<p:toolbar>
+								<p:toolbarGroup align="left">
+								<p:commandButton id="btnAddExamen" styleClass="ui-button-bleu" title="ajouter examen" icon="ui-icon-plusthick"  
+										
+										process="@this examensTable" 
+										ajax="true"
+										immediate="true" 
+										update="examensTable @this"
+										action="#{visiteMedicaleMBean.addExamen()}">
+								</p:commandButton>
+									
+								</p:toolbarGroup>
+								<p:toolbarGroup align="right">
+
+
+								</p:toolbarGroup>
+							</p:toolbar>
+						</f:facet>
+						<p:column
+							headerText="#{suiviMedicalMgs.numero}"
+							style="width:2%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column
+							headerText="#{suiviMedicalMgs.examen}">
+							<p:selectOneMenu style="width:100%" required="true" requiredMessage="#{suiviMedicalMgs.examen_required}"
+								value="#{examen.nomenclatureDto.id}"
+								label="#{suiviMedicalMgs.examen_select}">
+								<f:selectItem
+									itemLabel="#{suiviMedicalMgs.examen_select}"
+									itemValue="" />
+								<f:selectItems value="#{visiteMedicaleMBean.listeNcExamen}" />
+
+							</p:selectOneMenu>
+						</p:column>
+						
+						
+						
+						<p:column style="width:8%">
+                       <p:commandButton id="btnRemoveExamen"  
+									action="#{visiteMedicaleMBean.removeExamen()}" 
+									icon="ui-icon-trash" 
+									ajax="true" 
+									update="examensTable"   
+									process="@this"
+									immediate="true">
+										<f:setPropertyActionListener target="#{visiteMedicaleMBean.selectedExamenIndex}" value="#{rowIndex}" />	
+								</p:commandButton>
+								</p:column>
+					</p:dataTable>
+				</p:column>
+
+			</p:row>
+			
+		</p:panelGrid>
+				<br></br>		
+						
+								<p:toolbar id="VisiteMedicaleToolBar" styleClass="toolBarMesrs">
+				<p:toolbarGroup>
+					<p:commandButton value="#{commonmsgs.bouton_enregistrer}" styleClass="ui-button-save"
+						id="savesBtn" icon="ui-icon-disk" update=":pnl_Gerer"
+						actionListener="#{visiteMedicaleMBean.onSave}">
+
+						
+					</p:commandButton>
+					<p:spacer width="10px"></p:spacer>
+					<p:commandButton id="btnShowDossierMedical" value="Consulter le dossier médical" 
+															title="consulter le dossier médical"
+															immediate="true"   
+															update=":dossierMedicalDialog"
+															ajax="true"
+															action="#{dossierMedicalMBean.onConsultDossierMedical()}"
+															oncomplete="PF('dossierMedicalDialog').show()">
+															<f:setPropertyActionListener target="#{dossierMedicalMBean.dossierEmployeDto}" value="#{visiteMedicaleMBean.visiteMedicaleDto.dossierEmployeDto}" />	
+													</p:commandButton>
+					
+					
+				</p:toolbarGroup>
+
+
+
+				<p:toolbarGroup align="right">
+					<p:commandButton value="#{commonmsgs.bouton_retour}"
+						immediate="true" process="@this" id="backBtn"
+						icon="ui-icon-arrowreturn-1-w" update=":pnl_Gerer"
+						actionListener="#{visiteMedicaleMBean.init()}">
+
+
+					</p:commandButton>
+				</p:toolbarGroup>
+			</p:toolbar>
+					</h:form>
+					<p:dialog position="center" appendTo="@(body)" header="Employé"
+						id="employeDetailDialog" widgetVar="employeDetailDialog"
+						modal="true" resizable="false">
+						<ui:include
+							src="/pages/administrative/dossierEmploye/DossierEmployeDetail.xhtml">
+							<ui:param name="dossierEmployeDtoParam"
+								value="#{visiteMedicaleMBean.visiteMedicaleDto.dossierEmployeDto}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+                  <p:dialog position="center" appendTo="@(body)" header="Dossier Médical" width="850px" style="font-size:11px"
+						id="dossierMedicalDialog" widgetVar="dossierMedicalDialog"
+						modal="true" resizable="false">
+						<ui:include
+						src="/pages/suivimedical/DossierMedical.xhtml" >
+						<ui:param name="dossierEmployeDtoParam"  value="#{dossierMedicalMBean.dossierEmployeDto}"></ui:param>
+						<ui:param name="rendredModifPhotoParam"  value="false"></ui:param>
+						<ui:param name="listAntecedents"  value="#{dossierMedicalMBean.listAntecedents}"></ui:param>
+						<ui:param name="listAllergies"  value="#{dossierMedicalMBean.listAllergies}"></ui:param>
+						<ui:param name="listPathologies"  value="#{dossierMedicalMBean.listPathologies}"></ui:param>
+						<ui:param name="listVaccins"  value="#{dossierMedicalMBean.listVaccins}"></ui:param>
+						<ui:param name="listVisites"  value="#{dossierMedicalMBean.listVisites}"></ui:param>
+						</ui:include>
+					</p:dialog>
+
+				</p:outputPanel>
+			</p:outputPanel>
+
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>
+</html>

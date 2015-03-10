@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>-->
+<h:head>
+	<title>MESRS REFERENTIEL AUTHENTIFICATION</title>
+	<link rel="shortcut icon" href="images/icons/favicon.ico"
+		type="image/x-icon" />
+	<script type="text/javascript"
+		src="#{facesContext.externalContext.request.contextPath}/js/calandar.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</h:head>
+<h:body style="
+margin: 0px;
+	
+	overflow: visible !important;
+	
+	">
+
+	<center>
+		<p:outputPanel style="text-align:center;margin-top:15%" layout="block">
+			<h:outputText value="#{commonmsgs.title}"
+				style="font-size:32px;white-space:nowrap;color:blue;display:block;font-weight:bold"></h:outputText>
+		</p:outputPanel>
+		<br></br>
+		<p:panel id="loginPnl"
+			header="#{authentificationmsgs.authentification_title}"
+			style="width: 400px; ">
+
+
+
+
+
+			<h:form id="loginFrm">
+				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<h:panelGrid columns="2" columnClasses="labelColumn4, labelColumn3 ">
+					<h:panelGroup>
+						<h:outputLabel
+							value="#{authentificationmsgs.authentification_user}"
+							style="font-size: 11px" />
+						<h:outputText value="*" styleClass="required-star-right" />
+					</h:panelGroup>
+					<p:inputText id="j_username" value="#{loginBean.userName}"
+						autocomplete="off" required="true"
+						label="#{authentificationmsgs.authentification_user}"
+						requiredMessage="#{authentificationmsgs.authentification_user_required}"
+						style="width: 200px">
+						<f:validateLength minimum="2" />
+					</p:inputText>
+					<h:panelGroup>
+						<h:outputLabel
+							value="#{authentificationmsgs.authentification_password}"
+							style="font-size: 11px" />
+						<h:outputText value="*" styleClass="required-star-right" />
+					</h:panelGroup>
+					<p:password id="j_password" value="#{loginBean.password}"
+						autocomplete="off" required="true"
+						label="#{authentificationmsgs.authentification_password}"
+						requiredMessage="#{authentificationmsgs.authentification_password_required}"
+						style="width: 200px" />
+					<h:outputLabel value="" />
+					<p:commandButton id="loginBtn" ajax="false" type="submit"
+						update="@form" value="#{commonmsgs.button_login}"
+						action="#{loginBean.doLogin}" styleClass="ui-priority-primary" />
+				</h:panelGrid>
+
+			</h:form>
+		</p:panel>
+		<p style="font-size: 10px">
+			Copyright 2014 <a href="https://www.mesrs.dz/"><strong>Ministère
+					de l'Enseignement Supérieur et de la Recherche Scientifique</strong></a>
+		</p>
+		<h:outputText style="font-size: 10px" value="#{commonmsgs.version} " />
+	</center>
+
+
+
+</h:body>
+</html>

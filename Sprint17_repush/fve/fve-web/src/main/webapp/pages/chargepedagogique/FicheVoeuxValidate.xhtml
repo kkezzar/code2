@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of"
+	xmlns:dm="http://java.sun.com/jsf/composite/components/habilitation"
+	xmlns:scol="http://java.sun.com/jsf/composite/components/scolarite"
+>
+<ui:composition template="/templates/fullPageLayout.xhtml">
+<ui:define name="title"></ui:define>
+	<ui:define name="pageTitleContent">
+		#{chargeMsgs.fiche_veoux_panel_page_validate_title}
+	</ui:define>
+<ui:define name="centerContent">
+
+<h:form id="mainForm">
+<h:panelGrid id="gridFichesVoeux" style="margin-bottom:5px; width:100%;">
+<p:row>
+<p:column>
+<p:panelGrid id="gridCriteriaSelection" style="margin-bottom:5px;width:100%;">
+					<p:row>
+	        		<p:column style="width:15%;text-align:right;" >
+	        		<h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_annee_academique}" />
+	        		</p:column>
+					<p:column>
+							   <p:selectOneMenu id="listAnneesID" 	value="#{ficheVoeuxValidate.ficheVoeuxBB.selectedIdYear}" style="width:150px" >
+												<f:selectItems value="#{ficheVoeuxValidate.ficheVoeuxBB.listYears}" var="y" 	itemLabel="#{y.label}" itemValue="#{y.value}"/>
+												<p:ajax listener="#{ficheVoeuxValidate.ficheVoeuxBB.handleYearChange}" 
+													event="valueChange" process="@this listPeriodesID" 
+													update="listPeriodesID fichesVoeuxDetails" 
+													onstart="PF('ajaxProgress1').block()"  oncomplete="PF('ajaxProgress1').unblock()"/>
+							</p:selectOneMenu>
+					</p:column>
+				
+					<p:column style="width:15%;text-align:right;" ><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periodicite}" /></p:column>
+					<p:column>
+							<p:selectOneMenu id="listPeriodiciteID" 	value="#{ficheVoeuxValidate.ficheVoeuxBB.selectedPeriodiciteCode}" style="width:150px" >
+										<f:selectItems value="#{ficheVoeuxValidate.ficheVoeuxBB.listPeriodicites}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+										<p:ajax listener="#{ficheVoeuxValidate.ficheVoeuxBB.handlePeriodiciteChange}" 	event="valueChange" process="@this listPeriodesID" 
+										update="listPeriodesID fichesVoeuxDetails" 
+											onstart="PF('ajaxProgress1').block()"  oncomplete="PF('ajaxProgress1').unblock()"/>
+							</p:selectOneMenu>
+					</p:column>
+				
+					<p:column style="width:15%;text-align:right;" ><h:outputLabel value="#{chargeMsgs.fiche_veoux_outputtext_label_periode}" /></p:column>
+					<p:column>
+							<p:selectOneMenu id="listPeriodesID" 	value="#{ficheVoeuxValidate.ficheVoeuxBB.selectedPeriodeFicheId}" style="width:150px" >
+										<f:selectItems value="#{ficheVoeuxValidate.ficheVoeuxBB.listPeriodesParPeriodicite}" var="p" 	itemLabel="#{p.label}" itemValue="#{p.value}" />
+										<p:ajax listener="#{ficheVoeuxValidate.ficheVoeuxBB.handlePeriodeChange}" 	event="valueChange" process="@this  listAnneesID listPeriodiciteID" 
+														update="fichesVoeuxDetails" 
+										onstart="PF('ajaxProgress1').block()"  oncomplete="PF('ajaxProgress1').unblock()"/>
+							</p:selectOneMenu>
+					</p:column>
+					</p:row>
+				
+</p:panelGrid>
+</p:column>
+</p:row>
+<p:row>
+<p:column>
+<p:outputPanel id='fichesVoeuxDetails'>
+				<p:dataTable id="fichesVoeuxDataTable" var="row"
+								value="#{ficheVoeuxValidate.ficheVoeuxBB.fichesVoeux}"
+								rowKey="#{row.id}"
+								emptyMessage="#{chargeMsgs.fiche_veoux_validate_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selection="#{ficheVoeuxValidate.ficheVoeuxBB.selectedFicheVoeux}"
+								selectionMode="single"
+								currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+        						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"	
+        						paginatorPosition="bottom"
+        						paginator="true" 
+								rows="10" 
+								>
+								<p:ajax event="rowSelect" listener="#{ficheVoeuxValidate.onFichesVoeuxRowSelect}"  	update="@([id$=cmpOutputPanel])"/>  
+								
+			    				<f:facet name="header">#{chargeMsgs.fiche_veoux_data_validate_table_list_header}</f:facet>  
+								<p:column	headerText="" style="width:20px" styleClass="center"> 	<h:outputText value="#{rowIndex+1}"/> </p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_data_table_column_enseignant}"> 	<h:outputText value="#{row.nomEnseignant} #{row.prenomEnseignant}" styleClass="center"/> </p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_data_table_column_annne}" style="width:100px"> 	<h:outputText value="#{row.premiereAnneeAcademique}/#{row.deuxiemeAnneeAcademique}" styleClass="center"/> </p:column>
+								<p:column	headerText="#{chargeMsgs.fiche_veoux_data_table_column_periode}" ><h:outputText value="#{row.libellePeriode}"/></p:column>
+								<p:column headerText="#{chargeMsgs.fiche_veoux_data_table_column_situation}" >	<h:outputText value="#{row.libelleSituation}" style="#{row.styleCssSituation}"/></p:column>
+								
+						</p:dataTable>
+			<p:outputPanel id="cmpOutputPanel" >  
+				<br />
+				<h:panelGrid id="gridFicheComponentId" rendered="#{ficheVoeuxValidate.ficheVoeuxBB.hasFicheVoeux}" style="width:100%;">
+					<scol:FicheVoeuxComponent managedBean="#{ficheVoeuxValidate.ficheVoeuxBB}" toEdit="true"></scol:FicheVoeuxComponent>
+				</h:panelGrid>
+			</p:outputPanel>
+<p:messages id="msgComponent" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+</p:outputPanel>	
+</p:column>
+</p:row>
+</h:panelGrid>
+</h:form>
+
+<pe:blockUI target=":mainForm" widgetVar="ajaxProgress1">
+        	<i class="fa fa-spinner fa-spin"></i>
+</pe:blockUI>
+<style type="text/css">
+                .ui-selectonemenu-label{
+                    width:100% !important;
+                }
+                .ui-selectonemenu{
+                    width:100% !important;
+                }
+</style>
+</ui:define>
+</ui:composition>
+</html>

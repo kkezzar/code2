@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+<p:dialog
+		header="#{dialogHeader}" id="#{dialogWidgetVar}" position="center"
+		widgetVar="#{dialogWidgetVar}" modal="true" showEffect="fade"
+		hideEffect="fade" resizable="true" width="850px" >
+		<p:outputPanel id="pnl-individu" style="width:800px">
+			<h:form id="form_individu">
+			
+			<p:panelGrid styleClass="ui-panelgrid-full-width  ui-panelgrid-form-no-border" id="searchPanel">
+				<p:row>
+
+					<p:column>
+						<p:outputLabel value="#{individumsgs.individu_nom_latin}"
+							 />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{individuCommonBean.individuSearchDto.nomLatin}" 
+							id="searchNom"
+							requiredMessage="#{individumsgs.individu_nom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:outputLabel value="#{individumsgs.individu_prenom_latin}"
+							 />
+					</p:column>
+					<p:column>
+						<p:inputText value="#{individuCommonBean.individuSearchDto.prenomLatin}" 
+							id="searchPrenom"
+							requiredMessage="#{individumsgs.individu_prenom_required}">
+							<f:validateLength minimum="2" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:commandButton value="#{commonmsgs.bouton_rechercher}" process=":form_individu"
+							id="searchBtn" onstart="PF('page').block()"
+							onsuccess="PF('page').unblock()" icon="ui-icon-search"
+							 update="individuDataTable"
+							actionListener="#{individuCommonBean.onSearchIndividu}">
+							</p:commandButton>						
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:dataTable id="individuDataTable" resizableColumns="true" 
+					value="#{individuCommonBean.individuModel}" var="current" rowKey="#{current.id}"
+					paginator="true" paginatorPosition="bottom" selectionMode="single"
+					emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+					currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  "
+					lazy="true">
+				<ui:insert name="ajaxRowSelect" >
+					</ui:insert>
+                   
+				<p:column styleClass="textOnLeft" sortBy="#{current.identifiant}"
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_identifiant}" />
+					</f:facet>
+					<h:outputText value="#{current.identifiant}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.nomLatin}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_nom_latin}" />
+					</f:facet>
+					<h:outputText value="#{current.nomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.prenomLatin}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_prenom_latin}" />
+					</f:facet>
+					<h:outputText value="#{current.prenomLatin}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.nomArabe}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_nom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{current.nomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.prenomArabe}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_prenom_arabe}" />
+					</f:facet>
+					<h:outputText value="#{current.prenomArabe}" />
+				</p:column>
+				<p:column styleClass="textOnLeft" sortBy="#{current.dateNaissance}" 
+					>
+					<f:facet name="header">
+						<h:outputText
+							value="#{individumsgs.individu_date_naissance}" />
+
+					</f:facet>
+					<h:outputText value="#{current.dateNaissance}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				
+			</p:dataTable>
+			</h:form>
+		</p:outputPanel>
+	</p:dialog>
+
+				</ui:composition>

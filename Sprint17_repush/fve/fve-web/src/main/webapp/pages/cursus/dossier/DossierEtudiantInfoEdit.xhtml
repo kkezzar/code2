@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:accordionPanel multiple="false" activeIndex="0" styleClass="infoEtudiantStyle">
+		 
+        <p:tab title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_identification_title}">
+        <p:panelGrid  styleClass="ui-panelgrid-full-width">
+        <p:row>
+          <p:column style="width:70%">
+            <ui:include src="/pages/cursus/dossier/DossierEtudiantIdentficationEdit.xhtml" />
+          </p:column>
+          <p:column style="width:30%">
+             <ui:include src="/pages/cursus/dossier/photo/PhotoEtudiantEdit.xhtml">
+             </ui:include>
+          </p:column>
+        </p:row>
+          </p:panelGrid>
+        </p:tab>
+       
+<!--          <p:tab title="#{dossierEtudiantMsgs.dossier_etudiant_tabView_pieces_constitutives_title}" disabled="#{dossierEtudiantBean.dossierEtudiantDto.id == null}"> -->
+<!--             <ui:include src="/pages/cursus/dossier/piece/PieceConstEdit.xhtml" /> -->
+<!--         </p:tab> -->
+       </p:accordionPanel>
+	
+	</ui:composition>

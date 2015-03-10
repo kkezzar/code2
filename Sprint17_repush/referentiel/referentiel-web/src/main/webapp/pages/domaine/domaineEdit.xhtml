@@ -1,0 +1,502 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:outputStylesheet library="./css" name="style.css" />
+<ui:composition template="/template/centertemplate.xhtml">
+	<ui:define name="main">
+
+		<p:panel header="#{commonmsgs.menu_habilitation_domaine_objet}"
+			style="border:0;" styleClass="domaineStyle">
+
+			<p:messages id="messages" showSummary="true" autoUpdate="true"
+				closable="true" />
+			<h:form id="domaineFromId" prependId="false">
+
+				<p:fieldset legend="#{habilitationmsgs.domaine_fieldset}">
+
+					<p:panelGrid id="parentGrid" styleClass="ui-panelgrid-full-width">
+						<p:row>
+							<p:column style="width:15%">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_idf_domaine_parent_label}" />
+							</p:column>
+							<p:column style="width:35%">
+								<h:outputText id="idfParent" style="font-weight: bold;"
+									value="#{domaineBckBean.refDomaineDto.idfDomaineParent}" />
+							</p:column>
+							<p:column style="width:15%">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_name_domaine_parent_label}" />
+							</p:column>
+							<p:column style="width:315%">
+								<h:outputText id="nomParent" style="font-weight: bold;"
+									value="#{domaineBckBean.refDomaineDto.nomDomaineParent}" />
+							</p:column>
+						</p:row>
+
+					</p:panelGrid>
+
+					<br></br>
+					<p:panel header="#{commonmsgs.menu_habilitation_domaine_objet}"
+						style="border:0;">
+						<p:panelGrid id="editDomaineDescription"
+							styleClass="ui-panelgrid-full-width">
+
+							<p:row>
+								<p:column style="width:10%">
+									<p:outputLabel
+										value="#{habilitationmsgs.domaine_identifiant_label}"
+										for="identifiant" />
+								</p:column>
+								<p:column style="width:40%">
+									<h:outputText id="identifiant"
+										value="#{domaineBckBean.refDomaineDto.identifiant}"
+										styleClass="value" />
+
+								</p:column>
+							</p:row>
+
+							<p:row>
+								<p:column style="width:10%">
+									<p:outputLabel value="#{habilitationmsgs.domaine_name_label}"
+										for="name" />
+								</p:column>
+								<p:column style="width:40%">
+									<p:inputText id="name" style="text-align: left;width:98%"
+										value="#{domaineBckBean.refDomaineDto.nom}"
+										label="#{habilitationmsgs.domaine_name_infobull}"
+										required="true"
+										valueChangeListener="#{domaineBckBean._nameDomaineChanged}"
+										disabled="false"
+										requiredMessage="#{habilitationmsgs.domaine_name_required}">
+
+									</p:inputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:10%">
+									<p:outputLabel
+										value="#{habilitationmsgs.domaine_name_arabe_label}"
+										for="nameArabe" />
+								</p:column>
+								<p:column style="width:40%">
+									<p:inputText id="nameArabe" style="text-align: left;width:98%"
+										value="#{domaineBckBean.refDomaineDto.nomArabe}"
+										label="#{habilitationmsgs.domaine_name_Arabe_infobull}"
+										required="true"
+										valueChangeListener="#{domaineBckBean._nameArabeDomaineChanged}"
+										disabled="false"
+										requiredMessage="#{habilitationmsgs.domaine_name_arabe_required}">
+
+									</p:inputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:10%">
+									<h:outputText value="#{habilitationmsgs.domaine_rang_label} " />
+								</p:column>
+								<p:column style="width:40%">
+									<h:outputText id="rang" style="text-align: left"
+										value="#{domaineBckBean.refDomaineDto.rang}              ">
+									</h:outputText>
+
+									<p:commandButton id="editRangDomaine" icon="ui-icon-suitcase"
+										process="@this"
+										label="#{habilitationmsgs.domaine_change_rang_label}">
+										<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+										<f:param name="subDomaine" value="false" />
+										<f:param name="searchValue"
+											value="#{domaineBckBean.searchValue}" />
+									</p:commandButton>
+									<p:tooltip for="editRangDomaine"
+										value="#{habilitationmsgs.msg_tooltip_change_rang}"
+										showEffect="slide" hideEffect="slide" />
+								</p:column>
+
+							</p:row>
+							<p:row>
+								<p:column style="width:10%">
+									<p:outputLabel
+										value="#{habilitationmsgs.domaine_help_context}"
+										for="nameContext" />
+								</p:column>
+								<p:column style="width:40%">
+									<p:inputText id="nameContext" style="text-align: left;width:98%"
+										value="#{domaineBckBean.refDomaineDto.helpTemplateName}"
+										valueChangeListener="#{domaineBckBean.onAnotherValueChange}"
+										disabled="false"/>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+
+						<p:overlayPanel id="overlayRangDomaine" for="editRangDomaine"
+							widgetVar="rangDlg" hideEffect="fade"
+							rendered="#{domaineBckBean.listDomaineDto!=null}">
+							<p:panel header="#{habilitationmsgs.domaine_gestion_rang}">
+								<p:orderList value="#{domaineBckBean.listDomaineDto}"
+									var="currentDomaine" styleClass="smallList"
+									rendered="#{domaineBckBean.listDomaineDto!=null}"
+									itemValue="#{currentDomaine}" converter="#{domaineBckBean}"
+									controlsLocation="right" id="orderListDomaine"
+									moveBottomLabel="#{commonmsgs.move_bottom_label}"
+									moveTopLabel="#{commonmsgs.move_top_label}"
+									moveDownLabel="#{commonmsgs.move_down_label}"
+									moveUpLabel="#{commonmsgs.move_up_label}">
+									<f:facet name="caption">
+										<h:outputText
+											value="#{habilitationmsgs.domaine_identifiant_table_label}   #{habilitationmsgs.domaine_name_table_label}" />
+									</f:facet>
+									<p:column style="width:40%">
+										<h:outputText dir="ltr" value="#{currentDomaine.identifiant}" />
+									</p:column>
+									<p:column style="width:60%">
+										<h:outputText dir="ltr" value="#{currentDomaine.nom}" />
+									</p:column>
+
+								</p:orderList>
+								<p:toolbar id="panelAction">
+									<p:toolbarGroup align="left">
+
+										<p:commandButton value="#{commonmsgs.button_save}"
+											icon="ui-icon-disk" onsuccess="PF('rangDlg').hide()"
+											update=":domaineFromId:rang"
+											action="#{domaineBckBean.saveDomaineRang}">
+											<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+											<f:param name="searchValue"
+												value="#{domaineBckBean.searchValue}" />
+											<f:param name="subDomaine" value="false" />
+											<f:param name="newDomaine" value="true" />
+										</p:commandButton>
+									</p:toolbarGroup>
+
+									<p:toolbarGroup align="right">
+										<p:commandButton value="#{commonmsgs.button_cancel}"
+											icon="ui-icon-arrowreturnthick-1-w" process="@this"
+											onsuccess="PF('rangDlg').hide()">
+											<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+											<f:param name="searchValue"
+												value="#{domaineBckBean.searchValue}" />
+										</p:commandButton>
+									</p:toolbarGroup>
+
+								</p:toolbar>
+
+
+							</p:panel>
+						</p:overlayPanel>
+
+					</p:panel>
+				</p:fieldset>
+				<br></br>
+				<br></br>
+				<p:fieldset
+					legend="#{habilitationmsgs.domaine_sub_domaine_fieldset}"
+					rendered="#{domaineBckBean.refDomaineDto.id!=null}">
+					<br />
+					<p:dataTable resizableColumns="true" id="subDomaineData"
+						value="#{domaineBckBean.listSubDomaineDto}" var="current"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="#{commonmsgs.warn_info_aucun_result}" rows="10"
+						selectionMode="single"
+						selection="#{domaineBckBean.selectedSubDomaine}"
+						rowKey="#{current.identifiant}"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+						<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+						<f:param name="subDomaine" value="true" />
+						<f:param name="searchValue" value="#{domaineBckBean.searchValue}" />
+						<p:ajax event="page" update="@this" />
+						<p:ajax event="rowSelect"
+							listener="#{domaineBckBean.onSubDomaineSelect}" update="@form" />
+						<p:ajax event="sort" update="@all" process="@form" />
+						<f:facet name="header">
+							<h:outputText
+								value="#{habilitationmsgs.domaine_sub_domaine_list}       " />
+							<p:commandButton id="addDomaineButton" icon="ui-icon-plusthick"
+								actionListener="#{domaineBckBean.addSubDomaine}" process="@this">
+								<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+								<f:param name="searchValue"
+									value="#{domaineBckBean.searchValue}" />
+							</p:commandButton>
+							<p:tooltip for="addDomaineButton"
+								value="#{habilitationmsgs.msg_tooltip_add_sub_domaine}"
+								showEffect="slide" hideEffect="slide" />
+							<p:commandButton id="editDomaineBtn" icon="ui-icon-pencil"
+								process="@this" oncomplete="PF('newDomaineDlg').show()"
+								update="subDomaineData"
+								rendered="#{domaineBckBean.refSubDomaineDto.id!=null}">
+								<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+								<f:param name="idfSubDomaine"
+									value="#{domaineBckBean.idfSubDomaine}" />
+								<f:param name="searchValue"
+									value="#{domaineBckBean.searchValue}" />
+							</p:commandButton>
+							<p:tooltip for="editDomaineBtn"
+								value="#{habilitationmsgs.msg_tooltip_edit_sub_domaine}"
+								showEffect="slide" hideEffect="slide" />
+							<p:column>
+								<p:commandButton id="_changeRangSubDomaine"
+									icon="ui-icon-suitcase" process="@this"
+									label="#{habilitationmsgs.domaine_change_rang_label}">
+									<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+									<f:param name="searchValue"
+										value="#{domaineBckBean.searchValue}" />
+								</p:commandButton>
+								<p:tooltip for="_changeRangSubDomaine"
+									value="#{habilitationmsgs.msg_tooltip_change_rang}"
+									showEffect="slide" hideEffect="slide" />
+							</p:column>
+							<p:column>
+								<p:commandButton id="removeDomaineBtn" icon="ui-icon-trash"
+									rendered="#{domaineBckBean.refSubDomaineDto.id!=null}"
+									process="subDomaineData"
+									actionListener="#{domaineBckBean.deleteSubDomaine}"
+									update="subDomaineData">
+									<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+									<f:param name="searchValue"
+										value="#{domaineBckBean.searchValue}" />
+									<f:param name="idfSubDomaine"
+										value="#{domaineBckBean.idfSubDomaine}" />
+									<f:param name="subDomaine" value="true" />
+
+									<p:confirm header="Confirmation"
+										message="#{commonmsgs.msg_delete_confirmation}"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:tooltip for="removeDomaineBtn"
+									value="#{habilitationmsgs.msg_tooltip_delete_sub_domaine}"
+									showEffect="slide" hideEffect="slide" />
+							</p:column>
+						</f:facet>
+						<p:column sortBy="#{current.identifiant}">
+							<f:facet name="header">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_identifiant_table_label}" />
+							</f:facet>
+							<h:outputText value="#{current.identifiant}" />
+						</p:column>
+						<p:column sortBy="#{current.nom}">
+							<f:facet name="header">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_name_table_label}" />
+							</f:facet>
+							<h:outputText value="#{current.nom}" />
+						</p:column>
+						<p:column sortBy="#{current.nomArabe}">
+							<f:facet name="header">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_name_arabe_table_label}" />
+							</f:facet>
+							<h:outputText value="#{current.nomArabe}" />
+						</p:column>
+						<p:column sortBy="#{current.rang}">
+							<f:facet name="header">
+								<h:outputText
+									value="#{habilitationmsgs.domaine_rang_table_label}" />
+							</f:facet>
+							<h:outputText value="#{current.rang}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:overlayPanel id="overlayRangSubDomaine"
+						for="subDomaineData:_changeRangSubDomaine"
+						widgetVar="rangSubDomaineDlg" hideEffect="fade"
+						rendered="#{domaineBckBean.listSubDomaineDto!=null}">
+						<p:panel header="#{habilitationmsgs.module_gestion_rang}">
+							<p:orderList value="#{domaineBckBean.listSubDomaineDto}"
+								var="currentDomaine" styleClass="smallList"
+								rendered="#{domaineBckBean.listSubDomaineDto!=null}"
+								itemValue="#{currentDomaine}" converter="#{domaineBckBean}"
+								controlsLocation="right" id="orderListSubDomaine"
+								moveBottomLabel="#{commonmsgs.move_bottom_label}"
+								moveTopLabel="#{commonmsgs.move_top_label}"
+								moveDownLabel="#{commonmsgs.move_down_label}"
+								moveUpLabel="#{commonmsgs.move_up_label}">
+								<f:facet name="caption">
+									<h:outputText
+										value="#{habilitationmsgs.domaine_identifiant_table_label}   #{habilitationmsgs.domaine_name_table_label}" />
+								</f:facet>
+								<p:column style="width:30%">
+									<h:outputText dir="ltr" value="#{currentDomaine.identifiant}" />
+								</p:column>
+								<p:column style="width:35%">
+									<h:outputText dir="ltr" value="#{currentDomaine.nom}" />
+								</p:column>
+								<p:column style="width:35%">
+									<h:outputText dir="ltr" value="#{currentDomaine.nomArabe}" />
+								</p:column>
+
+							</p:orderList>
+							<p:toolbar id="panelSubAction">
+								<p:toolbarGroup align="left">
+
+									<p:commandButton value="#{commonmsgs.button_save}"
+										icon="ui-icon-disk" onsuccess="PF('rangSubDomaineDlg').hide()"
+										update=":domaineFromId:subDomaineData"
+										actionListener="#{domaineBckBean.saveDomaineRang}">
+										<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+										<f:param name="searchValue"
+											value="#{domaineBckBean.searchValue}" />
+										<f:param name="subDomaine" value="true" />
+										<f:param name="newDomaine" value="true" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+								<p:toolbarGroup align="right">
+									<p:commandButton value="#{commonmsgs.button_cancel}"
+										icon="ui-icon-arrowreturnthick-1-w" process="@this"
+										onsuccess="PF('rangSubDomaineDlg').hide()">
+										<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+										<f:param name="subDomaine" value="true" />
+										<f:param name="newDomaine" value="true" />
+										<f:param name="searchValue"
+											value="#{domaineBckBean.searchValue}" />
+									</p:commandButton>
+								</p:toolbarGroup>
+
+							</p:toolbar>
+
+						</p:panel>
+					</p:overlayPanel>
+					<p:overlayPanel id="overlayNewDomaine"
+						for="subDomaineData:addDomaineButton" widgetVar="newDomaineDlg"
+						hideEffect="fade" dismissable="false"
+						rendered="#{domaineBckBean.subDomaine}">
+						<p:panelGrid id="_editSubDomaine" styleClass="noBorder1">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="2">
+										<h:outputText
+											value="#{habilitationmsgs.domaine_sub_domaine_label}" />
+									</p:column>
+								</p:row>
+
+							</f:facet>
+							<!-- 
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{habilitationmsgs.domaine_sub_domaine_identifiant_label} *" />
+								</p:column>
+								<p:column>
+									<p:inputText id="subIdentifiant" style="text-align: left;font-weight: bold"
+										value="#{domaineBckBean.refSubDomaineDto.identifiant}"
+										label="#{habilitationmsgs.domaine_sub_domaine_identifiant_infobull}"
+										disabled="true" styleClass="noprocess"
+										
+										valueChangeListener="#{domaineBckBean.idfSubDomaineChanged}"
+										requiredMessage="#{habilitationmsgs.domaine_sub_domaine_identifiant_required}">
+
+									</p:inputText>
+								</p:column>
+							</p:row>
+							 -->
+
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{habilitationmsgs.domaine_sub_domaine_name_label} *" />
+								</p:column>
+								<p:column>
+									<p:inputText id="subName" style="text-align: left"
+										value="#{domaineBckBean.refSubDomaineDto.nom}"
+										label="#{habilitationmsgs.domaine_sub_domaine_name_infobull}"
+										disabled="false" styleClass="noprocess"
+										required="#{not empty param[saveSubDomaine.clientId]}"
+										valueChangeListener="#{domaineBckBean.nameSubDomaineChanged}"
+										requiredMessage="#{habilitationmsgs.domaine_sub_domaine_name_required}">
+									</p:inputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputText
+										value="#{habilitationmsgs.domaine_sub_domaine_name_arabe_label} *" />
+								</p:column>
+								<p:column>
+									<p:inputText id="subNameArabe" style="text-align: left"
+										value="#{domaineBckBean.refSubDomaineDto.nomArabe}"
+										label="#{habilitationmsgs.domaine_sub_domaine_name_arabe_infobull}"
+										disabled="false" styleClass="noprocess"
+										required="#{not empty param[saveSubDomaine.clientId]}"
+										valueChangeListener="#{domaineBckBean.nameArabeSubDomaineChanged}"
+										requiredMessage="#{habilitationmsgs.domaine_sub_domaine_name_arabe_required}">
+									</p:inputText>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						<br />
+						<p:toolbar id="domaineAction">
+							<p:toolbarGroup align="left">
+
+								<p:commandButton value="#{commonmsgs.button_save}"
+									icon="ui-icon-disk" onsuccess="PF('newDomaineDlg').hide()"
+									update=":domaineFromId" binding="#{saveSubDomaine}"
+									action="#{domaineBckBean.saveSubDomaine()}">
+									<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+									<f:param name="searchValue"
+										value="#{domaineBckBean.searchValue}" />
+									<f:param name="subDomaine" value="true" />
+									<f:param name="newDomaine" value="true" />
+									<f:param name="idfSubDomaine"
+										value="#{domaineBckBean.idfSubDomaine}" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+							<p:toolbarGroup align="right">
+								<p:commandButton value="#{commonmsgs.button_cancel}"
+									icon="ui-icon-arrowreturnthick-1-w" process="@this"
+									onsuccess="PF('newDomaineDlg').hide()">
+									<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+									<f:param name="idfSubDomaine"
+										value="#{domaineBckBean.idfSubDomaine}" />
+									<f:param name="searchValue"
+										value="#{domaineBckBean.searchValue}" />
+									<f:param name="subDomaine" value="true" />
+									<f:param name="newDomaine" value="true" />
+								</p:commandButton>
+							</p:toolbarGroup>
+
+						</p:toolbar>
+
+					</p:overlayPanel>
+				</p:fieldset>
+				<br />
+				<br />
+				<p:toolbar id="footerDomaine">
+					<p:toolbarGroup align="left">
+
+						<p:commandButton value="#{commonmsgs.button_save}"
+							icon="ui-icon-disk" process="@(.domaineStyle)"
+							update="@(.domaineStyle)"
+							actionListener="#{domaineBckBean.saveDomaine}">
+							<f:param name="idfd" value="#{domaineBckBean.idfd}" />
+							<f:param name="subDomaine" value="true" />
+							<f:param name="idfSubDomaine"
+								value="#{domaineBckBean.idfSubDomaine}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+					<p:toolbarGroup align="right">
+						<p:commandButton value="#{commonmsgs.button_return}"
+							icon="ui-icon-arrowreturnthick-1-w" process="@none"
+							immediate="true" action="#{domaineBckBean.back}" ajax="false">
+							<f:param name="searchValue" value="#{domaineBckBean.searchValue}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+
+				</p:toolbar>
+
+
+
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

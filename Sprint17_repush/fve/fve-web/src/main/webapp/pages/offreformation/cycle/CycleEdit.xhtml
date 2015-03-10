@@ -1,0 +1,355 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/fullPageLayout.xhtml"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:of="http://java.sun.com/jsf/composite/components/of">
+<ui:define name="title">#{cycleMsgs.cycle_panel_page_title}</ui:define>
+<!-- TITRE PAGE -->
+<ui:define name="pageTitleContent">#{cycleMsgs.cycle_panel_page_title}</ui:define>
+<ui:define name="centerContent">
+<h:form id="formCycle">
+<p:outputPanel id="mainOutputPanel">
+<h:panelGrid style="margin:10px;width:100%;">
+	<p:row>
+	<p:column>
+					<p:panelGrid id="gridTypeFormationSelection" style="width:100%;margin-bottom:8px;">
+					<p:row>
+					<p:column style="width:150px;"><h:outputLabel value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_type_formation_label}" /></p:column>
+					<p:column><p:selectOneMenu id="listTypesFormationFilterID" 	value="#{cycleBB.typeFormationCycleCode}" required="true" requiredMessage="#{cycleMsgs.cycle_message_type_formation_required}">
+										<f:selectItems value="#{cycleBB.listTypesFormation}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+										<p:ajax listener="#{cycleBB.handleTypesFormationFilterChange}" 	event="valueChange" process="@this" update="cyclesDataTable cycleDetailOutputPanel"
+										onstart="PF('blockUIWidget1').block()" oncomplete="PF('blockUIWidget1').unblock()"/>
+					</p:selectOneMenu>
+					</p:column>
+					</p:row>
+					</p:panelGrid>
+   </p:column>
+   </p:row>
+	<p:row>
+	
+	<p:column style="width:30%;">
+					<p:dataTable id="cyclesDataTable" var="row"
+								value="#{cycleBB.listCycles}"
+								rowKey="#{row.id}"
+								emptyMessage="#{cycleMsgs.cycle_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								selection="#{cycleBB.selectedCycle}"
+								style="width:100%;margin-bottom:8px;">
+								
+								<p:ajax event="rowSelect" listener="#{cycleBB.onCycleRowSelect}"  	update=":formCycle:cycleDetailOutputPanel"
+								onstart="PF('blockUIWidget2').block()" oncomplete="PF('blockUIWidget2').unblock()"/>  
+			    				<f:facet name="header">#{cycleMsgs.cycle_data_table_list_header}</f:facet>  
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_rang}" style="text-align:center;width:30px"> 	<h:outputText value="#{row.rang}" styleClass="center"/> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_code}" style="text-align:center;;width:50px;"><h:outputText value="#{row.code}"  style="align:center;"/></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" style="text-align:center;">	<h:outputText value="#{row.libelleLongLt}" style="float:left;"/></p:column>
+						</p:dataTable>
+	</p:column>
+	<p:column>
+		<p:outputPanel id="cycleDetailOutputPanel" style="width:100%;margin:0px;">
+			<p:panel id="fsCycleDetail"  header="#{cycleBB.selectedDetailCycleTitle}"  rendered="#{cycleBB.showCycleDetails}" style="width:100%;margin-bottom:8px;">
+			<p:tabView id="tvCycleDetails" style="padding:0px">
+				<p:tab title="#{cycleMsgs.cycle_detail_tabview_descriptif}">	
+					 	<p:panelGrid  id="pgCycleDescriptif" rendered="#{not empty cycleBB.selectedCycle}" style="width:100%;">
+						<p:row>
+		          		<p:column  style="width:150px;"><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_type_passage_label} " /></p:column>
+				        <p:column><p:selectOneMenu id="listTypesPassageID" 	value="#{cycleBB.selectedCycle.refCodeTypePassage}">
+										<f:selectItems value="#{cycleBB.listTypesPassage}" var="t2" 	itemLabel="#{t2.label}" itemValue="#{t2.value}" />
+						</p:selectOneMenu> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_code_label} " /></p:column>
+				        <p:column><p:inputText id="cycleCodeID" value="#{cycleBB.selectedCycle.code}" maxlength="5" style="width:100px;" required="true" requiredMessage="#{cycleMsgs.cycle_message_code_required}"/></p:column>
+				        </p:row> 
+				         
+				         <p:row>
+				         <p:column><h:outputLabel for="rangCycleId" value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_rang_label}" /></p:column>
+        				<p:column><p:spinner id="rangCycleId" value="#{cycleBB.selectedCycle.rang}" min="1" max="10" required="true" requiredMessage="#{cycleMsgs.cycle_message_rang_required}"/></p:column>
+				      	</p:row> 
+				      	
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_fr_label} " /></p:column>
+				        <p:column><p:inputText id="cycleLibelleLongFrID" value="#{cycleBB.selectedCycle.libelleLongLt}" maxlength="150" style="width:60%;" required="true" requiredMessage="#{cycleMsgs.cycle_message_libelle_long_fr_required}"/></p:column> 
+				        </p:row>
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_long_ar_label} " /></p:column>
+				        <p:column><p:inputText id="cycleLibelleLongArID" value="#{cycleBB.selectedCycle.libelleLongAr}" maxlength="150" dir="rtl" style="width:60%;"/> </p:column>
+				         </p:row>
+				          
+				         <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_court_fr_label} " /></p:column>
+				        <p:column><p:inputText id="cycleLibelleCourtFrID" value="#{cycleBB.selectedCycle.libelleCourtLt}" maxlength="50"/> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+		          		<p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_libelle_court_ar_label} " /></p:column>
+				        <p:column> <p:inputText id="cycleLibelleCourtArID" value="#{cycleBB.selectedCycle.libelleCourtAr}" maxlength="50" dir="rtl"/> </p:column>
+				        </p:row>
+				        
+				        <p:row>
+				        <p:column><h:outputText value="#{cycleMsgs.cycle_panelgrid_detail_inputtext_statut_label} " /></p:column>
+				        <p:column><p:selectBooleanCheckbox value="#{cycleBB.selectedCycle.statut}" /></p:column>
+				         </p:row>
+				         
+		                </p:panelGrid>
+                </p:tab>
+                <p:tab title="#{cycleMsgs.cycle_detail_tabview_niveaux}" disabled="#{not cycleBB.toEditCycle}">
+						<p:dataTable id="levelsDataTable" var="row"
+								value="#{cycleBB.listLevelsCycle}"
+								rowKey="#{row.code}"
+								emptyMessage="#{cycleMsgs.level_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single">
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_rang}" style="text-align:center;width:30px"><h:outputText value="#{row.rang}" /> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_data_table_column_header_code}" style="text-align:center;width:50px"><h:outputText value="#{row.code}" /></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" style="text-align:center;">	<h:outputText value="#{row.libelleLongLt}" style="float:left;"/></p:column>
+						</p:dataTable>
+                </p:tab>
+                <p:tab title="#{cycleMsgs.cycle_detail_tabview_diplomes}" disabled="#{not cycleBB.toEditCycle}">
+                		<p:panel header="#{cycleMsgs.cycle_detail_tabview_diplomes_panel_diplomes_in}" style="width:100%;margin-bottom:8px;">
+                		<p:toolbar style="width:100%;margin-bottom:8px;">
+						<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOneDiplomeIn" 
+									action="#{cycleBB.prepareAddCycleDiplome()}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true" 
+									update=":dlgDiplomeId"
+									oncomplete="PF('dlgAddDiplome').show();">
+									<f:setPropertyActionListener target="#{cycleBB.sensIsIn}" value="true" />
+							</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>	
+                		<p:dataTable id="diplomesInDataTable" var="row"
+								value="#{cycleBB.selectedCycleDiplomesIn}"
+								rowKey="#{row.id}"
+								emptyMessage="#{cycleMsgs.cycle_diplomes_in_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="width:100%;margin-bottom:8px;">
+								<p:column	style="text-align:center;width:30px"><h:outputText value="#{rowIndex+1}" /> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_diplomes_in_data_table_column_code}" style="text-align:center;width:80px"><h:outputText value="#{row.diplomeCode}" /></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" style="text-align:center;">	<h:outputText value="#{row.diplomeLibelle}" style="float:left;"/></p:column>
+								<p:column style="width:32px" >
+										<p:commandButton id="editDiplomeInButtonID" 	 
+ 														icon="ui-icon-pencil" 
+														action="#{cycleBB.prepareEditCycleDiplome(row)}" 
+														process="@this"	
+														oncomplete="PF('dlgAddDiplome').show();"
+														update=":dlgDiplomeId">
+														<f:setPropertyActionListener target="#{cycleBB.selectedCycleDiplomesInId}" value="#{row.id}" />										
+										</p:commandButton>
+      							</p:column>
+      							<p:column style="width:32px" >
+      									  <p:commandButton id="btnRemoveDiplomeIn"  
+														action="#{cycleBB.removeCycleDiplome()}" 
+											  		 	icon="ui-icon-trash" 
+														ajax="true" 
+														update="diplomesInDataTable"   
+														process="@this">
+													<p:confirm		header="#{cycleMsgsperiod_diplome_message_remove_confirm_title}" 
+																			message="#{cycleMsgs.period_diplome_message_remove_confirm_msg}" 	icon="ui-icon-alert" />
+													<f:setPropertyActionListener target="#{cycleBB.selectedCycleDiplomesInId}" value="#{row.id}" />
+													<f:setPropertyActionListener target="#{cycleBB.sensIsIn}" value="true" />
+											</p:commandButton>
+								</p:column>
+						</p:dataTable >
+                		</p:panel>
+	
+                		<p:panel header="#{cycleMsgs.cycle_detail_tabview_diplomes_panel_diplome_out}" style="width:100%;margin-bottom:8px;">
+                		<p:toolbar style="width:100%;margin-bottom:8px;">
+						<p:toolbarGroup align="right">
+						<p:commandButton id="btnAddOneDiplomeOut" 
+									action="#{cycleBB.prepareAddCycleDiplome}"  
+									icon="ui-icon-plusthick"  
+									process="@this" 
+									ajax="true" 
+									update=":dlgDiplomeId"
+									oncomplete="PF('dlgAddDiplome').show();">
+									<f:setPropertyActionListener target="#{cycleBB.sensIsIn}" value="false" />
+							</p:commandButton>
+							</p:toolbarGroup>
+						</p:toolbar>	
+                		<p:dataTable id="diplomesOutDataTable" var="row"
+								value="#{cycleBB.selectedCycleDiplomeOut}"
+								rowKey="#{row.id}"
+								emptyMessage="#{cycleMsgs.cycle_diplomes_out_data_table_list_empty}"
+								rowIndexVar="rowIndex" 
+								selectionMode="single"
+								style="width:100%;margin-bottom:8px;">
+								<p:column	style="text-align:center;width:30px" headerText="#{cycleMsgs.cycle_diplomes_in_data_table_column_rang}"><h:outputText value="#{row.rang}" /> </p:column>
+								<p:column	headerText="#{cycleMsgs.cycle_diplomes_in_data_table_column_code}" style="text-align:center;width:80px" sortBy="#{row.diplomeCode}"><h:outputText value="#{row.diplomeCode}" /></p:column>
+								<p:column headerText="#{cycleMsgs.cycle_data_table_column_header_libelle_long_lt}" style="text-align:center;" sortBy="#{row.diplomeLibelle}">	<h:outputText value="#{row.diplomeLibelle}" style="float:left;"/></p:column>
+								<p:column style="width:32px" >
+										<p:commandButton id="editDiplomeOutButtonID" 	 
+ 														icon="ui-icon-pencil" 
+														action="#{cycleBB.prepareEditCycleDiplome(row)}" 
+														process="@this"	
+														oncomplete="PF('dlgAddDiplome').show();"
+														update=":dlgDiplomeId">
+														<f:setPropertyActionListener target="#{cycleBB.selectedCycleDiplomesOutId}" value="#{row.id}" />										
+										</p:commandButton>
+      							</p:column>
+      							<p:column style="width:32px" >
+      									  <p:commandButton id="btnRemoveDiplomeOut"  
+														action="#{cycleBB.removeCycleDiplome()}" 
+											  		 	icon="ui-icon-trash" 
+														ajax="true" 
+														update="diplomesOutDataTable"   
+														process="@this">
+													<p:confirm		header="#{cycleMsgsperiod_diplome_message_remove_confirm_title}" 
+																			message="#{cycleMsgs.period_diplome_message_remove_confirm_msg}" 	icon="ui-icon-alert" />
+													<f:setPropertyActionListener target="#{cycleBB.selectedCycleDiplomesOutId}" value="#{row.id}" />
+													<f:setPropertyActionListener target="#{cycleBB.sensIsIn}" value="false" />
+											</p:commandButton>
+								</p:column>
+						</p:dataTable >
+					
+                		</p:panel>
+                </p:tab>
+                </p:tabView>
+			</p:panel>
+			
+				<p:toolbar id="cycleToolBar" styleClass="toolBarMesrs" style="width:100%;margin:0;">
+				<p:toolbarGroup align="left">
+						<p:commandButton id="btnAddCycle" 
+							value="#{cycleMsgs.cycle_bouton_ajouter_libelle}" 
+							action="#{cycleBB.addCycle()}"  
+							icon="ui-icon-plusthick"  
+							process="@this" ajax="true"
+							update=":formCycle:cycleDetailOutputPanel" 
+							onstart="PF('blockUIWidget3').block()" oncomplete="PF('blockUIWidget3').unblock()">
+						</p:commandButton>
+				</p:toolbarGroup>
+				<p:toolbarGroup rendered="#{cycleBB.showCycleDetails}">
+					<p:separator />
+						<p:commandButton id="btnRemoveCycle" 
+							value="#{cycleMsgs.cycle_bouton_supprimer_libelle}" 
+							action="#{cycleBB.removeCycle()}"  
+							icon="ui-icon-trash"   
+							process="@this cyclesDataTable" ajax="true" 
+							update="@form" 
+							onstart="PF('blockUIWidget3').block()" oncomplete="PF('blockUIWidget3').unblock()">
+							<p:confirm		header="#{cycleMsgs.period_message_remove_confirm_title}"	 message="#{cycleMsgs.cycle_message_remove_confirm_msg}"	icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:separator />
+				</p:toolbarGroup>
+				<p:toolbarGroup>
+				<p:commandButton id="btnSaveCycle" 
+							value="#{cycleMsgs.cycle_bouton_enregistrer_libelle}" 
+							action="#{cycleBB.saveCycle()}"  icon="ui-icon-disk"  
+							process="@this formCycle:cycleDetailOutputPanel" ajax="true" 
+							update="@form" 
+							onstart="PF('blockUIWidget2').block()" oncomplete="PF('blockUIWidget2').unblock()" 
+							rendered="#{cycleBB.showCycleDetails}">
+						</p:commandButton>
+				</p:toolbarGroup>
+				</p:toolbar>
+	</p:outputPanel>
+	</p:column>
+	</p:row>
+	<p:row>
+	<p:column>
+	<p:messages id="msg" showDetail="true" showSummary="false" autoUpdate="true" closable="true"/>
+	</p:column>
+	</p:row>
+	</h:panelGrid>
+	</p:outputPanel>
+	</h:form>
+	
+	<p:dialog id="dlgDiplomeId"  widgetVar="dlgAddDiplome"  appendTo="@(body)" modal="true" header="#{cycleBB.dialogDiplomeTitle}" resizable="false">  	
+	<h:form id="dlgForm" style="font-size:11px">
+	<p:messages id="messagesDlgAddDiplome" showDetail="true" autoUpdate="true" closable="true"  showSummary="false"/>
+	
+	<p:panelGrid  id="gridDialog" style="margin-bottom:8px;">
+	<p:row>
+	<p:column style="width:130px;"><h:outputLabel value="#{cycleMsgs.cycle_diplomes_dialog_grid_niveau_diplome_column}"></h:outputLabel></p:column>
+	<p:column  style="width:150px;">
+					<p:selectOneMenu id="listNiveauxDiplomesID" 	value="#{cycleBB.selectedNiveauDiplomeId}"  style="width:250px;"
+														 required="true" requiredMessage="#{cycleMsgs.cycle_diplome_message_niveau_required}">
+										<f:selectItems value="#{cycleBB.listNiveauxDiplomes}" var="t" 	itemLabel="#{t.label}" itemValue="#{t.value}" />
+										<p:ajax listener="#{cycleBB.handleNiveauxDiplomesChange}" 	event="valueChange" process="@this" update="dlgForm:listTypesDiplomesId"/>
+					</p:selectOneMenu>
+	</p:column>
+	</p:row>
+	
+	<p:row>
+	<p:column><h:outputLabel value="#{cycleMsgs.cycle_diplomes_dialog_grid_type_diplome_column}"></h:outputLabel></p:column>
+	<p:column>
+					<p:selectOneMenu id="listTypesDiplomesId" value="#{cycleBB.selectedTypeDiplomeId}" style="width:250px;" required="true"
+					requiredMessage="#{cycleMsgs.cycle_diplome_message_type_diplome_required}">
+										<f:selectItems value="#{cycleBB.listTypesDiplomes}" var ="d" itemValue="#{d.value}"  itemLabel="#{d.label}"/>
+					</p:selectOneMenu>
+	</p:column>
+	</p:row>
+	
+	<p:row rendered="#{cycleBB.selectedSens eq 'OUT'}">
+	<p:column><h:outputLabel value="#{cycleMsgs.cycle_diplomes_dialog_grid_rang_diplome_column}"></h:outputLabel></p:column>
+	<p:column>
+					<p:spinner id="basic" value="#{cycleBB.selectedRang}" min="1" max="2"/>
+	</p:column>
+	</p:row>
+	</p:panelGrid>
+	
+	<p:toolbar style="margin-bottom:8px;">
+	<p:toolbarGroup>
+			<p:commandButton id="btnHideAddServiceFaitDialogID" value="#{cycleMsgs.cycle_diplomes_dialog_button_fermer}" 	
+												 type="button" onclick="PF('dlgAddDiplome').hide();"  icon="ui-icon-close">
+			</p:commandButton>
+	</p:toolbarGroup>
+	<p:toolbarGroup align="right" >
+			<p:commandButton id="btnAddDiplome" 
+							action="#{cycleBB.saveCycleDiplome()}"  
+							icon="ui-icon-plusthick"  
+							value = "#{cycleMsgs.cycle_diplomes_dialog_button_ajouter}"
+							process="@this :dlgForm" 
+							ajax="true" 
+							update=":formCycle:tvCycleDetails:diplomesInDataTable  :formCycle:tvCycleDetails:diplomesOutDataTable" 
+							rendered="#{not cycleBB.addOrEditDialog}"
+							oncomplete="handleUpdateCycleDiplomeRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	
+	<p:toolbarGroup align="right">
+			<p:commandButton id="btnUpdateCycleDomaine" 
+							action="#{cycleBB.saveCycleDiplome()}"  
+							value = "#{chargeMsgs.fiche_veoux_component_bouton_update_voeu_ligne_dlg_libelle}"
+							process="@this :dlgForm" 
+							ajax="true" 
+							update=":formCycle:tvCycleDetails:diplomesInDataTable :formCycle:tvCycleDetails:diplomesOutDataTable"  
+							rendered="#{cycleBB.addOrEditDialog}"
+							oncomplete="handleUpdateServiceFaitRequest(xhr, status, args)">
+				</p:commandButton>
+	</p:toolbarGroup>
+	
+	</p:toolbar>
+	</h:form>
+	<script type="text/javascript">
+   								 function handleUpdateCycleDiplomeRequest(xhr, status, args) {
+	       									 if(args.validationFailed || !args.isValid) {
+	            							PF('dlgAddDiplome').jq.effect("shake", {times:5}, 100);
+	       							 }
+	        						else {
+	           			 					PF('dlgAddDiplome').hide();
+	       							 }
+    							}
+	</script>
+	</p:dialog>
+	
+	<pe:blockUI target="formCycle" widgetVar="blockUIWidget1">
+        					<i class="fa fa-spinner fa-spin"></i>
+    </pe:blockUI>
+    <pe:blockUI target="formCycle" widgetVar="blockUIWidget2">
+        					<i class="fa fa-spinner fa-spin"></i>
+    </pe:blockUI>
+    <pe:blockUI target="formCycle" widgetVar="blockUIWidget3">
+        					<i class="fa fa-spinner fa-spin"></i>
+    </pe:blockUI>
+	</ui:define>
+</ui:composition>

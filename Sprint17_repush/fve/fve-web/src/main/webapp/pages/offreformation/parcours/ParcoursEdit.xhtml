@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"	
+>
+	
+	
+	<f:metadata>
+		<f:event type="preRenderView"
+			listener="#{parcoursEditBB.initParcours(parcoursId)}" />
+	</f:metadata>
+
+	<h:form id="ueDetailForm">
+
+		<p:panel id="pnl_l1icence" rendered="#{parcoursEditBB.cycleL}">
+			<p:fieldset id="fldst_s1"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s1}">
+				<f:subview id="sbvw_s1">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s1)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s1}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s2"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s2}">
+				<f:subview id="sbvw_s2">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s2)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s2}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s3"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s3}">
+				<f:subview id="sbvw_s3">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s3)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s3}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s4"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s4}">
+				<f:subview id="sbvw_s4">
+
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s4)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s4}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s5"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s5}">
+				<f:subview id="sbvw_s5">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s5)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s5}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s6"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s6}">
+				<f:subview id="sbvw_s6">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s6)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s6}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+		</p:panel>
+
+		<p:panel id="pnl_master" rendered="#{parcoursEditBB.cycleM}">
+			<p:fieldset id="fldst_s7"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s7}">
+				<f:subview id="sbvw_s7">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s7)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s7}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s8"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s8}">
+				<f:subview id="sbvw_s8">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s8)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s8}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s9"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s9}">
+				<f:subview id="sbvw_s9">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s9)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s9}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s10"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s10}">
+				<f:subview id="sbvw_s10">
+
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s10)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s10}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+		</p:panel>
+
+
+		<p:panel id="pnl_doctor" rendered="#{parcoursEditBB.cycleD}">
+			<p:fieldset id="fldst_s11"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s11}">
+				<f:subview id="sbvw_s11">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s11)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s11}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s12"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s12}">
+				<f:subview id="sbvw_s12">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s12)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s12}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+
+			<p:fieldset id="fldst_s13"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s13}">
+				<f:subview id="sbvw_s13">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s13)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s13}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s14"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s14}">
+				<f:subview id="sbvw_s14">
+
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s14)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s14}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s15"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s15}">
+				<f:subview id="sbvw_s15">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s15)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s15}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+			<p:fieldset id="fldst_s16"
+				legend="#{ofmsgs.offre_formation_parcours_edit_s16}">
+				<f:subview id="sbvw_s16">
+					<ui:include
+						src="/pages/offreformation/parcours/RepatitionUeSemestreEdit.xhtml">
+						<ui:param name="repartitions"
+							value="#{parcoursEditBB.getRepartition(parcoursEditBB.s16)}" />
+						<ui:param name="refCodeSemestre" value="#{parcoursEditBB.s16}" />
+					</ui:include>
+				</f:subview>
+			</p:fieldset>
+		</p:panel>
+
+	</h:form>
+
+</ui:composition>

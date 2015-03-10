@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"	
+	>
+
+	<p:commandButton value="#{commonmsgs.bouton_nouveau}"
+		actionListener="#{parcoursEditBB.AddNewRepartition}"
+		update="dtTbl_repartition" icon="ui-icon-extlink"
+		immediate="true"
+		style="margin-bottom:10px">
+		<f:param name="ofId" value="#{parcoursEditBB.parcours.id}" />
+		<f:param name="parcoursId" value="#{parcoursEditBB.parcours.id}" />
+		<f:param name="refCodeSemestre" value="#{refCodeSemestre}" />
+		<p:ajax event="dialogReturn"
+			listener="#{parcoursEditBB.addUeDialogReturn}"
+			update="dtTbl_repartition" />
+	</p:commandButton>
+
+	<p:dataTable id="dtTbl_repartition" resizableColumns="true"
+		value="#{repartitions}" var="currentRepartition" paginator="true"
+		paginatorPosition="bottom" style="margin-top:5px"
+		emptyMessage="#{commonmsgs.data_table_empty_Message}" rows="10"
+		paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+		currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})  ">
+
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{ofmsgs.offre_formation_ue_search_code_ue}" />
+			</f:facet>
+			<h:outputText value="#{currentRepartition.uniteEnseignementCode}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{ofmsgs.offre_formation_ue_search_libelle_fr}" />
+			</f:facet>
+
+			<h:outputText
+				value="#{currentRepartition.uniteEnseignementLibelleFr}" />
+		</p:column>
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{ofmsgs.offre_formation_ue_search_libelle_ar}" />
+			</f:facet>
+
+			<h:outputText
+				value="#{currentRepartition.uniteEnseignementLibelleAr}" />
+		</p:column>
+
+		<p:column>
+			<f:facet name="header">
+				<h:outputText value="#{commonmsgs.data_table_action_title}" />
+			</f:facet>
+			<p:commandLink value="#{commonmsgs.data_table_action_remove}"
+				action="#{parcoursEditBB.removeUe(currentRepartition.uniteEnseignementId)}"
+				update="dtTbl_repartition" icon="ui-icon-extlink" immediate="true">
+				<f:param name="ofId" value="#{parcoursEditBB.parcours.id}" />
+				<f:param name="parcoursId" value="#{parcoursEditBB.parcours.id}" />
+				<f:param name="refCodeSemestre" value="#{refCodeSemestre}" />
+			</p:commandLink>
+
+
+		</p:column>
+	</p:dataTable>
+
+</ui:composition>

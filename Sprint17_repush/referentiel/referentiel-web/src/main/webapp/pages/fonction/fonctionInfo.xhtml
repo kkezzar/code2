@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<h:outputText value="#{habilitationmsgs.fonction_description}"
+		style="font-weight: bold;" />
+	<hr></hr>
+
+	<p:panelGrid id="editfonctionDescription" styleClass="ui-panelgrid-full-width"
+		rendered="#{fonctionBckBean.refFonctionDto.id!=null}">
+		<p:row>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.fonction_identifiant_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="idfFonction" styleClass="value"
+					value="#{fonctionBckBean.refFonctionDto.identifiant}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.fonction_name_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="nomFonction" styleClass="value"
+					value="#{fonctionBckBean.refFonctionDto.nom}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.fonction_name_arabe_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="nomArabeFonction" styleClass="value"
+					value="#{fonctionBckBean.refFonctionDto.nomArabe}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{habilitationmsgs.fonction_rang_label}" />
+			</p:column>
+			<p:column>
+				<h:outputText id="rangFonction" styleClass="value"
+					value="#{fonctionBckBean.refFonctionDto.rang}" />
+			</p:column>
+			<p:row>
+				<p:column style="width:15%">
+					<h:outputText value="#{habilitationmsgs.fonction_ancre_aide_label} " />
+				</p:column>
+				<p:column style="width:85%">
+					<h:outputText value="#{fonctionBckBean.refFonctionDto.helpAnchor}" styleClass="value" />
+				</p:column>
+			</p:row>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:note="http://java.sun.com/jsf/composite/components/notation">
+
+	<p:panel rendered="#{deliberationBean.deliberation != null}"
+		id="panelNote">
+		<p:dataTable var="current" value="#{deliberationBean.deliberation}"
+			widgetVar="deliberationTable" id="deliberationTable"
+			rowKey="#{current.diaId}"
+			filteredValue="#{deliberationBean.filtredDeliberation}"
+			emptyMessage="#{bilanMsgs.bilan_data_grid_empty_result}"
+			paginator="true" selectionMode="single"
+			currentPageReportTemplate="{startRecord} - {endRecord} sur {totalRecords}"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rows="30" rowsPerPageTemplate="10,20,30,40,50,60"
+			resizableColumns="true" rowIndexVar="rowIndex">
+
+			<p:ajax event="rowSelect"
+				listener="#{deliberationBean.onNoteRowSelect}"
+				onstart="PF('globalWidget').block()" update=":deliberationForm"
+				onsuccess="PF('globalWidget').unblock()"
+				oncomplete="PF('detail').show()" />
+
+			<p:ajax event="page" onstart="PF('globalWidget').block()"
+				oncomplete="PF('globalWidget').unblock()">
+			</p:ajax>
+			<p:ajax event="sort" onstart="PF('globalWidget').block()"
+				oncomplete="PF('globalWidget').unblock()">
+			</p:ajax>
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup align="right">
+						<h:outputText value="#{bilanMsgs.bilan_data_table_search_all}" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('deliberationTable').filter()" style="width:150px"
+							placeholder="#{bilanMsgs.bilan_data_table_search_key}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+			<p:column exportable="false"
+				headerText="#{bilanMsgs.bilan_data_table_column_index}"
+				style="width:3%">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+			<p:columns var="entry" value="#{deliberationBean.columnNames}"
+				rendered="#{deliberationBean.renderColumn(entry.key)}"
+				styleClass="#{deliberationBean.isUe(entry.key) ? 'ui-ue-column-color':''}"
+				sortBy="#{current.line[entry.key]}"
+				filterBy="#{current.line[entry.key]}" filterStyle="display:none"
+				filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{entry.key}" id="col" />
+					<p:tooltip id="toolTipFade" for="col"
+						value="#{deliberationBean.loadInforBulle(entry.key)}" />
+				</f:facet>
+				<h:outputText value="#{current.line[entry.key]}" />
+			</p:columns>
+
+		</p:dataTable>
+
+
+		<p:dialog header="#{bilanMsgs.deliberation_note_detail_dialog_titre}"
+			widgetVar="detail" modal="true" resizable="false" id="detail"
+			closeOnEscape="true">
+			<p:outputPanel style="width:900px">
+				<p:panelGrid styleClass="ui-panelgrid-full-width">
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_numero_inscription}" />
+						</p:column>
+						<p:column>
+							<h:outputText styleClass="value"
+								value="#{deliberationBean.bilanSessionDto.numeroInscriptionEtudiant}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_nom}" />
+						</p:column>
+						<p:column>
+							<h:outputText styleClass="value"
+								value="#{deliberationBean.bilanSessionDto.nomLatinEtudiant}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{bilanMsgs.bilan_data_table_list_column_prenom}" />
+						</p:column>
+						<p:column>
+							<h:outputText styleClass="value"
+								value="#{deliberationBean.bilanSessionDto.prenomLatinEtudiant}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<note:NoteExamenControleContinuComponent
+					rendered="#{deliberationBean.planningSessionDto.avecControle}"
+					listData="#{deliberationBean.bilanSessionDto}"
+					withCI="#{deliberationBean.planningSessionDto.avecControleIntermediaire}" />
+				<note:NoteExamenComponent
+					rendered="#{!deliberationBean.planningSessionDto.avecControle}"
+					listData="#{deliberationBean.bilanSessionDto}" />
+
+
+				<br />
+				<!-- 				<p:toolbar id="actionPanel"> -->
+				<!-- 					<p:toolbarGroup align="left"> -->
+				<!-- 						<p:commandButton value="#{commonmsgs.bouton_ok}" -->
+				<!-- 							onclick="PF('detail').hide()" -->
+				<!-- 							icon="ui-icon-check"> -->
+				<!-- 						</p:commandButton> -->
+				<!-- 					</p:toolbarGroup> -->
+				<!-- 				</p:toolbar> -->
+			</p:outputPanel>
+		</p:dialog>
+	</p:panel>
+
+</ui:composition>
+

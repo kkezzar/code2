@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+		
+
+	<p:fieldset legend="#{titreAccesMsgs.titre_acces_infos}">
+		
+		<p:panelGrid>
+
+			<p:row>
+				<p:column>
+					<h:outputText value="N° Demande" />
+				</p:column>
+				<p:column>
+				<h:outputText value="#{preinscriptionMBean.dto.id}" style="font-weight: bold;"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Décision" />
+				</p:column>
+				<p:column>
+				  <h:outputText value="#{preinscriptionMBean.getDecisionLabel()}" style="font-weight: bold;"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="Domaine" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.dto.libelleDomaine}" style="font-weight: bold;"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Etablissement" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.dto.libelleEtablissement}" style="font-weight: bold;"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="Filière" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.dto.libelleFiliere}" style="font-weight: bold;"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Spécialité" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.dto.libelleSpecialite}" style="font-weight: bold;"/>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<h:outputText value="Niveau" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.dto.libelleNiveau}" style="font-weight: bold;"/>
+				</p:column>
+				<p:column>
+					<h:outputText value="Etat" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{preinscriptionMBean.getStatutLabel()}" style="font-weight: bold;"/>
+				</p:column>
+			</p:row>
+			
+		</p:panelGrid>
+
+	</p:fieldset>
+	
+		<br/>
+		
+
+</ui:composition> 	

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c_rt="http://java.sun.com/jstl/core_rt">
+
+<!-- INTERFACE COMPOSANT -->
+<composite:interface>
+<composite:attribute name="id" required="true"/>
+<composite:attribute name="searchGenericMethodName" method-signature="void searchGeneric()" required="true"/>
+<composite:attribute name="searchAdvancedMethodName" method-signature="void searchAdvanced()" required="true"/>
+<composite:attribute name="searchKeyWords"  required="true"/>
+<composite:attribute name="toUpdateOnSearch"  required="true"/>
+<composite:attribute name="txtKeyWordWidth"  required="true"/>
+<composite:attribute name="ajaxProgessId"  required="false"/>
+<composite:attribute name="textWatermark"  required="false"/>
+<composite:attribute name="alignement"  required="false"/>
+<composite:attribute name="withAdvancedSearch"  required="true" type="java.lang.Boolean"/>
+</composite:interface>
+
+<!-- IMPLEMENTATION COMPOSANT -->
+<composite:implementation>
+<p:outputPanel id="#{cc.attrs.id}_outputPanel">
+	
+		<p:inputText id="#{cc.attrs.id}_genericKeyWordTextlId"  		
+							value="#{cc.attrs.searchKeyWords}"	
+							required="#{not empty param[btnSearchBound.clientId]}"
+							requiredMessage="Mots clés requis !"
+							style="vertical-align:middle;width:#{cc.attrs.txtKeyWordWidth}px;"/>
+							<p:spacer/>
+		<p:commandButton  	id="#{cc.attrs.id}_btnGenericSearch"  binding="#{btnSearchBound}"
+												update="#{cc.attrs.toUpdateOnSearch}"  
+												ajax="true" 	
+												icon="ui-icon-search"  
+												process="@this #{cc.attrs.id}_genericKeyWordTextlId"
+												action="#{cc.attrs.searchGenericMethodName}"
+												style="vertical-align:middle;height:26px; width:40px;"
+												onstart="PF('#{cc.attrs.ajaxProgessId}').block()"  oncomplete="PF('#{cc.attrs.ajaxProgessId}').unblock()">
+		</p:commandButton>
+		<p:watermark for="#{cc.attrs.id}_genericKeyWordTextlId" value="#{cc.attrs.textWatermark}" />
+		<p:overlayPanel id="#{cc.attrs.id}_overlayPanelId"  rendered="#{cc.attrs.withAdvancedSearch}"
+										for="#{cc.attrs.id}_genericKeyWordTextlId"
+										style="width:#{cc.attrs.txtKeyWordWidth}px;">
+										<p:outputLabel value="Autres critères"/>
+		 <composite:insertChildren />
+		 <br />
+		 <p:commandButton  	id="#{cc.attrs.id}_btnAdvancedSearch" 
+												update="#{cc.attrs.toUpdateOnSearch}"  
+												ajax="true" 	
+												icon="ui-icon-search"  
+												process="@this #{cc.attrs.id}_genericKeyWordTextlId"
+												action="#{cc.attrs.searchAdvancedMethodName}"
+												style="vertical-align:middle;height:26px; width:40px;"
+												onstart="PF('#{cc.attrs.ajaxProgessId}').block()"  oncomplete="PF('#{cc.attrs.ajaxProgessId}').unblock()">
+						</p:commandButton>
+    </p:overlayPanel>
+</p:outputPanel>
+
+</composite:implementation>
+</html>
